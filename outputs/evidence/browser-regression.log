@@ -1,0 +1,13 @@
+
+> xiaon-learning-companion@1.0.0 test:browser
+> playwright test --grep 14 |15 
+
+
+Running 2 tests using 1 worker
+
+(node:43308) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/experience.spec.ts:22:1 › 14 提交等待期间关闭长期记忆，迟到结果不追加长期条目 (1.8s)
+  ✓  2 tests/experience.spec.ts:23:1 › 15 聊天中明确选择休息，后续回应和入口停止学习邀请 (3.7s)
+
+  2 passed (6.0s)

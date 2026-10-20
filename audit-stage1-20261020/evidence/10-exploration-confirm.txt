@@ -1,0 +1,54 @@
+- banner:
+  - text: 五维探索
+  - generic: 按自己的节奏，向前一点点
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: A SMALL WORLD TO EXPLORE
+  - heading "每一种思考，都值得发现。" [level=1]
+  - paragraph: 不用证明什么。去几个地方，看看你怎样理解和解决问题。
+  - generic: 已探索 0 / 5 个地点
+  - button "地图入口":
+  - button "列表入口":
+  - button "理解花园 从一句话，找到数学的意思 未开始":
+    - strong: 理解花园
+    - generic: 从一句话，找到数学的意思
+    - generic: 未开始
+  - button "逻辑小桥 让每一步，都有自己的理由 未开始":
+    - strong: 逻辑小桥
+    - generic: 让每一步，都有自己的理由
+    - generic: 未开始
+  - button "计算工坊 留意符号，也看见小变化 未开始":
+    - strong: 计算工坊
+    - generic: 留意符号，也看见小变化
+    - generic: 未开始
+  - button "生活集市 把生活里的问题写成式子 未开始":
+    - strong: 生活集市
+    - generic: 把生活里的问题写成式子
+    - generic: 未开始
+  - button "空间山丘 转个角度，发现另一种样子 未开始":
+    - strong: 空间山丘
+    - generic: 转个角度，发现另一种样子
+    - generic: 未开始
+  - heading "先从理解和逻辑出发" [level=3]
+  - paragraph: 你可以随时暂停。结果只代表这些任务中的表现。
+  - button "看看已有的学习观察":
+    - text: 看看已有的学习观察
+  - paragraph: 本次计算题已打开 0 / 10 · 包含补充题
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长
+- dialog "提示与确认":
+  - button "关闭弹窗" [active]:
+  - generic: 理解 · 未开始
+  - heading "欢迎来到理解花园" [level=2]
+  - paragraph: 通过几个小任务，看看你现在怎样理解和解决问题。你可以随时暂停，结果只代表这些任务中的表现。
+  - button "我愿意，进入这个小任务":
+    - text: 我愿意，进入这个小任务
+  - button "先看看地图"

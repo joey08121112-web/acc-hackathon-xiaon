@@ -1,0 +1,14 @@
+
+> xiaon-learning-companion@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 1583 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.61 kB │ gzip:   0.45 kB
+dist/assets/index-BSRWGeMu.css   41.80 kB │ gzip:  10.16 kB
+dist/assets/index-B-zr9lD2.js   319.04 kB │ gzip: 101.16 kB
+✓ built in 587ms
+Offline HTML: /Users/ami/Documents/个人/ACC黑客松/outputs/team/双击打开-学伴小N.html (361318 bytes)

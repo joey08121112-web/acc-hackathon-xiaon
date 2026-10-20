@@ -1,0 +1,39 @@
+- banner:
+  - text: 学伴小N
+  - generic: 你的 AI 学伴
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: HI, 很高兴见到你
+  - heading "今天，按你的节奏来。" [level=1]
+  - button "AI 学伴":
+    - text: AI 学伴
+  - generic: 每一步，都算数
+  - generic: 慢慢来就好
+  - img "原创学伴小N，绿色的小芽伙伴"
+  - generic: YOUR LITTLE LEARNING COMPANION
+  - generic: 小N 轻轻说
+  - heading "这次数学考试之后， 你现在最想做什么？" [level=2]
+  - paragraph: 不用马上振作，也不用一下子想清楚。
+  - button "先聊聊 我想先说说现在的心情":
+    - text: 先聊聊
+    - generic: 我想先说说现在的心情
+  - button "一起看一道题":
+    - generic: 一起看一道题
+  - button "今天先休息":
+    - generic: 今天先休息
+  - generic: 还有一个小小的世界
+  - heading "去探索，你的解题方式" [level=3]
+  - paragraph: 五个地点，没有排名，只有发现。
+  - button "进入五维探索":
+  - text: 你的选择会被尊重。
+  - button "了解信息与授权"
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长

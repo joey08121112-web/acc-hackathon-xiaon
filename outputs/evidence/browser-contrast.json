@@ -1,0 +1,204 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/node_modules/.bin/playwright",
+      "test",
+      "tests/accessibility.spec.ts"
+    ],
+    "configFile": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/playwright.config.ts",
+    "rootDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-contrast",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-contrast",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "snapshotDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://localhost:5173",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "zh-CN",
+          "timezoneId": "Asia/Shanghai",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../evidence/browser-contrast.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "accessibility.spec.ts",
+      "file": "accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "四个主页面的 WCAG A/AA 自动检查",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1516,
+                  "error": {
+                    "message": "Error: 探索\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 2.93 (foreground color: #859771, background color: #f8f7ef, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"h3\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: 探索\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 2.93 (foreground color: #859771, background color: #f8f7ef, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"h3\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/accessibility.spec.ts:3:728",
+                    "location": {
+                      "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/accessibility.spec.ts",
+                      "column": 728,
+                      "line": 3
+                    },
+                    "snippet": "  1 | import { test, expect } from '@playwright/test';\n  2 | import AxeBuilder from '@axe-core/playwright';\n> 3 | test('四个主页面的 WCAG A/AA 自动检查',async({page})=>{await page.goto('/');await page.getByRole('button',{name:'认识一下小N',exact:true}).click();await page.getByRole('combobox',{name:'年龄段',exact:true}).selectOption('14-17');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();for(const tab of ['小N','探索','今日','成长']){await page.getByRole('button',{name:tab,exact:true}).click();const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect.soft(report.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),tab).toEqual([]);}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^\n  4 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/accessibility.spec.ts",
+                        "column": 728,
+                        "line": 3
+                      },
+                      "message": "Error: 探索\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 2.93 (foreground color: #859771, background color: #f8f7ef, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"h3\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  1 | import { test, expect } from '@playwright/test';\n  2 | import AxeBuilder from '@axe-core/playwright';\n> 3 | test('四个主页面的 WCAG A/AA 自动检查',async({page})=>{await page.goto('/');await page.getByRole('button',{name:'认识一下小N',exact:true}).click();await page.getByRole('combobox',{name:'年龄段',exact:true}).selectOption('14-17');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();for(const tab of ['小N','探索','今日','成长']){await page.getByRole('button',{name:tab,exact:true}).click();const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect.soft(report.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),tab).toEqual([]);}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^\n  4 |\n    at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/accessibility.spec.ts:3:728"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/accessibility.spec.ts",
+                        "column": 728,
+                        "line": 3
+                      },
+                      "message": "Error: 今日\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.45 (foreground color: #607153, background color: #e9eede, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"nav > button:nth-child(2)\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  1 | import { test, expect } from '@playwright/test';\n  2 | import AxeBuilder from '@axe-core/playwright';\n> 3 | test('四个主页面的 WCAG A/AA 自动检查',async({page})=>{await page.goto('/');await page.getByRole('button',{name:'认识一下小N',exact:true}).click();await page.getByRole('combobox',{name:'年龄段',exact:true}).selectOption('14-17');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();for(const tab of ['小N','探索','今日','成长']){await page.getByRole('button',{name:tab,exact:true}).click();const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect.soft(report.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),tab).toEqual([]);}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^\n  4 |\n    at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/accessibility.spec.ts:3:728"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T07:59:24.547Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-contrast/accessibility-四个主页面的-WCAG-A-AA-自动检查/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-contrast/accessibility-四个主页面的-WCAG-A-AA-自动检查/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-contrast/accessibility-四个主页面的-WCAG-A-AA-自动检查/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/accessibility.spec.ts",
+                    "column": 728,
+                    "line": 3
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ddd864604af8a6a0198f-8d8e3e174cb8dca61bd0",
+          "file": "accessibility.spec.ts",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-20T07:59:24.259Z",
+    "duration": 2149.456,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

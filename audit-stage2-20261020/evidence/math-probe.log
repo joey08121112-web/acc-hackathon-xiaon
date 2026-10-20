@@ -1,0 +1,92 @@
+{"task":"bracket","value":"x+5","expected":true,"actual":true,"result":"PASS"}
+{"task":"bracket","value":"5+x","expected":true,"actual":true,"result":"PASS"}
+{"task":"transfer","value":"4a+2","expected":true,"actual":true,"result":"PASS"}
+{"task":"transfer","value":"4*a+2","expected":true,"actual":false,"result":"FAIL"}
+{"task":"transfer","value":"4×a+2","expected":true,"actual":false,"result":"FAIL"}
+{"task":"transfer","value":"+4a+2","expected":true,"actual":false,"result":"FAIL"}
+{"task":"bracket","value":"3x-2x-5=x+5","expected":false,"actual":false,"result":"PASS"}
+{"task":"bracket","value":"x-5","expected":false,"actual":false,"result":"PASS"}
+{"task":"transfer","value":"4a-2","expected":false,"actual":false,"result":"PASS"}
+{
+  "report": {
+    "dim": "计算",
+    "status": "需要继续观察",
+    "finding": "这次作答还没有完成正确解答。我们需要继续了解具体步骤。",
+    "basis": [
+      {
+        "id": "transfer",
+        "attempts": [
+          {
+            "id": "audit-first",
+            "value": "4*a+2",
+            "correct": false,
+            "hinted": false,
+            "time": "synthetic"
+          },
+          {
+            "id": "audit-second",
+            "value": "4a+2",
+            "correct": true,
+            "hinted": false,
+            "time": "synthetic"
+          }
+        ],
+        "hint": false,
+        "draft": "",
+        "paused": false
+      }
+    ],
+    "next": "在新题中先圈出括号前的符号，再逐项去括号。"
+  },
+  "records": {
+    "transfer": {
+      "id": "transfer",
+      "attempts": [
+        {
+          "id": "audit-first",
+          "value": "4*a+2",
+          "correct": false,
+          "hinted": false,
+          "time": "synthetic"
+        },
+        {
+          "id": "audit-second",
+          "value": "4a+2",
+          "correct": true,
+          "hinted": false,
+          "time": "synthetic"
+        }
+      ],
+      "hint": false,
+      "draft": "",
+      "paused": false
+    }
+  }
+}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Equivalent mathematically correct answers must not be recorded as incorrect
+
+3 !== 0
+
+    at assert (/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/math-probe.ts:21:8)
+    at Object.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/math-probe.ts:21:102)
+    at Module._compile (node:internal/modules/cjs/loader:1934:14)
+    at Object.transformer (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/node_modules/tsx/dist/register-B1c7OH6V.cjs:22:2188)
+    at Module.load (node:internal/modules/cjs/loader:1656:32)
+    at Module._load (node:internal/modules/cjs/loader:1448:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at loadCJSModuleWithModuleLoad (node:internal/modules/esm/translators:376:15)
+    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:248:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:569:25) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 3,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.8.2

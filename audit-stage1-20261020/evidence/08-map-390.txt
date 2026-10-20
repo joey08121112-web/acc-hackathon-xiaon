@@ -1,0 +1,44 @@
+- banner:
+  - text: 五维探索
+  - generic: 按自己的节奏，向前一点点
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: A SMALL WORLD TO EXPLORE
+  - heading "每一种思考，都值得发现。" [level=1]
+  - paragraph: 不用证明什么。去几个地方，看看你怎样理解和解决问题。
+  - generic: 已探索 0 / 5 个地点
+  - button "地图入口":
+  - button "列表入口":
+  - text: 小N的探索手记
+  - text: VOL. 01 · 数学
+  - button "理解花园 从这里开始":
+    - strong: 理解花园
+    - generic: 从这里开始
+  - button "逻辑小桥 从这里开始":
+    - strong: 逻辑小桥
+    - generic: 从这里开始
+  - button "计算工坊 未开始":
+    - strong: 计算工坊
+    - generic: 未开始
+  - button "生活集市 未开始":
+    - strong: 生活集市
+    - generic: 未开始
+  - button "空间山丘 未开始":
+    - strong: 空间山丘
+    - generic: 未开始
+  - generic: 路线只作导航，没有分数排名
+  - heading "先从理解和逻辑出发" [level=3]
+  - paragraph: 你可以随时暂停。结果只代表这些任务中的表现。
+  - button "看看已有的学习观察":
+    - text: 看看已有的学习观察
+  - paragraph: 本次计算题已打开 0 / 10 · 包含补充题
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索" [active]:
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长

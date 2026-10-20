@@ -1,0 +1,44 @@
+- banner:
+  - button "返回":
+  - heading "和小N聊聊" [level=2]
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - img "原创学伴小N，绿色的小芽伙伴"
+  - strong: 小N在这里
+  - generic: AI · 本地预设回复演示
+  - button "能力说明"
+  - generic: 此刻，只聊你想聊的
+  - generic: 小N · AI
+  - generic: 这次数学考试之后，你现在最想做什么？
+  - generic: 这次考砸了，有点难过。我想先说说，现在不想看题。
+  - generic: 小N · AI
+  - generic: 听起来，这次考试让你有些难受。现在不用急着解决所有问题。你愿意说说，最让你在意的是哪一部分吗？
+  - generic: 我愿意慢慢说，但今天不想探索，也不想做题。我只想聊聊。
+  - generic: 小N · AI
+  - generic: 听起来，这次考试让你有些难受。现在不用急着解决所有问题。你愿意说说，最让你在意的是哪一部分吗？
+  - generic: 谢谢你，我想先说说今天的事情。
+  - generic: 小N · AI
+  - generic: 我在听，我们先聊聊。你现在最想说的是什么？
+  - generic: 我只想聊聊
+  - generic: 小N · AI
+  - generic: 我在听，我们先聊聊。你现在最想说的是什么？
+  - generic: 今天先休息
+  - generic: 小N · AI
+  - generic: 可以，休息也是你的选择。今天先把任务放一放。等你想继续时，我会在这里。
+  - generic: 今天的任务提醒已暂停。你可以继续说说，不必开始任务。
+  - textbox "对小N说":
+    - /placeholder: 想说什么都可以，慢慢说…
+  - button "发送" [disabled]:
+  - paragraph:
+    - text: AI 回答可能有误。需要现实中的支持？
+    - button "点这里"
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长

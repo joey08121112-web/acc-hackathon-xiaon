@@ -1,0 +1,475 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/playwright.config.ts",
+    "rootDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-first",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-first",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "snapshotDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://localhost:5173",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "zh-CN",
+          "timezoneId": "Asia/Shanghai",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../evidence/browser-first.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "experience.spec.ts",
+      "file": "experience.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "01 首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1218,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T07:53:38.998Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-84530de3ef76bb52dc6b",
+          "file": "experience.spec.ts",
+          "line": 7,
+          "column": 1
+        },
+        {
+          "title": "02 选择休息、刷新与今日页都停止任务催促",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45053,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts",
+                        "column": 150,
+                        "line": 3
+                      },
+                      "message": "Error: locator.selectOption: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('年龄段', { exact: true })\u001b[22m\n\n\n  1 | import { test, expect, type Page } from '@playwright/test';\n  2 | const screenshot=(p:Page,name:string)=>p.screenshot({path:`../evidence/${name}.png`,fullPage:true});\n> 3 | async function basic(p:Page){await p.goto('/');await p.getByRole('button',{name:'认识一下小N',exact:true}).click();await p.getByLabel('年龄段',{exact:true}).selectOption('14-17');await p.getByRole('checkbox').check();await p.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();await p.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();}\n    |                                                                                                                                                      ^\n  4 | async function settings(p:Page){await p.getByRole('button',{name:'我的与设置',exact:true}).click();}\n  5 | async function question(p:Page){await p.getByRole('button',{name:'一起看一道题',exact:false}).click();await p.getByRole('button',{name:'我愿意，从示例题开始',exact:true}).click();}\n  6 | const state=(p:Page)=>p.evaluate(()=>JSON.parse(localStorage.getItem('xiaon-progress-v1')||'{}'));\n    at basic (/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:3:150)\n    at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:10:46"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T07:53:42.195Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-first/experience-02-选择休息、刷新与今日页都停止任务催促/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-first/experience-02-选择休息、刷新与今日页都停止任务催促/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-first/experience-02-选择休息、刷新与今日页都停止任务催促/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-39adea9da86a9e62dd03",
+          "file": "experience.spec.ts",
+          "line": 10,
+          "column": 1
+        },
+        {
+          "title": "03 错误、提示、暂停、刷新、修正、新题独立完成改变报告",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "interrupted",
+                  "duration": 32109,
+                  "error": {
+                    "message": "Error: locator.selectOption: Test ended.\nCall log:\n\u001b[2m  - waiting for getByLabel('年龄段', { exact: true })\u001b[22m\n",
+                    "stack": "Error: locator.selectOption: Test ended.\nCall log:\n\u001b[2m  - waiting for getByLabel('年龄段', { exact: true })\u001b[22m\n\n    at basic (/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:3:150)\n    at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:11:53",
+                    "location": {
+                      "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts",
+                      "column": 150,
+                      "line": 3
+                    },
+                    "snippet": "  1 | import { test, expect, type Page } from '@playwright/test';\n  2 | const screenshot=(p:Page,name:string)=>p.screenshot({path:`../evidence/${name}.png`,fullPage:true});\n> 3 | async function basic(p:Page){await p.goto('/');await p.getByRole('button',{name:'认识一下小N',exact:true}).click();await p.getByLabel('年龄段',{exact:true}).selectOption('14-17');await p.getByRole('checkbox').check();await p.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();await p.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();}\n    |                                                                                                                                                      ^\n  4 | async function settings(p:Page){await p.getByRole('button',{name:'我的与设置',exact:true}).click();}\n  5 | async function question(p:Page){await p.getByRole('button',{name:'一起看一道题',exact:false}).click();await p.getByRole('button',{name:'我愿意，从示例题开始',exact:true}).click();}\n  6 | const state=(p:Page)=>p.evaluate(()=>JSON.parse(localStorage.getItem('xiaon-progress-v1')||'{}'));"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts",
+                        "column": 150,
+                        "line": 3
+                      },
+                      "message": "Error: locator.selectOption: Test ended.\nCall log:\n\u001b[2m  - waiting for getByLabel('年龄段', { exact: true })\u001b[22m\n\n\n  1 | import { test, expect, type Page } from '@playwright/test';\n  2 | const screenshot=(p:Page,name:string)=>p.screenshot({path:`../evidence/${name}.png`,fullPage:true});\n> 3 | async function basic(p:Page){await p.goto('/');await p.getByRole('button',{name:'认识一下小N',exact:true}).click();await p.getByLabel('年龄段',{exact:true}).selectOption('14-17');await p.getByRole('checkbox').check();await p.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();await p.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();}\n    |                                                                                                                                                      ^\n  4 | async function settings(p:Page){await p.getByRole('button',{name:'我的与设置',exact:true}).click();}\n  5 | async function question(p:Page){await p.getByRole('button',{name:'一起看一道题',exact:false}).click();await p.getByRole('button',{name:'我愿意，从示例题开始',exact:true}).click();}\n  6 | const state=(p:Page)=>p.evaluate(()=>JSON.parse(localStorage.getItem('xiaon-progress-v1')||'{}'));\n    at basic (/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:3:150)\n    at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:11:53"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T07:54:27.458Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-first/experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-first/experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-first/experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts",
+                    "column": 150,
+                    "line": 3
+                  }
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-0d4633dc765841fe1931",
+          "file": "experience.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "04 断网提交保留草稿，失败重试、重复点击与刷新不重复计题",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-5a8a2cb401e7173dfc44",
+          "file": "experience.spec.ts",
+          "line": 12,
+          "column": 1
+        },
+        {
+          "title": "05 五维地图和列表完整任务、空间视觉选择与报告证据",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-ac6fcb10f74225dc82be",
+          "file": "experience.spec.ts",
+          "line": 13,
+          "column": 1
+        },
+        {
+          "title": "06 周计划接受、减量、改期、暂不开始与今日接续",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-261a901dac36a320d2e3",
+          "file": "experience.spec.ts",
+          "line": 14,
+          "column": 1
+        },
+        {
+          "title": "07 记忆开启、主动保存、更正、停止、删除；关闭不新增长期记忆",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-ca68ff401077de14b21b",
+          "file": "experience.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "08 示例图片真实裁剪、像素遮挡、刷新恢复、手动核对与移除清理",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-1254ae4a228d1444bf4f",
+          "file": "experience.spec.ts",
+          "line": 16,
+          "column": 1
+        },
+        {
+          "title": "09 求助失败、取消、安全联系人替代、模拟成功并非已读",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-14ce83a97bf90c97a867",
+          "file": "experience.spec.ts",
+          "line": 17,
+          "column": 1
+        },
+        {
+          "title": "10 聊天等待、暂停、恢复、断网失败、重试不重复消息",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-6acad9fe8fabf436c919",
+          "file": "experience.spec.ts",
+          "line": 18,
+          "column": 1
+        },
+        {
+          "title": "11 监护人信息申请范围、必要核验、处理中、结果",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-20f3d11077d56e444b10",
+          "file": "experience.spec.ts",
+          "line": 19,
+          "column": 1
+        },
+        {
+          "title": "12 常见手机宽度、长文本、大字体与减少动效，无横向溢出",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-901f436ee86880e61ab7",
+          "file": "experience.spec.ts",
+          "line": 20,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-20T07:53:38.799Z",
+    "duration": 80880.037,
+    "expected": 1,
+    "skipped": 10,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

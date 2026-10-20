@@ -1,0 +1,17 @@
+- text: 学伴小N
+- generic: 认识彼此 · 3/3
+- generic: YOUR CHOICE, ALWAYS
+- heading "这些，由你决定" [level=1]
+- paragraph: 两项都默认关闭。拒绝后，也可以正常聊天、看题和探索。
+- strong: 跨会话长期记忆
+- paragraph: 可保存你主动分享的偏好和学习观察，供以后参考。关闭后不再新增或使用长期记忆；本机演示进度仍单独保留。
+- switch "跨会话长期记忆"
+- strong: 用于学习研究
+- paragraph: 独立的用途授权演示。本版本没有研究数据收集或传输；切换仅展示授权状态。
+- switch "用于学习研究"
+- text: 以后随时可在“我的与设置”里更改选择、查看信息用途或清除本机数据。
+- button "按我的选择，开始":
+  - text: 按我的选择，开始
+- button "关闭可选功能，进入基本体验"
+- button "返回基本信息" [active]
+- contentinfo: 一个本地演示 · 没有真实模型或消息服务

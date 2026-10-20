@@ -1,0 +1,48 @@
+- banner:
+  - button "返回":
+  - heading "一起看题" [level=2]
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: 计算 · 轻量探索
+  - button "先暂停":
+    - text: 先暂停
+  - generic: 只专注这一小步
+  - heading "一起看看这个括号" [level=1]
+  - paragraph: 化简：3x − (2x − 5)
+  - text: 写下你的答案或关键一步
+  - textbox "你的解题步骤":
+    - /placeholder: 写化简结果，也可用 = 连接等式步骤…
+    - text: x − 5
+  - button "−"
+  - button "+"
+  - button "("
+  - button ")"
+  - button "x"
+  - button "a"
+  - button "="
+  - button "给一点提示":
+    - text: 给一点提示
+  - button "提交修改":
+    - text: 提交修改
+  - text: 一级提示
+  - paragraph: 括号前是减号，括号里的每一项都要变号：−(2x − 5) = −2x + 5。
+  - generic: 使用提示后完成，会如实记为“提示下完成”。
+  - generic: 小N · AI · 基于这次作答
+  - heading "先停在这一步，一起看看。" [level=3]
+  - paragraph: 先观察去括号这一步，尤其是括号前的符号。你可以再试一次，或选择一级提示。
+  - generic "查看作答与提示记录 1 次尝试":
+    - text: 查看作答与提示记录
+    - generic: 1 次尝试
+  - button "题目识别错了？重新核对":
+    - text: 题目识别错了？重新核对
+  - paragraph: 本次计算已打开 1/10 题 · 修改与重试不重复计题
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长

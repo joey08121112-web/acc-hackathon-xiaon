@@ -1,0 +1,50 @@
+- banner:
+  - button "返回":
+  - heading "一起看题" [level=2]
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: 计算 · 同类新题
+  - button "先暂停":
+    - text: 先暂停
+  - generic: 只专注这一小步
+  - heading "换一道，看看新变化" [level=1]
+  - paragraph: 化简：7a − (3a − 2)
+  - text: 写下你的答案或关键一步
+  - textbox "你的解题步骤":
+    - /placeholder: 写化简结果，也可用 = 连接等式步骤…
+    - text: 4a+2
+  - button "−"
+  - button "+"
+  - button "("
+  - button ")"
+  - button "x"
+  - button "a"
+  - button "="
+  - button "给一点提示":
+    - text: 给一点提示
+  - button "提交修改":
+    - text: 提交修改
+  - generic: 小N · AI · 基于这次作答
+  - heading "你修正了这道原题。" [level=3]
+  - paragraph: 7a − (3a − 2) = 7a − 3a + 2 = 4a + 2。
+  - text: 已整理一张方法笔记
+  - generic: 固定学习成果 · 不重复领取
+  - button "用一道新题检验":
+    - text: 用一道新题检验
+  - button "看看这次学习观察"
+  - generic "查看作答与提示记录 2 次尝试":
+    - text: 查看作答与提示记录
+    - generic: 2 次尝试
+  - button "题目识别错了？重新核对":
+    - text: 题目识别错了？重新核对
+  - paragraph: 本次计算已打开 2/10 题 · 修改与重试不重复计题
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长

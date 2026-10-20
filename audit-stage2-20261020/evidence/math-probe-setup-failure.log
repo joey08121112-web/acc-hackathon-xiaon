@@ -1,0 +1,20 @@
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/math-probe.ts' imported from /Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveBaseSync (file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:11092)
+    at resolveDirectorySync (file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:12398)
+    at resolveTsPathsSync (file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:13605)
+    at resolve (file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:16832) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/audit-stage2-20261020/evidence/math-probe.ts'
+}
+
+Node.js v26.8.2

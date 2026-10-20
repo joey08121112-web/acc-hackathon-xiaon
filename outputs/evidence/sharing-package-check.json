@@ -1,0 +1,9 @@
+{
+  "single_html_bytes": 360461,
+  "team_zip_bytes": 115008,
+  "team_zip_integrity": "PASS",
+  "single_html_matches_tested_http_version": true,
+  "source_zip_integrity": "PASS",
+  "no_actual_notifications": true,
+  "file_protocol": "not tested"
+}

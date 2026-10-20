@@ -1,0 +1,43 @@
+import { test, expect } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+test('单文件体验版无需其他资源即可走通看题与恢复；分享包可下载',async({page})=>{
+ const unexpected:string[]=[],errors:string[]=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ await page.route('**/*',async route=>{
+  const u=new URL(route.request().url());
+  if(route.request().isNavigationRequest()&&u.pathname==='/offline.html')await route.continue();
+  else {unexpected.push(u.pathname);await route.abort();}
+ });
+ await page.goto('/offline.html');
+ await expect(page.getByRole('heading',{name:'慢慢来， 也会到达。'})).toBeVisible();
+ expect(await page.locator('script[src],link[rel="stylesheet"][href]').count()).toBe(0);
+ await page.getByRole('button',{name:'认识一下小N',exact:true}).click();
+ await page.getByRole('combobox',{name:'年龄段',exact:true}).selectOption('adult');
+ await page.getByRole('checkbox').check();
+ await page.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();
+ await page.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();
+ await page.getByRole('button',{name:'一起看一道题',exact:true}).click();
+ await page.getByRole('button',{name:'我愿意，从示例题开始',exact:true}).click();
+ await page.getByLabel('你的解题步骤').fill('x-5');
+ await page.getByRole('button',{name:'我先试试',exact:true}).click();
+ await expect(page.getByText('先停在这一步，一起看看。')).toBeVisible();
+ await page.getByRole('button',{name:'给一点提示',exact:true}).click();
+ await page.getByLabel('你的解题步骤').fill('x+5');
+ await page.getByRole('button',{name:'提交修改',exact:true}).click();
+ await expect(page.getByText('你在提示后完成了这一步。')).toBeVisible();
+ await page.reload();
+ await expect(page.getByLabel('你的解题步骤')).toHaveValue('x+5');
+ await page.getByRole('button',{name:'看看这次学习观察',exact:true}).click();
+ await expect(page.locator('.report-item').filter({has:page.getByRole('heading',{name:'计算',exact:true})}).getByText('提示下完成',{exact:true})).toBeVisible();
+ await page.screenshot({path:'../evidence/offline-phone-http.png',fullPage:false});
+ expect(unexpected).toEqual([]);expect(errors).toEqual([]);
+ await page.unroute('**/*');
+ await page.goto('/share.html');
+ const waiting=page.waitForEvent('download');
+ await page.getByRole('link',{name:'下载队友体验包（免安装）',exact:true}).click();
+ const download=await waiting;
+ expect(download.suggestedFilename()).toBe('学伴小N-队友体验包.zip');
+ const bytes=await readFile((await download.path())!);
+ expect(bytes.subarray(0,4).toString('hex')).toBe('504b0304');
+ expect(bytes.length).toBeGreaterThan(100_000);
+});

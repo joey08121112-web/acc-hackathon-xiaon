@@ -1,0 +1,42 @@
+{
+  "source": "outputs/xiaon",
+  "source_files_checked": 45,
+  "unchanged": true,
+  "changed": [],
+  "delivery_hashes_match": true,
+  "version": "1.0.0",
+  "git": "not a Git repository",
+  "screenshots": 25,
+  "rejected_screenshots": [
+    "01-welcome-390.png"
+  ],
+  "limited_use_screenshots": {
+    "18-math-320-large-long-input.png": "Capture precedes updated input paint; valid for pre-existing formula layout only. Long input proof is 19 + math-short-metrics.json."
+  },
+  "browser": "Codex in-app browser",
+  "viewports": [
+    [
+      390,
+      844
+    ],
+    [
+      320,
+      740
+    ],
+    [
+      430,
+      844
+    ],
+    [
+      390,
+      480
+    ],
+    [
+      320,
+      440
+    ]
+  ],
+  "real_keyboard_tested": false,
+  "test_suites_rerun": false,
+  "stage": 1
+}

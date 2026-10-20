@@ -1,0 +1,7 @@
+{
+  "src/App.tsx": "a2609148024bbe7ad322a8ded955908d41dd9f845b1d1053f1f6310db58268a1",
+  "src/domain.ts": "b4f24cf720f5ea2198bbc59631d9695e10ce34bce255b3a261cbd04e3ff2ed45",
+  "src/style.css": "02860490c01c6c62e22ff28100fd28c628135bd209fbe7406cf425c9c29c0a10",
+  "src/domain.test.ts": "bdc4c412eafab1ab4e5b305bb2f539d141dfc7ac211370dbce99a0a726a9e366",
+  "README.md": "ed50a747da2d92a077fe4d63c2001438b453f7cea0ef56cad0a2fe6383e5bf1d"
+}

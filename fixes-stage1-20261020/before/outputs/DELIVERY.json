@@ -1,0 +1,54 @@
+{
+  "project": "学伴小N",
+  "date": "2026-10-20",
+  "local_url": "http://localhost:5173/",
+  "unit_tests": {
+    "passed": 17,
+    "total": 17,
+    "log": "evidence/unit-final.log"
+  },
+  "browser_tests": {
+    "passed": 17,
+    "total": 17,
+    "report": "evidence/browser-release.json"
+  },
+  "scope": "Local synthetic prototype; desktop browser mobile viewport, not physical-phone acceptance",
+  "source_sha256": {
+    "src/data.ts": "9fd87a201f55bca91e9aa77b3005320bf557280f9e969db879b07ec472a94911",
+    "src/App.tsx": "a2609148024bbe7ad322a8ded955908d41dd9f845b1d1053f1f6310db58268a1",
+    "src/main.tsx": "0149f7a69d4d5aeb746722160f8fbcd57defdf78e80e1fe3d9038dc76f84361e",
+    "src/domain.test.ts": "bdc4c412eafab1ab4e5b305bb2f539d141dfc7ac211370dbce99a0a726a9e366",
+    "src/style.css": "02860490c01c6c62e22ff28100fd28c628135bd209fbe7406cf425c9c29c0a10",
+    "src/Upload.tsx": "ee8e8f4699c540c69813f13dc0d63c1706daecf5ad9a805865c04251167d2dda",
+    "src/domain.ts": "b4f24cf720f5ea2198bbc59631d9695e10ce34bce255b3a261cbd04e3ff2ed45",
+    "src/Art.tsx": "211c3a2a9eaf098f2956298752b5ebd3ed21d276908d58644f5f77c67a624c7c",
+    "package.json": "2461b63bad1bf516818365419272edb3040fa6a3b680e4df2e89bcd784b5ed54",
+    "package-lock.json": "6c46d2309206e94d6a485289a7ac6c669e1dcf9c09856e5ef9d0274f1dc1ba2e",
+    "vite.config.ts": "61a7fbafe09ff8d83d4d30ac8358a2c0a38d93cb94f5ee4de839bf5e0c95db1a",
+    "tsconfig.json": "b2b281880189dca3e9f2039b7dea03e3d8f094c0a7af4976a5bf7748a8cf6e50",
+    "scripts/build-offline.mjs": "6a3fb765b5db9206befd49b9f760741840a6bebed7246679e5d636e925085d39",
+    "tests/offline.spec.ts": "885713184ef034e72568bf133cd02f370a7ef30c36eea2e96063c011acb630f4"
+  },
+  "sharing": {
+    "guide_url": "http://localhost:5173/share.html",
+    "archive": "学伴小N-队友体验包.zip",
+    "single_html_sha256": "d38cf963ff687d335f1258dffb666129ad85d4ece2ee4047888365d0720c8a21",
+    "http_standalone_test": {
+      "passed": 1,
+      "total": 1,
+      "report": "evidence/browser-sharing-fixed.json"
+    },
+    "file_protocol_validation": "Not tested: browser URL policy forbids file://",
+    "core_regression": "17 core checks passed again in evidence/browser-sharing.log; initial standalone failure fixed and rerun separately"
+  },
+  "migration": {
+    "root": "/Users/ami/Documents/个人/ACC黑客松",
+    "source_root": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon",
+    "former_root": "/Users/ami/Documents/Codex/2026-10-20/n-n-n-agents-md-react",
+    "compatibility_links_preserved": true,
+    "published_source_sha256_matches": 14,
+    "zip_crc_passed": 19,
+    "record": "work/migration/result.json",
+    "raw_historical_evidence": "not rewritten"
+  }
+}

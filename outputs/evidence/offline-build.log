@@ -1,0 +1,18 @@
+
+> xiaon-learning-companion@1.0.0 build:offline
+> npm run build && node scripts/build-offline.mjs
+
+
+> xiaon-learning-companion@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 1583 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.61 kB │ gzip:   0.46 kB
+dist/assets/index-BF22_8JJ.css   41.71 kB │ gzip:  10.15 kB
+dist/assets/index-CS9E9h6K.js   318.27 kB │ gzip: 100.95 kB
+✓ built in 561ms
+Offline HTML: /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/team/双击打开-学伴小N.html (360461 bytes)

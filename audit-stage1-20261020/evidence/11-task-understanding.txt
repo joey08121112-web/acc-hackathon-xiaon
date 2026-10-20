@@ -1,0 +1,38 @@
+- banner:
+  - button "返回":
+  - heading "一起看题" [level=2]
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: 理解 · 轻量探索
+  - button "先暂停":
+    - text: 先暂停
+  - generic: 只专注这一小步
+  - heading "读懂一句数学语言" [level=1]
+  - paragraph: “比 x 的 2 倍少 3”可以怎样表示？
+  - text: 选择你的答案
+  - button "选择你的答案 2(x − 3) 3 − 2x":
+    - generic: 2x − 3
+  - button "2(x − 3)":
+    - generic: 2(x − 3)
+  - button "3 − 2x":
+    - generic: 3 − 2x
+  - button "给一点提示":
+    - text: 给一点提示
+  - button "我先试试" [disabled]:
+    - text: 我先试试
+  - generic "查看作答与提示记录 0 次尝试":
+    - text: 查看作答与提示记录
+    - generic: 0 次尝试
+  - button "题目识别错了？重新核对":
+    - text: 题目识别错了？重新核对
+  - paragraph: 所有任务均为原创示例，不用于能力排名。
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长

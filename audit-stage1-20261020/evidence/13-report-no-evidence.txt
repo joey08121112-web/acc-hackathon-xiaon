@@ -1,0 +1,64 @@
+- banner:
+  - button "返回":
+  - heading "学习观察" [level=2]
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: OBSERVATIONS, WITH EVIDENCE
+  - heading "这一次，我们发现了什么？" [level=1]
+  - paragraph: 这是 AI 根据本机作答记录整理的学习观察。结果只代表这些任务，不是智力或人格判断。
+  - strong: 0 次尝试，有迹可循
+  - paragraph: 提示、修改与独立完成，分别记录。
+  - article:
+    - generic: "01"
+    - heading "理解" [level=2]
+    - generic: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - generic "观察依据 0 道题":
+      - text: 观察依据
+      - text: 0 道题
+  - article:
+    - generic: "02"
+    - heading "逻辑" [level=2]
+    - generic: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - generic "观察依据 0 道题":
+      - text: 观察依据
+      - text: 0 道题
+  - article:
+    - generic: "03"
+    - heading "计算" [level=2]
+    - generic: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - generic "观察依据 0 道题":
+      - text: 观察依据
+      - text: 0 道题
+  - article:
+    - generic: "04"
+    - heading "建模" [level=2]
+    - generic: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - generic "观察依据 0 道题":
+      - text: 观察依据
+      - text: 0 道题
+  - article:
+    - generic: "05"
+    - heading "空间想象" [level=2]
+    - generic: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - generic "观察依据 0 道题":
+      - text: 观察依据
+      - text: 0 道题
+  - button "按这些观察，安排一小周":
+    - text: 按这些观察，安排一小周
+  - button "导出这份观察（AI 演示）":
+    - text: 导出这份观察（AI 演示）
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长

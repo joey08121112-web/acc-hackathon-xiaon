@@ -1,0 +1,23 @@
+- banner:
+  - text: 今日小任务
+  - generic: 按自己的节奏，向前一点点
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: A LITTLE IS ENOUGH TODAY
+  - heading "今天，留一点空白。" [level=1]
+  - paragraph: 你已选择休息。没有需要赶上的进度。
+  - img "小N安静地休息":
+    - generic: z
+  - heading "休息不是落后。" [level=2]
+  - paragraph: 任务已暂停，提醒也已停止。
+  - button "我想自己重新安排"
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日" [active]:
+    - text: 今日
+  - button "成长":
+    - text: 成长

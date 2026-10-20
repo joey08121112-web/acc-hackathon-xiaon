@@ -1,0 +1,88 @@
+
+> xiaon-learning-companion@1.0.0 test:browser
+> playwright test
+
+
+Running 12 tests using 1 worker
+
+(node:42500) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/experience.spec.ts:7:1 › 01 首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入 (1.2s)
+  ✘   2 tests/experience.spec.ts:10:1 › 02 选择休息、刷新与今日页都停止任务催促 (45.1s)
+(node:42541) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/experience.spec.ts:11:1 › 03 错误、提示、暂停、刷新、修正、新题独立完成改变报告 (32.1s)
+
+
+  1) tests/experience.spec.ts:10:1 › 02 选择休息、刷新与今日页都停止任务催促 ─────────────────────────────────────────
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByLabel('年龄段', { exact: true })
+
+
+      1 | import { test, expect, type Page } from '@playwright/test';
+      2 | const screenshot=(p:Page,name:string)=>p.screenshot({path:`../evidence/${name}.png`,fullPage:true});
+    > 3 | async function basic(p:Page){await p.goto('/');await p.getByRole('button',{name:'认识一下小N',exact:true}).click();await p.getByLabel('年龄段',{exact:true}).selectOption('14-17');await p.getByRole('checkbox').check();await p.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();await p.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();}
+        |                                                                                                                                                      ^
+      4 | async function settings(p:Page){await p.getByRole('button',{name:'我的与设置',exact:true}).click();}
+      5 | async function question(p:Page){await p.getByRole('button',{name:'一起看一道题',exact:false}).click();await p.getByRole('button',{name:'我愿意，从示例题开始',exact:true}).click();}
+      6 | const state=(p:Page)=>p.evaluate(()=>JSON.parse(localStorage.getItem('xiaon-progress-v1')||'{}'));
+        at basic (/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:3:150)
+        at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:10:46
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../work/browser-first/experience-02-选择休息、刷新与今日页都停止任务催促/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../work/browser-first/experience-02-选择休息、刷新与今日页都停止任务催促/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../work/browser-first/experience-02-选择休息、刷新与今日页都停止任务催促/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../work/browser-first/experience-02-选择休息、刷新与今日页都停止任务催促/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/experience.spec.ts:11:1 › 03 错误、提示、暂停、刷新、修正、新题独立完成改变报告 ──────────────────────────────────
+
+    Test was interrupted.
+
+    Error: locator.selectOption: Test ended.
+    Call log:
+      - waiting for getByLabel('年龄段', { exact: true })
+
+
+      1 | import { test, expect, type Page } from '@playwright/test';
+      2 | const screenshot=(p:Page,name:string)=>p.screenshot({path:`../evidence/${name}.png`,fullPage:true});
+    > 3 | async function basic(p:Page){await p.goto('/');await p.getByRole('button',{name:'认识一下小N',exact:true}).click();await p.getByLabel('年龄段',{exact:true}).selectOption('14-17');await p.getByRole('checkbox').check();await p.getByRole('button',{name:'继续，选择可选功能',exact:true}).click();await p.getByRole('button',{name:'关闭可选功能，进入基本体验',exact:true}).click();}
+        |                                                                                                                                                      ^
+      4 | async function settings(p:Page){await p.getByRole('button',{name:'我的与设置',exact:true}).click();}
+      5 | async function question(p:Page){await p.getByRole('button',{name:'一起看一道题',exact:false}).click();await p.getByRole('button',{name:'我愿意，从示例题开始',exact:true}).click();}
+      6 | const state=(p:Page)=>p.evaluate(()=>JSON.parse(localStorage.getItem('xiaon-progress-v1')||'{}'));
+        at basic (/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:3:150)
+        at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/experience.spec.ts:11:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../work/browser-first/experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../work/browser-first/experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../work/browser-first/experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../work/browser-first/experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/experience.spec.ts:10:1 › 02 选择休息、刷新与今日页都停止任务催促 ──────────────────────────────────────────
+  1 interrupted
+    tests/experience.spec.ts:11:1 › 03 错误、提示、暂停、刷新、修正、新题独立完成改变报告 ───────────────────────────────────
+  9 did not run
+  1 passed (1.3m)

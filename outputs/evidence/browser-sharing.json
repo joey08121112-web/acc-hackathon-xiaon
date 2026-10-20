@@ -1,0 +1,789 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/playwright.config.ts",
+    "rootDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-sharing",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-sharing",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "snapshotDir": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://localhost:5173",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "zh-CN",
+          "timezoneId": "Asia/Shanghai",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../evidence/browser-sharing.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "accessibility.spec.ts",
+      "file": "accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "四个主页面的 WCAG A/AA 自动检查",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1390,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:26:33.094Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ddd864604af8a6a0198f-8d8e3e174cb8dca61bd0",
+          "file": "accessibility.spec.ts",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "experience.spec.ts",
+      "file": "experience.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "01 首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 636,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:26:34.653Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-84530de3ef76bb52dc6b",
+          "file": "experience.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "02 选择休息、刷新与今日页都停止任务催促",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 520,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:26:35.292Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-39adea9da86a9e62dd03",
+          "file": "experience.spec.ts",
+          "line": 75,
+          "column": 1
+        },
+        {
+          "title": "03 错误、提示、暂停、刷新、修正、新题独立完成改变报告",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3890,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:26:35.815Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-0d4633dc765841fe1931",
+          "file": "experience.spec.ts",
+          "line": 90,
+          "column": 1
+        },
+        {
+          "title": "04 断网提交保留草稿，失败重试、重复点击与刷新不重复计题",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2983,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:26:39.709Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-5a8a2cb401e7173dfc44",
+          "file": "experience.spec.ts",
+          "line": 139,
+          "column": 1
+        },
+        {
+          "title": "05 五维地图和列表完整任务、空间视觉选择与报告证据",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5862,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:26:42.697Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-ac6fcb10f74225dc82be",
+          "file": "experience.spec.ts",
+          "line": 159,
+          "column": 1
+        },
+        {
+          "title": "06 周计划接受、减量、改期、暂不开始与今日接续",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14595,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:26:48.562Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-261a901dac36a320d2e3",
+          "file": "experience.spec.ts",
+          "line": 195,
+          "column": 1
+        },
+        {
+          "title": "07 记忆开启、主动保存、更正、停止、删除；关闭不新增长期记忆",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2266,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:03.161Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-ca68ff401077de14b21b",
+          "file": "experience.spec.ts",
+          "line": 226,
+          "column": 1
+        },
+        {
+          "title": "08 示例图片真实裁剪、像素遮挡、刷新恢复、手动核对与移除清理",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1290,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:05.430Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-1254ae4a228d1444bf4f",
+          "file": "experience.spec.ts",
+          "line": 270,
+          "column": 1
+        },
+        {
+          "title": "09 求助失败、取消、安全联系人替代、模拟成功并非已读",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3534,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:06.724Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-14ce83a97bf90c97a867",
+          "file": "experience.spec.ts",
+          "line": 332,
+          "column": 1
+        },
+        {
+          "title": "10 聊天等待、暂停、恢复、断网失败、重试不重复消息",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3317,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:10.265Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-6acad9fe8fabf436c919",
+          "file": "experience.spec.ts",
+          "line": 372,
+          "column": 1
+        },
+        {
+          "title": "11 监护人信息申请范围、必要核验、处理中、结果",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1813,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:13.586Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-20f3d11077d56e444b10",
+          "file": "experience.spec.ts",
+          "line": 398,
+          "column": 1
+        },
+        {
+          "title": "12 常见手机宽度、长文本、大字体与减少动效，无横向溢出",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1497,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:15.402Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-901f436ee86880e61ab7",
+          "file": "experience.spec.ts",
+          "line": 413,
+          "column": 1
+        },
+        {
+          "title": "13 错误后的补充题分支与10题上限经刷新仍生效",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9621,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:16.902Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-8f1d198be9ed6fc09759",
+          "file": "experience.spec.ts",
+          "line": 452,
+          "column": 1
+        },
+        {
+          "title": "14 提交等待期间关闭长期记忆，迟到结果不追加长期条目",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1590,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:26.526Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-fcc2f27ece9ec8643790",
+          "file": "experience.spec.ts",
+          "line": 479,
+          "column": 1
+        },
+        {
+          "title": "15 聊天中明确选择休息，后续回应和入口停止学习邀请",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3660,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:28.120Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-3d26f590cebac4a7a4f1",
+          "file": "experience.spec.ts",
+          "line": 507,
+          "column": 1
+        },
+        {
+          "title": "16 重新首次介绍保留进度，重置演示清空进度与图片",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2293,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:31.786Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "116f6b4a9defd92cdbb9-c1ce1ace62b6f2db8384",
+          "file": "experience.spec.ts",
+          "line": 525,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "offline.spec.ts",
+      "file": "offline.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "单文件体验版无需其他资源即可走通看题与恢复；分享包可下载",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5171,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '慢慢来， 也会到达。' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '慢慢来， 也会到达。' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '慢慢来， 也会到达。' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '慢慢来， 也会到达。' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '慢慢来， 也会到达。' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '慢慢来， 也会到达。' })\u001b[22m\n\n    at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/offline.spec.ts:12:62",
+                    "location": {
+                      "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/offline.spec.ts",
+                      "column": 62,
+                      "line": 12
+                    },
+                    "snippet": "  10 |  });\n  11 |  await page.goto('/offline.html');\n> 12 |  await expect(page.getByRole('heading',{name:'慢慢来， 也会到达。'})).toBeVisible();\n     |                                                              ^\n  13 |  expect(await page.locator('script[src],link[rel=\"stylesheet\"][href]').count()).toBe(0);\n  14 |  await page.getByRole('button',{name:'认识一下小N',exact:true}).click();\n  15 |  await page.getByRole('combobox',{name:'年龄段',exact:true}).selectOption('adult');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/offline.spec.ts",
+                        "column": 62,
+                        "line": 12
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '慢慢来， 也会到达。' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '慢慢来， 也会到达。' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '慢慢来， 也会到达。' })\u001b[22m\n\n\n  10 |  });\n  11 |  await page.goto('/offline.html');\n> 12 |  await expect(page.getByRole('heading',{name:'慢慢来， 也会到达。'})).toBeVisible();\n     |                                                              ^\n  13 |  expect(await page.locator('script[src],link[rel=\"stylesheet\"][href]').count()).toBe(0);\n  14 |  await page.getByRole('button',{name:'认识一下小N',exact:true}).click();\n  15 |  await page.getByRole('combobox',{name:'年龄段',exact:true}).selectOption('adult');\n    at /Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/offline.spec.ts:12:62"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T08:27:34.088Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-sharing/offline-单文件体验版无需其他资源即可走通看题与恢复；分享包可下载/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-sharing/offline-单文件体验版无需其他资源即可走通看题与恢复；分享包可下载/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/work/browser-sharing/offline-单文件体验版无需其他资源即可走通看题与恢复；分享包可下载/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/tests/offline.spec.ts",
+                    "column": 62,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-b46f0a1186de79992769",
+          "file": "offline.spec.ts",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-20T08:26:32.837Z",
+    "duration": 66539.961,
+    "expected": 17,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

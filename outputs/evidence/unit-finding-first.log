@@ -1,0 +1,52 @@
+
+> xiaon-learning-companion@1.0.0 test
+> tsx --test src/domain.test.ts
+
+✔ 可选授权默认关闭，基本体验与长期记忆解耦 (0.377542ms)
+✔ 所有原创建议答案都被正确接受，错误答案不被接受 (0.347458ms)
+✔ 去括号符号错误与等价步骤被区分；矛盾等式不能靠末尾答案蒙混过关 (0.153208ms)
+✔ 无作答时所有维度尚未观察，暂停不等于能力弱 (0.124ms)
+✔ 第一次错误、提示、修改记录分别保留；提示后不能算独立掌握 (0.136542ms)
+✔ 没有提示的原题修改不冒充首次独立完成 (0.046875ms)
+✔ 同类新题首次独立完成能改变观察，重复原题不能增加独立题量 (0.075666ms)
+✔ 同一个提交ID重复到达幂等，不重复计题 (0.046959ms)
+✔ 计算最多10道，包含补充；刷新、重试与反复进入不能绕过 (0.191583ms)
+✔ 暂停后草稿和提示持久化，恢复不重开题 (0.069959ms)
+✔ 中断的聊天与发送演示恢复为可重试失败，不假装发送成功 (0.039ms)
+✔ 聊天重试不重复插入学生消息；暂停时迟到回复被忽略 (0.041792ms)
+✔ 安全支持暂停任务，迟到提交不能写入成绩或记录 (0.025541ms)
+✔ 关闭长期记忆后不追加条目，原有学习进度仍可保存 (0.243667ms)
+✔ 计划减量、改期、暂不开始都持久化 (0.037583ms)
+✔ 损坏数据有明确恢复提示，未来版本不误读 (0.040083ms)
+✖ 其他计算错误不能被编造成漏改负号的证据 (0.358792ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 16
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 81.208166
+
+✖ failing tests:
+
+test at src/domain.test.ts:154:1
+✖ 其他计算错误不能被编造成漏改负号的证据 (0.358792ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /新题有独立/. Input:
+  
+  '这次 1 道题中，出现了与去括号时漏改符号一致的结果，具体步骤仍需核对。另外的新题有独立完成记录。'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/codex/2026-10-20/n-n-n-agents-md-react/outputs/xiaon/src/domain.test.ts:159:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '这次 1 道题中，出现了与去括号时漏改符号一致的结果，具体步骤仍需核对。另外的新题有独立完成记录。',
+    expected: /新题有独立/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }

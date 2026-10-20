@@ -1,0 +1,18 @@
+# 依赖与构建产物（可用 npm install / npm run build 重新生成）
+node_modules/
+dist/
+tsconfig.tsbuildinfo
+
+# 系统文件
+.DS_Store
+
+# 内部过程工作目录（浏览器测试中间产物，不随仓库分发）
+work/
+
+# 旧版原型（已被 outputs/xiaon 取代）
+outputs/xiaon-prototype/
+outputs/xiaon-prototype.zip
+
+# 测试产物
+test-results/
+playwright-report/

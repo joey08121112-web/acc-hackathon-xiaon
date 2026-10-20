@@ -1,0 +1,34 @@
+- banner:
+  - text: 学伴小N
+  - generic: 你的 AI 学伴
+  - button "帮助与支持":
+  - button "我的与设置":
+- main:
+  - generic: HI, 很高兴见到你
+  - heading "今天，先好好休息。" [level=1]
+  - button "AI 学伴":
+    - text: AI 学伴
+  - generic: 每一步，都算数
+  - generic: 慢慢来就好
+  - img "小N安静地休息":
+    - generic: z
+  - generic: YOUR LITTLE LEARNING COMPANION
+  - generic: 小N 轻轻说
+  - heading "不用赶路，歇一歇也很好。" [level=2]
+  - paragraph: 任务提醒已暂停。你不需要完成什么来证明自己。
+  - button "我想继续聊聊":
+    - text: 我想继续聊聊
+  - paragraph: 由你决定什么时候再开始。
+  - text: 你的选择会被尊重。
+  - button "了解信息与授权"
+- navigation "主导航":
+  - button "小N":
+    - text: 小N
+  - button "探索":
+    - text: 探索
+  - button "今日":
+    - text: 今日
+  - button "成长":
+    - text: 成长
+- status:
+  - text: 今天先休息。任务提醒已暂停，回来时由你决定。

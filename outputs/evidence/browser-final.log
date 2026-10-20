@@ -1,0 +1,25 @@
+
+> xiaon-learning-companion@1.0.0 test:browser
+> playwright test
+
+
+Running 14 tests using 1 worker
+
+(node:43157) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/accessibility.spec.ts:3:1 › 四个主页面的 WCAG A/AA 自动检查 (1.4s)
+  ✓   2 tests/experience.spec.ts:7:1 › 01 首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入 (606ms)
+  ✓   3 tests/experience.spec.ts:10:1 › 02 选择休息、刷新与今日页都停止任务催促 (517ms)
+  ✓   4 tests/experience.spec.ts:11:1 › 03 错误、提示、暂停、刷新、修正、新题独立完成改变报告 (3.9s)
+  ✓   5 tests/experience.spec.ts:12:1 › 04 断网提交保留草稿，失败重试、重复点击与刷新不重复计题 (2.9s)
+  ✓   6 tests/experience.spec.ts:13:1 › 05 五维地图和列表完整任务、空间视觉选择与报告证据 (5.5s)
+  ✓   7 tests/experience.spec.ts:14:1 › 06 周计划接受、减量、改期、暂不开始与今日接续 (14.6s)
+  ✓   8 tests/experience.spec.ts:15:1 › 07 记忆开启、主动保存、更正、停止、删除；关闭不新增长期记忆 (2.2s)
+  ✓   9 tests/experience.spec.ts:16:1 › 08 示例图片真实裁剪、像素遮挡、刷新恢复、手动核对与移除清理 (1.3s)
+  ✓  10 tests/experience.spec.ts:17:1 › 09 求助失败、取消、安全联系人替代、模拟成功并非已读 (3.6s)
+  ✓  11 tests/experience.spec.ts:18:1 › 10 聊天等待、暂停、恢复、断网失败、重试不重复消息 (3.4s)
+  ✓  12 tests/experience.spec.ts:19:1 › 11 监护人信息申请范围、必要核验、处理中、结果 (1.9s)
+  ✓  13 tests/experience.spec.ts:20:1 › 12 常见手机宽度、长文本、大字体与减少动效，无横向溢出 (1.5s)
+  ✓  14 tests/experience.spec.ts:21:1 › 13 错误后的补充题分支与10题上限经刷新仍生效 (9.6s)
+
+  14 passed (53.4s)
