@@ -1,11 +1,11 @@
 # ACC黑客松 · 学伴小N
 
-本次小N项目和交付材料已迁至这个目录。`audit-stage1-20261020/` 为另外新增的审计资料，迁移时保留未改动。
+本次小N项目和交付材料已迁至这个目录。`audit-stage1-20261020/` 为另外新增的审计资料，迁移时保留未改动。阶段2审查已完成：[audit-stage2-20261020/REPORT.md](audit-stage2-20261020/REPORT.md)（结论：不通过，1项P1待修复）。
 
 - **打开体验**：http://localhost:5173/
 - **打开与分享说明**：http://localhost:5173/share.html
 - **源码**：[outputs/xiaon](outputs/xiaon/README.md)
-- **发给队友**：[队友体验包](outputs/学伴小N-队友体验包.zip)，解压后按包内说明用电脑浏览器打开。
+- **发给队友**：[队友上手指南](队友上手指南.md)（拉代码、命令行启动、演示路线、真实现与演示边界）；只想快速体验的同学可直接用 [队友体验包](outputs/学伴小N-队友体验包.zip)，解压后按包内说明用电脑浏览器打开。
 - **截图**：[手机截图索引](outputs/SCREENSHOTS.md)
 - **验证记录**：[VALIDATION.md](outputs/VALIDATION.md)
 - **原始失败与工作资料**：`work/`
