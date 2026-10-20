@@ -1,0 +1,41 @@
+- banner:
+  - button "返回":
+    - img
+  - heading "和小N聊聊" [level=2]
+  - button "帮助与支持":
+    - img
+  - button "我的与设置":
+    - img
+- main:
+  - img "原创学伴小N，绿色的小芽伙伴"
+  - strong: 小N在这里
+  - text: AI · 本地预设回复演示
+  - button "能力说明"
+  - text: 此刻，只聊你想聊的 小N · AI 这次数学考试之后，你现在最想做什么？ 先聊聊，暂不邀请看题。想开始时，由你决定。
+  - button "我想开始看题"
+  - button "这次考砸了，有点难过"
+  - button "我想说说"
+  - button "今天先休息"
+  - textbox "对小N说":
+    - /placeholder: 想说什么都可以，慢慢说…
+  - button "发送" [disabled]:
+    - img
+  - paragraph:
+    - text: AI 回答可能有误。需要现实中的支持？
+    - button "点这里"
+- navigation "主导航":
+  - button "小N":
+    - img
+    - text: 小N
+  - button "探索":
+    - img
+    - text: 探索
+  - button "今日":
+    - img
+    - text: 今日
+  - button "成长":
+    - img
+    - text: 成长
+- status:
+  - img
+  - text: 好的，先不看题。想开始时由你决定。
