@@ -1,0 +1,254 @@
+
+> xiaon-learning-companion@1.0.0 test:agent
+> node scripts/agent/test.mjs all
+
+✔ JSON Schema artifact exactly matches runtime schemas, all object boundaries reject extras (3.732458ms)
+✔ B/C consumers register independently, unimplemented ports fail explicitly (21.928542ms)
+✔ report/plan/evidence storage retains old immutable revisions without claiming B/C recomputation (7.520959ms)
+✔ refresh cannot create fake sessions; persisted exploration prerequisites, pause and 10-task budget enforced (26.18175ms)
+✔ later hints preserve original attempts; consent writes leave evidenceRevision stable (9.538917ms)
+✔ revocation stops the run before replaying prior provider context and invalidates reply replay (20.361916ms)
+✔ deleted memory retry cannot resurrect it; expiry and review deadline suppress future requests (22.215667ms)
+✔ six tool executions are a hard bound even within one parallel-call model response (19.937417ms)
+✔ GLM HTTP adapter serializes native protocol and categorizes auth/rate/malformed responses without leaking credentials (19.579333ms)
+✔ 05 config defaults personal Coding Plan GLM Flash, one server-side variable namespace, and validates budgets (7.462917ms)
+✔ GLM configured endpoint/token budget and native thinking fields roundtrip without leaking private thought (29.352917ms)
+✔ truncation refuses tool execution; configured provider timeout reports timeout (29.387834ms)
+✔ configured whole-run timeout reaches runtime without browser timeout overriding it (20.755833ms)
+✔ default Coding Plan provider sends the complete chat endpoint while an explicit base still overrides it (1.189667ms)
+✔ HTTP local session, strict origin/host, CSRF, request validation and native tool chain (75.885584ms)
+✔ strict schema and browser public view deny answer, role, learner and invalid versions (21.410833ms)
+✔ native synthetic tool loop really queries SQLite and returns a tool result to model (15.239917ms)
+✔ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (22.171083ms)
+✔ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (18.208ms)
+✔ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (12.275333ms)
+✔ restart preserves attempts, operation receipts and sessions in a real SQLite file (11.814334ms)
+✔ timeout, cancellation, unsupported provider and budget do not fake completion (60.102083ms)
+✔ legacy import preview, transaction rollback, retry and unknown time keep original untouched (10.529041ms)
+✔ opening version 1 yesterday prevents version 2 of the same original from becoming unseen without an earlier attempt (36.711875ms)
+✔ a single active session spanning midnight cannot turn a previously opened original into an unseen new problem (19.918208ms)
+✔ unassisted redo next day records delayed retention but adds neither a new task nor a new independent date (20.463125ms)
+✔ supplemental calc family math is checked at independent values; padded answers retain exact quotes; second-line contradictions fail (0.7325ms)
+✔ registered frozen port is consumed by A tools without changing registry; public selection hides trusted grading key (16.041875ms)
+✔ parallel duplicate grades commit one immutable revision, and catalog output mutations cannot replace the trusted answer (10.1795ms)
+✔ same-timestamp cross-version exposure has no provable ordering and cannot establish unseen independence (8.861208ms)
+✔ six explicit subskills have observation, genuinely different transfer and delayed tasks; strict public views hide keys (15.665ms)
+✔ reference math is independently derived from integer substitutions or explicit language/cost meanings, all typical errors rejected (4.73325ms)
+✔ spatial answers independently derived by trigonometric rotation and edge lengths, with explicit y-up coordinate convention (0.498208ms)
+✔ existing restricted parser accepts equivalents, rejects contradictory chains, defers unsupported syntax and never executes source (1.101041ms)
+✔ candidate constraints filter dimension, knowledge point, exclusions and limit without promising prerequisite mastery (1.391834ms)
+✔ wrong then correct, helped completion, original redo and unseen independent attempts remain distinct immutable facts (41.619084ms)
+✔ no-hint correction is never first independent; no attempt, whitespace and pause do not mean weak ability (16.936792ms)
+✔ hint after submission does not rewrite success; chat help or answer exposure before submission prevents independence (38.727917ms)
+✔ same-day variants cannot establish across-day status; two trusted dates and unseen tasks can; local date uses Shanghai (33.839542ms)
+✔ original opened on an earlier date, repeated raw problem and version aliases do not count as unseen transfer (11.69625ms)
+✔ unknown legacy time/exposure cannot establish independent status, missing grades stay unknown (8.590709ms)
+✔ cross-session rule is configurable and not a standardized assessment (7.338542ms)
+✔ operation retries append no duplicate evidence, different operations for one grade reuse it, fake attempt rejected (6.627417ms)
+✔ real SQLite reopen retains attempts, evidence, snapshots and operation receipts; frozen-port consumer compiles (23.2175ms)
+✔ choice correct alone does not prove reasoning; validated explanation has exact saved-answer quotes (59.565208ms)
+✔ no quote, foreign quote, malformed JSON, unknown points, wrong offsets, extra keys and program/model conflict all defer (88.78975ms)
+✔ model sees only required task/rubric, persisted answer and exposure snapshot, no optional profile/chat/history (8.847791ms)
+✔ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (19.8495ms)
+✔ absence and queries are read-only; UTC strings with omitted milliseconds compare by instant (60.531958ms)
+✔ initial anchoring attempt cannot be recycled as a later review outcome (8.545125ms)
+✔ a completed review never schedules the same seen task as the next unseen check (9.377167ms)
+✔ future plan date and queued due cannot silently diverge after rescheduling (14.140542ms)
+✔ out-of-order completion cannot roll due backwards (13.14075ms)
+✔ corrected evidence marks old plans as revised without rewriting student confirmation (14.025959ms)
+✔ stale evidence references in a snapshot cannot be relabelled as current facts (15.218083ms)
+✔ task prerequisite shortage is explicit, budget one never claims a three-minute task fits (10.733084ms)
+✔ due support priority and explicit student choice retain alternative evidence (14.4755ms)
+✔ calendar validation rejects impossible dates and configurable clock intervals are persisted (10.609625ms)
+✔ Shanghai midnight alone cannot advance a review stage; a real day can (33.475917ms)
+✔ a new calendar day refreshes a draft without overwriting the accepted plan (8.441042ms)
+✔ fractional minute budgets remain within budget and produce valid integer estimates (7.712ms)
+✔ new evidence or an unaccepted draft never prevents the student pausing the current confirmed plan (19.509833ms)
+✔ 1/3/7/14 days, exact due boundary, absence and same-day repetition never fast-forward (81.346292ms)
+✔ same-day fresh tasks and repeated original cannot advance; attempts stay append-only (32.324417ms)
+✔ help, incorrect and needs_review schedule differently; no outcome for absence (52.251958ms)
+✔ four profiles differ, unknown is optional, stable avoids remedial practice; refresh is idempotent (47.235375ms)
+✔ seen/chat-answer exposure never selected as unseen; catalog exhaustion is explicit (8.465333ms)
+✔ defer/resume/reschedule/lighter keep immutable plans, postponement history and stale guards (14.307875ms)
+✔ Shanghai midnight, host TZ independence, legacy unknown never seeds due or stability (10.143583ms)
+✔ report immutability, correction annotations and queue replay from authoritative grades (22.439709ms)
+✔ restart receipts, queue revisions and immutable snapshots survive real disk reopen (15.660917ms)
+✔ untrusted self-report, stale outcome, reused attempt and stale assessment fail without writes (8.128ms)
+✔ constraints retain per-session ten calculation tasks and prerequisites; optional memories never read (21.891458ms)
+✔ profiles really differ through B and C: modeling difficulty versus calculation independence (50.821375ms)
+✔ exploration prerequisite and real session limit persist across refresh, support switch and next date (32.246459ms)
+✔ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (66.866291ms)
+✔ Tutor and PlannerReporter native tools are real; six executions/four rounds, illegal tools and forged arguments are gated (17.0285ms)
+✔ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (9.109167ms)
+✔ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (36.054375ms)
+✔ retry analysis after timeout uses saved attempt and appends grading revision; report flags old basis (84.061833ms)
+✔ Tutor may quote an already submitted cost expression that coincides with an unused calculation answer, but cannot reveal a current unseen task (19.025ms)
+✔ student rest takes priority over an in-flight model operation and cancels its late text (9.471ms)
+✔ new tool handlers return actual C queues/proposals and a non-writing memory candidate (12.331667ms)
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (102.107792ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (32.196709ms)
+✔ an unseen review opened yesterday but submitted today cannot advance C when B classifies the preview as seen (27.773875ms)
+✔ protected D HTTP routes reject self-granted roles, bypasses, clock input and malicious import atomically (74.66775ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (55.304792ms)
+✔ Tutor records a stuck point only with a verbatim student quote, once per turn, and it survives into later turns (42.290417ms)
+✔ record_stuck_point is Tutor-only, needs the program-supplied conversation and rejects other knowledge points (6.955333ms)
+✔ select_task by knowledge point honours prerequisites and returns only that point (27.623ms)
+✔ Tutor receives the latest verdict without the trusted answer, both in its input and via get_latest_feedback (17.852458ms)
+✔ speech ends after a pause; a steady noisy room is not speech; a click is not speech; silence times out (2.017166ms)
+✔ encodeWav writes a valid 16 kHz mono 16-bit file and clips out-of-range samples (5.866334ms)
+✔ Doubao ASR sends one request with server-side config, returns text, and maps vendor outcomes (3.4545ms)
+✔ available() asks the vendor with silence once, caches the answer, and re-checks a refusal later (0.837958ms)
+✔ ASR config: shares the TTS key unless a separate one is set, and can be switched off (0.325958ms)
+✔ /api/voice/asr needs a session + CSRF, accepts only a base64 WAV, and health reports whether recognition is really available (75.862125ms)
+✔ step 1 listens on the first student turn, step 2 probes afterwards; the program, not the client, picks the stage (24.757334ms)
+✔ Tutor sees the recent conversation (8 turns), not only the last sentence (5.755542ms)
+✔ self-harm wording is answered by a fixed program message: no model call, nothing stored (12.95125ms)
+✔ chat only counts as task help after the Tutor really answered (10.939459ms)
+✔ TTS stream parser survives any chunk boundary, braces inside strings and concatenated objects (0.757875ms)
+✔ Doubao TTS assembles audio, sends only server config + text, caches repeats, rejects vendor errors and empty audio (5.1155ms)
+✔ TTS is off unless provider, key and speaker are all configured (0.385666ms)
+✔ /api/voice/tts needs a local session + CSRF, accepts only {text}, reports availability and returns audio (81.592084ms)
+✔ synthetic generation → real handler → validation → SQLite → unified catalog → student opens → real grading (87.979416ms)
+✔ repair round: a wrong first candidate is rejected and a valid second one publishes; two failures publish nothing (25.469083ms)
+✔ idempotent operation IDs, conflicting reuse and concurrent requests never double-publish (76.6935ms)
+✔ program gates: prerequisite, pause, exploration order, 10-calculation cap, daily cost cap and offline fallback (50.492667ms)
+✔ cancel, timeout, pause during generation and reset discard late results; nothing is opened automatically (1714.497542ms)
+✔ optional memory reaches the generator only when enabled; reset removes generated tasks and records (31.368625ms)
+✔ review purpose: due item → generated unseen task → next-day review advances the stage through the normal C path (34.602708ms)
+✔ generate-task HTTP route accepts only whitelisted student choices and never returns answers, rubric, hints or prompt (119.079666ms)
+✔ every template answer equals the expression at several points, across signs, both variables and difficulty bounds (8.516375ms)
+✔ degenerate and out-of-range parameters are rejected by explicit rules (5.622709ms)
+✔ validator publishes only program content and rejects wrong answers, wrong steps, malformed and injected candidates (7.299417ms)
+✔ fingerprints collide for whitespace, minus glyphs, term order, x/a swaps and ID changes, not for different problems (1.020708ms)
+✔ restricted parser rejects forms outside the grammar (0.077917ms)
+✔ fitReply keeps short replies and cuts long ones at a sentence end, else a comma, else the limit (0.57125ms)
+✔ Tutor reply above the limit: one rewrite, then a sentence-end cut; recorded on the home turn (23.099584ms)
+✖ record_stuck_point ignores the model's studentConfirmed; only a confirmed ProblemRecord linking it confirms it (10.970833ms)
+✔ Tutor memory context: the program keeps only active ids, no repeats, at most N items and M characters (0.341125ms)
+✖ while selectMemoriesForContext is a stub, the Tutor still receives all active memories (unchanged behaviour) (8.349833ms)
+✔ G0 Claude-lane schemas parse synthetic records and reject extra or out-of-scope fields (3.907166ms)
+✔ G0 Claude-lane routes are stubs: 501 not_implemented behind the same session and CSRF gate (80.942791ms)
+✔ problemSecrets never reaches view(); reset clears every G0 collection (14.155208ms)
+✖ home flow: listen 2 turns, needs-check once, every field outside the stage is dropped and traced (23.26125ms)
+✔ home flow: safety first (nothing stored), rest pauses, intent without the home flow is rejected (12.548166ms)
+✖ home flow: memory on still drops memory drafts while memory-flow is a stub; farewell ends the session (16.083167ms)
+✔ home flow: probe → think (active task + start_together) → reflect when the program matches the answer → companion after a card (24.31825ms)
+✔ home flow without a model: fixed gentle reply, no observation, contract still holds (7.647458ms)
+✔ listen lasts at least 2 turns even when the student already talks about exams or clicks study (0.96425ms)
+✔ needs-check is offered exactly once, after 2 listen turns, and waits while the latest message is intense (0.121042ms)
+✔ companion stays companion until a study intent appears; study intent moves to probe and resets the streak (0.098708ms)
+✔ after 6 consecutive companion turns the reply asks about study once, never again (0.062375ms)
+✔ a decline (button or words) means study is never asked again in this session (0.09925ms)
+✔ understanding/logic probing only in probe, at least every 3 turns, never while intense or listening (0.077333ms)
+✔ safety and rest outrank every stage; a safety message does not advance the conversation (0.074292ms)
+✔ probe asks for the concrete problem only when a specific wrong problem is mentioned and none is recorded yet (0.054125ms)
+✔ probe → think needs a confirmed problem or active task plus start_together; think → reflect → companion (0.168ms)
+✔ each stage allows only its own model fields; memory drafts disappear when memory is off (0.099125ms)
+✔ formal test choice suggests professional mode (not while intense); farewell ends the session (0.071541ms)
+✔ ChatRequest stays backward compatible; intent/flow are optional and closed enums (0.7905ms)
+✔ home flow over HTTP returns the full ChatReply; needs-check after 2 listen turns; conversation/end is a stub (41.107208ms)
+✔ G0 zCode-lane schemas: drafts carry no answer status, secrets are separate, recognition needs mask confirmation (1.755125ms)
+✔ zCode-lane routes: problem/memory/greeting live, recognize still 501; program-gated inputs rejected first (51.813542ms)
+✔ validateMemoryDraft: 关闭即拒、情绪与评价丢弃、40 字上限、origin 由程序决定 (0.597209ms)
+✔ shouldOfferMemory: 同一场次最多两次提议机会；新场次重新计 (13.239541ms)
+✔ confirmMemoryDraft: 只有学生确认才写入；写 chat 提起与 30 天复核；关闭时拒绝 (7.882917ms)
+✔ greeting: 优先接上次小结（记忆关闭也可以）；没有小结才提记忆 (16.375417ms)
+✔ greeting: 离线（无模型）返回默认文字；刚确认的记忆不会被马上提起 (6.177875ms)
+✔ selectMemoriesForContext: 只取与当前话题相关的记忆，按相关度排序 (0.413875ms)
+✔ Tutor 上下文经协调器按需取用：相关记忆才进上下文 (8.293333ms)
+✔ validateProblemDraft: 出处核对、知识点归一、不完整草稿不通过 (0.706625ms)
+✔ confirmProblem: 两次解题一致且 expression 核对一致 → verified，秘密只在服务端 (17.182542ms)
+✔ confirmProblem: 两次解题不一致 → unknown 且不写 ProblemSecret (6.170208ms)
+✔ confirmProblem: 两次一致但与题目算不出同一结果 → unknown（不写秘密） (6.232084ms)
+✔ confirmProblem: 学生改后的文字被保存；模型离线仍能确认（无参考答案） (13.741875ms)
+✔ confirmProblem: 题库题用题库答案（verified）；错题确认同时确认被引用的卡点 (7.877ms)
+✔ confirmProblem: 学生自带参考答案记 student_provided，不冒充已核验 (5.76575ms)
+✔ 重置整个演示：错题记录与参考答案一并清除 (5.87875ms)
+ℹ tests 162
+ℹ suites 0
+ℹ pass 158
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2926.510666
+
+✖ failing tests:
+
+test at tests-agent/g/alignment.test.ts:1:3659
+✖ record_stuck_point ignores the model's studentConfirmed; only a confirmed ProblemRecord linking it confirms it (10.970833ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/zcode/outputs/xiaon/tests-agent/g/alignment.test.ts:49:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { code: 'not_implemented' },
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/alignment.test.ts:1:6567
+✖ while selectMemoriesForContext is a stub, the Tutor still receives all active memories (unchanged behaviour) (8.349833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 7
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/zcode/outputs/xiaon/tests-agent/g/alignment.test.ts:72:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 7,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/home-chat.test.ts:1:1875
+✖ home flow: listen 2 turns, needs-check once, every field outside the stage is dropped and traced (23.26125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'memoryDraft:stage_not_allowed',
+      'observation:not_implemented',
+  +   'problemDraft:invalid',
+  -   'problemDraft:not_implemented',
+      'progressCardDraft:stage_not_allowed'
+    ]
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/zcode/outputs/xiaon/tests-agent/g/home-chat.test.ts:43:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'memoryDraft:stage_not_allowed', 'observation:not_implemented', 'problemDraft:invalid', 'progressCardDraft:stage_not_allowed' ],
+    expected: [ 'memoryDraft:stage_not_allowed', 'observation:not_implemented', 'problemDraft:not_implemented', 'progressCardDraft:stage_not_allowed' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/home-chat.test.ts:1:4437
+✖ home flow: memory on still drops memory drafts while memory-flow is a stub; farewell ends the session (16.083167ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   kind: 'interest',
+  +   origin: 'chat',
+  +   text: '喜欢打篮球'
+  + }
+  - null
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/zcode/outputs/xiaon/tests-agent/g/home-chat.test.ts:65:40)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { text: '喜欢打篮球', kind: 'interest', origin: 'chat' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

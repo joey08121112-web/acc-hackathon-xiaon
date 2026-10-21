@@ -1,0 +1,29 @@
+
+> xiaon-learning-companion@1.0.0 test:agent:i
+> node scripts/agent/test.mjs i
+
+✔ G0 zCode-lane schemas: drafts carry no answer status, secrets are separate, recognition needs mask confirmation (0.933292ms)
+✔ zCode-lane routes: problem/memory/greeting live, recognize still 501; program-gated inputs rejected first (45.641042ms)
+✔ validateMemoryDraft: 关闭即拒、情绪与评价丢弃、40 字上限、origin 由程序决定 (0.491708ms)
+✔ shouldOfferMemory: 同一场次最多两次提议机会；新场次重新计 (12.2745ms)
+✔ confirmMemoryDraft: 只有学生确认才写入；写 chat 提起与 30 天复核；关闭时拒绝 (6.389666ms)
+✔ greeting: 优先接上次小结（记忆关闭也可以）；没有小结才提记忆 (13.590416ms)
+✔ greeting: 离线（无模型）返回默认文字；刚确认的记忆不会被马上提起 (6.388167ms)
+✔ selectMemoriesForContext: 只取与当前话题相关的记忆，按相关度排序 (0.75975ms)
+✔ Tutor 上下文经协调器按需取用：相关记忆才进上下文 (10.756917ms)
+✔ validateProblemDraft: 出处核对、知识点归一、不完整草稿不通过 (0.665834ms)
+✔ confirmProblem: 两次解题一致且 expression 核对一致 → verified，秘密只在服务端 (16.344333ms)
+✔ confirmProblem: 两次解题不一致 → unknown 且不写 ProblemSecret (5.787208ms)
+✔ confirmProblem: 两次一致但与题目算不出同一结果 → unknown（不写秘密） (6.833125ms)
+✔ confirmProblem: 学生改后的文字被保存；模型离线仍能确认（无参考答案） (11.387584ms)
+✔ confirmProblem: 题库题用题库答案（verified）；错题确认同时确认被引用的卡点 (8.552ms)
+✔ confirmProblem: 学生自带参考答案记 student_provided，不冒充已核验 (6.63375ms)
+✔ 重置整个演示：错题记录与参考答案一并清除 (5.623458ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 193.544083

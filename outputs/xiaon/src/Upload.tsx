@@ -358,9 +358,9 @@ export function Upload({
           {stage === 3 && (
             <>
               <div className="notice">
-                示例识别结果 · 未接入 OCR
+                题目识别功能稍后上线 · 当前未接入识图
                 <br />
-                下方固定示例并非对任意图片的真实识别，请手动核对和修改。
+                下方内容不会自动识别图片，请手动核对和修改题目文字。
               </div>
               <label className="field">
                 核对题目内容
