@@ -1,0 +1,44 @@
+[
+  {
+    "command": "npm run typecheck:agent",
+    "exitCode": 0,
+    "log": "typecheck-final.txt"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "log": "domain-final.txt"
+  },
+  {
+    "command": "npm run test:agent",
+    "exitCode": 0,
+    "log": "agent-all-final.txt"
+  },
+  {
+    "command": "npm run test:agent:h",
+    "exitCode": 0,
+    "log": "h-final.txt"
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 0,
+    "log": "build-final.txt"
+  },
+  {
+    "command": "npm run typecheck:agent (含 live-backup.ts 的最终检查)",
+    "exitCode": 0,
+    "log": "typecheck-final-with-live.txt"
+  },
+  {
+    "command": "npx playwright test -c tests-agent/h/playwright.config.ts",
+    "exitCode": 0,
+    "log": "browser-final.txt",
+    "result": "8/8",
+    "outputDirectory": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-DYyTIz"
+  },
+  {
+    "command": "node --import tsx tests-agent/h/live-backup.ts",
+    "exitCode": 0,
+    "log": "live-backup.txt"
+  }
+]

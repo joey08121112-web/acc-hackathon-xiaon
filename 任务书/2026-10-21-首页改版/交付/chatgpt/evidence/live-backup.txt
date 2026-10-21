@@ -1,0 +1,1 @@
+{"mode":"real service process, local rules, synthetic records","liveCountBeforeReset":2,"snapshotCount":1,"restoredCount":1,"integrity":"ok","previousBackupCount":0,"externalModelCalls":0}

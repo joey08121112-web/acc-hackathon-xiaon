@@ -1,0 +1,20 @@
+
+> xiaon-learning-companion@1.0.0 test:agent:h
+> node scripts/agent/test.mjs h
+
+✔ 运行中 WAL 库一致性备份；清空后恢复，恢复前另存当前库 (30.642875ms)
+✔ 备份保留数只作用于本库命名空间，不删除无关文件；缺失库不创建 (46309.61675ms)
+✔ 容器数据路径没有独立挂载时给出警告；有实际挂载才通过 (0.575042ms)
+✔ ChatRequest stays backward compatible; intent/flow are optional and closed enums (0.755833ms)
+✔ home flow over HTTP returns the full ChatReply; needs-check after 2 listen turns; conversation/end is a stub (37.242375ms)
+✔ 需求卡只在程序发信号时展示三项选择 (2.999917ms)
+✔ 专业模式说明包含五维和暂停；没有建议时不展示 (0.311791ms)
+✔ 小结引用当前场次观察和已确认进步卡，不混入其他场次 (12.925875ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46470.227375

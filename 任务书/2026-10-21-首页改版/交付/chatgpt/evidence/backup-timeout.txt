@@ -1,0 +1,17 @@
+✔ 运行中 WAL 库一致性备份；清空后恢复，恢复前另存当前库 (121.590542ms)
+✖ 备份保留数只作用于本库命名空间，不删除无关文件；缺失库不创建 (10006.119083ms)
+✔ 容器数据路径没有独立挂载时给出警告；有实际挂载才通过 (1.20725ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10234.312041
+
+✖ failing tests:
+
+test at tests-agent/h/backup.test.ts:1:1761
+✖ 备份保留数只作用于本库命名空间，不删除无关文件；缺失库不创建 (10006.119083ms)
+  'test timed out after 10000ms'

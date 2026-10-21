@@ -42,6 +42,8 @@ import { HeroArt, MapArt, Mascot, SpaceShape } from "./Art";
 import { HomeHero } from "./voice/HomeHero";
 import { explorationStatus } from "./components/learning/ExplorationMap";
 import { useLearning } from "./agents/useLearning";
+import { useDevMode, setDevMode } from "./agents/devMode";
+import { ChatPanel } from "./components/learning/ChatPanel";
 import { LearningPages, LearningStatus } from "./components/learning/LearningPages";
 import { aiConfigured, chatWithAI } from "./ai";
 import {
@@ -108,6 +110,20 @@ function SectionHeading({
 }
 function App() {
   const learning = useLearning();
+  const devMode = useDevMode();
+  const [memoryChoice, setMemoryChoice] = useState<boolean | null>(null);
+  const [introSaving, setIntroSaving] = useState(false);
+  const [introError, setIntroError] = useState("");
+  const finishIntroduction = async () => {
+    if (memoryChoice === null || introSaving) return;
+    setIntroSaving(true); setIntroError("");
+    try {
+      if (learning.enabled && !learning.connected) throw new Error("请先连接，再保存你的选择。");
+      if (learning.connected) await learning.run("consent", { optionalMemory: memoryChoice }, { persist: false });
+      patch({ longMemory: memoryChoice, onboarded: true, page: "home", tab: "小N" });
+    } catch { setIntroError("这次没有保存好，请连接后再试。你的选择还在。"); }
+    finally { setIntroSaving(false); }
+  };
   const learningPages = ["chat","explore","task","growth","report","plan","today","review","memory"];
   const [s, dispatch] = useReducer(reducer, null, () => {
     try {
@@ -141,6 +157,13 @@ function App() {
     chatEnd = useRef<HTMLDivElement>(null),
     taskTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const patch = (p: Partial<State>) => dispatch({ type: "patch", patch: p });
+  // 首页范围：已有 chat 导航统一回到综合模式；离线规则入口继续保留。
+  useEffect(() => {
+    if (learning.enabled && s.page === "chat") {
+      patch({ page: "home", tab: "小N" });
+      window.history.replaceState({ page: "home", tab: "小N" }, "", "#home");
+    }
+  }, [learning.enabled, s.page]);
   const contact = s.helpContact;
   const setContact = (value: string) =>
     patch({ helpContact: value, helpStatus: "none" });
@@ -595,7 +618,7 @@ function App() {
               年龄段、年级、教材，以及你在演示中提交的作答与任务进度，用于提供合适的内容和恢复学习。
             </p>
             <p className="small">
-              本机模式保存在浏览器或本地 SQLite。启用真实模型时，会发送必要对话、作答和许可偏好到智谱。请勿输入真实姓名、学校或联系方式。
+              记录保存在这台设备的浏览器或本地服务里。启用真实模型时，会发送必要对话、作答和你许可的偏好到智谱。请勿输入真实姓名、学校或联系方式。
             </p>
           </div>
           <label className="check-row">
@@ -625,15 +648,16 @@ function App() {
         </div>
       ) : (
         <div className="onboard-copy">
-          <SectionHeading eyebrow="YOUR CHOICE, ALWAYS" title="这些，由你决定">
-            两项都默认关闭。拒绝后，也可以正常聊天、看题和探索。
+          <SectionHeading eyebrow="YOUR CHOICE, ALWAYS" title="要不要让小N记住？">
+            你聊过的小事和有用的方法，可以由你确认后记住。开或关都能正常聊天和学习。
           </SectionHeading>
-          <Toggle
-            title="跨会话长期记忆"
-            description="可保存你主动分享的偏好和学习观察，供以后参考。关闭后不再新增或使用长期记忆；本机演示进度仍单独保留。"
-            checked={s.longMemory}
-            onChange={() => patch({ longMemory: !s.longMemory })}
-          />
+          <p className="notice">聊天时小N会留意你怎么读题、怎么想，帮你找方法，不打分。</p>
+          <fieldset className="home-memory-choice" disabled={introSaving}>
+            <legend>记忆由你选择</legend>
+            <label><input type="radio" name="intro-memory" checked={memoryChoice === true} onChange={() => setMemoryChoice(true)} /><span>愿意，让小N在我确认后记住</span></label>
+            <label><input type="radio" name="intro-memory" checked={memoryChoice === false} onChange={() => setMemoryChoice(false)} /><span>暂时不记住，照样可以聊</span></label>
+          </fieldset>
+          <p className="small muted">关闭后，小N不提议记住，也不主动提起。对话观察、对话小结、进步卡和错题记录属于学习记录，仍会保存。以后随时可以修改选择。</p>
           <Toggle
             title="用于学习研究"
             description="独立的用途授权演示。本版本没有研究数据收集或传输；切换仅展示授权状态。"
@@ -644,25 +668,9 @@ function App() {
             <ShieldCheck size={18} />
             以后随时可在“我的与设置”里更改选择、查看信息用途或清除本机数据。
           </div>
-          <button
-            className="primary wide"
-            onClick={() => patch({ onboarded: true, page: "home", tab: "小N" })}
-          >
-            按我的选择，开始 <ArrowRight size={18} />
-          </button>
-          <button
-            className="secondary wide"
-            onClick={() =>
-              patch({
-                longMemory: false,
-                research: false,
-                onboarded: true,
-                page: "home",
-                tab: "小N",
-              })
-            }
-          >
-            关闭可选功能，进入基本体验
+          {introError && <p className="error" role="alert">{introError}</p>}
+          <button className="primary wide" disabled={memoryChoice === null || introSaving || learning.busy} onClick={() => void finishIntroduction()}>
+            {introSaving ? "正在保存…" : "按我的选择，开始"} <ArrowRight size={18} />
           </button>
           <button
             className="text-button"
@@ -673,7 +681,7 @@ function App() {
         </div>
       )}
       <footer className="onboard-footer">
-        本机合成材料体验 · 模型模式见连接状态 · 通知为演示
+        本机合成材料体验 · AI 也会出错 · 通知为演示
       </footer>
     </div>
   );
@@ -776,11 +784,17 @@ function App() {
             )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
             <LearningStatus l={learning} />
-            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">新版学习记录、评分、报告、计划保存在本机SQLite；草稿是浏览器恢复缓存。真实模型模式会向智谱发送当前消息、必要题目/作答/评分依据和获准偏好。以下旧授权、身份与通知仍为演示；上传仍无OCR。学习记忆请以新版记忆页为准。</div>}
+            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在本地服务里；真实模型会向智谱发送本次需要的学习内容和获准记忆。你可以查看记录、管理记忆或重置整个演示。{devMode && <p>SQLite 保存学习事实，浏览器缓存草稿；单用户演示。</p>}</div>}
             <main className={`page page-${s.page}`}>
-              {learning.enabled && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>setModal(`dimension-${index}`)} safety={s.safety} />}
+              {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>setModal(`dimension-${index}`)} safety={s.safety} />}
               {s.page === "home" && (
                 <>
+                  {learning.enabled ? <>
+                    <div className="home-heading"><div><span className="eyebrow">HI, 很高兴见到你</span><h1>心事有人听，进步有人记。</h1></div></div>
+                    <ChatPanel l={learning} paused={s.rest || !!learning.view?.paused} safety={s.safety} navigate={navigate} trace={null} />
+                    {learning.cache.activeTaskId && <div className="resume-strip"><Pause size={17}/><div><strong>上次停在这里</strong><small>你的作答草稿还在</small></div><button onClick={() => navigate("task")}>继续 <ArrowRight size={15}/></button></div>}
+                    <div className="home-foot"><ShieldCheck size={13}/>你的选择会被尊重。<button onClick={() => navigate("privacy")}>了解信息与授权</button></div>
+                  </> : <>
                   <div className="home-heading">
                     <div>
                       <span className="eyebrow">HI, 很高兴见到你</span>
@@ -895,6 +909,7 @@ function App() {
                       了解信息与授权
                     </button>
                   </div>
+                  </>}
                 </>
               )}
               {!learning.enabled && s.page === "chat" && (
@@ -2101,6 +2116,7 @@ function App() {
                       checked={large}
                       onChange={() => setLarge(!large)}
                     />
+                    <Toggle title="评委 / 开发者模式" description="显示服务模式和运行记录，便于演示检查。默认关闭。" checked={devMode} onChange={() => setDevMode(!devMode)} />
                     <Toggle
                       title="断网与失败演示"
                       description="开启后，聊天回复、任务提交和通知演示会失败；草稿保留。本次页面有效，刷新后关闭。"
@@ -2119,6 +2135,7 @@ function App() {
                   <div className="settings-group">
                     <button
                       onClick={() => {
+                        setMemoryChoice(null); setIntroError("");
                         patch({ onboarded: false, onboardStep: 0 });
                         say("重新进入首次介绍，原有学习进度保留。");
                       }}
@@ -2145,7 +2162,7 @@ function App() {
                   <p className="center small muted">
                     学伴小N · 交互原型 1.0
                     <br />
-                    模型状态见连接栏；真实模式会外发必要学习上下文，通知仍为演示。
+                    真实模型会处理本次需要的学习内容。通知仍为演示。
                   </p>
                 </>
               )}
@@ -2346,13 +2363,13 @@ function App() {
                       <strong>基本服务 · 必要</strong>
                       <Tag>{s.necessary ? "已了解并确认" : "尚未确认"}</Tag>
                       <p>
-                        年龄段、年级、教材用于匹配内容；聊天、作答、提示、计划用于当前体验与刷新恢复。
+                        年龄段、年级、教材用于匹配内容；作答、提示、计划、对话观察、对话小结、进步卡和错题记录用于学习与恢复进度，不受记忆开关影响。后续专业模式还会保存评测报告和月阶段记录。聊天观察只留意怎么读题、怎么想，不打分，不把情绪记成标签。
                       </p>
                     </div>
                     <div>
                       <strong>跨会话长期记忆 · 可选</strong>
                       <Tag>{(learning.enabled ? learning.view?.optionalMemory : s.longMemory) ? "开启" : "关闭"}</Tag>
-                      <p>仅保存主动保留的偏好、任务表现与观察，独立存储。</p>
+                      <p>由你确认后记住生活小事、兴趣和有用的方法。关闭后不提议记住，也不主动提起；对话小结等学习记录仍会保存。</p>
                       <button onClick={() => navigate("memory")}>
                         管理记忆与开关 <ArrowRight size={15} />
                       </button>
@@ -2371,11 +2388,11 @@ function App() {
                   <div className="info-paper">
                     <h3>第三方服务与生成来源</h3>
                     <p>
-                      {learning.enabled ? "已接入本机受控Agent服务；真实模型模式向智谱发送当前消息、必要题目/原始作答/rubric与许可偏好。报告事实与计划来自程序核验的证据。" : "当前为离线规则原型，聊天来自本地预设，观察来自本机作答。"} OCR、身份核验、通知和研究平台仍未接入，插画为原创矢量绘制，未宣称安全认证。
+                      {learning.enabled ? "真实模型模式会向智谱发送当前对话、必要题目和作答、用于整理观察或小结的相关内容，以及你允许使用的记忆。记忆关闭后不发送可选记忆。学习记录由程序保存，学生确认由你的点击或输入决定。" : "当前为离线规则原型，聊天来自本地预设，观察来自本机作答。"} OCR、身份核验、通知和研究平台仍未接入，插画为原创矢量绘制，未宣称安全认证。
                     </p>
                     <h3>保存与删除</h3>
                     <p>
-                      {learning.enabled ? "新版学习记录、报告、计划与许可偏好保存在本机SQLite；草稿和导航使用浏览器恢复缓存。旧浏览器资料保留，需主动预览导入。" : "离线版在浏览器保留进度、可选记忆与图片。"} 移除图片清除对应核对内容；重置会同时请求清除新版SQLite与旧浏览器数据；服务未连接时不假装完成清除。
+                      {learning.enabled ? "学习记录、报告、计划和获准记忆保存在本地服务里；草稿和上次打开的位置保存在浏览器里。旧资料保留，需主动预览导入。" : "离线版在浏览器保留进度、可选记忆与图片。"} 移除图片清除对应核对内容；重置会同时请求清除本地服务记录与旧浏览器数据；服务未连接时不假装完成清除。
                     </p>
                     <h3>信息权利与反馈</h3>
                     <p>

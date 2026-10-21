@@ -1,0 +1,61 @@
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-c1Q7Bu
+[WebServer] (node:41344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:41373) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 7 tests using 1 worker
+
+(node:41375) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-37DGkL
+  ✓  1 tests-agent/h/browser.spec.ts:16:1 › 首次记忆选择无预选，告知清楚；开与关均能保存 (1.0s)
+  ✘  2 tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 (6.0s)
+(node:41420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-epUzCa
+  ✓  3 tests-agent/h/browser.spec.ts:47:1 › 正式测试需二次确认，启动失败留在首页并可重试 (598ms)
+  ✓  4 tests-agent/h/browser.spec.ts:56:1 › 陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结 (1.2s)
+  ✓  5 tests-agent/h/browser.spec.ts:68:1 › 小结失败可重试，问候失败回退；输入框在缩小视口可达 (521ms)
+  ✓  6 tests-agent/h/browser.spec.ts:78:1 › 开发者开关默认关；隐私列出记录类型；旧 chat 导航回首页 (683ms)
+  ✓  7 tests-agent/h/browser.spec.ts:85:1 › 没有本地服务时保留旧首页按钮 (196ms)
+
+
+  1) tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 ──────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.pet-hero-bubble')
+    Expected substring: "上次我们聊了应用题的条件"
+    Received string:    "嗨，我是小N。今天过得怎么样？想跟我说说吗？"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.pet-hero-bubble') with timeout 5000ms
+      - waiting for locator('.pet-hero-bubble')
+        14 × locator resolved to <div role="status" aria-live="polite" class="pet-hero-bubble">嗨，我是小N。今天过得怎么样？想跟我说说吗？</div>
+           - unexpected value "嗨，我是小N。今天过得怎么样？想跟我说说吗？"
+
+
+      42 |  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+      43 |  await page.screenshot({path:info.outputPath('summary-390.png'),fullPage:true});
+    > 44 |  await page.reload();await expect(page.locator('.pet-hero-bubble')).toContainText('上次我们聊了应用题的条件');
+         |                                                                     ^
+      45 | });
+      46 |
+      47 | test('正式测试需二次确认，启动失败留在首页并可重试',async({page})=>{
+        at /Users/ami/Documents/个人/ACC黑客松-wt/chatgpt/outputs/xiaon/tests-agent/h/browser.spec.ts:44:69
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-37DGkL/artifacts/browser-首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-37DGkL/artifacts/browser-首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-37DGkL/artifacts/browser-首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 ───────────────────────────
+  6 passed (11.8s)
