@@ -57,7 +57,9 @@ test(`understanding/logic probing only in probe, at least every 3 turns, never w
  assert.equal(d[0].probeAllowed||d[1].probeAllowed,false,'listen never probes');
  // turns 3..9: open at 3, gap at 4–5, open at 6, gap at 7, intense at 8, open again at 9
  assert.deepEqual(d.slice(2).map(x=>x.probeAllowed),[true,false,false,true,false,false,true]);
- assert.ok(d[2].allowed.includes('observation'));assert.ok(!d[3].allowed.includes('observation'));
+ assert.ok(d[2].allowed.includes('observation'));
+ // G2: the turn right after a probe may record the answer (answerTurn), the next gap turn may not.
+ assert.ok(d[3].answerTurn&&d[3].allowed.includes('observation'));assert.ok(!d[4].answerTurn&&!d[4].allowed.includes('observation'));
  assert.equal(d[7].intense,true);assert.equal(d[7].probeAllowed,false);
  for(const x of d)if(x.probeAllowed)assert.equal(x.stage,'probe');
 });

@@ -230,7 +230,7 @@ export class LearningCoordinator {
    const context=this.tutorContext(p.history,sessionId,stage),ectx=this.r.engineContext();
    const stuckPoints=this.recentStuckPoints();
    const signals={needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem};
-   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals,helpLevel,helpLevelsUsed:live?.helpLevelsUsed??[]},signal,{prompt:homeTutorPrompt({stage,allowed}),secrets,releasedAnswers});
+   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals,helpLevel,helpLevelsUsed:live?.helpLevelsUsed??[]},signal,{prompt:homeTutorPrompt({stage,allowed,answerTurn:decision.answerTurn}),secrets,releasedAnswers});
    if(exposed&&session&&result.run.status==='completed')this.r.events.expose({operationId:p.operationId+'-help',sessionId:session.id,taskId:exposed.taskId,taskVersion:exposed.taskVersion,kind:'chat_help',hintId:null});
    const out=homeTutorOutput.safeParse(result.value);const value=out.success?out.data:{message:result.run.error?.code==='forbidden'?ANSWER_HELD_TEXT:result.run.error?.message??'我在这里，按你的节奏来。',taskIds:[]};
    const proposed:Partial<Record<StageField,unknown>>=out.success?{problemDraft:out.data.problemDraft,observation:out.data.observation,progressCardDraft:out.data.progressCardDraft,memoryDraft:out.data.memoryDraft}:{};
@@ -247,7 +247,9 @@ export class LearningCoordinator {
    };
    const problemDraft=gated('problemDraft',schemas.ProblemDraft,()=>validateProblemDraft(kept.problemDraft,check));
    let memoryDraft=gated('memoryDraft',schemas.MemoryDraft,()=>validateMemoryDraft(kept.memoryDraft,{...check,memoryEnabled,origin:'chat'}));
-   const observation=gated('observation',schemas.ObservationDraft,()=>validateObservation(kept.observation,{...check,probeAllowed:decision.probeAllowed,existing:repo.list('observations').filter(o=>o.sessionId===sessionId)}));
+   const observation=gated('observation',schemas.ObservationDraft,()=>validateObservation(kept.observation,{...check,
+    // G2 (REPORT-1): on the turn after a probe only this message is the answer, so only it may be quoted.
+    ...(decision.answerTurn?{studentTexts:[last]}:{}),probeAllowed:decision.probeAllowed||decision.answerTurn,existing:repo.list('observations').filter(o=>o.sessionId===sessionId)}));
    if(observation)repo.append('observations',{schemaVersion:SCHEMA_VERSION,id:'obs-'+p.operationId,...observation,sessionId,status:'unverified',at:now});
    let progressCardDraft=null;
    if(stage==='reflect'&&fromStage==='reflect'&&episodeId){

@@ -25,12 +25,14 @@ export interface ChatStageState { sessionId:string;turn:number;stage:ChatStage;l
 /** One student turn as the program sees it. hasProblem/hasActiveTask/solved/progressCardDone are computed by the coordinator from stored records. */
 export interface StageEvent { sessionId:string;text:string;intent:ChatIntent|null;hasProblem:boolean;hasActiveTask:boolean;solved:boolean;progressCardDone:boolean;memoryEnabled:boolean }
 export interface StageDecision { stage:ChatStage;state:ChatStageState;needsCheck:boolean;askStudy:boolean;askProblem:boolean;probeAllowed:boolean;modeSuggestion:boolean;end:boolean;intense:boolean;allowed:StageField[];
+ /** G2 (REPORT-1): the probe turn right after a probe. The student's answer to it may be recorded (quoting this message only); no new probe. */
+ answerTurn:boolean;
  /** think only: the student asked for the next help level this turn. */
  helpRequested:boolean }
 export function initialStageState(sessionId:string):ChatStageState{
  return {sessionId,turn:0,stage:'listen',listenTurns:0,companionStreak:0,thinkTurns:0,lastProbeTurn:null,needsCheckAsked:false,askStudyAsked:false,studyDeclined:false,ended:false};
 }
-const quiet={needsCheck:false,askStudy:false,askProblem:false,probeAllowed:false,modeSuggestion:false,end:false,helpRequested:false};
+const quiet={needsCheck:false,askStudy:false,askProblem:false,probeAllowed:false,modeSuggestion:false,end:false,helpRequested:false,answerTurn:false};
 /** previous=null (or an ended session) starts event.sessionId fresh. A safety decision returns the state unchanged: it is never persisted. */
 export function decideStage(previous:ChatStageState|null,event:StageEvent):StageDecision{
  const prior=previous&&!previous.ended?previous:initialStageState(event.sessionId);const text=event.text;
@@ -63,10 +65,11 @@ export function decideStage(previous:ChatStageState|null,event:StageEvent):Stage
  const askProblem=stage==='probe'&&!event.hasProblem&&PROBLEM_PATTERN.test(text);
  let probeAllowed=false;
  if(stage==='probe'&&!intense&&(s.lastProbeTurn===null||s.turn-s.lastProbeTurn>=PROBE_GAP_TURNS)){probeAllowed=true;s.lastProbeTurn=s.turn;}
+ const answerTurn=stage==='probe'&&!intense&&!probeAllowed&&prior.lastProbeTurn!==null&&s.turn-1===prior.lastProbeTurn;
  const end=FAREWELL_PATTERN.test(text);if(end)s.ended=true;
  s.stage=stage;
- const allowed=STAGE_FIELDS[stage].filter(f=>(f!=='observation'||probeAllowed)&&(f!=='memoryDraft'||event.memoryEnabled));
- return {stage,state:s,needsCheck,askStudy,askProblem,probeAllowed,modeSuggestion:event.intent==='formal_test'&&!intense,end,intense,allowed,helpRequested:stage==='think'&&HELP_PATTERN.test(text)};
+ const allowed=STAGE_FIELDS[stage].filter(f=>(f!=='observation'||probeAllowed||answerTurn)&&(f!=='memoryDraft'||event.memoryEnabled));
+ return {stage,state:s,needsCheck,askStudy,askProblem,probeAllowed,answerTurn,modeSuggestion:event.intent==='formal_test'&&!intense,end,intense,allowed,helpRequested:stage==='think'&&HELP_PATTERN.test(text)};
 }
 /** Splits model-proposed extra fields into allowed ones and the names the program discards (null/undefined count as absent). */
 export function filterStageFields(allowed:StageField[],candidate:Partial<Record<StageField,unknown>>):{kept:Partial<Record<StageField,unknown>>;dropped:StageField[]}{
