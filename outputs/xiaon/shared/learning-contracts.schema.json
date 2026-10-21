@@ -4436,6 +4436,211 @@
                     "requiresStudentConfirmation"
                   ],
                   "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "schemaVersion": {
+                      "type": "string",
+                      "const": "1.0.0"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                    },
+                    "runId": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                    },
+                    "sessionId": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "knowledgePointId": {
+                      "type": "string",
+                      "enum": [
+                        "negative-brackets",
+                        "like-terms"
+                      ]
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "concept",
+                        "method",
+                        "start"
+                      ]
+                    },
+                    "studentQuote": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "summary": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "studentConfirmed": {
+                      "type": "boolean"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                    }
+                  },
+                  "required": [
+                    "schemaVersion",
+                    "id",
+                    "runId",
+                    "sessionId",
+                    "knowledgePointId",
+                    "kind",
+                    "studentQuote",
+                    "summary",
+                    "studentConfirmed",
+                    "createdAt"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "feedback": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "attemptId": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                            },
+                            "taskId": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                            },
+                            "taskVersion": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991
+                            },
+                            "title": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 8000
+                            },
+                            "knowledgePointIds": {
+                              "maxItems": 500,
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                              }
+                            },
+                            "studentValue": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 8000
+                            },
+                            "verdict": {
+                              "type": "string",
+                              "enum": [
+                                "correct",
+                                "incorrect",
+                                "needs_review"
+                              ]
+                            },
+                            "points": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "pointId": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "supported",
+                                      "unsupported",
+                                      "uncertain"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "pointId",
+                                  "status"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "errorClues": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 8000
+                              }
+                            },
+                            "hintLevelsUsed": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer",
+                                "exclusiveMinimum": 0,
+                                "maximum": 9007199254740991
+                              }
+                            },
+                            "answerExposed": {
+                              "type": "boolean"
+                            },
+                            "attemptedAt": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "attemptId",
+                            "taskId",
+                            "taskVersion",
+                            "title",
+                            "knowledgePointIds",
+                            "studentValue",
+                            "verdict",
+                            "points",
+                            "errorClues",
+                            "hintLevelsUsed",
+                            "answerExposed",
+                            "attemptedAt"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "feedback"
+                  ],
+                  "additionalProperties": false
                 }
               ]
             }
@@ -5084,6 +5289,197 @@
       ],
       "additionalProperties": false
     },
+    "StuckPoint": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "sessionId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "knowledgePointId": {
+          "type": "string",
+          "enum": [
+            "negative-brackets",
+            "like-terms"
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "concept",
+            "method",
+            "start"
+          ]
+        },
+        "studentQuote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "studentConfirmed": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "runId",
+        "sessionId",
+        "knowledgePointId",
+        "kind",
+        "studentQuote",
+        "summary",
+        "studentConfirmed",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    },
+    "LatestFeedback": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "attemptId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "taskId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "taskVersion": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000
+        },
+        "knowledgePointIds": {
+          "maxItems": 500,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+          }
+        },
+        "studentValue": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000
+        },
+        "verdict": {
+          "type": "string",
+          "enum": [
+            "correct",
+            "incorrect",
+            "needs_review"
+          ]
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pointId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "supported",
+                  "unsupported",
+                  "uncertain"
+                ]
+              }
+            },
+            "required": [
+              "pointId",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "errorClues": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8000
+          }
+        },
+        "hintLevelsUsed": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "answerExposed": {
+          "type": "boolean"
+        },
+        "attemptedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "attemptId",
+        "taskId",
+        "taskVersion",
+        "title",
+        "knowledgePointIds",
+        "studentValue",
+        "verdict",
+        "points",
+        "errorClues",
+        "hintLevelsUsed",
+        "answerExposed",
+        "attemptedAt"
+      ],
+      "additionalProperties": false
+    },
     "SourceTime": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -5552,6 +5948,13 @@
             "建模",
             "空间想象"
           ]
+        },
+        "knowledgePointId": {
+          "type": "string",
+          "enum": [
+            "negative-brackets",
+            "like-terms"
+          ]
         }
       },
       "required": [
@@ -5652,6 +6055,54 @@
       "required": [
         "text"
       ],
+      "additionalProperties": false
+    },
+    "ToolArguments_record_stuck_point": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "knowledgePointId": {
+          "type": "string",
+          "enum": [
+            "negative-brackets",
+            "like-terms"
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "concept",
+            "method",
+            "start"
+          ]
+        },
+        "studentQuote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "studentConfirmed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "knowledgePointId",
+        "kind",
+        "studentQuote",
+        "summary",
+        "studentConfirmed"
+      ],
+      "additionalProperties": false
+    },
+    "ToolArguments_get_latest_feedback": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {},
       "additionalProperties": false
     }
   }

@@ -49,8 +49,14 @@ const Failure = z.strictObject({code:ErrorCode,message:text,recoverable:z.boolea
 // E1: 'generator' is an additive, tool-less structured-output role; it never grades, confirms or writes data.
 const RolePolicy = z.strictObject({role:z.enum(['tutor','assessor','planner','reporter','generator']),allowedTools:ids,maxRounds:z.number().int().min(1).max(4),maxToolExecutions:z.number().int().min(1).max(6)});
 const ToolCall = z.strictObject({...base,runId:id,callId:id,name:id,argumentsHash:z.string().length(64),status:z.enum(['succeeded','failed']),errorCode:ErrorCode.nullable(),evidenceIds:ids,dataVersion:z.number().int().nonnegative(),at:utc});
+// P0: a Tutor-recorded stuck point for the two open calculation points. A hypothesis from conversation, never a skill state;
+// studentQuote is program-checked to be verbatim student text from the same Tutor turn.
+const stuckKnowledgePoint = z.enum(['negative-brackets','like-terms']);
+const StuckPoint = z.strictObject({...base,runId:id,sessionId:id.nullable(),knowledgePointId:stuckKnowledgePoint,kind:z.enum(['concept','method','start']),studentQuote:z.string().min(1).max(200),summary:z.string().min(1).max(200),studentConfirmed:z.boolean(),createdAt:utc});
+// Latest graded attempt as the Tutor may see it: verdict and clue descriptions only, never the trusted answer, rubric or hint text.
+const LatestFeedback = z.strictObject({attemptId:id,...ref.shape,title:text,knowledgePointIds:ids,studentValue:text,verdict,points:z.array(z.strictObject({pointId:id,status:z.enum(['supported','unsupported','uncertain'])})),errorClues:z.array(text),hintLevelsUsed:z.array(version),answerExposed:z.boolean(),attemptedAt:nullableTime});
 const ToolResult = z.discriminatedUnion('ok',[
-  z.strictObject({schemaVersion:z.literal(SCHEMA_VERSION),callId:id,ok:z.literal(true),dataVersion:z.number().int().nonnegative(),evidenceIds:ids,data:z.union([TaskPublicView,GradingResult,AssessmentSnapshot,z.strictObject({sessions:z.array(LearningSession),attemptCount:z.number().int().nonnegative(),memories:z.array(MemoryItem)}),z.strictObject({attempts:z.array(Attempt),gradings:z.array(GradingResult),evidence:z.array(Evidence)}),z.strictObject({skills:z.array(SkillState),limitations:z.array(text)}),z.strictObject({hint:z.string(),level:version,exposureId:id}),z.strictObject({reviews:z.array(ReviewItem)}),PlanProposal,z.strictObject({candidate:z.string(),requiresStudentConfirmation:z.literal(true)})])}),
+  z.strictObject({schemaVersion:z.literal(SCHEMA_VERSION),callId:id,ok:z.literal(true),dataVersion:z.number().int().nonnegative(),evidenceIds:ids,data:z.union([TaskPublicView,GradingResult,AssessmentSnapshot,z.strictObject({sessions:z.array(LearningSession),attemptCount:z.number().int().nonnegative(),memories:z.array(MemoryItem)}),z.strictObject({attempts:z.array(Attempt),gradings:z.array(GradingResult),evidence:z.array(Evidence)}),z.strictObject({skills:z.array(SkillState),limitations:z.array(text)}),z.strictObject({hint:z.string(),level:version,exposureId:id}),z.strictObject({reviews:z.array(ReviewItem)}),PlanProposal,z.strictObject({candidate:z.string(),requiresStudentConfirmation:z.literal(true)}),StuckPoint,z.strictObject({feedback:LatestFeedback.nullable()})])}),
   z.strictObject({schemaVersion:z.literal(SCHEMA_VERSION),callId:id,ok:z.literal(false),dataVersion:z.number().int().nonnegative(),evidenceIds:ids,error:Failure}),
 ]);
 // E1 attached entity: audit of one program-gated task generation. Never stores keys, headers, reasoning,
@@ -71,17 +77,19 @@ const tools = {
   get_learning_context:z.strictObject({}),
   query_learning_evidence:z.strictObject({taskId:id.optional()}),
   get_skill_state:z.strictObject({knowledgePointId:id.optional()}),
-  select_task:z.strictObject({sessionId:id,dimension:dimension.optional()}),
+  select_task:z.strictObject({sessionId:id,dimension:dimension.optional(),knowledgePointId:stuckKnowledgePoint.optional()}),
   grade_attempt:z.strictObject({attemptId:id}),
   request_hint:z.strictObject({taskId:id}),
   get_hint:z.strictObject({sessionId:id,taskId:id,taskVersion:version,level:version}),
   get_due_reviews:z.strictObject({}),
   propose_plan:z.strictObject({timeBudgetMinutes:z.number().int().min(1).max(30)}),
   propose_memory:z.strictObject({text}),
+  record_stuck_point:z.strictObject({knowledgePointId:stuckKnowledgePoint,kind:StuckPoint.shape.kind,studentQuote:StuckPoint.shape.studentQuote,summary:StuckPoint.shape.summary,studentConfirmed:z.boolean()}),
+  get_latest_feedback:z.strictObject({}),
 };
 export const schemas = {
   TaskDefinition,TaskPublicView,LearningSession,SessionEvent,Attempt,ExposureEvent,GradingResult,Evidence,SkillState,AssessmentSnapshot,
-  ReviewPolicy,ReviewItem,ReviewOutcome,ReportSnapshot,PlanProposal,PlanVersion,MemoryItem,ConsentState,ToolCall,ToolResult,AgentRun,RolePolicy,GenerationRecord,
+  ReviewPolicy,ReviewItem,ReviewOutcome,ReportSnapshot,PlanProposal,PlanVersion,MemoryItem,ConsentState,ToolCall,ToolResult,AgentRun,RolePolicy,GenerationRecord,StuckPoint,LatestFeedback,
   SourceTime:sourceTime,Failure,SubmitAttempt,
   StartSession:z.strictObject({...operation,mode:LearningSession.shape.mode}),
   SessionState:z.strictObject({...operation,sessionId:id,status:LearningSession.shape.status}),
@@ -117,6 +125,8 @@ export type ToolResult = z.infer<typeof ToolResult>;
 export type AgentRun = z.infer<typeof AgentRun>;
 export type RolePolicy = z.infer<typeof RolePolicy>;
 export type GenerationRecord = z.infer<typeof GenerationRecord>;
+export type StuckPoint = z.infer<typeof StuckPoint>;
+export type LatestFeedback = z.infer<typeof LatestFeedback>;
 export type Failure = z.infer<typeof Failure>;
 export type SourceTime = z.infer<typeof sourceTime>;
 export type SubmitAttempt = z.infer<typeof SubmitAttempt>;
@@ -129,6 +139,8 @@ export interface EntityMap {
   reviewOutcomes:ReviewOutcome; reports:ReportSnapshot; proposals:PlanProposal; plans:PlanVersion; memories:MemoryItem; consents:ConsentState; toolCalls:ToolCall; runs:AgentRun;
   /** E1 attached audit records; included in reset like every other collection. */
   generations:GenerationRecord;
+  /** P0 Tutor stuck-point hypotheses; necessary learning records, cleared by reset. */
+  stuckPoints:StuckPoint;
 }
 /** Synchronous single-process SQLite transaction. Do not await inside transaction callbacks. append never replaces. */
 export interface LearningRepository {

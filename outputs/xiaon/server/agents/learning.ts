@@ -9,6 +9,7 @@ import { attemptFacts } from '../plugins/planning/evidence';
 import { currentReviewItems,planHistory,reportHistory,shanghaiDate } from '../../src/learning/review';
 import { ControlledRoles,tutorOutput,type TutorStage } from './roles';
 import { hash } from '../storage/repository';
+import { latestFeedback } from '../tools/registry';
 import { RuntimeError } from '../core/errors';
 import { GeneratedTaskStore,TaskGenerator,GENERATION_DEFAULTS,type GenerationConfig } from '../plugins/generation';
 import { readGlmConfig } from '../providers/config';
@@ -124,7 +125,10 @@ export class LearningCoordinator {
    const session=this.r.events.sessions().find(s=>s.status==='active');
    const exposed=this.r.repository.list('exposures').filter(e=>e.sessionId===session?.id&&e.kind==='task').at(-1);
    const task=exposed?this.r.catalog.publicTask(exposed.taskId,exposed.taskVersion):null;
-   const context=this.r.events.context();const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,paused:!session},signal);
+   const context=this.r.events.context(),ctx=this.r.engineContext();
+   // P0: the program hands the Tutor the latest verdict and recent stuck points, so it never has to guess what just happened.
+   const stuckPoints=this.r.repository.list('stuckPoints').slice(-3).map(({knowledgePointId,kind,summary,studentConfirmed,createdAt})=>({knowledgePointId,kind,summary,studentConfirmed,createdAt}));
+   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,paused:!session,latestFeedback:latestFeedback(ctx),stuckPoints},signal);
    // Chat counts as task help only once the Tutor actually answered; a failed/offline turn disclosed nothing.
    if(exposed&&session&&result.run.status==='completed')this.r.events.expose({operationId:p.operationId+'-help',sessionId:session.id,taskId:exposed.taskId,taskVersion:exposed.taskVersion,kind:'chat_help',hintId:null});
    const out=tutorOutput.safeParse(result.value);const value=out.success?out.data:{message:result.run.error?.message??'本地规则模式：我在这里，按你的节奏来。',taskIds:[]};
@@ -136,7 +140,7 @@ export class LearningCoordinator {
   const session=this.r.events.sessions().find(s=>s.status!=='closed')??null;
   const attempted=new Set(this.r.repository.list('attempts').flatMap(a=>this.r.catalog.definition(a.taskId,a.taskVersion)?.knowledgePoints??[]));
   const tasks=this.r.catalog.candidates({sessionId:session?.id??'preview',excludeTaskIds:[],limit:100}).map(t=>({...t,eligible:t.prerequisites.every(k=>attempted.has(k))&&(!(session?.mode==='exploration')||['理解','逻辑'].includes(t.primaryDimension)||['理解','逻辑'].every(d=>this.r.repository.list('attempts').some(a=>a.sessionId===session.id&&this.r.catalog.definition(a.taskId,a.taskVersion)?.primaryDimension===d)))}));
-  return {now:this.r.clock.now(),session,paused:session?.status==='paused',assessment,tasks,attempts:this.r.repository.list('attempts').map(a=>({...a,classification:classifyAttempt(a,ctx)})),exposures:this.r.repository.list('exposures'),gradings:this.r.repository.list('gradings'),evidence:this.r.repository.list('evidence'),reports:reportHistory(ctx),plans:planHistory(ctx),proposal:this.r.repository.list('proposals').at(-1)??null,reviews:currentReviewItems(ctx),consentConfigured:this.r.repository.list('consents').length>0,optionalMemory:this.r.events.memoryEnabled(),memories:this.r.repository.list('memories'),runs:this.r.repository.list('runs'),toolCalls:this.r.repository.list('toolCalls'),
+  return {now:this.r.clock.now(),session,paused:session?.status==='paused',assessment,tasks,attempts:this.r.repository.list('attempts').map(a=>({...a,classification:classifyAttempt(a,ctx)})),exposures:this.r.repository.list('exposures'),gradings:this.r.repository.list('gradings'),evidence:this.r.repository.list('evidence'),reports:reportHistory(ctx),plans:planHistory(ctx),proposal:this.r.repository.list('proposals').at(-1)??null,reviews:currentReviewItems(ctx),consentConfigured:this.r.repository.list('consents').length>0,optionalMemory:this.r.events.memoryEnabled(),memories:this.r.repository.list('memories'),runs:this.r.repository.list('runs'),toolCalls:this.r.repository.list('toolCalls'),stuckPoints:this.r.repository.list('stuckPoints'),
   // Audit only: fingerprints and reason codes, never answers or model text. exposed derives from real task exposures.
   generations:this.r.repository.list('generations').map(g=>({...g,exposed:!!g.taskId&&this.r.repository.list('exposures').some(e=>e.kind==='task'&&e.taskId===g.taskId&&e.taskVersion===g.taskVersion)})),generationAvailable:this.r.provider.kind!=='offline'};
  }

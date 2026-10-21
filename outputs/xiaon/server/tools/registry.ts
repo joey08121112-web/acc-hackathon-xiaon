@@ -1,19 +1,27 @@
 import { z } from 'zod';
-import { SCHEMA_VERSION,schemas,type EngineContext,type EngineRegistration,type NativeToolCall,type RolePolicy,type ToolResult,type ToolDefinition } from '../../shared/learning-contracts';
+import { SCHEMA_VERSION,schemas,type EngineContext,type EngineRegistration,type LatestFeedback,type NativeToolCall,type RolePolicy,type ToolResult,type ToolDefinition } from '../../shared/learning-contracts';
 import { hash } from '../storage/repository';
 import { RuntimeError,failure } from '../core/errors';
 import type { StudentEvents } from '../core/events';
 import { legacySkills } from './legacy';
 export const ROLE_POLICIES:Record<RolePolicy['role'],RolePolicy>={
- tutor:{role:'tutor',allowedTools:['get_learning_context','query_learning_evidence','get_skill_state','select_task','get_hint','get_due_reviews','propose_memory'],maxRounds:4,maxToolExecutions:6},
+ tutor:{role:'tutor',allowedTools:['get_learning_context','query_learning_evidence','get_skill_state','select_task','get_hint','get_due_reviews','propose_memory','record_stuck_point','get_latest_feedback'],maxRounds:4,maxToolExecutions:6},
  assessor:{role:'assessor',allowedTools:['query_learning_evidence','get_skill_state','grade_attempt'],maxRounds:4,maxToolExecutions:6},
  planner:{role:'planner',allowedTools:['get_learning_context','query_learning_evidence','get_skill_state','select_task','get_due_reviews','propose_plan'],maxRounds:4,maxToolExecutions:6},
  reporter:{role:'reporter',allowedTools:['query_learning_evidence','get_skill_state'],maxRounds:4,maxToolExecutions:6},
  // E1: the generator calls no tools; its single JSON output is validated and published by the program.
  generator:{role:'generator',allowedTools:[],maxRounds:2,maxToolExecutions:1},
 };
-const descriptions:Record<string,string>={get_hint:'只读取学生已主动请求的提示；不能暗中揭示提示',get_due_reviews:'读取真实到期队列，不自动开题',propose_plan:'从有效证据生成计划草案；不能确认计划',propose_memory:'仅提出可选偏好候选；必须学生另行确认',get_learning_context:'读取当前本机学习场次、尝试数量与获准使用的有效辅导偏好',query_learning_evidence:'读取已保存学生作答和评分证据；不能创建作答',get_skill_state:'读取有限观察；未注册五维引擎时明确标记 legacy',select_task:'只返回可信题库的公开候选题，不含答案、rubric或提示正文；学生还需通过 API 打开题目',grade_attempt:'仅按已保存 attemptId 从可信题库核对；不能接收答案或伪造学生提交'};
-export type ToolContext={role:RolePolicy['role'];runId:string;signal:AbortSignal};
+const descriptions:Record<string,string>={get_hint:'只读取学生已主动请求的提示；不能暗中揭示提示',get_due_reviews:'读取真实到期队列，不自动开题',propose_plan:'从有效证据生成计划草案；不能确认计划',propose_memory:'仅提出可选偏好候选；必须学生另行确认',get_learning_context:'读取当前本机学习场次、尝试数量与获准使用的有效辅导偏好',query_learning_evidence:'读取已保存学生作答和评分证据；不能创建作答',get_skill_state:'读取有限观察；未注册五维引擎时明确标记 legacy',select_task:'只返回可信题库的公开候选题，不含答案、rubric或提示正文；可按knowledgePointId（negative-brackets去括号负号/like-terms合并同类项）选题；学生还需通过 API 打开题目',record_stuck_point:'记录学生在对话中说清的卡点（只限negative-brackets或like-terms）；studentQuote必须逐字摘自学生本轮对话；只是待核实的假设，不是能力判断',get_latest_feedback:'读取最近一次已判作答的结果、评分点状态和错误线索；不含正确答案、rubric或提示正文',grade_attempt:'仅按已保存 attemptId 从可信题库核对；不能接收答案或伪造学生提交'};
+/** studentTexts: this turn's student messages, supplied by the program so record_stuck_point can verify quotes. */
+export type ToolContext={role:RolePolicy['role'];runId:string;signal:AbortSignal;studentTexts?:readonly string[]};
+/** Latest graded attempt for the Tutor: the student's own value plus verdict/clues; trusted answers, rubric and hint text stay out. */
+export function latestFeedback(ctx:EngineContext):LatestFeedback|null{
+ const gradings=ctx.repository.list('gradings');
+ const attempt=ctx.repository.list('attempts').filter(a=>gradings.some(g=>g.attemptId===a.id)).at(-1);if(!attempt)return null;
+ const grading=gradings.filter(g=>g.attemptId===attempt.id).at(-1)!,task=ctx.catalog.definition(attempt.taskId,attempt.taskVersion);
+ return schemas.LatestFeedback.parse({attemptId:attempt.id,taskId:attempt.taskId,taskVersion:attempt.taskVersion,title:task?.title??attempt.taskId,knowledgePointIds:task?.knowledgePoints??[],studentValue:attempt.value,verdict:grading.verdict,points:grading.points.map(p=>({pointId:p.pointId,status:p.status})),errorClues:grading.errorClues,hintLevelsUsed:[...new Set(attempt.hintSnapshot.map(h=>h.level))],answerExposed:attempt.answerExposed,attemptedAt:attempt.sourceTime.occurredAt});
+}
 export class ToolRegistry {
  constructor(private ctx:()=>EngineContext,private engines:()=>EngineRegistration,private events:StudentEvents){}
  definitions(role:RolePolicy['role']):ToolDefinition[]{return ROLE_POLICIES[role].allowedTools.map(name=>({name,description:descriptions[name],parameters:z.toJSONSchema(schemas.ToolArguments[name as keyof typeof schemas.ToolArguments])}));}
@@ -47,13 +55,16 @@ export class ToolRegistry {
      const args=schemas.ToolArguments.select_task.parse(raw);const session=this.events.requireSession(args.sessionId);
      const exposed=ctx.repository.list('exposures').filter(e=>e.sessionId===session.id&&e.kind==='task');
      const calc=new Set(exposed.filter(e=>ctx.catalog.definition(e.taskId,e.taskVersion)?.primaryDimension==='计算').map(e=>e.taskId));
-     const candidate=ctx.catalog.candidates({sessionId:session.id,dimension:args.dimension,excludeTaskIds:exposed.map(e=>e.taskId),limit:100}).find(t=>{
+     const attemptedPoints=new Set(ctx.repository.list('attempts').flatMap(a=>ctx.catalog.definition(a.taskId,a.taskVersion)?.knowledgePoints??[]));
+     const pool=ctx.catalog.candidates({sessionId:session.id,dimension:args.dimension,knowledgePointId:args.knowledgePointId,excludeTaskIds:exposed.map(e=>e.taskId),limit:100});
+     const candidate=pool.find(t=>{
       if(t.primaryDimension==='计算'&&calc.size>=10)return false;
-      const attemptedPoints=new Set(ctx.repository.list('attempts').flatMap(a=>ctx.catalog.definition(a.taskId,a.taskVersion)?.knowledgePoints??[]));if(t.prerequisites.some(k=>!attemptedPoints.has(k)))return false;
+      if(t.prerequisites.some(k=>!attemptedPoints.has(k)))return false;
       if(session.mode==='exploration'&&!['理解','逻辑'].includes(t.primaryDimension))return ['理解','逻辑'].every(d=>ctx.repository.list('attempts').some(a=>a.sessionId===session.id&&ctx.catalog.definition(a.taskId,a.taskVersion)?.primaryDimension===d));
       return true;
      });
-     if(!candidate)throw new RuntimeError('unavailable','题库耗尽或当前场次先修/题量约束不满足');data=candidate;break;
+     const missing=[...new Set(pool.flatMap(t=>t.prerequisites.filter(k=>!attemptedPoints.has(k))))];
+     if(!candidate)throw new RuntimeError('unavailable',args.knowledgePointId&&pool.length&&missing.length?'需要先尝试先修知识点：'+missing.join('、'):'题库耗尽或当前场次先修/题量约束不满足');data=candidate;break;
     }
     case 'get_hint':{
      const args=schemas.ToolArguments.get_hint.parse(raw);this.events.requireSession(args.sessionId);
@@ -70,6 +81,19 @@ export class ToolRegistry {
     }
     case 'propose_memory':{
      if(!this.events.memoryEnabled())throw new RuntimeError('forbidden','可选记忆关闭');data={candidate:schemas.ToolArguments.propose_memory.parse(raw).text,requiresStudentConfirmation:true};break;
+    }
+    case 'record_stuck_point':{
+     const args=schemas.ToolArguments.record_stuck_point.parse(raw);
+     if(!access.studentTexts)throw new RuntimeError('forbidden','只能在学生对话中记录卡点');
+     const quote=args.studentQuote.trim();if(!quote||!access.studentTexts.some(t=>t.includes(quote)))throw new RuntimeError('invalid_params','studentQuote必须逐字摘自学生本轮对话');
+     const stuckId='stuck-'+hash({runId:access.runId,callId:call.id}).slice(0,48),saved=ctx.repository.get('stuckPoints',stuckId);
+     if(!saved&&ctx.repository.list('stuckPoints').some(p=>p.runId===access.runId))throw new RuntimeError('invalid_state','本轮对话已记录过卡点');
+     const session=this.events.sessions().find(s=>s.status==='active');
+     const point=saved??schemas.StuckPoint.parse({schemaVersion:SCHEMA_VERSION,id:stuckId,runId:access.runId,sessionId:session?.id??null,knowledgePointId:args.knowledgePointId,kind:args.kind,studentQuote:quote,summary:args.summary,studentConfirmed:args.studentConfirmed,createdAt:ctx.clock.now()});
+     if(!saved)ctx.repository.append('stuckPoints',point);data=point;break;
+    }
+    case 'get_latest_feedback':{
+     const feedback=latestFeedback(ctx);data={feedback};evidenceIds=feedback?[feedback.attemptId]:[];break;
     }
     case 'grade_attempt':{
      const args=schemas.ToolArguments.grade_attempt.parse(raw);const engine=this.engines().assessment;if(!engine)throw new RuntimeError('not_implemented');

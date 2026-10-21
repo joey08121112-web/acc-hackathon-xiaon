@@ -22,9 +22,9 @@ const turns=(n:number)=>Array.from({length:n},(_,i)=>({role:i%2===0?'user' as co
 test('step 1 listens on the first student turn, step 2 probes afterwards; the program, not the client, picks the stage',async()=>{
  const p=new Recorder(),f=setup(p);try{
   const first=await f.d.chat({operationId:id(),history:[{role:'user',content:'今天考砸了'}]}) as {stage:string;quickReplies:string[]};
-  assert.equal(first.stage,'listen');assert.match(p.systems[0],/tutor-d2-listen/);assert.match(p.systems[0],/接住情绪/);assert.ok(first.quickReplies.includes('不想说'));
+  assert.equal(first.stage,'listen');assert.match(p.systems[0],/tutor-d3-listen/);assert.match(p.systems[0],/接住情绪/);assert.ok(first.quickReplies.includes('不想说'));
   const second=await f.d.chat({operationId:id(),history:[{role:'user',content:'考砸了'},{role:'assistant',content:'听起来挺难受的'},{role:'user',content:'我就是不会'}]}) as {stage:string;quickReplies:string[]};
-  assert.equal(second.stage,'probe');assert.match(p.systems[1],/tutor-d2-probe/);assert.match(p.systems[1],/找到真正卡点/);assert.ok(second.quickReplies.includes('不知道从哪下手'));
+  assert.equal(second.stage,'probe');assert.match(p.systems[1],/tutor-d3-probe/);assert.match(p.systems[1],/找到真正卡点/);assert.ok(second.quickReplies.includes('不知道从哪下手'));
   await assert.rejects(f.d.chat({operationId:id(),history:[{role:'user',content:'你好'}],stage:'probe'} as never),{code:'invalid_params'});
  }finally{f.dispose();}
 });

@@ -6,7 +6,7 @@ import type { z } from 'zod';
 import { schemas,type EntityMap,type LearningRepository } from '../../shared/learning-contracts';
 import { RuntimeError } from '../core/errors';
 export const entitySchemas = {
- tasks:schemas.TaskDefinition,generations:schemas.GenerationRecord,sessions:schemas.LearningSession,sessionEvents:schemas.SessionEvent,attempts:schemas.Attempt,exposures:schemas.ExposureEvent,gradings:schemas.GradingResult,evidence:schemas.Evidence,skills:schemas.SkillState,assessments:schemas.AssessmentSnapshot,reviewPolicies:schemas.ReviewPolicy,reviewItems:schemas.ReviewItem,reviewOutcomes:schemas.ReviewOutcome,reports:schemas.ReportSnapshot,proposals:schemas.PlanProposal,plans:schemas.PlanVersion,memories:schemas.MemoryItem,consents:schemas.ConsentState,toolCalls:schemas.ToolCall,runs:schemas.AgentRun,
+ tasks:schemas.TaskDefinition,generations:schemas.GenerationRecord,sessions:schemas.LearningSession,sessionEvents:schemas.SessionEvent,attempts:schemas.Attempt,exposures:schemas.ExposureEvent,gradings:schemas.GradingResult,evidence:schemas.Evidence,skills:schemas.SkillState,assessments:schemas.AssessmentSnapshot,reviewPolicies:schemas.ReviewPolicy,reviewItems:schemas.ReviewItem,reviewOutcomes:schemas.ReviewOutcome,reports:schemas.ReportSnapshot,proposals:schemas.PlanProposal,plans:schemas.PlanVersion,memories:schemas.MemoryItem,consents:schemas.ConsentState,toolCalls:schemas.ToolCall,runs:schemas.AgentRun,stuckPoints:schemas.StuckPoint,
 } satisfies {[K in keyof EntityMap]:z.ZodType<EntityMap[K]>};
 function canonical(value:unknown):string {
  if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';
@@ -30,6 +30,8 @@ export class SqliteRepository implements LearningRepository {
    this.db.exec('CREATE TABLE IF NOT EXISTS operations(id TEXT PRIMARY KEY,request_hash TEXT NOT NULL,result TEXT NOT NULL); INSERT OR IGNORE INTO migrations VALUES(1);');
    // v2 (E1): additive generations table, created by the loop above; existing rows are untouched.
    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(2);');
+   // v3 (P0): additive stuckPoints table, created by the same loop.
+   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(3);');
    for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
   });
  }
