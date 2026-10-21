@@ -1,0 +1,38 @@
+# G2 契约补丁门禁（2026-10-21 20:46，worktree g2-contracts-163adf）
+
+$ npm run typecheck:agent
+exit 0
+
+$ npm test
+ℹ tests 25
+ℹ pass 25
+ℹ fail 0
+exit 0
+
+$ npm run test:agent
+ℹ tests 201
+ℹ pass 201
+ℹ fail 0
+exit 0
+
+$ npm run build
+✓ built in 768ms
+exit 0
+
+$ npm run test:agent:g
+ℹ tests 47
+ℹ pass 47
+ℹ fail 0
+exit 0
+
+$ npm run test:agent:h
+ℹ tests 12
+ℹ pass 12
+ℹ fail 0
+exit 0
+
+$ npm run test:agent:i
+ℹ tests 23
+ℹ pass 23
+ℹ fail 0
+exit 0
