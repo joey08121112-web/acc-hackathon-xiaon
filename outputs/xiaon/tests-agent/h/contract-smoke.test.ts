@@ -17,7 +17,7 @@ test('ChatRequest stays backward compatible; intent/flow are optional and closed
  assert.equal(schemas.ModeSuggestion.safeParse({mode:'professional',reason:'想看清楚自己的情况'}).success,true);
 });
 
-test('home flow over HTTP returns the full ChatReply; needs-check after 2 listen turns; conversation/end is a stub',async()=>{
+test('home flow over HTTP returns the full ChatReply; needs-check after 2 listen turns; conversation/end returns a summary',async()=>{
  const f=temporaryRepository(),r=createRuntime(f);installLearning(r);const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[origin]});await new Promise<void>(resolve=>server.listen(port,'127.0.0.1',resolve));
  try{
   const login=await fetch(base+'/api/local-session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});const token=(await login.json()).csrfToken,cookie=login.headers.get('set-cookie')!.split(';')[0];
@@ -27,6 +27,7 @@ test('home flow over HTTP returns the full ChatReply; needs-check after 2 listen
   assert.deepEqual(replies.map(x=>x.stage),['listen','listen']);assert.deepEqual(replies.map(x=>x.needsCheck),[false,true]);assert.ok(replies[0].sessionId);
   const legacy=schemas.ChatReply.parse(await(await post('learning/chat',{operationId:id(),history:[{role:'user',content:'你好'}]})).json());assert.equal(legacy.stage,'listen');assert.equal(legacy.sessionId,null);
   assert.equal((await post('learning/chat',{operationId:id(),history:[{role:'user',content:'你好'}],intent:'study'})).status,400);
-  const end=await post('learning/conversation/end',{operationId:id(),sessionId:replies[0].sessionId,history});assert.equal(end.status,501);assert.equal((await end.json()).error.code,'not_implemented');
+  // Claude phase 1 implemented conversation/end (was a 501 stub in G0).
+  const end=await post('learning/conversation/end',{operationId:id(),sessionId:replies[0].sessionId,history});assert.equal(end.status,200);assert.equal(schemas.ConversationSummary.parse(await end.json()).sessionId,replies[0].sessionId);
  }finally{await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}
 });

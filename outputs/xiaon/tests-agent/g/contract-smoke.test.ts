@@ -1,4 +1,4 @@
-/** 所有者：Claude。G0 契约冒烟（Claude 路：进步卡、对话观察与小结）。第一期实现后整体替换本文件。 */
+/** 所有者：Claude。契约冒烟（Claude 路：进步卡、对话观察与小结）。第一期起路由已实现，本文件只保留门禁与 schema 检查。 */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRuntime } from '../../server/bootstrap';
@@ -25,17 +25,18 @@ test('G0 Claude-lane schemas parse synthetic records and reject extra or out-of-
  assert.ok(schemas.EndConversation.safeParse({operationId:'op-end',sessionId:'chat-1',history:[]}).success);
 });
 
-test('G0 Claude-lane routes are stubs: 501 not_implemented behind the same session and CSRF gate',async()=>{
+test('Claude-lane routes sit behind the same session and CSRF gate and validate before acting',async()=>{
  const f=temporaryRepository(),r=createRuntime(f);installLearning(r);const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[origin]});await new Promise<void>(resolve=>server.listen(port,'127.0.0.1',resolve));
  try{
   assert.equal((await fetch(base+'/api/learning/conversation/end',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'})).status,403);
   const login=await fetch(base+'/api/local-session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});const token=(await login.json()).csrfToken,cookie=login.headers.get('set-cookie')!.split(';')[0];
   const post=(path:string,body:unknown)=>fetch(base+'/api/'+path,{method:'POST',headers:{Origin:origin,Cookie:cookie,'X-Xiaon-CSRF':token,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  // Phase 1: both routes are implemented; an unknown chat session is not found, unknown keys are rejected first.
   for(const [path,body] of [
    ['learning/progress-card/confirm',{operationId:id(),sessionId:'chat-1',episodeId:null,aiDraft:null,breakthrough:'我自己想到了',method:null,nextTry:null,confidence:null}],
    ['learning/conversation/end',{operationId:id(),sessionId:'chat-1',history:[{role:'user',content:'今天先聊到这'}]}],
   ] as const){
-   const res=await post(path,body);assert.equal(res.status,501,path);assert.equal((await res.json()).error.code,'not_implemented');
+   const res=await post(path,body);assert.equal(res.status,404,path);assert.equal((await res.json()).error.code,'not_found');
    assert.equal((await post(path,{...body,extra:true})).status,400,path+' rejects unknown keys');
   }
   assert.equal(r.repository.list('progressCards').length+r.repository.list('summaries').length,0);

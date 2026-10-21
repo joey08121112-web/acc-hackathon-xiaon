@@ -1,0 +1,279 @@
+✖ think: help is given level by level only on request, each level is recorded on the episode and as an exposure (24.241208ms)
+✖ think: a reply containing the reference answer is held back until the student has said it; then reflect (14.409542ms)
+✔ think on a confirmed problem record: ProblemSecret answers are intercepted the same way (synthetic fixture) (13.264916ms)
+✖ reflect: the card is drafted after the student reflects, is not saved until confirmed, and is honest about hints (20.373542ms)
+✖ reflect with memory on: a method memory draft from the progress card; without a model the card is assembled by the program (8.305041ms)
+✖ confirmProgressCard: student text and AI draft stored apart, empty columns skipped, then back to companion (11.601166ms)
+✖ a card cannot be confirmed before reflect; the episode resumes after a restart (8.855458ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 1
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 282.841208
+
+✖ failing tests:
+
+test at tests-agent/g/think-card.test.ts:1:2633
+✖ think: help is given level by level only on request, each level is recorded on the episode and as an exposure (24.241208ms)
+  AssertionError [ERR_ASSERTION]: no help unless asked
+  
+  undefined !== 0
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:43:29)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:3618
+✖ think: a reply containing the reference answer is held back until the student has said it; then reflect (14.409542ms)
+  AssertionError [ERR_ASSERTION]: after the student solved it, the answer may be discussed
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:60:42)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '未作答题的解答已拦截，请主动请求分级提示',
+    expected: /就是/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:5895
+✖ reflect: the card is drafted after the student reflects, is not saved until confirmed, and is honest about hints (20.373542ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(card.progressCardDraft)
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:82:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:7206
+✖ reflect with memory on: a method memory draft from the progress card; without a model the card is assembled by the program (8.305041ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(card.progressCardDraft)
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:95:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:7916
+✖ confirmProgressCard: student text and AI draft stored apart, empty columns skipped, then back to companion (11.601166ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(draft)
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:104:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:9327
+✖ a card cannot be confirmed before reflect; the episode resumes after a restart (8.855458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    Comparison {
+  +   code: 'not_implemented'
+  -   code: 'invalid_state'
+    }
+  
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:117:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: confirmProgressCard 尚未实现（阶段 0 桩）
+        at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/context.ts:23:44)
+        at confirmProgressCard (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/progress/index.ts:7:136)
+        at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:247:207)
+        at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:66)
+        at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:208)
+        at LearningCoordinator.confirmProgressCard (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:247:141)
+        at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:117:28)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    expected: { code: 'invalid_state' },
+    operator: 'rejects',
+    diff: 'simple'
+  }
+exit 1
+
+# 第二次运行：上面第3项在桩阶段就通过，原因是合成答案 -x+5 含题库答案 x+5，被旧的题库拦截碰巧拦下；改用与题库无关的 7y-11 后重跑
+✖ think: help is given level by level only on request, each level is recorded on the episode and as an exposure (26.415208ms)
+✖ think: a reply containing the reference answer is held back until the student has said it; then reflect (14.266166ms)
+✖ think on a confirmed problem record: ProblemSecret answers are intercepted the same way (synthetic fixture; the answer matches no catalog answer) (10.365916ms)
+✖ reflect: the card is drafted after the student reflects, is not saved until confirmed, and is honest about hints (18.06625ms)
+✖ reflect with memory on: a method memory draft from the progress card; without a model the card is assembled by the program (8.556417ms)
+✖ confirmProgressCard: student text and AI draft stored apart, empty columns skipped, then back to companion (12.033542ms)
+✖ a card cannot be confirmed before reflect; the episode resumes after a restart (9.392666ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 0
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 295.674333
+
+✖ failing tests:
+
+test at tests-agent/g/think-card.test.ts:1:2633
+✖ think: help is given level by level only on request, each level is recorded on the episode and as an exposure (26.415208ms)
+  AssertionError [ERR_ASSERTION]: no help unless asked
+  
+  undefined !== 0
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:43:29)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:3618
+✖ think: a reply containing the reference answer is held back until the student has said it; then reflect (14.266166ms)
+  AssertionError [ERR_ASSERTION]: after the student solved it, the answer may be discussed
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:60:42)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '未作答题的解答已拦截，请主动请求分级提示',
+    expected: /就是/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:4503
+✖ think on a confirmed problem record: ProblemSecret answers are intercepted the same way (synthetic fixture; the answer matches no catalog answer) (10.365916ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /7y\s*-\s*11/. Input:
+  
+  '结果是 7y - 11'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:71:75)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '结果是 7y - 11',
+    expected: /7y\s*-\s*11/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:5941
+✖ reflect: the card is drafted after the student reflects, is not saved until confirmed, and is honest about hints (18.06625ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(card.progressCardDraft)
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:82:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:7252
+✖ reflect with memory on: a method memory draft from the progress card; without a model the card is assembled by the program (8.556417ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(card.progressCardDraft)
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:95:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:7962
+✖ confirmProgressCard: student text and AI draft stored apart, empty columns skipped, then back to companion (12.033542ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(draft)
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:104:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/think-card.test.ts:1:9373
+✖ a card cannot be confirmed before reflect; the episode resumes after a restart (9.392666ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    Comparison {
+  +   code: 'not_implemented'
+  -   code: 'invalid_state'
+    }
+  
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:117:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: confirmProgressCard 尚未实现（阶段 0 桩）
+        at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/context.ts:23:44)
+        at confirmProgressCard (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/progress/index.ts:7:136)
+        at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:247:207)
+        at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:66)
+        at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:208)
+        at LearningCoordinator.confirmProgressCard (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:247:141)
+        at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/think-card.test.ts:117:28)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    expected: { code: 'invalid_state' },
+    operator: 'rejects',
+    diff: 'simple'
+  }
+exit 1

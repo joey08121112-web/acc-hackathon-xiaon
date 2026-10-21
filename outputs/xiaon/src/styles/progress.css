@@ -1,1 +1,15 @@
-/* 所有者：Claude（改造三：一起思考与进步卡）。在 main.tsx 中于 style.css 之后引入。 */
+/* 所有者：Claude（改造三：一起思考与进步卡）。在 main.tsx 中于 style.css 之后引入。手机 390 宽可用。 */
+.progress-card{display:grid;gap:12px;margin:16px 0;padding:16px;border-radius:16px;background:var(--paper,#fffaf2);border:1px solid rgba(0,0,0,.08)}
+.progress-card h2{margin:0;font-size:1.15rem}
+.progress-field{display:grid;gap:4px}
+.progress-field[data-skipped="true"] textarea{opacity:.45}
+.progress-field textarea{width:100%;box-sizing:border-box;resize:vertical;font-size:16px}
+.progress-skip{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted,#6b6b6b)}
+.progress-confidence{display:flex;flex-wrap:wrap;gap:8px;border:0;padding:0;margin:0}
+.progress-confidence legend{width:100%;margin-bottom:6px;font-size:.9rem}
+.progress-confidence button{min-height:40px;padding:6px 12px;border-radius:999px;border:1px solid rgba(0,0,0,.15);background:transparent}
+.progress-confidence button[aria-pressed="true"]{background:var(--accent,#2f6f4f);color:#fff;border-color:transparent}
+.progress-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.progress-actions .primary{min-height:44px;flex:1 1 160px}
+.progress-cards .progress-card-record{padding:10px 0;border-top:1px solid rgba(0,0,0,.08)}
+.progress-cards .progress-card-record p{margin:4px 0}

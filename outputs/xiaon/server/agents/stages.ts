@@ -14,6 +14,8 @@ export const DECLINE_PATTERN=/不想学|不学了|先不学|不想做题|不用�
 export const INTENSE_PATTERN=/崩溃|气死|烦死|想哭|哭了|难受死|委屈|绝望|受不了|好怕|害怕|焦虑|压力好大/;
 export const PROBLEM_PATTERN=/(?:这|那)道题|(?:这|那)题|第\s*[0-9一二三四五六七八九十]+\s*(?:道|题)|错题|题.*(?:做错|算错|写错)|(?:做错|算错|写错).*题/;
 export const UNDERSTOOD_PATTERN=/懂了|明白了|会了|我知道了|原来如此/;
+/** In think, an explicit request for more help (button "给我一点提示" or words). The program decides the level, never the model. */
+export const HELP_PATTERN=/提示|帮帮我|帮我一下|没思路|想不出|怎么下手|给点思路/;
 export const FAREWELL_PATTERN=/拜拜|再见|晚安|下次(?:再)?聊|今天先(?:聊)?到这|先聊到这|我先走了|886/;
 /** Fields the model may output per stage. Anything else is dropped by the program and recorded on the turn. */
 export const STAGE_FIELDS:Record<ChatStage,StageField[]>={companion:['memoryDraft'],listen:['memoryDraft'],probe:['problemDraft','observation'],think:[],reflect:['progressCardDraft','memoryDraft'],safety:[],rest:[]};
@@ -22,11 +24,13 @@ export const HOME_QUICK_REPLIES:Record<ChatStage,string[]>={listen:['考试没�
 export interface ChatStageState { sessionId:string;turn:number;stage:ChatStage;listenTurns:number;companionStreak:number;thinkTurns:number;lastProbeTurn:number|null;needsCheckAsked:boolean;askStudyAsked:boolean;studyDeclined:boolean;ended:boolean }
 /** One student turn as the program sees it. hasProblem/hasActiveTask/solved/progressCardDone are computed by the coordinator from stored records. */
 export interface StageEvent { sessionId:string;text:string;intent:ChatIntent|null;hasProblem:boolean;hasActiveTask:boolean;solved:boolean;progressCardDone:boolean;memoryEnabled:boolean }
-export interface StageDecision { stage:ChatStage;state:ChatStageState;needsCheck:boolean;askStudy:boolean;askProblem:boolean;probeAllowed:boolean;modeSuggestion:boolean;end:boolean;intense:boolean;allowed:StageField[] }
+export interface StageDecision { stage:ChatStage;state:ChatStageState;needsCheck:boolean;askStudy:boolean;askProblem:boolean;probeAllowed:boolean;modeSuggestion:boolean;end:boolean;intense:boolean;allowed:StageField[];
+ /** think only: the student asked for the next help level this turn. */
+ helpRequested:boolean }
 export function initialStageState(sessionId:string):ChatStageState{
  return {sessionId,turn:0,stage:'listen',listenTurns:0,companionStreak:0,thinkTurns:0,lastProbeTurn:null,needsCheckAsked:false,askStudyAsked:false,studyDeclined:false,ended:false};
 }
-const quiet={needsCheck:false,askStudy:false,askProblem:false,probeAllowed:false,modeSuggestion:false,end:false};
+const quiet={needsCheck:false,askStudy:false,askProblem:false,probeAllowed:false,modeSuggestion:false,end:false,helpRequested:false};
 /** previous=null (or an ended session) starts event.sessionId fresh. A safety decision returns the state unchanged: it is never persisted. */
 export function decideStage(previous:ChatStageState|null,event:StageEvent):StageDecision{
  const prior=previous&&!previous.ended?previous:initialStageState(event.sessionId);const text=event.text;
@@ -62,7 +66,7 @@ export function decideStage(previous:ChatStageState|null,event:StageEvent):Stage
  const end=FAREWELL_PATTERN.test(text);if(end)s.ended=true;
  s.stage=stage;
  const allowed=STAGE_FIELDS[stage].filter(f=>(f!=='observation'||probeAllowed)&&(f!=='memoryDraft'||event.memoryEnabled));
- return {stage,state:s,needsCheck,askStudy,askProblem,probeAllowed,modeSuggestion:event.intent==='formal_test'&&!intense,end,intense,allowed};
+ return {stage,state:s,needsCheck,askStudy,askProblem,probeAllowed,modeSuggestion:event.intent==='formal_test'&&!intense,end,intense,allowed,helpRequested:stage==='think'&&HELP_PATTERN.test(text)};
 }
 /** Splits model-proposed extra fields into allowed ones and the names the program discards (null/undefined count as absent). */
 export function filterStageFields(allowed:StageField[],candidate:Partial<Record<StageField,unknown>>):{kept:Partial<Record<StageField,unknown>>;dropped:StageField[]}{
@@ -86,3 +90,10 @@ export function fitReply(text:string,max:number):string{
  return head;
 }
 export const replyLength=(text:string)=>Array.from(text).length;
+/** Does a reply reveal a reference answer? Long answers by substring; short ones (≤2 chars) only as a standalone token. */
+export function containsAnswer(text:string,answer:string):boolean{
+ const clean=(v:string)=>v.normalize('NFKC').replace(/\s+/g,'').replace(/[−–—]/g,'-').toLowerCase();
+ const t=clean(text),a=clean(answer);if(!a)return false;
+ if(a.length>2)return t.includes(a);
+ return new RegExp('(?<![0-9a-z.])'+a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![0-9a-z.])').test(t);
+}

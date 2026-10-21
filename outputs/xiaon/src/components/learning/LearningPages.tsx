@@ -15,6 +15,7 @@ const names:Record<string,string>={'math-language':'数学语句与条件','coun
 const date=(s:string)=>new Date(s).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false});
 const pretty=(s:string)=>Object.entries({...names,...skillStatusLabels}).reduce((text,[key,value])=>text.replaceAll(key,value),s);
 const swallow=(p:Promise<unknown>)=>{void p.catch(()=>{});};
+const confidenceLabels:Record<string,string>={more_sure:'更有把握',about_same:'差不多',still_unsure:'仍不确定',prefer_not:'暂不回答'};
 // G0: the service-mode bar and the Agent/tool trace are engineering views, shown only in developer mode.
 export function LearningStatus({l}:{l:LearningUI}){const dev=useDevMode();if(!dev)return null;return <div className="learning-status" aria-live="polite" aria-label="服务模式"><Leaf size={15}/><span>{l.mode}</span><button className="text-button" onClick={()=>swallow(l.connect())}>重新连接</button></div>;}
 export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:{l:LearningUI;page:string;navigate:(page:string,tab?:string)=>void;onExploreDimension:(index:number)=>void;safety?:boolean}){
@@ -41,6 +42,20 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:
  {page==='explore'?<ExplorationMap view={v} onDimension={onExploreDimension} onReport={()=>navigate('report','成长')}/>:<>
  {['理解','逻辑','计算','建模','空间想象'].map(dim=><section className="info-paper" key={dim}><h2>{dim}</h2>{v.assessment.skills.filter(s=>s.dimension===dim).map(s=><div className="learning-skill" key={s.id}><strong>{names[s.knowledgePointId]}</strong><span className="tag">{skillStatusLabels[s.status]}</span><p>{s.coverage}</p>{s.recentDifficulty&&<p>最近一次仍有困难，此前成功继续保留。</p>}{isGenerationKnowledgePoint(s.knowledgePointId)&&<details><summary>针对这个环节出一道新题</summary><GenerationPanel l={l} knowledgePointId={s.knowledgePointId} purpose="practice" navigate={navigate} safety={safety}/></details>}<details><summary>观察范围与待了解</summary>{s.unknowns.map((u,i)=><p className="small" key={i}>{u}</p>)}</details></div>)}</section>)}
  <ProblemList l={l} navigate={navigate}/>
+ {v.progressCards.length>0&&<section className="info-paper progress-cards"><h2>进步卡</h2><p className="small muted">你确认过的学习记录，不是评分。</p>
+  {[...v.progressCards].reverse().map(c=>{const ep=c.episodeId?v.episodes.filter(e=>e.id===c.episodeId).at(-1):undefined;const helped=!!ep&&ep.helpLevelsUsed.length>0;
+   return <div className="progress-card-record" key={c.id}><small>{date(c.confirmedAt)}{ep?.studentSolvedAt?(helped?' · 提示后完成':' · 自己完成'):''}</small>
+    {([['今天的小突破',c.breakthrough],['这次有用的方法',c.method],['下次想试试',c.nextTry]] as const).map(([label,value])=><p key={label}><strong>{label}：</strong>{value??'跳过'}</p>)}
+    <p className="small">信心自评：{c.confidence?confidenceLabels[c.confidence]:'未记录'}</p>
+   </div>;})}
+ </section>}
+ {v.summaries.length>0&&<section className="info-paper conversation-summaries"><h2>对话小结</h2><p className="small muted">聊天观察，待专业模式确认，不是评分。</p>
+  {[...v.summaries].reverse().map(s=><details key={s.id}><summary>{date(s.createdAt)} · {s.topics.join('、')||'聊了聊'}</summary>
+   {s.observationIds.map(oid=>v.observations.find(o=>o.id===oid)).flatMap(o=>o?[o]:[]).map(o=><p key={o.id}><span className="tag">{o.dimension} · 待核实</span>「{o.quote}」{o.note}</p>)}
+   {s.changes.length>0&&<><h3>和上次比</h3>{s.changes.map((c,i)=><p key={i}>{c}</p>)}</>}
+   <h3>可以试试</h3>{s.planSuggestions.map((c,i)=><p key={i}>{c}</p>)}
+  </details>)}
+ </section>}
  <div className="quick-replies"><button onClick={()=>navigate('report','成长')}>学习观察报告</button><button onClick={()=>navigate('plan','成长')}>查看我的计划</button><button onClick={()=>navigate('review','成长')}>阶段回顾</button><button onClick={()=>navigate('memory')}>我的学习记忆</button></div>
  </>}
  </>}
