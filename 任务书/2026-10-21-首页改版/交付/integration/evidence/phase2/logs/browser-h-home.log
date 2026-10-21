@@ -1,0 +1,291 @@
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+[WebServer] (node:11919) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:11949) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:11951) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+  ✘  1 tests-agent/h/browser.spec.ts:16:1 › 首次记忆选择无预选，告知清楚；开与关均能保存 (25ms)
+(node:11953) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+  ✘  2 tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 (21ms)
+(node:11955) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+  ✘  3 tests-agent/h/browser.spec.ts:48:1 › 正式测试建议只进入说明，不点开始不切换场次 (21ms)
+(node:11957) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+  ✘  4 tests-agent/h/browser.spec.ts:56:1 › 陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结 (21ms)
+(node:11959) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+  ✘  5 tests-agent/h/browser.spec.ts:68:1 › 小结失败可重试，问候失败回退；输入框在缩小视口可达 (22ms)
+(node:11961) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+  ✘  6 tests-agent/h/browser.spec.ts:78:1 › 开发者开关默认关；隐私列出记录类型；旧 chat 导航回首页 (22ms)
+(node:11963) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+  ✘  7 tests-agent/h/browser.spec.ts:85:1 › 没有本地服务时保留旧首页按钮 (21ms)
+(node:11965) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc
+  ✘  8 tests-agent/h/browser.spec.ts:93:1 › 已暂停的 support 场次，进入专业模式说明后仍未开始测评 (21ms)
+
+
+  1) tests-agent/h/browser.spec.ts:16:1 › 首次记忆选择无预选，告知清楚；开与关均能保存 ───────────────────────────────────
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:18952
+    Call log:
+      - → POST http://127.0.0.1:18952/__h/reset
+        - user-agent: Playwright/1.64.1 (arm64; macOS 27.0) node/26.8
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Xiaon-Test: synthetic-h-only
+
+
+      12 |  expect((await response).ok()).toBeTruthy();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+      13 | }
+    > 14 | test.beforeEach(async({request})=>{const r=await request.post('http://127.0.0.1:18952/__h/reset',{headers:{'X-Xiaon-Test':'synthetic-h-only'}});expect(r.ok()).toBeTruthy();});
+         |                                                          ^
+      15 |
+      16 | test('首次记忆选择无预选，告知清楚；开与关均能保存',async({page})=>{
+      17 |  for(const enabled of [true,false]){
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:14:58
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-首次记忆选择无预选，告知清楚；开与关均能保存/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-首次记忆选择无预选，告知清楚；开与关均能保存/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-首次记忆选择无预选，告知清楚；开与关均能保存/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 ──────────────────────────
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:18952
+    Call log:
+      - → POST http://127.0.0.1:18952/__h/reset
+        - user-agent: Playwright/1.64.1 (arm64; macOS 27.0) node/26.8
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Xiaon-Test: synthetic-h-only
+
+
+      12 |  expect((await response).ok()).toBeTruthy();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+      13 | }
+    > 14 | test.beforeEach(async({request})=>{const r=await request.post('http://127.0.0.1:18952/__h/reset',{headers:{'X-Xiaon-Test':'synthetic-h-only'}});expect(r.ok()).toBeTruthy();});
+         |                                                          ^
+      15 |
+      16 | test('首次记忆选择无预选，告知清楚；开与关均能保存',async({page})=>{
+      17 |  for(const enabled of [true,false]){
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:14:58
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests-agent/h/browser.spec.ts:48:1 › 正式测试建议只进入说明，不点开始不切换场次 ────────────────────────────────────
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:18952
+    Call log:
+      - → POST http://127.0.0.1:18952/__h/reset
+        - user-agent: Playwright/1.64.1 (arm64; macOS 27.0) node/26.8
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Xiaon-Test: synthetic-h-only
+
+
+      12 |  expect((await response).ok()).toBeTruthy();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+      13 | }
+    > 14 | test.beforeEach(async({request})=>{const r=await request.post('http://127.0.0.1:18952/__h/reset',{headers:{'X-Xiaon-Test':'synthetic-h-only'}});expect(r.ok()).toBeTruthy();});
+         |                                                          ^
+      15 |
+      16 | test('首次记忆选择无预选，告知清楚；开与关均能保存',async({page})=>{
+      17 |  for(const enabled of [true,false]){
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:14:58
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-正式测试建议只进入说明，不点开始不切换场次/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-正式测试建议只进入说明，不点开始不切换场次/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-正式测试建议只进入说明，不点开始不切换场次/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests-agent/h/browser.spec.ts:56:1 › 陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结 ─────────────────────────────────
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:18952
+    Call log:
+      - → POST http://127.0.0.1:18952/__h/reset
+        - user-agent: Playwright/1.64.1 (arm64; macOS 27.0) node/26.8
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Xiaon-Test: synthetic-h-only
+
+
+      12 |  expect((await response).ok()).toBeTruthy();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+      13 | }
+    > 14 | test.beforeEach(async({request})=>{const r=await request.post('http://127.0.0.1:18952/__h/reset',{headers:{'X-Xiaon-Test':'synthetic-h-only'}});expect(r.ok()).toBeTruthy();});
+         |                                                          ^
+      15 |
+      16 | test('首次记忆选择无预选，告知清楚；开与关均能保存',async({page})=>{
+      17 |  for(const enabled of [true,false]){
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:14:58
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests-agent/h/browser.spec.ts:68:1 › 小结失败可重试，问候失败回退；输入框在缩小视口可达 ────────────────────────────────
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:18952
+    Call log:
+      - → POST http://127.0.0.1:18952/__h/reset
+        - user-agent: Playwright/1.64.1 (arm64; macOS 27.0) node/26.8
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Xiaon-Test: synthetic-h-only
+
+
+      12 |  expect((await response).ok()).toBeTruthy();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+      13 | }
+    > 14 | test.beforeEach(async({request})=>{const r=await request.post('http://127.0.0.1:18952/__h/reset',{headers:{'X-Xiaon-Test':'synthetic-h-only'}});expect(r.ok()).toBeTruthy();});
+         |                                                          ^
+      15 |
+      16 | test('首次记忆选择无预选，告知清楚；开与关均能保存',async({page})=>{
+      17 |  for(const enabled of [true,false]){
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:14:58
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-小结失败可重试，问候失败回退；输入框在缩小视口可达/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-小结失败可重试，问候失败回退；输入框在缩小视口可达/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-小结失败可重试，问候失败回退；输入框在缩小视口可达/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests-agent/h/browser.spec.ts:78:1 › 开发者开关默认关；隐私列出记录类型；旧 chat 导航回首页 ───────────────────────────
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:18952
+    Call log:
+      - → POST http://127.0.0.1:18952/__h/reset
+        - user-agent: Playwright/1.64.1 (arm64; macOS 27.0) node/26.8
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Xiaon-Test: synthetic-h-only
+
+
+      12 |  expect((await response).ok()).toBeTruthy();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+      13 | }
+    > 14 | test.beforeEach(async({request})=>{const r=await request.post('http://127.0.0.1:18952/__h/reset',{headers:{'X-Xiaon-Test':'synthetic-h-only'}});expect(r.ok()).toBeTruthy();});
+         |                                                          ^
+      15 |
+      16 | test('首次记忆选择无预选，告知清楚；开与关均能保存',async({page})=>{
+      17 |  for(const enabled of [true,false]){
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:14:58
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-开发者开关默认关；隐私列出记录类型；旧-chat-导航回首页/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-开发者开关默认关；隐私列出记录类型；旧-chat-导航回首页/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-开发者开关默认关；隐私列出记录类型；旧-chat-导航回首页/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests-agent/h/browser.spec.ts:85:1 › 没有本地服务时保留旧首页按钮 ───────────────────────────────────────────
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:18952
+    Call log:
+      - → POST http://127.0.0.1:18952/__h/reset
+        - user-agent: Playwright/1.64.1 (arm64; macOS 27.0) node/26.8
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Xiaon-Test: synthetic-h-only
+
+
+      12 |  expect((await response).ok()).toBeTruthy();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+      13 | }
+    > 14 | test.beforeEach(async({request})=>{const r=await request.post('http://127.0.0.1:18952/__h/reset',{headers:{'X-Xiaon-Test':'synthetic-h-only'}});expect(r.ok()).toBeTruthy();});
+         |                                                          ^
+      15 |
+      16 | test('首次记忆选择无预选，告知清楚；开与关均能保存',async({page})=>{
+      17 |  for(const enabled of [true,false]){
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:14:58
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-没有本地服务时保留旧首页按钮/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-没有本地服务时保留旧首页按钮/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-没有本地服务时保留旧首页按钮/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests-agent/h/browser.spec.ts:93:1 › 已暂停的 support 场次，进入专业模式说明后仍未开始测评 ──────────────────────────
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:18952
+    Call log:
+      - → POST http://127.0.0.1:18952/__h/reset
+        - user-agent: Playwright/1.64.1 (arm64; macOS 27.0) node/26.8
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Xiaon-Test: synthetic-h-only
+
+
+      12 |  expect((await response).ok()).toBeTruthy();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+      13 | }
+    > 14 | test.beforeEach(async({request})=>{const r=await request.post('http://127.0.0.1:18952/__h/reset',{headers:{'X-Xiaon-Test':'synthetic-h-only'}});expect(r.ok()).toBeTruthy();});
+         |                                                          ^
+      15 |
+      16 | test('首次记忆选择无预选，告知清楚；开与关均能保存',async({page})=>{
+      17 |  for(const enabled of [true,false]){
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:14:58
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-已暂停的-support-场次，进入专业模式说明后仍未开始测评/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-已暂停的-support-场次，进入专业模式说明后仍未开始测评/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-1cU5Fc/artifacts/browser-已暂停的-support-场次，进入专业模式说明后仍未开始测评/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8 failed
+    tests-agent/h/browser.spec.ts:16:1 › 首次记忆选择无预选，告知清楚；开与关均能保存 ────────────────────────────────────
+    tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 ───────────────────────────
+    tests-agent/h/browser.spec.ts:48:1 › 正式测试建议只进入说明，不点开始不切换场次 ─────────────────────────────────────
+    tests-agent/h/browser.spec.ts:56:1 › 陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结 ──────────────────────────────────
+    tests-agent/h/browser.spec.ts:68:1 › 小结失败可重试，问候失败回退；输入框在缩小视口可达 ─────────────────────────────────
+    tests-agent/h/browser.spec.ts:78:1 › 开发者开关默认关；隐私列出记录类型；旧 chat 导航回首页 ────────────────────────────
+    tests-agent/h/browser.spec.ts:85:1 › 没有本地服务时保留旧首页按钮 ────────────────────────────────────────────
+    tests-agent/h/browser.spec.ts:93:1 › 已暂停的 support 场次，进入专业模式说明后仍未开始测评 ───────────────────────────

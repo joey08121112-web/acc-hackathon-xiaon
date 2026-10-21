@@ -1,0 +1,76 @@
+Integration2 browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-6Ix7E9
+[WebServer] (node:11093) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:11123) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:11125) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Integration2 browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-PQ1eh3
+  ✘  1 tests-agent/integration2/phase2.spec.ts:29:1 › 390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长 (5.2s)
+(node:11165) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Integration2 browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-2vA6qt
+  ✘  2 tests-agent/integration2/phase2.spec.ts:62:1 › 仅理解与逻辑完成也能出报告，另三项还没测到；旧报告仅开发者可见，错误无原文 (2.0m)
+
+
+  1) tests-agent/integration2/phase2.spec.ts:29:1 › 390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长 
+
+    Error: b-cost-delayed
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      22 | }
+      23 | const RIGHT:Record<string,string>={understand:'2x-3',logic:'A','b-like-observation':'5x-4','b-like-transfer':'3a+7',bracket:'x+5',model:'3x+2',space:'B','b-language-transfer':'3a+6','b-logic-transfer':'C','b-cost-transfer':'5a+8','b-space-transfer':'A','b-language-delayed':'2x-8','b-logic-delayed':'B','b-like-delayed':'7x-5'};
+    > 24 | async function pass(page:Page,wrong=false){const v=await view(page),iv=v.interviews.find((i:{status:string})=>i.status==='in_progress'),tid=iv.pending.task.taskId;expect(RIGHT[tid],tid).toBeTruthy();await answer(page,wrong?'C':RIGHT[tid]);await expect(mode(page)).toContainText('再说说你的想法');return answer(page,'先检查题目的条件，再一步一步核对关系');}
+         |                                                                                                                                                                                           ^
+      25 | async function clock(page:Page,at:string){expect((await page.request.post(api+'/__integration2/clock',{headers:{'X-Xiaon-Test':'synthetic-integration2-only'},data:{at}})).ok()).toBe(true);await page.reload();}
+      26 | async function getReport(page:Page){const done=page.waitForResponse(r=>r.url().endsWith('/interview/report'));await mode(page).getByRole('button',{name:'看看本次报告'}).click();expect((await done).ok()).toBe(true);await expect(report(page)).toBeVisible();}
+      27 | test.beforeEach(async({request})=>{expect((await request.post(api+'/__integration2/reset',{headers:{'X-Xiaon-Test':'synthetic-integration2-only'}})).ok()).toBe(true);});
+        at pass (/Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/integration2/phase2.spec.ts:24:187)
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/integration2/phase2.spec.ts:56:118
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-PQ1eh3/artifacts/phase2-390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-PQ1eh3/artifacts/phase2-390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-PQ1eh3/artifacts/phase2-390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests-agent/integration2/phase2.spec.ts:62:1 › 仅理解与逻辑完成也能出报告，另三项还没测到；旧报告仅开发者可见，错误无原文 ──────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.click: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '根据最近的评测定一个本月目标' })
+
+
+      66 |  await expect(page.getByText('详细证据（原学习观察报告）')).toBeVisible();await page.getByText('详细证据（原学习观察报告）').click();await expect(page.getByRole('button',{name:'根据当前证据生成报告与计划草案'})).toBeVisible();
+      67 |  await page.evaluate(()=>{localStorage.removeItem('xiaon-dev-mode');window.dispatchEvent(new Event('xiaon-dev-mode-change'));});
+    > 68 |  await report(page).getByRole('button',{name:'进入月阶段规划'}).click();await page.route('**/api/learning/stage/draft',route=>route.fulfill({status:500,json:{error:{code:'internal_error',message:'secret-internal-sqlite-engine-details'}}}));await page.getByRole('button',{name:'根据最近的评测定一个本月目标'}).click();await expect(page.getByRole('alert')).toContainText('这一步暂时没完成');await expect(page.getByRole('alert')).not.toContainText('secret-internal');await shot(page,'18-safe-error');
+         |                                                                                                                                                                                                                                                                                                 ^
+      69 | });
+      70 |
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/integration2/phase2.spec.ts:68:289
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-2vA6qt/artifacts/phase2-仅理解与逻辑完成也能出报告，另三项还没测到；旧报告仅开发者可见，错误无原文/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-2vA6qt/artifacts/phase2-仅理解与逻辑完成也能出报告，另三项还没测到；旧报告仅开发者可见，错误无原文/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-2vA6qt/artifacts/phase2-仅理解与逻辑完成也能出报告，另三项还没测到；旧报告仅开发者可见，错误无原文/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests-agent/integration2/phase2.spec.ts:29:1 › 390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长 
+    tests-agent/integration2/phase2.spec.ts:62:1 › 仅理解与逻辑完成也能出报告，另三项还没测到；旧报告仅开发者可见，错误无原文 ───────────

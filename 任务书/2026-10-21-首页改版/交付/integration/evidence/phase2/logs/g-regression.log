@@ -1,0 +1,9 @@
+✔ 拒绝复测允许 confirmation 换键序，但拒绝真正篡改确认字段 (10.435375ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 140.070833

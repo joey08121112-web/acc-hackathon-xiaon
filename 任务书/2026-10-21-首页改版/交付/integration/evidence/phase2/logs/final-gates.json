@@ -1,0 +1,22 @@
+[
+  {
+    "label": "final-typecheck",
+    "command": "npm run typecheck:agent",
+    "exit": 0
+  },
+  {
+    "label": "final-domain",
+    "command": "npm test",
+    "exit": 0
+  },
+  {
+    "label": "final-agent",
+    "command": "npm run test:agent",
+    "exit": 0
+  },
+  {
+    "label": "final-build",
+    "command": "npm run build",
+    "exit": 0
+  }
+]

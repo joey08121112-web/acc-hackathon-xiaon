@@ -1,0 +1,60 @@
+Integration2 browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-ooE52j
+[WebServer] (node:12452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12481) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:12483) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Integration2 browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-ooE52j
+  ✘  1 tests-agent/integration2/phase2.spec.ts:29:1 › 390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长 (2.0m)
+(node:12633) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Integration2 browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-ooE52j
+  ✓  2 tests-agent/integration2/phase2.spec.ts:62:1 › 仅理解与逻辑完成也能出报告，另三项还没测到；旧报告仅开发者可见，错误无原文 (1.7s)
+
+
+  1) tests-agent/integration2/phase2.spec.ts:29:1 › 390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: page.waitForResponse: Test timeout of 120000ms exceeded.
+
+      43 |  await mode(page).getByRole('button',{name:'先暂停',exact:true}).click();await expect(page).toHaveURL(/#home$/);await clock(page,'2026-10-22T01:00:00.000Z');await nav(page,'专业模式');await expect(mode(page)).toContainText('上次停在：计算');await shot(page,'06-next-day-paused');
+      44 |  await mode(page).getByRole('button',{name:'继续测评'}).click();await expect(mode(page).getByRole('textbox')).toBeVisible();v=await view(page);expect(v.interviews[0].pending.task).toEqual(pending.task);expect(v.interviews[0].learningSessionId).not.toBe(oldSession);
+    > 45 |  await page.setViewportSize({width:390,height:420});await mode(page).getByRole('textbox').fill('暂存想法');await mode(page).getByRole('textbox').focus();await expect(mode(page).getByRole('button',{name:'告诉小N'})).toBeInViewport();await shot(page,'07-composer-390x420');await page.setViewportSize({width:390,height:844});
+         |                      ^
+      46 |  await answer(page,'先把x项合起来，再核对常数项');for(let i=0;i<2;i++)await pass(page);await expect(mode(page)).toContainText('这次五个模块都走过了');await getReport(page);
+      47 |  await expect(report(page).locator('.professional-module')).toHaveCount(5);await expect(report(page)).toContainText('本次得到确认');await expect(report(page)).toContainText('可以试试');await expect(report(page).locator('.professional-module').filter({hasText:'理解'})).toContainText('掌握得不错');await expect(report(page).locator('.professional-module').filter({hasText:'计算'})).toContainText('部分掌握');
+      48 |  await report(page).getByText('展开依据原话',{exact:false}).first().click();expect(await report(page).innerText()).not.toMatch(/\d+\s*(分|名)|总分[:：]|排名[:：]|百分位/);await expect(page.getByText('根据当前证据生成报告与计划草案',{exact:true})).toHaveCount(0);await shot(page,'08-report');
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/integration2/phase2.spec.ts:45:22
+
+    Error: locator.click: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for getByRole('region', { name: '专业模式测评' }).getByRole('button', { name: '给一点小提示' })
+
+
+      43 |  await mode(page).getByRole('button',{name:'先暂停',exact:true}).click();await expect(page).toHaveURL(/#home$/);await clock(page,'2026-10-22T01:00:00.000Z');await nav(page,'专业模式');await expect(mode(page)).toContainText('上次停在：计算');await shot(page,'06-next-day-paused');
+      44 |  await mode(page).getByRole('button',{name:'继续测评'}).click();await expect(mode(page).getByRole('textbox')).toBeVisible();v=await view(page);expect(v.interviews[0].pending.task).toEqual(pending.task);expect(v.interviews[0].learningSessionId).not.toBe(oldSession);
+    > 45 |  await page.setViewportSize({width:390,height:420});await mode(page).getByRole('textbox').fill('暂存想法');await mode(page).getByRole('textbox').focus();await expect(mode(page).getByRole('button',{name:'告诉小N'})).toBeInViewport();await shot(page,'07-composer-390x420');await page.setViewportSize({width:390,height:844});
+         |                                                                                                                                  ^
+      46 |  await answer(page,'先把x项合起来，再核对常数项');for(let i=0;i<2;i++)await pass(page);await expect(mode(page)).toContainText('这次五个模块都走过了');await getReport(page);
+      47 |  await expect(report(page).locator('.professional-module')).toHaveCount(5);await expect(report(page)).toContainText('本次得到确认');await expect(report(page)).toContainText('可以试试');await expect(report(page).locator('.professional-module').filter({hasText:'理解'})).toContainText('掌握得不错');await expect(report(page).locator('.professional-module').filter({hasText:'计算'})).toContainText('部分掌握');
+      48 |  await report(page).getByText('展开依据原话',{exact:false}).first().click();expect(await report(page).innerText()).not.toMatch(/\d+\s*(分|名)|总分[:：]|排名[:：]|百分位/);await expect(page.getByText('根据当前证据生成报告与计划草案',{exact:true})).toHaveCount(0);await shot(page,'08-report');
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/integration2/phase2.spec.ts:45:130
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-ooE52j/artifacts/phase2-390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-ooE52j/artifacts/phase2-390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-browser-ooE52j/artifacts/phase2-390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests-agent/integration2/phase2.spec.ts:29:1 › 390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长 
+  1 passed (2.1m)

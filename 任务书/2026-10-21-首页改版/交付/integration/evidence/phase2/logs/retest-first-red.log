@@ -1,0 +1,37 @@
+✔ 模块选择是程序规则：需要加强优先，其次部分掌握，同级按固定顺序 (0.385209ms)
+✔ draftMonthStage：离线草案（revision 1、未确认、月底复测、周一脚手架），过 draftProblems 门控 (15.367208ms)
+✔ draftMonthStage：模型只负责措辞，模块与结构不由模型决定；模型失败回退程序措辞 (4.757166ms)
+✔ confirmMonthStage：学生点击才生效；accept 生成本周计划草案并记入 weeks；defer 不安排任务 (9.763542ms)
+✔ retestReminder：到期前 3 天起提醒；拒绝后、未确认、非本月窗口都不提醒 (0.462042ms)
+✔ declineRetest：新修订只写拒绝时间，其余不变 (7.702583ms)
+✔ trend：同月多次测评取最近一次；保留全部历史；月份按上海时间；过 trendProblems 门控 (0.914125ms)
+✖ HTTP 端到端：草案→确认→周计划→提醒→拒绝；记忆关闭不影响；重置清除 (37.308875ms)
+✔ 三个挂载位组件渲染：草案卡可确认、今日页有本周任务、复测提醒有入口；无提醒时不渲染 (3.846333ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 316.460834
+
+✖ failing tests:
+
+test at tests-agent/i/plan-tracking.test.ts:1:15366
+✖ HTTP 端到端：草案→确认→周计划→提醒→拒绝；记忆关闭不影响；重置清除 (37.308875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  500 !== 200
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/i/plan-tracking.test.ts:194:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

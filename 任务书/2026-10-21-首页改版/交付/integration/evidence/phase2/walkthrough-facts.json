@@ -1,0 +1,613 @@
+{
+  "firstReport": {
+    "changes": [],
+    "comparedWithReportId": null,
+    "createdAt": "2026-10-22T01:00:00.000Z",
+    "evidenceRevision": 30,
+    "id": "preport-967d5ade-55a6-498b-b4d5-200375846062",
+    "interviewId": "interview-3bfa6d23-28df-4478-8f1f-820ba41130fa",
+    "mode": "model",
+    "modules": [
+      {
+        "attemptIds": [
+          "af048ab0-b9a2-42a2-8b2f-6d58620ac2d6"
+        ],
+        "basis": "correct_with_reason",
+        "evidenceIds": [
+          "109d9b5c-c0f2-47c3-a0ba-1ab0c9734ed5",
+          "f4115b83-c178-4ede-8f76-7ef024ad79df"
+        ],
+        "level": "good",
+        "module": "理解",
+        "quotes": [
+          "先算两倍再减三，顺序不能反过来"
+        ],
+        "scope": "this_interview",
+        "suggestions": [],
+        "turnIds": [
+          "iturn-8501a352-b5c7-40dd-91bb-0a211f019424",
+          "iturn-805e0792-b1b0-4df5-b6f9-8d2d9ccd9932"
+        ],
+        "wording": "这次把条件读清楚了。"
+      },
+      {
+        "attemptIds": [
+          "b6559c8e-b0d3-40ec-8e98-7033135819d6",
+          "09e4c167-420d-46aa-9c58-f60ec6bc92fc"
+        ],
+        "basis": "correct_on_transfer",
+        "evidenceIds": [
+          "1899b2b8-adfc-4ec1-a8dc-11d429941793",
+          "09830773-d721-42bb-a0d9-03dbaf14813b",
+          "d1b75b01-d852-4998-aa62-6cfbf4e33d3f",
+          "d7b34728-1a7f-4a5d-a5ab-21cea6fd7b06"
+        ],
+        "level": "partial",
+        "module": "逻辑",
+        "quotes": [
+          "先检查题目的条件，再一步一步核对关系",
+          "先检查题目的条件，再一步一步核对关系"
+        ],
+        "scope": "this_interview",
+        "suggestions": [
+          "举反例时先检查它是否满足题目的前提。"
+        ],
+        "turnIds": [
+          "iturn-644ee052-1486-45b4-a8c7-cfd23ee4fa5d",
+          "iturn-cb8e9de2-3653-432f-9c55-dd480e4e85c0",
+          "iturn-791507cf-1a99-49d2-bf9d-1f266cd2f4ad",
+          "iturn-6b3fa72e-0331-44b5-ad5c-df447fdadb53"
+        ],
+        "wording": "第一题没做对，同类的第二题做对了。"
+      },
+      {
+        "attemptIds": [
+          "60988c23-ee4e-4c8f-bde3-3cd048d554c9"
+        ],
+        "basis": "completed_with_hint",
+        "evidenceIds": [
+          "088e27ef-0961-47d9-b5d7-05914819693a"
+        ],
+        "level": "partial",
+        "module": "计算",
+        "quotes": [
+          "先把x项合起来，再核对常数项"
+        ],
+        "scope": "this_interview",
+        "suggestions": [
+          "写出每一步等号，做完把结果代一个数检查。"
+        ],
+        "turnIds": [
+          "iturn-29325769-983d-4cb4-b4b5-2f05f094bae4",
+          "iturn-c6157e4e-a075-4fae-a757-aa49f9e5c839"
+        ],
+        "wording": "在一个小提示之后做出来了。"
+      },
+      {
+        "attemptIds": [
+          "eed64ebc-caf2-4891-9663-642faec8f172"
+        ],
+        "basis": "correct_with_reason",
+        "evidenceIds": [
+          "7a54dee8-ea9f-46bb-88cb-aa1e403d5566",
+          "b47d1e38-3ba2-4a60-a346-462f7a377b8a"
+        ],
+        "level": "good",
+        "module": "建模",
+        "quotes": [
+          "先检查题目的条件，再一步一步核对关系"
+        ],
+        "scope": "this_interview",
+        "suggestions": [],
+        "turnIds": [
+          "iturn-67dc1f18-9656-451f-93e6-8412de0b1752",
+          "iturn-a19b8944-5f5f-4e89-b0e4-cd6a248d8f33"
+        ],
+        "wording": "这次答对了，也说清了自己的想法。"
+      },
+      {
+        "attemptIds": [
+          "a60b048a-7289-4d45-b577-e024a8e9e1dc"
+        ],
+        "basis": "correct_with_reason",
+        "evidenceIds": [
+          "ed825210-63fa-4d96-837b-8c6532ad55cd"
+        ],
+        "level": "good",
+        "module": "空间想象",
+        "quotes": [
+          "先检查题目的条件，再一步一步核对关系"
+        ],
+        "scope": "this_interview",
+        "suggestions": [],
+        "turnIds": [
+          "iturn-f715b8a9-44a3-4bf3-ac5a-9170d1e620bb",
+          "iturn-57a10fbf-723f-4a62-917f-dce39ad2ce64"
+        ],
+        "wording": "这次答对了，也说清了自己的想法。"
+      }
+    ],
+    "observationChecks": [
+      {
+        "dimension": "理解",
+        "observationId": "obs-442c0c94-b68a-4737-afa1-b5e303ba08f6",
+        "result": "confirmed"
+      },
+      {
+        "dimension": "理解",
+        "observationId": "obs-d470f05b-8b4e-45aa-8a47-128fc62aa0de",
+        "result": "confirmed"
+      }
+    ],
+    "operationId": "967d5ade-55a6-498b-b4d5-200375846062",
+    "schemaVersion": "1.0.0",
+    "supersedesReportId": null,
+    "version": 1
+  },
+  "lastReport": {
+    "changes": [
+      {
+        "from": "partial",
+        "module": "逻辑",
+        "note": "上次部分掌握，这次掌握得不错",
+        "to": "good"
+      },
+      {
+        "from": "partial",
+        "module": "计算",
+        "note": "上次部分掌握，这次掌握得不错",
+        "to": "good"
+      }
+    ],
+    "comparedWithReportId": "preport-967d5ade-55a6-498b-b4d5-200375846062",
+    "createdAt": "2026-11-01T01:00:00.000Z",
+    "evidenceRevision": 53,
+    "id": "preport-3290bded-c92d-40b1-9cc2-08a021c9ffe3",
+    "interviewId": "interview-d5207d3d-4110-43ed-a668-3b7302fe6add",
+    "mode": "model",
+    "modules": [
+      {
+        "attemptIds": [
+          "311c85f5-aae0-4ae3-b8d6-e71696d844ef"
+        ],
+        "basis": "correct_with_reason",
+        "evidenceIds": [
+          "cac464d3-1c55-4812-8291-a0310cd8cb6a",
+          "7cef776a-05af-4573-ac2b-0cb96edeaba7"
+        ],
+        "level": "good",
+        "module": "理解",
+        "quotes": [
+          "先检查题目的条件，再一步一步核对关系"
+        ],
+        "scope": "this_interview",
+        "suggestions": [],
+        "turnIds": [
+          "iturn-7b412894-48d7-4be2-a93a-195de9f0956e",
+          "iturn-3888a454-6ed5-44b4-99c6-9f27ac1a2015"
+        ],
+        "wording": "这次把条件读清楚了。"
+      },
+      {
+        "attemptIds": [
+          "3405db24-f18c-4949-bc65-c7b66c934eb1"
+        ],
+        "basis": "correct_with_reason",
+        "evidenceIds": [
+          "ff6a07a2-8af6-46fa-a0c7-2bcd5ec37092",
+          "31f5fac6-829d-4486-a560-da5e1c6bd66c"
+        ],
+        "level": "good",
+        "module": "逻辑",
+        "quotes": [
+          "先检查题目的条件，再一步一步核对关系"
+        ],
+        "scope": "this_interview",
+        "suggestions": [],
+        "turnIds": [
+          "iturn-652ac073-5b35-4f6c-af7c-feebf74881bc",
+          "iturn-22b29b9b-2b76-4707-b32b-49e472435566"
+        ],
+        "wording": "这次答对了，也说清了自己的想法。"
+      },
+      {
+        "attemptIds": [
+          "024f5fd3-5370-4cca-ae72-c8375b94ff8b"
+        ],
+        "basis": "correct_with_reason",
+        "evidenceIds": [
+          "ccf47190-838c-4760-b949-12d97a7d0957"
+        ],
+        "level": "good",
+        "module": "计算",
+        "quotes": [
+          "先检查题目的条件，再一步一步核对关系"
+        ],
+        "scope": "this_interview",
+        "suggestions": [],
+        "turnIds": [
+          "iturn-b07b5a19-a347-4397-b6b9-3743e6dc261c",
+          "iturn-f7d4bccd-350b-41ba-b4ca-777a5848f579"
+        ],
+        "wording": "这次答对了，也说清了自己的想法。"
+      },
+      {
+        "attemptIds": [
+          "7a606256-ec41-4dac-b0e2-5ab58c981fc5"
+        ],
+        "basis": "correct_with_reason",
+        "evidenceIds": [
+          "cdbf5ba2-caef-441c-a0de-296ba36026b0",
+          "b13a4302-301b-4021-8b81-224df3b2ce9f"
+        ],
+        "level": "good",
+        "module": "建模",
+        "quotes": [
+          "先检查题目的条件，再一步一步核对关系"
+        ],
+        "scope": "this_interview",
+        "suggestions": [],
+        "turnIds": [
+          "iturn-e96e306e-f6a0-44ab-9e2a-8dcf68b78a78",
+          "iturn-262949e8-e7bd-4519-a871-039744bcfdad"
+        ],
+        "wording": "这次答对了，也说清了自己的想法。"
+      },
+      {
+        "attemptIds": [
+          "8cc2ff04-05b7-4313-b31c-d3b9f1ebf17e"
+        ],
+        "basis": "correct_with_reason",
+        "evidenceIds": [
+          "c8257540-0e9d-47ad-9e9a-fbac1ad4e2f7"
+        ],
+        "level": "good",
+        "module": "空间想象",
+        "quotes": [
+          "先检查题目的条件，再一步一步核对关系"
+        ],
+        "scope": "this_interview",
+        "suggestions": [],
+        "turnIds": [
+          "iturn-66228694-c532-4c42-93f9-54b659fcbb42",
+          "iturn-cbdd11f3-9bde-4066-983d-fb0c08df40cd"
+        ],
+        "wording": "这次答对了，也说清了自己的想法。"
+      }
+    ],
+    "observationChecks": [],
+    "operationId": "3290bded-c92d-40b1-9cc2-08a021c9ffe3",
+    "schemaVersion": "1.0.0",
+    "supersedesReportId": null,
+    "version": 1
+  },
+  "monthStage": [
+    {
+      "confirmation": {
+        "action": "accept",
+        "actor": "student",
+        "confirmedAt": "2026-10-22T01:00:00.000Z"
+      },
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "goal": "这个月在逻辑上往前一步：举反例时先检查它是否满足题目的前提。",
+      "id": "stage-9cc90c44-d85b-4fd2-94cf-082a5d633777",
+      "mode": "local_rules",
+      "module": "逻辑",
+      "month": "2026-10",
+      "operationId": "dcce8a15-9c20-49a0-ac1f-7af5e7338a64",
+      "retestDeclinedAt": "2026-10-31T01:00:00.000Z",
+      "retestSuggestedAt": "2026-10-31",
+      "revision": 3,
+      "schemaVersion": "1.0.0",
+      "sourceReportId": "preport-967d5ade-55a6-498b-b4d5-200375846062",
+      "status": "confirmed",
+      "updatedAt": "2026-10-31T01:00:00.000Z",
+      "weeks": [
+        {
+          "planVersionId": null,
+          "proposalId": "8d1e9a8a-90d7-431e-a23e-ae879a083737",
+          "weekStart": "2026-10-19"
+        },
+        {
+          "planVersionId": null,
+          "proposalId": null,
+          "weekStart": "2026-10-26"
+        }
+      ]
+    }
+  ],
+  "interviews": [
+    {
+      "completedAt": "2026-10-22T01:00:00.000Z",
+      "completedModules": [
+        "理解",
+        "逻辑",
+        "计算",
+        "建模",
+        "空间想象"
+      ],
+      "currentModule": null,
+      "id": "interview-3bfa6d23-28df-4478-8f1f-820ba41130fa",
+      "learningSessionId": "93f4b964-98f9-41e2-b6fa-17da661d2a74",
+      "moduleOrder": [
+        "理解",
+        "逻辑",
+        "计算",
+        "建模",
+        "空间想象"
+      ],
+      "operationId": "3bfa6d23-28df-4478-8f1f-820ba41130fa",
+      "pausedAt": null,
+      "pending": null,
+      "revision": 15,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T01:00:00.000Z",
+      "status": "completed",
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "completedAt": "2026-11-01T01:00:00.000Z",
+      "completedModules": [
+        "理解",
+        "逻辑",
+        "计算",
+        "建模",
+        "空间想象"
+      ],
+      "currentModule": null,
+      "id": "interview-d5207d3d-4110-43ed-a668-3b7302fe6add",
+      "learningSessionId": "7e117e98-8821-436d-9322-97feb6dc57f0",
+      "moduleOrder": [
+        "理解",
+        "逻辑",
+        "计算",
+        "建模",
+        "空间想象"
+      ],
+      "operationId": "d5207d3d-4110-43ed-a668-3b7302fe6add",
+      "pausedAt": null,
+      "pending": null,
+      "revision": 11,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-11-01T01:00:00.000Z",
+      "status": "completed",
+      "updatedAt": "2026-11-01T01:00:00.000Z"
+    }
+  ],
+  "turns": [
+    {
+      "module": "理解",
+      "kind": "question",
+      "task": {
+        "taskId": "understand",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "理解",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "understand",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "逻辑",
+      "kind": "question",
+      "task": {
+        "taskId": "logic",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "逻辑",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "logic",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "逻辑",
+      "kind": "transfer",
+      "task": {
+        "taskId": "b-logic-transfer",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "逻辑",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "b-logic-transfer",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "计算",
+      "kind": "question",
+      "task": {
+        "taskId": "b-like-observation",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "计算",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "b-like-observation",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "建模",
+      "kind": "question",
+      "task": {
+        "taskId": "model",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "建模",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "model",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "空间想象",
+      "kind": "question",
+      "task": {
+        "taskId": "space",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "空间想象",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "space",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "理解",
+      "kind": "question",
+      "task": {
+        "taskId": "b-language-delayed",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "理解",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "b-language-delayed",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "逻辑",
+      "kind": "question",
+      "task": {
+        "taskId": "b-logic-delayed",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "逻辑",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "b-logic-delayed",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "计算",
+      "kind": "question",
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "计算",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "建模",
+      "kind": "question",
+      "task": {
+        "taskId": "b-cost-delayed",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "建模",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "b-cost-delayed",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "空间想象",
+      "kind": "question",
+      "task": {
+        "taskId": "b-space-delayed",
+        "taskVersion": 2
+      }
+    },
+    {
+      "module": "空间想象",
+      "kind": "follow_up",
+      "task": {
+        "taskId": "b-space-delayed",
+        "taskVersion": 2
+      }
+    }
+  ],
+  "plans": [
+    {
+      "snapshot": {
+        "changes": [
+          "学生选择 accept：学生明确选择接受"
+        ],
+        "confirmation": {
+          "action": "accept",
+          "actor": "student",
+          "confirmedAt": "2026-10-22T01:00:00.000Z",
+          "expectedPreviousVersionId": null,
+          "reason": "学生明确选择接受"
+        },
+        "createdAt": "2026-10-22T01:00:00.000Z",
+        "evidenceRevision": 30,
+        "goal": "like-terms：从提示帮助过渡到独立处理",
+        "id": "892773c6-a585-490e-b4ff-c4bec6113c3d",
+        "items": [
+          {
+            "estimatedMinutes": 3,
+            "evidenceIds": [
+              "088e27ef-0961-47d9-b5d7-05914819693a"
+            ],
+            "goal": "只看当前知识点的一个具体步骤，先提供支持",
+            "id": "27a70aca-de65-4920-841b-f3674b4553dd",
+            "knowledgePointId": "like-terms",
+            "scheduledDate": "2026-10-22",
+            "status": "scheduled",
+            "task": null,
+            "taskType": "supported_practice"
+          },
+          {
+            "estimatedMinutes": 3,
+            "evidenceIds": [
+              "088e27ef-0961-47d9-b5d7-05914819693a"
+            ],
+            "goal": "支持后自选未见新题；完成支持前须再次核对题目暴露",
+            "id": "cdff40b3-4a14-479d-a319-8786b9a63c43",
+            "knowledgePointId": "like-terms",
+            "scheduledDate": "2026-10-22",
+            "status": "scheduled",
+            "task": {
+              "taskId": "b-like-transfer",
+              "taskVersion": 2
+            },
+            "taskType": "independent_transfer"
+          }
+        ],
+        "operationId": "18f0d75f-82d1-4fb1-a1b8-6cadb254e8ba",
+        "previousVersionId": null,
+        "proposalId": "8d1e9a8a-90d7-431e-a23e-ae879a083737",
+        "schemaVersion": "1.0.0",
+        "version": 1
+      },
+      "basisRevised": false,
+      "replacementId": null
+    }
+  ]
+}
