@@ -1,3 +1,81 @@
+# zCode 路 HANDOFF
+
+本文件自上而下：第二期（最新，周 / 月学习规划与长期跟踪）、第一期（口述卡点与错题记录、记忆与开场问候）。
+
+# zCode 路 HANDOFF · 第二期（周 / 月学习规划与长期跟踪）
+
+编制日期：2026-10-21。分支 `revamp/i2-plan-tracking`，worktree `/Users/ami/Documents/个人/ACC黑客松-wt/zcode2`。基于 `revamp-base2`（main b611610）。先完整读了 `交付/claude/CONTRACT-PHASE2.md`（含第 2 节与任务书的差异、第 9 节给各路的提醒），`server/plugins/planning/**` 与 `src/learning/review/**` 只读未改。
+
+## 1. 范围与未完成项
+
+**已完成**
+
+- **月阶段目标**（`server/plugins/stages/index.ts` → `draftMonthStage`）：模块选择是程序规则（`focusModule`：「需要加强」优先、其次「部分掌握」，同级按 `INTERVIEW_MODULE_ORDER` 固定顺序；都没有 → `invalid_state`，前端也不再给入口）。目标文字由模型措辞（提示词版本 `stage-goal-i2`，内联在插件里，一次、无工具；过长/带分数排名/坏 JSON 回退程序措辞并标 `local_rules`；上个月同模块时措辞接续「继续上个月……」）。复测建议日期 = 当月最后一天；`weeks[]` 草案期是本周到月底各周周一的脚手架（≤6 项，两端都空）。
+- **拆周任务**（`confirmMonthStage`）：学生点「定下这个目标」后，用 `ctx.planning().propose`（现有计划引擎，预算 6 分钟与计划页一致）生成本周草案，把 `proposalId` 记进本周 `weeks[]` 项；`planVersionId` 留空——周计划的确认走现有 `learning/confirm`（接受 / 减量 / 改期 / 暂不开始），由学生在计划页完成，本路不替学生确认（这正是契约 §9 预见的「把已确认周计划挂到月阶段」无路由情形；如需把 `planVersionId` 写回 `weeks[]`，要一条新路由 = 契约变更，未申请）。「暂不开始」（defer）不安排任务。
+- **今日页**（`WeeklyTasksView`，今日页复测提醒之下）：显示本月目标（模块 + 目标文字）、本周任务及其状态（待确认 / 已暂停 / 等待自主开始 / 已有真实尝试，尝试按计划确认时间之后的作答算）；只显示本周，附「错过的安排不扣分，也不集中堆积」。周计划草案未确认时给出带去计划页的入口。周与月阶段用 `proposalId` 对应 `view().plans` / `view().proposal`，不需要新路由。
+- **月底复测提醒**（`RetestReminder` 组件 + `retestReminder` 插件）：从 `retestSuggestedAt` 前 `RETEST_REMIND_DAYS_BEFORE`（3）天起到建议日期当天，首页与今日页显示「可以做一次专业模式复测」；已确认但未拒绝才提醒，草案 / 暂不开始 / 被取代 / 已拒绝一律不提醒；同窗口多月阶段取最近的。拒绝调 `learning/stage/retest-decline`（受下述契约缺陷阻塞，见第 3 节）。
+- **长期趋势**（`server/plugins/tracking/index.ts` → `trend`）：`history` = 全部报告 × 5 模块（按报告时间、模块固定序），`latest` = 每月每模块取最近一次报告的点；月份按报告时间的上海月份（UTC 月底的报告正确归到下月）；全部过 `trendProblems` 门控。供 ChatGPT 成长档案用（`GET /api/learning/trend`）。
+- **计划页**（`MonthStageView`，标题之下）：本月无阶段且最新报告有可聚焦模块时给「根据最近的评测定一个本月目标」入口（调 `stage/draft`）；报告无可聚焦模块时说明本月不用定加强目标。草案卡显示模块 + 等级文字（`MODULE_LEVEL_LABELS`）+ 可编辑目标 + 复测日期，按钮「定下这个目标 / 暂不开始」（暂不开始后仍可再确认）；已确认显示目标、各周安排状态与「看看评测依据」。
+- 月阶段 / 提醒 / 趋势均为学习记录：不受记忆开关影响（HTTP 测试里关掉开关后 `view()` 照常），重置演示清除（已测）。
+- 共用日历规则放 `src/components/plan/calendar.ts`（纯函数，服务端插件与组件共用，避免两份周一/月底逻辑漂移）。
+
+**未完成 / 受阻**
+
+- **`POST stage/retest-decline` 恒 500（契约缺陷）**：`revisionProblems` 用 `JSON.stringify` 比较 `confirmation`，仓库 canonical 键序与 zod 输出键序不同，拒绝复测的写入必被门控拒绝。插件逻辑本身正确（单测过门控），路由层面等 Claude 按契约变更申请修复。已提 `CONTRACT-REQUEST.md` 第 4 条（一行修复：改用键序无关的 `hash` 比较）。修复前：学生点「本月先不做」会看到错误提示，提醒继续显示（本月还剩几天窗口）；修复后语义即恢复（拒绝后本月不再提——`retestReminder` 的过滤逻辑已实现并有单测）。
+- `weeks[].planVersionId` 恒为 `null`（见上），不申请变更，前端按 `proposalId` 对应。
+- 月中重新定目标：契约规定已确认 / 暂不开始的月份 `stage/draft` 409，要变更需走契约流程，未做。
+- 真实模型措辞（stage-goal-i2）未跑（无 `.env.server`）；离线回退已测。
+- 浏览器测试未跑（约束禁跑 D 阶段；组件用 SSR 断言覆盖文案与入口）。
+
+## 2. 分支、提交与文件清单
+
+- 分支 `revamp/i2-plan-tracking`（从 tag `revamp-base2` 新建），worktree `/Users/ami/Documents/个人/ACC黑客松-wt/zcode2`，提交号见 `git log -1`。
+- 只改了 zCode 拥有的文件：
+  - `server/plugins/stages/index.ts`（实现四个函数 + `focusModule`、`WEEK_TIME_BUDGET_MINUTES`）
+  - `server/plugins/tracking/index.ts`（实现 `trend`）
+  - `src/components/plan/{MonthStageView,WeeklyTasksView,RetestReminder}.tsx`（桩→实现）、`src/components/plan/calendar.ts`（新增，纯函数）、`src/components/plan/pointNames.ts`（新增，显示名）
+  - `tests-agent/i/plan-tracking.test.ts`（新增 9 项）；`tests-agent/i/phase2-contract-smoke.test.ts` **删除**（契约允许整体替换；其仍有效的断言——schema 学生专属确认、客户端不能选模块 400、路由存在性/版本门控——已并入新文件）
+  - 交付物：`任务书/2026-10-21-首页改版/交付/zcode/{HANDOFF.md,CONTRACT-REQUEST.md,evidence/i2-*}`
+- 未动：`shared/learning-contracts.ts`、`server/agents/{learning,professional}.ts`、`server/plugins/planning/**`、`src/learning/review/**`、`LearningPages.tsx`、`ChatPanel.tsx` 等他人文件；主目录未动（误写入主目录 CONTRACT-REQUEST 的一次编辑已当场恢复，最终只改 worktree 副本）。
+
+## 3. 运行过的命令与退出码
+
+在 `outputs/xiaon`（worktree 内，Node 26.8.2）：
+
+| 命令 | 退出码 | 备注 |
+| --- | --- | --- |
+| `npm ci` | 0 | worktree 初装 |
+| `npm run typecheck:agent` | 0 | |
+| `npm test` | 0 | 25/25 |
+| `npm run test:agent:i` | 0 | 28/28（problem 9、memory 8、G0 契约 2、plan-tracking 9） |
+| `npm run test:agent` | **1** | 205/206；唯一失败 `tests-agent/h/phase2-contract-smoke.test.ts:47` 钉死「GET trend 桩 501」的阶段 0 快照（本路实现后返回 200）。h 目录归 ChatGPT，集成时更新期望值即可（证据：`evidence/i2-test-agent-all-known-h-conflict.txt`） |
+| `npm run build` | 0 | |
+
+**首次失败留档**（`evidence/i2-first-run-stubs.txt`）：测试先于实现编写；桩未导出 `focusModule` 等新符号，整个测试文件在模块加载期失败——桩状态的原样留档。修复过程中的真实失败（测试夹具 attemptId 含中文不合 id 规则、`assert.equal` 误用于对象比较、以及发现 retest-decline 契约缺陷）都已在最终版本处理；无未决失败（除上述 h 路快照与契约缺陷）。
+
+## 4. 证据级别
+
+| 级别 | 状态 |
+| --- | --- |
+| 静态检查 | 跑了（typecheck、build） |
+| 规则单测 | 跑了（focusModule、retestReminder 窗口、trend 推导、declineRetest 修订、组件 SSR） |
+| 模拟模型端到端 | 跑了（HTTP 层：草案→确认→周计划→learning/confirm→提醒窗口→拒绝（受契约缺陷阻，断言如实记 500）；合成 Provider 测模型措辞与回退；TestClock 推进 10-26→10-31） |
+| 真实模型 | 未运行（本路未读 `.env.server`；模型只用于目标措辞，有离线回退） |
+| 浏览器 | 未运行（约束禁跑 D 阶段） |
+| 真实设备 | 未运行 |
+
+## 5. 给集成方的入口
+
+- 启动：worktree 内 `XIAON_UI_PORT=5213 XIAON_API_PORT=18953 XIAON_DB_PATH=.local/zcode2.sqlite npm run dev:learning`。
+- 走一遍月规划：先有专业评测报告（Claude 面试引擎 `interview/report`，或测试里直接插报告）→ 计划页出现「根据最近的评测定一个本月目标」→ 草案卡（模块由等级决定、目标可改）→「定下这个目标」→ 本周草案进 `view().proposal` 且 `weeks[]` 记 `proposalId` → 计划页下方现有草案卡「接受这份计划」→ 今日页看本月目标与本周任务。
+- 走一遍提醒：TestClock 或等到 `retestSuggestedAt` 前 3 天 → 首页与今日页出现复测提醒 →（契约修复后）「本月先不做」→ 提醒消失。
+- 走一遍趋势：`GET /api/learning/trend`（需本机会话 Cookie）→ `latest` 每月每模块一点、`history` 全量；ChatGPT 成长档案直接用。
+- 已知集成点：`CONTRACT-REQUEST.md` 第 4 条（retest-decline 键序缺陷，修复后翻转 `plan-tracking.test.ts` 里标注的两条断言）；h 路快照期望值；如集成想把已确认周计划写回 `weeks[].planVersionId` 需新路由（契约变更）。
+
+第二期到此为止，不自动开始第三期，不合并别人的分支。
+
+---
+
 # zCode 路 HANDOFF · 第一期（口述卡点与错题记录、记忆与开场问候）
 
 编制日期：2026-10-21。分支 `revamp/i-problem-vision`，worktree `/Users/ami/Documents/个人/ACC黑客松-wt/zcode`。基于 `revamp-base`（main 99a9385）。

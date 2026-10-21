@@ -1,0 +1,40 @@
+
+> xiaon-learning-companion@1.0.0 test:agent:i
+> node scripts/agent/test.mjs i
+
+✔ G0 zCode-lane schemas: drafts carry no answer status, secrets are separate, recognition needs mask confirmation (1.100667ms)
+✔ zCode-lane routes: problem/memory/greeting live, recognize still 501; program-gated inputs rejected first (72.620042ms)
+✔ validateMemoryDraft: 关闭即拒、情绪与评价丢弃、40 字上限、origin 由程序决定 (0.63125ms)
+✔ shouldOfferMemory: 同一场次最多两次提议机会；新场次重新计 (15.758542ms)
+✔ confirmMemoryDraft: 只有学生确认才写入；写 chat 提起与 30 天复核；关闭时拒绝 (9.604959ms)
+✔ greeting: 优先接上次小结（记忆关闭也可以）；没有小结才提记忆 (19.823709ms)
+✔ greeting: 离线（无模型）返回默认文字；刚确认的记忆不会被马上提起 (9.858459ms)
+✔ selectMemoriesForContext: 只取与当前话题相关的记忆，按相关度排序，最多 5 条 (0.532375ms)
+✔ greeting 只从有效记忆里挑：过期、到期待复核、已停用的一律不提 (12.277584ms)
+✔ Tutor 上下文经协调器按需取用：相关记忆才进上下文 (16.136125ms)
+✔ 模块选择是程序规则：需要加强优先，其次部分掌握，同级按固定顺序 (0.502375ms)
+✔ draftMonthStage：离线草案（revision 1、未确认、月底复测、周一脚手架），过 draftProblems 门控 (18.906667ms)
+✔ draftMonthStage：模型只负责措辞，模块与结构不由模型决定；模型失败回退程序措辞 (8.191625ms)
+✔ confirmMonthStage：学生点击才生效；accept 生成本周计划草案并记入 weeks；defer 不安排任务 (17.748458ms)
+✔ retestReminder：到期前 3 天起提醒；拒绝后、未确认、非本月窗口都不提醒 (0.887959ms)
+✔ declineRetest：新修订只写拒绝时间，其余不变 (5.469125ms)
+✔ trend：同月多次测评取最近一次；保留全部历史；月份按上海时间；过 trendProblems 门控 (1.307417ms)
+✔ HTTP 端到端：草案→确认→周计划→提醒→拒绝；记忆关闭不影响；重置清除 (35.646792ms)
+✔ 三个挂载位组件渲染：草案卡可确认、今日页有本周任务、复测提醒有入口；无提醒时不渲染 (3.618625ms)
+✔ validateProblemDraft: 出处核对、知识点归一、不完整草稿不通过 (0.772792ms)
+✔ 首页流程：合法草稿透传到确认卡，未点「记下」不写入；确认后才落库并与场次关联 (33.057959ms)
+✔ confirmProblem: 两次解题一致且 expression 核对一致 → verified，秘密只在服务端 (17.404875ms)
+✔ confirmProblem: 两次解题不一致 → unknown 且不写 ProblemSecret (10.512125ms)
+✔ confirmProblem: 两次一致但与题目算不出同一结果 → unknown（不写秘密） (8.202209ms)
+✔ confirmProblem: 学生改后的文字被保存；模型离线仍能确认（无参考答案） (19.099083ms)
+✔ confirmProblem: 题库题用题库答案（verified）；错题确认同时确认被引用的卡点 (10.705375ms)
+✔ confirmProblem: 学生自带参考答案记 student_provided，不冒充已核验 (6.640042ms)
+✔ 重置整个演示：错题记录与参考答案一并清除 (6.14575ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 318.576917
