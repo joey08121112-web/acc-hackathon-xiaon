@@ -76,3 +76,13 @@ export function matchesAnswer(text:string,answers:string[]):boolean{
  const said=clean(text);
  return answers.some(a=>{const c=clean(a);return c.length>0&&(said===c||(c.length>2&&said.includes(c))||said.endsWith('='+c)||said.endsWith('是'+c));});
 }
+/** Program length gate for a Tutor reply: within max characters it is returned as is; otherwise cut at the last sentence end
+ * (or last comma, closed with 。) inside the limit. Used after one model rewrite has already been tried. */
+export function fitReply(text:string,max:number):string{
+ const chars=Array.from(text);if(chars.length<=max)return text;
+ const head=chars.slice(0,max).join('');
+ const end=Math.max(...['。','！','？','!','?','…'].map(c=>head.lastIndexOf(c)));if(end>=0)return head.slice(0,end+1);
+ const pause=Math.max(...['，',',','；',';'].map(c=>head.lastIndexOf(c)));if(pause>0)return head.slice(0,pause)+'。';
+ return head;
+}
+export const replyLength=(text:string)=>Array.from(text).length;

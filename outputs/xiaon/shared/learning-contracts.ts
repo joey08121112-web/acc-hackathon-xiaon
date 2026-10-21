@@ -52,6 +52,8 @@ const ToolCall = z.strictObject({...base,runId:id,callId:id,name:id,argumentsHas
 // P0: a Tutor-recorded stuck point for the two open calculation points. A hypothesis from conversation, never a skill state;
 // studentQuote is program-checked to be verbatim student text from the same Tutor turn.
 const stuckKnowledgePoint = z.enum(['negative-brackets','like-terms']);
+// G0: studentConfirmed is written false by the program at record time (the model's value is ignored). A stuck point counts as
+// student-confirmed only when the student confirms a ProblemRecord whose stuckPointId points to it (a click, not model output).
 const StuckPoint = z.strictObject({...base,runId:id,sessionId:id.nullable(),knowledgePointId:stuckKnowledgePoint,kind:z.enum(['concept','method','start']),studentQuote:z.string().min(1).max(200),summary:z.string().min(1).max(200),studentConfirmed:z.boolean(),createdAt:utc});
 // Latest graded attempt as the Tutor may see it: verdict and clue descriptions only, never the trusted answer, rubric or hint text.
 const LatestFeedback = z.strictObject({attemptId:id,...ref.shape,title:text,knowledgePointIds:ids,studentValue:text,verdict,points:z.array(z.strictObject({pointId:id,status:z.enum(['supported','unsupported','uncertain'])})),errorClues:z.array(text),hintLevelsUsed:z.array(version),answerExposed:z.boolean(),attemptedAt:nullableTime});
@@ -85,7 +87,9 @@ const shortText = z.string().min(1).max(200);
 const problemKnowledgePoint = z.enum(['math-language','counterexample','negative-brackets','like-terms','fixed-variable-cost','rotation-2d','other']);
 const ModeSuggestion = z.strictObject({mode:z.literal('professional'),reason:shortText});
 // What the model may propose in probe; answerStatus is program-decided and only exists on ProblemRecord.
-const ProblemDraft = z.strictObject({source:z.enum(['photo','spoken','catalog']),questionText:z.string().min(1).max(2000).nullable(),studentWork:z.string().min(1).max(2000).nullable(),knowledgePointId:problemKnowledgePoint,stuckPoint:shortText,catalogTask:ref.nullable()});
+// One stuck-point concept: the P0 StuckPoint entity. stuckQuote is the student's verbatim words about this problem;
+// stuckPointId optionally links the StuckPoint the Tutor recorded (same knowledge point, program-checked).
+const ProblemDraft = z.strictObject({source:z.enum(['photo','spoken','catalog']),questionText:z.string().min(1).max(2000).nullable(),studentWork:z.string().min(1).max(2000).nullable(),knowledgePointId:problemKnowledgePoint,stuckQuote:shortText,stuckPointId:id.nullable(),catalogTask:ref.nullable()});
 const ProblemRecord = z.strictObject({...base,...operation,...ProblemDraft.shape,sessionId:id.nullable(),answerStatus:z.enum(['verified','unknown']),confirmedAt:utc});
 // Server-only reference answer. Never in view(), logs, traces, prompts or any response.
 const ProblemSecret = z.strictObject({...base,problemId:id,answer:z.array(z.string().min(1).max(500)).min(1).max(5),origin:z.enum(['catalog','student_provided','program_computed']),createdAt:utc});
@@ -109,10 +113,17 @@ const ChatTurn = z.strictObject({...base,...operation,sessionId:id,turn:version,
   listenTurns:z.number().int().nonnegative(),companionStreak:z.number().int().nonnegative(),thinkTurns:z.number().int().nonnegative(),lastProbeTurn:z.number().int().positive().nullable(),
   needsCheckAsked:z.boolean(),askStudyAsked:z.boolean(),studyDeclined:z.boolean(),ended:z.boolean(),
   signals:z.strictObject({needsCheck:z.boolean(),askStudy:z.boolean(),askProblem:z.boolean(),probeAllowed:z.boolean(),modeSuggestion:z.boolean()}),
-  dropped:z.array(z.strictObject({field:stageField,reason:z.enum(['stage_not_allowed','memory_off','invalid','not_implemented'])})).max(8),at:utc});
+  dropped:z.array(z.strictObject({field:stageField,reason:z.enum(['stage_not_allowed','memory_off','invalid','not_implemented'])})).max(8),
+  // Program length gate on the Tutor reply (≤ TUTOR_REPLY_MAX_CHARS): ok, rewritten once by the model, or cut at a sentence end.
+  replyFit:z.enum(['ok','retried','truncated']),at:utc});
 const ChatReply = z.strictObject({text,stage:ChatStage,sessionId:id.nullable(),run:AgentRun.nullable(),safety:z.boolean(),quickReplies:z.array(z.string().min(1).max(40)).max(6),suggestions:z.array(TaskPublicView).max(3),
   askStudy:z.boolean(),needsCheck:z.boolean(),askProblem:z.boolean(),modeSuggestion:ModeSuggestion.nullable(),
   problemDraft:ProblemDraft.nullable(),progressCardDraft:ProgressCardDraft.nullable(),memoryDraft:MemoryDraft.nullable(),summary:ConversationSummary.nullable()});
+/** Tutor reply length gate (characters). The prompt asks for ≤60; the program retries once above this, then cuts at a sentence end. */
+export const TUTOR_REPLY_MAX_CHARS = 80;
+/** Memory selection for the Tutor context: at most this many active memories and this many characters in total. */
+export const MEMORY_CONTEXT_MAX_ITEMS = 5;
+export const MEMORY_CONTEXT_MAX_CHARS = 300;
 /** Recognize: cropped, masked JPEG only, ≤1.5MB decoded. Forwarded once, never stored or logged. */
 export const RECOGNIZE_MAX_IMAGE_BYTES = 1_500_000;
 const RECOGNIZE_MAX_BASE64 = Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES/3)*4;

@@ -13,7 +13,7 @@ class Greedy implements ModelProvider {
   this.systems.push(input.messages.find(m=>m.role==='system')!.content);
   return{content:JSON.stringify({message:'嗯，我在听。',taskIds:[],
    memoryDraft:{text:'喜欢打篮球',kind:'interest',origin:'chat'},
-   problemDraft:{source:'spoken',questionText:null,studentWork:null,knowledgePointId:'like-terms',stuckPoint:'这道题我做错了',catalogTask:null},
+   problemDraft:{source:'spoken',questionText:null,studentWork:null,knowledgePointId:'like-terms',stuckQuote:'这道题我做错了',stuckPointId:null,catalogTask:null},
    observation:{dimension:'理解',signal:'partial',quote:'这道题我做错了',note:'合成观察'},
    progressCardDraft:{episodeId:null,breakthrough:'合成',method:null,nextTry:null}}),toolCalls:[]};
  }

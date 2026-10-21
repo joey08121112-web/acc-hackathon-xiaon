@@ -44,7 +44,7 @@ test('G0 Claude-lane routes are stubs: 501 not_implemented behind the same sessi
 
 test('problemSecrets never reaches view(); reset clears every G0 collection',async()=>{
  const f=temporaryRepository(),r=createRuntime(f),d=installLearning(r);try{
-  r.repository.append('problems',{schemaVersion:SCHEMA_VERSION,id:'problem-1',operationId:'op-p1',source:'spoken',questionText:'化简 -(x-5)',studentWork:'-x-5',knowledgePointId:'negative-brackets',stuckPoint:'负号不知道管谁',catalogTask:null,sessionId:null,answerStatus:'verified',confirmedAt:at});
+  r.repository.append('problems',{schemaVersion:SCHEMA_VERSION,id:'problem-1',operationId:'op-p1',source:'spoken',questionText:'化简 -(x-5)',studentWork:'-x-5',knowledgePointId:'negative-brackets',stuckQuote:'负号不知道管谁',stuckPointId:null,catalogTask:null,sessionId:null,answerStatus:'verified',confirmedAt:at});
   r.repository.append('problemSecrets',{schemaVersion:SCHEMA_VERSION,id:'secret-1',problemId:'problem-1',answer:['SECRET-ANSWER-7x'],origin:'student_provided',createdAt:at});
   const view=await d.view();assert.equal(view.problems.length,1);assert.equal('problemSecrets' in view,false);assert.doesNotMatch(JSON.stringify(view),/SECRET-ANSWER-7x/);
   await d.reset({operationId:id(),confirmation:'清除本机学习记录与偏好'});

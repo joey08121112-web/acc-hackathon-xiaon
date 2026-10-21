@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SCHEMA_VERSION,type AgentRun,type ChatStage,type ModelMessage,type RolePolicy,type ModelProvider,type StageField } from '../../shared/learning-contracts';
+import { SCHEMA_VERSION,TUTOR_REPLY_MAX_CHARS,type AgentRun,type ChatStage,type ModelMessage,type RolePolicy,type ModelProvider,type StageField } from '../../shared/learning-contracts';
 import type { LearningRuntime } from '../bootstrap';
 import { RuntimeError,failure } from '../core/errors';
 import { hash } from '../storage/repository';
@@ -12,6 +12,8 @@ import { REFLECT_PROMPT } from './prompts/reflect';
 import { OBSERVE_PROMPT } from './prompts/observe';
 import { PROBLEM_DRAFT_PROMPT } from './prompts/problem-draft';
 import { MEMORY_DRAFT_PROMPT } from './prompts/memory-draft';
+import { fitReply,replyLength } from './stages';
+const REPLY_REWRITE='上一条回复的message超过'+TUTOR_REPLY_MAX_CHARS+'字。请保持原意改写到'+TUTOR_REPLY_MAX_CHARS+'字以内、最多2句，其他字段不变，仍只输出JSON。';
 export type TutorStage='listen'|'probe';
 // G0: rule 6 opens up by stage (home flow only). The legacy D flow keeps the original wording byte for byte.
 const RULE6_LEGACY='6. 不讲题、不给任何题目答案和提示，不主动开题，不声称学生的能力或分数。';
@@ -57,7 +59,8 @@ const STAGE_PROBE=[
 ].join('\n');
 export const tutorPrompt=(stage:TutorStage)=>({version:'tutor-d3-'+stage,text:TUTOR_BASE+'\n'+(stage==='listen'?STAGE_LISTEN:STAGE_PROBE)});
 // G0 home probe: same discovery steps, but rule 6 allows a solution idea, so the legacy prohibition line is replaced.
-const STAGE_PROBE_HOME=STAGE_PROBE.replace('禁止：讲解知识、给提示、给答案。','可以给解题思路，但不给完整答案或最终结果；学生要答案时，邀请他自己再试一步。');
+const STAGE_PROBE_HOME=STAGE_PROBE.replace('禁止：讲解知识、给提示、给答案。','可以给解题思路，但不给完整答案或最终结果；学生要答案时，邀请他自己再试一步。')
+ .replace('学生已确认你的总结才把studentConfirmed设为true。','studentConfirmed一律填false：是否确认由程序根据学生的点击决定。');
 const STAGE_BLOCK:Record<ChatStage,string>={listen:STAGE_LISTEN,probe:STAGE_PROBE_HOME,companion:COMPANION_PROMPT.text,think:THINK_PROMPT.text,reflect:REFLECT_PROMPT.text,safety:'',rest:''};
 const FIELD_BLOCK:Partial<Record<StageField,string>>={observation:OBSERVE_PROMPT.text,problemDraft:PROBLEM_DRAFT_PROMPT.text,memoryDraft:MEMORY_DRAFT_PROMPT.text};
 /** G0 home-flow Tutor prompt. The stage machine decides stage and allowed fields; the model only sees the blocks it may use this turn. */
@@ -81,13 +84,20 @@ const plannerOutput=z.strictObject({statementIndexes:z.array(z.number().int().no
 export class ControlledRoles {
  constructor(private r:LearningRuntime,private timeoutMs=120000){}
  async invoke(role:'tutor'|'planner',operationId:string,data:unknown,signal?:AbortSignal,home?:{prompt:{version:string;text:string}}){
-  return this.run(role,operationId,async(messages,controller,run)=>{
+  // G0 length gate (every Tutor turn, both flows): one rewrite request above the limit, then a cut at a sentence end.
+  let replyFit:'ok'|'retried'|'truncated'='ok';
+  const result=await this.run(role,operationId,async(messages,controller,run)=>{
    if(this.r.provider.kind==='offline')return role==='tutor'?{message:'我在这里。我们按你的节奏来。',taskIds:[]}: {statementIndexes:[]};
    while(run.rounds<4){
     this.check(controller.signal);run.rounds++;
     const response=await this.complete([...messages],this.r.tools.definitions(role),controller.signal);
     if(!response.toolCalls.length){const value=JSON.parse(response.content);if(role==='tutor'){
-      const out=(home?homeTutorOutput:tutorOutput).parse(value);const returned=new Set(messages.filter(m=>m.role==='tool').flatMap(m=>{try{const d=JSON.parse(m.content);return d.ok&&d.data?.question?[d.data.id]:[];}catch{return [];}}));
+      let out=(home?homeTutorOutput:tutorOutput).parse(value);
+      if(replyLength(out.message)>TUTOR_REPLY_MAX_CHARS){
+       if(replyFit==='ok'&&run.rounds<4){replyFit='retried';messages.push({role:'assistant',content:response.content.slice(0,4000)},{role:'user',content:REPLY_REWRITE});continue;}
+       out={...out,message:fitReply(out.message,TUTOR_REPLY_MAX_CHARS)};replyFit='truncated';
+      }
+      const returned=new Set(messages.filter(m=>m.role==='tool').flatMap(m=>{try{const d=JSON.parse(m.content);return d.ok&&d.data?.question?[d.data.id]:[];}catch{return [];}}));
       if(out.taskIds.some(id=>!returned.has(id)))throw new RuntimeError('provider_error','题目建议缺少真实工具来源');
       const clean=(s:string)=>s.replace(/[\s−–]/g,'').toLowerCase();
       const latestTask=this.r.repository.list('exposures').filter(e=>e.kind==='task').at(-1)?.taskId;
@@ -105,6 +115,7 @@ export class ControlledRoles {
     for(const call of response.toolCalls){if(run.toolExecutions>=6)throw new RuntimeError('budget_exhausted');this.check(controller.signal);run.toolExecutions++;run.callIds.push(call.id);const result=await this.r.tools.execute(call,{role,runId:run.id,signal:controller.signal,...(role==='tutor'?{studentTexts:studentTexts(data)}:{})});messages.push({role:'tool',content:JSON.stringify(result),toolCallId:call.id});}
    }throw new RuntimeError('budget_exhausted');
   },data,signal,undefined,home?.prompt??(role==='tutor'?tutorPrompt((data as {stage?:TutorStage}).stage==='probe'?'probe':'listen'):undefined));
+  return {...result,replyFit};
  }
  /** G0 plugins: one traced, tool-less model response (summary, progress card, greeting, recognition). Offline never creates a run. */
  async compose(call:ModelCall,signal?:AbortSignal):Promise<{content:string;run:AgentRun}>{

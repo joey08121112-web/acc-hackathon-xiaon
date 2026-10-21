@@ -6194,10 +6194,21 @@
             "other"
           ]
         },
-        "stuckPoint": {
+        "stuckQuote": {
           "type": "string",
           "minLength": 1,
           "maxLength": 200
+        },
+        "stuckPointId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "catalogTask": {
           "anyOf": [
@@ -6231,7 +6242,8 @@
         "questionText",
         "studentWork",
         "knowledgePointId",
-        "stuckPoint",
+        "stuckQuote",
+        "stuckPointId",
         "catalogTask"
       ],
       "additionalProperties": false
@@ -6296,10 +6308,21 @@
             "other"
           ]
         },
-        "stuckPoint": {
+        "stuckQuote": {
           "type": "string",
           "minLength": 1,
           "maxLength": 200
+        },
+        "stuckPointId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "catalogTask": {
           "anyOf": [
@@ -6359,7 +6382,8 @@
         "questionText",
         "studentWork",
         "knowledgePointId",
-        "stuckPoint",
+        "stuckQuote",
+        "stuckPointId",
         "catalogTask",
         "sessionId",
         "answerStatus",
@@ -7318,6 +7342,14 @@
             "additionalProperties": false
           }
         },
+        "replyFit": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "retried",
+            "truncated"
+          ]
+        },
         "at": {
           "type": "string",
           "format": "date-time",
@@ -7344,6 +7376,7 @@
         "ended",
         "signals",
         "dropped",
+        "replyFit",
         "at"
       ],
       "additionalProperties": false
@@ -7836,10 +7869,21 @@
                     "other"
                   ]
                 },
-                "stuckPoint": {
+                "stuckQuote": {
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 200
+                },
+                "stuckPointId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 },
                 "catalogTask": {
                   "anyOf": [
@@ -7873,7 +7917,8 @@
                 "questionText",
                 "studentWork",
                 "knowledgePointId",
-                "stuckPoint",
+                "stuckQuote",
+                "stuckPointId",
                 "catalogTask"
               ],
               "additionalProperties": false
@@ -8185,10 +8230,21 @@
                     "other"
                   ]
                 },
-                "stuckPoint": {
+                "stuckQuote": {
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 200
+                },
+                "stuckPointId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 },
                 "catalogTask": {
                   "anyOf": [
@@ -8222,7 +8278,8 @@
                 "questionText",
                 "studentWork",
                 "knowledgePointId",
-                "stuckPoint",
+                "stuckQuote",
+                "stuckPointId",
                 "catalogTask"
               ],
               "additionalProperties": false
@@ -8317,10 +8374,21 @@
                 "other"
               ]
             },
-            "stuckPoint": {
+            "stuckQuote": {
               "type": "string",
               "minLength": 1,
               "maxLength": 200
+            },
+            "stuckPointId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "catalogTask": {
               "anyOf": [
@@ -8354,7 +8422,8 @@
             "questionText",
             "studentWork",
             "knowledgePointId",
-            "stuckPoint",
+            "stuckQuote",
+            "stuckPointId",
             "catalogTask"
           ],
           "additionalProperties": false

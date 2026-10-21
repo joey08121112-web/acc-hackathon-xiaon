@@ -8,7 +8,7 @@ import { temporaryRepository } from '../../server/storage/testing';
 import { schemas,SCHEMA_VERSION,RECOGNIZE_MAX_IMAGE_BYTES } from '../../shared/learning-contracts';
 const port=Number(process.env.XIAON_I_HTTP_PORT??18973),origin='http://127.0.0.1:5213',base=`http://127.0.0.1:${port}`,id=()=>crypto.randomUUID();
 const at='2026-10-21T08:00:00.000Z';
-const draft={source:'spoken',questionText:'化简 3x+2x-4',studentWork:'5x+4',knowledgePointId:'like-terms',stuckPoint:'常数项的符号我弄反了',catalogTask:null} as const;
+const draft={source:'spoken',questionText:'化简 3x+2x-4',studentWork:'5x+4',knowledgePointId:'like-terms',stuckQuote:'常数项的符号我弄反了',stuckPointId:null,catalogTask:null} as const;
 const jpeg=Buffer.from([0xff,0xd8,0xff,0xe0,0,16,0x4a,0x46,0x49,0x46,0,1,0xff,0xd9]).toString('base64');
 
 test('G0 zCode-lane schemas: drafts carry no answer status, secrets are separate, recognition needs mask confirmation',()=>{
