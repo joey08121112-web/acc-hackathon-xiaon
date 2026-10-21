@@ -1,0 +1,30 @@
+
+> xiaon-learning-companion@1.0.0 test:agent:h
+> node scripts/agent/test.mjs h
+
+✔ 运行中 WAL 库一致性备份；清空后恢复，恢复前另存当前库 (43.496375ms)
+✔ 备份保留数只作用于本库命名空间，不删除无关文件；缺失库不创建 (30081.9995ms)
+✔ 容器数据路径没有独立挂载时给出警告；有实际挂载才通过 (0.727458ms)
+✔ ChatRequest stays backward compatible; intent/flow are optional and closed enums (0.791459ms)
+✔ home flow over HTTP returns the full ChatReply; needs-check after 2 listen turns; conversation/end returns a summary (48.245584ms)
+✔ 需求卡只在程序发信号时展示三项选择 (3.256125ms)
+✔ 专业模式说明包含五维和暂停；没有建议时不展示 (0.334375ms)
+✔ 小结引用当前场次观察和已确认进步卡，不混入其他场次 (15.949584ms)
+(node:3249) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ student-facing level names are fixed; the report carries no score or rank field (0.990917ms)
+✔ view() gives the UI interviews (latest revision), turns, reports, month stages and the retest reminder (15.007875ms)
+✔ H2 mount points render entry, report and archive without starting an interview (3.579792ms)
+✔ GET /api/learning/trend sits behind the local session and answers 501 while tracking is a stub (22.574125ms)
+(node:3250) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ entry explains time and order, requires an explicit start, and can pause (20.30975ms)
+✔ report shows all five fixed levels, raw quotes and comparisons, without numeric scoring (12.104292ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30311.008541

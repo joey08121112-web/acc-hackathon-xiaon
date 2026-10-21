@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-21",
+  "branch": "revamp/h2-professional-ui",
+  "base": "b6116106a38b03897975599ac37a2c74d7dfc125",
+  "checks": [
+    {
+      "command": "npm ci",
+      "exitCode": 0,
+      "passed": null,
+      "log": null
+    },
+    {
+      "command": "npm run typecheck:agent",
+      "exitCode": 0,
+      "passed": null,
+      "log": "h2-typecheck-with-fixture-final.txt"
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "passed": 25,
+      "log": "h2-domain-final.txt"
+    },
+    {
+      "command": "npm run test:agent",
+      "exitCode": 0,
+      "passed": 204,
+      "log": "h2-agent-all-after-ui-final.txt"
+    },
+    {
+      "command": "npm run test:agent:h",
+      "exitCode": 0,
+      "passed": 15,
+      "log": "h2-h-final.txt"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "passed": null,
+      "log": "h2-build-final.txt"
+    },
+    {
+      "command": "npx playwright test -c tests-agent/h/playwright.professional.config.ts",
+      "exitCode": 0,
+      "passed": 5,
+      "log": "h2-browser-final-green.txt"
+    },
+    {
+      "command": "npx playwright test -c tests-agent/h/playwright.config.ts",
+      "exitCode": 0,
+      "passed": 8,
+      "log": "h2-home-browser-final.txt"
+    }
+  ],
+  "h2BrowserOutput": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h2-browser-mLCay0",
+  "homeBrowserOutput": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-Z301BN",
+  "evidenceBoundary": "H2 uses scripted coordinator methods, synthetic task exposures and report/trend fixtures with real HTTP session/CSRF and temporary SQLite. Production interview/tracking engines, real model, grading/report gates and physical devices are not accepted by this run.",
+  "dBrowserRun": false,
+  "mainMergedOrPushed": false
+}

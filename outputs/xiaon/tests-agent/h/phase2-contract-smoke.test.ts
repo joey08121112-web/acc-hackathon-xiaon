@@ -31,11 +31,11 @@ test('view() gives the UI interviews (latest revision), turns, reports, month st
  }finally{f.dispose();}
 });
 
-test('mount points are stubs that render nothing until ChatGPT fills them',()=>{
+test('H2 mount points render entry, report and archive without starting an interview',()=>{
  const l={view:null} as unknown as LearningUI,navigate=()=>{};
- assert.equal(renderToStaticMarkup(createElement(ProfessionalModeView,{l,navigate,safety:false})),'');
- assert.equal(renderToStaticMarkup(createElement(ProfessionalReportView,{l,navigate})),'');
- assert.equal(renderToStaticMarkup(createElement(GrowthArchive,{l,navigate})),'');
+ assert.match(renderToStaticMarkup(createElement(ProfessionalModeView,{l,navigate,safety:false})),/开始/);
+ assert.match(renderToStaticMarkup(createElement(ProfessionalReportView,{l,navigate})),/专业评测报告/);
+ assert.match(renderToStaticMarkup(createElement(GrowthArchive,{l,navigate})),/成长档案/);
 });
 
 test('GET /api/learning/trend sits behind the local session and answers 501 while tracking is a stub',async()=>{

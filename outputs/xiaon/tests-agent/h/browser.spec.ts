@@ -45,13 +45,12 @@ test('首页主动开口、确定需求、错题挂载、小结与刷新问候�
  await page.reload();await expect(page.locator('.pet-hero-bubble')).toContainText('上次我们聊了应用题的条件');
 });
 
-test('正式测试需二次确认，启动失败留在首页并可重试',async({page})=>{
+test('正式测试建议只进入说明，不点开始不切换场次',async({page})=>{
  await ready(page);await say(page,'你好');await say(page,'今天还行');
- let starts=0;await page.route('**/api/learning/start',async route=>{starts++;if(starts===1)await route.fulfill({status:503,json:{error:{message:'合成启动失败'}}});else await route.continue();});
- await page.getByRole('button',{name:'做个正式测试',exact:true}).click();await expect(page.getByRole('button',{name:'去专业模式',exact:true})).toBeVisible();expect(starts).toBe(0);
- await expect(page.getByRole('button',{name:'我考砸了，不想说话',exact:true})).toBeEnabled();await page.getByRole('button',{name:'去专业模式',exact:true}).click();
- await expect(page.getByText('还没能开始专业模式，请稍后重试。')).toBeVisible();await expect(page.getByRole('heading',{name:'心事有人听，进步有人记。'})).toBeVisible();
- await page.getByRole('button',{name:'去专业模式',exact:true}).click();await expect(page).toHaveURL(/#explore$/);expect(starts).toBe(2);
+ let starts=0;page.on('request',r=>{if(r.url().endsWith('/learning/start')||r.url().endsWith('/interview/start'))starts++;});
+ await page.getByRole('button',{name:'做个正式测试',exact:true}).click();await expect(page.getByRole('button',{name:'去专业模式',exact:true})).toBeVisible();
+ await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');await page.getByRole('button',{name:'去专业模式',exact:true}).click();
+ await expect(page).toHaveURL(/#explore$/);await expect(page.getByRole('region',{name:'专业模式测评'}).getByRole('button',{name:'开始',exact:true})).toBeVisible();expect(starts).toBe(0);
 });
 
 test('陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结',async({page})=>{
@@ -90,11 +89,12 @@ test('没有本地服务时保留旧首页按钮',async({page})=>{
 });
 
 
-// 集成第一期：Claude 已按 H 的契约变更申请实现显式模式切换（switchMode），原「未切换成功、留在首页」的已知限制不再出现。
-test('已暂停的 support 场次，学生确认后切到专业模式并进入探索页',async({page})=>{
+// H2: the explanation is shared by navigation and home suggestions; interview/start owns the explicit mode switch.
+test('已暂停的 support 场次，进入专业模式说明后仍未开始测评',async({page})=>{
  await ready(page);await say(page,'你好');await say(page,'还行');
  await page.getByRole('button',{name:'做个正式测试',exact:true}).click();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
  await page.getByRole('button',{name:'今天先休息',exact:true}).click();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
  await page.getByRole('button',{name:'去专业模式',exact:true}).click();
- await expect(page).toHaveURL(/#explore$/);await expect(page.getByText('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。')).toHaveCount(0);
+ await expect(page).toHaveURL(/#explore$/);await expect(page.getByRole('button',{name:'开始',exact:true})).toBeVisible();
+ const view=await page.evaluate(async()=>await(await fetch('/api/learning')).json());expect(view.session.mode).toBe('support');expect(view.interviews).toHaveLength(0);
 });

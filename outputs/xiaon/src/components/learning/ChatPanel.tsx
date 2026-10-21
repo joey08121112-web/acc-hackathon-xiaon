@@ -4,7 +4,7 @@ import { ArrowRight, Keyboard, Loader2, Mic, Send, Square, Volume2, VolumeX } fr
 import type { LearningUI } from '../../agents/useLearning';
 import { apiRequest, newOperationId } from '../../agent-client';
 import { useDevMode } from '../../agents/devMode';
-import type { ChatIntent, ChatReply, ConversationSummary, Greeting, ModeSuggestion, LearningSession } from '../../../shared/learning-contracts';
+import type { ChatIntent, ChatReply, ConversationSummary, Greeting, ModeSuggestion } from '../../../shared/learning-contracts';
 import { SAFETY_PATTERN } from '../../../server/agents/stages';
 import { PetHero, useThinkingText } from './PetStage';
 import { useVoice } from '../../voice/voice';
@@ -32,7 +32,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
  const dev=useDevMode();
  const [message,setMessage]=useState(''),[reply,setReply]=useState<ChatReply|null>(null),[awaiting,setAwaiting]=useState(false),[typing,setTyping]=useState(true);
  const [greeting,setGreeting]=useState(OPENER),[notice,setNotice]=useState(''),[summary,setSummary]=useState<ConversationSummary|null>(null),[manualSuggestion,setManualSuggestion]=useState<ModeSuggestion|null>(null);
- const [needsSeen,setNeedsSeen]=useState(false),[modeAttempt,setModeAttempt]=useState(0),[keyboard,setKeyboard]=useState(false);
+ const [needsSeen,setNeedsSeen]=useState(false),[keyboard,setKeyboard]=useState(false);
  const requestLock=useRef(false),sent=useRef(false),greetingAbort=useRef<AbortController|null>(null),composer=useRef<HTMLFormElement>(null);
  const v=useVoice(),mic=useMic(),chat=l.cache.chat;
  const latestTurn=l.view?.chatTurns.at(-1);
@@ -81,17 +81,10 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
   if(intent==='formal_test'){send(label,{intent});setManualSuggestion({mode:'professional',reason:'你想做个正式测试。先了解一下，再决定要不要开始。'});return;}
   send(label,{intent});
  };
- const startProfessional=async(page:string,tab?:string)=>{
-  if(page!=='explore'){navigate(page,tab);return;}
+ // H2: entry only opens the explanation. The student's Start click owns interview/start.
+ const startProfessional=(page:string,tab?:string)=>{
   if(blocked||l.busy||requestLock.current)return;
-  requestLock.current=true;setNotice('');
-  try{
-   const session=await l.run<LearningSession>('learning/start',{mode:'exploration',switchMode:true});
-   if(session.mode!=='exploration'){setNotice('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。');setModeAttempt(n=>n+1);return;}
-   navigate('explore','探索');
-  }
-  catch{setNotice('还没能开始专业模式，请稍后重试。');setModeAttempt(n=>n+1);}
-  finally{requestLock.current=false;}
+  navigate(page,tab);
  };
  const end=()=>{
   if(!sessionId||blocked||l.busy||requestLock.current||shownSummary)return;
@@ -134,7 +127,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
    <div className="quick-replies home-quick" aria-label="可以点一下回答">{CHIPS.map(c=><button key={c.text} disabled={disabled} onClick={()=>{if(c.intent!=='life')pet.feel('concerned');send(c.text,c.intent?{intent:c.intent}:{});}}>{c.text}</button>)}</div>
    <NeedsCheckCard key={sessionId??'new'} open={!!reply?.needsCheck&&!needsSeen} disabled={disabled} onChoose={chooseNeed}/>
    <HomeChat l={l} reply={reply} send={send} navigate={navigate}/>
-   <fieldset className="home-mode-actions" disabled={disabled}><ModeSwitchCard key={`${sessionId}-${manualSuggestion?'manual':reply?.modeSuggestion?.reason}-${modeAttempt}`} suggestion={manualSuggestion??reply?.modeSuggestion??null} navigate={startProfessional}/></fieldset>
+   <fieldset className="home-mode-actions" disabled={disabled}><ModeSwitchCard key={`${sessionId}-${manualSuggestion?'manual':reply?.modeSuggestion?.reason}`} suggestion={manualSuggestion??reply?.modeSuggestion??null} navigate={startProfessional}/></fieldset>
    <div className="home-slots">
     <ProblemCapture open={!!reply?.askProblem} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
     <ProblemConfirmCard draft={reply?.problemDraft??null} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
@@ -143,7 +136,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
    </div>
   </>}
   <MemoryOffNotice memoryEnabled={memoryEnabled} where="home" navigate={navigate}/>
-  <ConversationSummaryView key={`${shownSummary?.id}-${modeAttempt}`} summary={blocked?null:shownSummary} l={l} navigate={startProfessional}/>
+  <ConversationSummaryView key={`${shownSummary?.id}`} summary={blocked?null:shownSummary} l={l} navigate={startProfessional}/>
   {chat.length>0&&<details className="chat-log" open><summary>聊天记录（{chat.length}）</summary><div className="messages">{chat.map((m,i)=><div className={'message '+(m.role==='user'?'user':'ai')} key={i}><div>{m.content}</div>{m.role==='assistant'&&v.available&&<button className="text-button say-button" onClick={()=>void v.actions.speak(m.content)}><Volume2 size={13}/>朗读</button>}</div>)}</div></details>}
   <div className="home-composer-wrap">
    {showComposer&&<form className="learning-composer" ref={composer} onSubmit={e=>{e.preventDefault();send(message);}}><label className="field">对小N说<textarea value={message} maxLength={2000} onChange={e=>setMessage(e.target.value)} onFocus={()=>requestAnimationFrame(()=>composer.current?.scrollIntoView({block:'nearest'}))} placeholder={shownSummary?'想接着聊，随时告诉我…':'想说什么，慢慢说…'} enterKeyHint="send"/></label><button className="primary" disabled={disabled||!message.trim()}><Send size={17}/>发送</button></form>}
