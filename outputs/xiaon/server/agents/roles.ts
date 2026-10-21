@@ -8,11 +8,11 @@ import { GENERATOR_PROMPT } from '../plugins/generation/prompt';
 import type { ModelCall } from '../plugins/context';
 import { COMPANION_PROMPT } from './prompts/companion';
 import { THINK_PROMPT } from './prompts/think';
-import { REFLECT_PROMPT } from './prompts/reflect';
+import { REFLECT_PROMPT,PROGRESS_CARD_FIELD } from './prompts/reflect';
 import { OBSERVE_PROMPT } from './prompts/observe';
 import { PROBLEM_DRAFT_PROMPT } from './prompts/problem-draft';
 import { MEMORY_DRAFT_PROMPT } from './prompts/memory-draft';
-import { fitReply,replyLength } from './stages';
+import { containsAnswer,fitReply,replyLength } from './stages';
 const REPLY_REWRITE='上一条回复的message超过'+TUTOR_REPLY_MAX_CHARS+'字。请保持原意改写到'+TUTOR_REPLY_MAX_CHARS+'字以内、最多2句，其他字段不变，仍只输出JSON。';
 export type TutorStage='listen'|'probe';
 // G0: rule 6 opens up by stage (home flow only). The legacy D flow keeps the original wording byte for byte.
@@ -62,7 +62,11 @@ export const tutorPrompt=(stage:TutorStage)=>({version:'tutor-d3-'+stage,text:TU
 const STAGE_PROBE_HOME=STAGE_PROBE.replace('禁止：讲解知识、给提示、给答案。','可以给解题思路，但不给完整答案或最终结果；学生要答案时，邀请他自己再试一步。')
  .replace('学生已确认你的总结才把studentConfirmed设为true。','studentConfirmed一律填false：是否确认由程序根据学生的点击决定。');
 const STAGE_BLOCK:Record<ChatStage,string>={listen:STAGE_LISTEN,probe:STAGE_PROBE_HOME,companion:COMPANION_PROMPT.text,think:THINK_PROMPT.text,reflect:REFLECT_PROMPT.text,safety:'',rest:''};
-const FIELD_BLOCK:Partial<Record<StageField,string>>={observation:OBSERVE_PROMPT.text,problemDraft:PROBLEM_DRAFT_PROMPT.text,memoryDraft:MEMORY_DRAFT_PROMPT.text};
+const FIELD_BLOCK:Partial<Record<StageField,string>>={observation:OBSERVE_PROMPT.text,problemDraft:PROBLEM_DRAFT_PROMPT.text,memoryDraft:MEMORY_DRAFT_PROMPT.text,progressCardDraft:PROGRESS_CARD_FIELD.text};
+/** Home-flow invoke options. secrets: reference answers to hold back (ProblemSecret or the episode's catalog task) until the student solved it;
+ * releasedAnswers: answers the student already said in a solved episode. The catalog guard stops holding exactly those expressions,
+ * even when another unattempted catalog task shares them. */
+export type HomeInvoke={prompt:{version:string;text:string};secrets?:string[];releasedAnswers?:string[]};
 /** G0 home-flow Tutor prompt. The stage machine decides stage and allowed fields; the model only sees the blocks it may use this turn. */
 export function homeTutorPrompt(decision:{stage:ChatStage;allowed:StageField[]}){
  const extra=decision.allowed.length?'，可以另外输出这些字段（没有就不输出）：'+decision.allowed.join('、'):'';
@@ -83,7 +87,7 @@ export const homeTutorOutput=tutorOutput.extend({problemDraft:z.unknown().option
 const plannerOutput=z.strictObject({statementIndexes:z.array(z.number().int().nonnegative()).max(100)});
 export class ControlledRoles {
  constructor(private r:LearningRuntime,private timeoutMs=120000){}
- async invoke(role:'tutor'|'planner',operationId:string,data:unknown,signal?:AbortSignal,home?:{prompt:{version:string;text:string}}){
+ async invoke(role:'tutor'|'planner',operationId:string,data:unknown,signal?:AbortSignal,home?:HomeInvoke){
   // G0 length gate (every Tutor turn, both flows): one rewrite request above the limit, then a cut at a sentence end.
   let replyFit:'ok'|'retried'|'truncated'='ok';
   const result=await this.run(role,operationId,async(messages,controller,run)=>{
@@ -101,12 +105,16 @@ export class ControlledRoles {
       if(out.taskIds.some(id=>!returned.has(id)))throw new RuntimeError('provider_error','题目建议缺少真实工具来源');
       const clean=(s:string)=>s.replace(/[\s−–]/g,'').toLowerCase();
       const latestTask=this.r.repository.list('exposures').filter(e=>e.kind==='task').at(-1)?.taskId;
+      const released=new Set((home?.releasedAnswers??[]).map(clean));
       const knownExpressions=new Set(this.r.repository.list('attempts').filter(a=>this.r.repository.list('gradings').filter(g=>g.attemptId===a.id).at(-1)?.verdict==='correct').flatMap(a=>this.r.catalog.definition(a.taskId,a.taskVersion)?.answer??[]).map(clean));
       for(const t of this.r.catalog.candidates({sessionId:'guard',excludeTaskIds:[],limit:100})){
        if(this.r.repository.list('attempts').some(a=>a.taskId===t.id))continue;
        const secret=this.r.catalog.definition(t.id,t.version)?.answer??[];
-       if(secret.some(a=>a.length>2&&(t.id===latestTask||!knownExpressions.has(clean(a)))&&clean(out.message).includes(clean(a))))throw new RuntimeError('forbidden','未作答题的解答已拦截，请主动请求分级提示');
-      }return out;
+       if(secret.some(a=>a.length>2&&!released.has(clean(a))&&(t.id===latestTask||!knownExpressions.has(clean(a)))&&clean(out.message).includes(clean(a))))throw new RuntimeError('forbidden','未作答题的解答已拦截，请主动请求分级提示');
+      }
+      // G0 phase 1: the same interception for the think episode's own answers (ProblemSecret or catalog), until the student said it.
+      if(home?.secrets?.some(a=>containsAnswer(out.message,a)))throw new RuntimeError('forbidden','未完成题目的答案已拦截');
+      return out;
      }
      const out=plannerOutput.parse(value);const count=(data as {report:{statements:unknown[]}}).report.statements.length;
      if(out.statementIndexes.some(i=>i>=count))throw new RuntimeError('provider_error','报告引用越界');return out;

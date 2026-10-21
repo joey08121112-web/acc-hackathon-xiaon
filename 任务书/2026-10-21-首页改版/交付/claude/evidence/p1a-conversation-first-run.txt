@@ -1,0 +1,139 @@
+✖ validateObservation: only 理解/逻辑, only on an allowed probe turn, verbatim quote, at most 3 per dimension (0.301334ms)
+✖ chat: an allowed probe turn stores an unverified observation; listen, gap turns and foreign quotes store nothing (18.775625ms)
+✖ chat: a quote from an earlier session does not count as this session's words (11.396833ms)
+✖ summary: emotion labels are dropped, no previous summary means no changes, the summary is a learning record even with memory off (8.307417ms)
+✖ summary: no professional-mode suggestion while the last 2 turns are intense; nothing to suggest without observations or stuck points (9.953083ms)
+✖ summary: changes compare same-dimension observations with both quotes; farewell triggers the summary in the chat reply (9.631833ms)
+✖ summary without a model: assembled by the program (topics + plan only), still saved; safety sessions get no summary (5.491042ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 0
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 258.235208
+
+✖ failing tests:
+
+test at tests-agent/g/conversation.test.ts:1:2027
+✖ validateObservation: only 理解/逻辑, only on an allowed probe turn, verbatim quote, at most 3 per dimension (0.301334ms)
+  Error: validateObservation 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/context.ts:23:44)
+      at validateObservation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/conversation/index.ts:5:140)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:32:11)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/conversation.test.ts:1:3478
+✖ chat: an allowed probe turn stores an unverified observation; listen, gap turns and foreign quotes store nothing (18.775625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:49:40)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/conversation.test.ts:1:4657
+✖ chat: a quote from an earlier session does not count as this session's words (11.396833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      field: 'observation',
+  +   reason: 'not_implemented'
+  -   reason: 'invalid'
+    }
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:64:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { field: 'observation', reason: 'not_implemented' },
+    expected: { field: 'observation', reason: 'invalid' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/conversation.test.ts:1:5398
+✖ summary: emotion labels are dropped, no previous summary means no changes, the summary is a learning record even with memory off (8.307417ms)
+  Error: endConversation 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/context.ts:23:44)
+      at endConversation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/conversation/index.ts:7:172)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:249:222)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:208)
+      at LearningCoordinator.endConversation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:249:149)
+      at Object.end (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:25:34)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:74:19)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/conversation.test.ts:1:7064
+✖ summary: no professional-mode suggestion while the last 2 turns are intense; nothing to suggest without observations or stuck points (9.953083ms)
+  Error: endConversation 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/context.ts:23:44)
+      at endConversation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/conversation/index.ts:7:172)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:249:222)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:208)
+      at LearningCoordinator.endConversation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:249:149)
+      at Object.end (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:25:34)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:88:25)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/conversation.test.ts:1:7769
+✖ summary: changes compare same-dimension observations with both quotes; farewell triggers the summary in the chat reply (9.631833ms)
+  Error: endConversation 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/context.ts:23:44)
+      at endConversation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/conversation/index.ts:7:172)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:249:222)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:208)
+      at LearningCoordinator.endConversation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:249:149)
+      at Object.end (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:25:34)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:100:20)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/conversation.test.ts:1:9003
+✖ summary without a model: assembled by the program (topics + plan only), still saved; safety sessions get no summary (5.491042ms)
+  Error: endConversation 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/context.ts:23:44)
+      at endConversation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/plugins/conversation/index.ts:7:172)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:249:222)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:81:208)
+      at LearningCoordinator.endConversation (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/learning.ts:249:149)
+      at Object.end (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:25:34)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/conversation.test.ts:113:19)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+exit 1

@@ -8,7 +8,7 @@ import { PlanningEngine } from '../plugins/planning';
 import { attemptFacts } from '../plugins/planning/evidence';
 import { currentReviewItems,planHistory,reportHistory,shanghaiDate } from '../../src/learning/review';
 import { ControlledRoles,tutorOutput,homeTutorOutput,homeTutorPrompt,type TutorStage } from './roles';
-import { decideStage,filterStageFields,matchesAnswer,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,UNDERSTOOD_PATTERN,type ChatStageState } from './stages';
+import { decideStage,filterStageFields,matchesAnswer,HELP_PATTERN,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,UNDERSTOOD_PATTERN,type ChatStageState } from './stages';
 import type { RevampContext } from '../plugins/context';
 import { validateProblemDraft,confirmProblem,recognize } from '../plugins/problems';
 import { validateMemoryDraft,confirmMemoryDraft,greeting,shouldOfferMemory,selectMemoriesForContext } from '../plugins/memory-flow';
@@ -41,6 +41,7 @@ const TUTOR_HISTORY_TURNS=8;
 // Student-selectable shortcuts that answer the question the Tutor just asked (listen: "what happened?", probe: "which kind of stuck?").
 // They are plain student messages once clicked, never model output.
 export const QUICK_REPLIES:Record<TutorStage,string[]>={listen:['考试没考好','有题不会做','就是不想学','不想说'],probe:['概念不太清楚','公式不会用','不知道从哪下手','说不清楚']};
+const ANSWER_HELD_TEXT='这一步我先不直接说答案，我们再往前想一小步，好吗？';
 const REST_TEXT='好，先不安排题目。我们可以继续聊，由你决定何时开始。';
 const chatReply=(r:Partial<ChatReply>&{text:string;stage:ChatStage}):ChatReply=>schemas.ChatReply.parse({sessionId:null,run:null,safety:false,quickReplies:[],suggestions:[],askStudy:false,needsCheck:false,askProblem:false,modeSuggestion:null,problemDraft:null,progressCardDraft:null,memoryDraft:null,summary:null,...r});
 const stateOf=(t:ChatTurn):ChatStageState=>({sessionId:t.sessionId,turn:t.turn,stage:t.stage,listenTurns:t.listenTurns,companionStreak:t.companionStreak,thinkTurns:t.thinkTurns,lastProbeTurn:t.lastProbeTurn,needsCheckAsked:t.needsCheckAsked,askStudyAsked:t.askStudyAsked,studyDeclined:t.studyDeclined,ended:t.ended});
@@ -192,23 +193,38 @@ export class LearningCoordinator {
     if(stage==='reflect'&&fromStage==='think'){const solved=matchesAnswer(last,answers);revise(episode,{stage:'reflect',status:'reflecting',studentSolvedAt:solved?now:null,endReason:solved?'solved':UNDERSTOOD_PATTERN.test(last)?'understood':'turn_limit'});}
     else if(stage!=='think'&&stage!=='reflect'&&stage!=='rest'){revise(episode,{status:'closed'});episodeId=null;}
    }
+   // FR16 help ladder: one level per explicit request, at most 3; recorded on the episode and, for a catalog task, as an exposure.
+   let helpLevel=0;
+   if(stage==='think'&&decision.helpRequested&&episodeId){
+    const current=repo.get('episodes',episodeId)!;helpLevel=Math.min(3,(current.helpLevelsUsed.at(-1)??0)+1);revise(current,{helpLevelsUsed:[...current.helpLevelsUsed,helpLevel]});
+    if(current.task&&session)this.r.events.expose({operationId:p.operationId+'-think-help',sessionId:session.id,taskId:current.task.taskId,taskVersion:current.task.taskVersion,kind:'chat_help',hintId:null});
+   }
+   // Answers stay server-side and are held back until the student said them (decision 7); then those expressions are released.
+   const live=episodeId?repo.get('episodes',episodeId)!:null;
+   const solvedEpisodes=repo.list('episodes').filter(e=>e.studentSolvedAt);
+   const unsolvedProblems=repo.list('problems').filter(x=>x.sessionId===sessionId&&!solvedEpisodes.some(e=>e.problemId===x.id)).map(x=>x.id);
+   const secrets=[...repo.list('problemSecrets').filter(x=>unsolvedProblems.includes(x.problemId)).flatMap(x=>x.answer),
+    ...(live?.task&&!live.studentSolvedAt?this.r.catalog.definition(live.task.taskId,live.task.taskVersion)?.answer??[]:[])];
+   const releasedAnswers=solvedEpisodes.flatMap(e=>e.task?this.r.catalog.definition(e.task.taskId,e.task.taskVersion)?.answer??[]:[]);
    const turn=(dropped:ChatTurn['dropped'],replyFit:ChatTurn['replyFit']='ok'):ChatTurn=>({schemaVersion:SCHEMA_VERSION,id:'turn-'+p.operationId,operationId:p.operationId,sessionId,turn:s.turn,stage,intent:p.intent??null,problemId:problem?.id??null,episodeId,listenTurns:s.listenTurns,companionStreak:s.companionStreak,thinkTurns:s.thinkTurns,lastProbeTurn:s.lastProbeTurn,needsCheckAsked:s.needsCheckAsked,askStudyAsked:s.askStudyAsked,studyDeclined:s.studyDeclined,ended:s.ended,signals:{needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem,probeAllowed:decision.probeAllowed,modeSuggestion:decision.modeSuggestion},dropped:dropped.slice(0,8),replyFit,at:now});
    if(stage==='rest'){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});repo.append('chatTurns',turn([]));return chatReply({text:REST_TEXT,stage,sessionId});}
    // memoryDraft: the stage machine already removed it when memory is off; memory-flow may narrow it further.
    let memoryGate:'memory_off'|'stage_not_allowed'|'not_implemented'|null=memoryEnabled?null:'memory_off';
    if(decision.allowed.includes('memoryDraft')){try{if(!shouldOfferMemory({sessionId,stage,turn:s.turn},ctx))memoryGate='stage_not_allowed';}catch(e){if(!notImplementedError(e))throw e;memoryGate='not_implemented';}}
-   const allowed=decision.allowed.filter(f=>f!=='memoryDraft'||!memoryGate);
+   // The card is drafted only after the student had a turn to reflect, so not on the turn that enters reflect.
+   const allowed=decision.allowed.filter(f=>(f!=='memoryDraft'||!memoryGate)&&(f!=='progressCardDraft'||fromStage==='reflect'));
    const context=this.tutorContext(p.history,sessionId,stage),ectx=this.r.engineContext();
    const stuckPoints=this.recentStuckPoints();
    const signals={needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem};
-   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals},signal,{prompt:homeTutorPrompt({stage,allowed})});
+   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals,helpLevel,helpLevelsUsed:live?.helpLevelsUsed??[]},signal,{prompt:homeTutorPrompt({stage,allowed}),secrets,releasedAnswers});
    if(exposed&&session&&result.run.status==='completed')this.r.events.expose({operationId:p.operationId+'-help',sessionId:session.id,taskId:exposed.taskId,taskVersion:exposed.taskVersion,kind:'chat_help',hintId:null});
-   const out=homeTutorOutput.safeParse(result.value);const value=out.success?out.data:{message:result.run.error?.message??'我在这里，按你的节奏来。',taskIds:[]};
+   const out=homeTutorOutput.safeParse(result.value);const value=out.success?out.data:{message:result.run.error?.code==='forbidden'?ANSWER_HELD_TEXT:result.run.error?.message??'我在这里，按你的节奏来。',taskIds:[]};
    const proposed:Partial<Record<StageField,unknown>>=out.success?{problemDraft:out.data.problemDraft,observation:out.data.observation,progressCardDraft:out.data.progressCardDraft,memoryDraft:out.data.memoryDraft}:{};
    const {kept,dropped}=filterStageFields(allowed,proposed);
    const log:ChatTurn['dropped']=dropped.map(field=>({field,reason:field==='memoryDraft'&&STAGE_FIELDS[stage].includes(field)&&memoryGate?memoryGate:'stage_not_allowed'}));
    // Plugin validators decide; their output is re-checked against the frozen schema. A stub (not_implemented) drops the field.
-   const studentTexts=p.history.filter(h=>h.role==='user').map(h=>h.content),check={sessionId,stage,studentTexts};
+   // Quotes must come from this chat session: the last s.turn student messages (safety turns are never counted or quoted).
+   const studentTexts=p.history.filter(h=>h.role==='user').map(h=>h.content).slice(-s.turn),check={sessionId,stage,studentTexts};
    const gated=<T>(field:StageField,schema:z.ZodType<T>,work:()=>Validation<unknown>):T|null=>{
     if(kept[field]===undefined)return null;
     try{const v=work();const parsed=v.ok?schema.safeParse(v.value):null;if(parsed?.success)return parsed.data;log.push({field,reason:'invalid'});}
@@ -220,9 +236,12 @@ export class LearningCoordinator {
    const observation=gated('observation',schemas.ObservationDraft,()=>validateObservation(kept.observation,{...check,probeAllowed:decision.probeAllowed,existing:repo.list('observations').filter(o=>o.sessionId===sessionId)}));
    if(observation)repo.append('observations',{schemaVersion:SCHEMA_VERSION,id:'obs-'+p.operationId,...observation,sessionId,status:'unverified',at:now});
    let progressCardDraft=null;
-   if(stage==='reflect'&&(fromStage!=='reflect'||kept.progressCardDraft!==undefined)){
-    try{const card=await draftProgressCard({sessionId,episode:episodeId?repo.get('episodes',episodeId)??null:null,studentTexts,candidate:kept.progressCardDraft??null},ctx,signal);
-     progressCardDraft=schemas.ProgressCardDraft.parse(card.draft);if(card.memoryDraft&&memoryEnabled&&!memoryGate)memoryDraft=schemas.MemoryDraft.parse(card.memoryDraft);}
+   if(stage==='reflect'&&fromStage==='reflect'&&episodeId){
+    // Only this episode's words count as quotable process: the turns since the episode started, plus this one.
+    const episodeTexts=studentTexts.slice(-(repo.list('chatTurns').filter(t=>t.episodeId===episodeId).length+1));
+    try{const card=await draftProgressCard({sessionId,episode:repo.get('episodes',episodeId)??null,studentTexts:episodeTexts,candidate:kept.progressCardDraft??null},ctx,signal);
+     // A progress-card memory line needs only the student's memory switch; chat-offer pacing (shouldOfferMemory) does not apply.
+     progressCardDraft=schemas.ProgressCardDraft.parse(card.draft);if(card.memoryDraft&&memoryEnabled)memoryDraft=schemas.MemoryDraft.parse(card.memoryDraft);}
     catch(e){if(!(e instanceof RuntimeError))throw e;if(kept.progressCardDraft!==undefined)log.push({field:'progressCardDraft',reason:e.code==='not_implemented'?'not_implemented':'invalid'});}
    }
    let summary=null;

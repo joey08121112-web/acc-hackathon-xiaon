@@ -39,8 +39,9 @@ test('home flow: listen 2 turns, needs-check once, every field outside the stage
   const c=await f.say('第3题我做错了');
   assert.equal(c.stage,'probe');assert.equal(c.askProblem,true);assert.equal(c.needsCheck,false);
   assert.match(p.systems[2],/^tutor-g0-probe-observe/);assert.match(p.systems[2],/本轮程序允许一次轻轻的试探/);assert.doesNotMatch(p.systems[2],/禁止：讲解知识/);
-  // Stage allows problemDraft + observation, but the G0 plugin validators are stubs: dropped as not_implemented, nothing stored.
-  assert.deepEqual(f.turns()[2].dropped.map(x=>x.field+':'+x.reason).sort(),['memoryDraft:stage_not_allowed','observation:not_implemented','problemDraft:not_implemented','progressCardDraft:stage_not_allowed']);
+  // Stage allows problemDraft + observation. problemDraft: zCode's validator is still a stub (not_implemented).
+  // observation: the quote "这道题我做错了" is not what the student said ("第3题我做错了"), so the program rejects it.
+  assert.deepEqual(f.turns()[2].dropped.map(x=>x.field+':'+x.reason).sort(),['memoryDraft:stage_not_allowed','observation:invalid','problemDraft:not_implemented','progressCardDraft:stage_not_allowed']);
   assert.equal(c.problemDraft,null);assert.equal(f.r.repository.list('observations').length,0);
   const d=await f.say('嗯');assert.equal(d.stage,'probe');assert.match(p.systems[3],/^tutor-g0-probe$/m);
   assert.deepEqual(f.turns().map(t=>t.turn),[1,2,3,4]);
@@ -59,12 +60,12 @@ test('home flow: safety first (nothing stored), rest pauses, intent without the 
  }finally{f.dispose();}
 });
 
-test('home flow: memory on still drops memory drafts while memory-flow is a stub; farewell ends the session',async()=>{
+test('home flow: memory on still drops memory drafts while memory-flow is a stub; farewell ends the session with a summary',async()=>{
  const f=setup(new Greedy());try{
   f.r.events.consent({operationId:id(),optionalMemory:true});
   const a=await f.say('今天去打球了');assert.equal(a.memoryDraft,null);
   assert.deepEqual(f.turns()[0].dropped.find(x=>x.field==='memoryDraft'),{field:'memoryDraft',reason:'not_implemented'});
-  const bye=await f.say('今天先聊到这，拜拜');assert.equal(bye.summary,null,'endConversation is a stub in G0');assert.equal(f.turns().at(-1)!.ended,true);
+  const bye=await f.say('今天先聊到这，拜拜');assert.equal(bye.summary?.trigger,'farewell');assert.equal(bye.summary?.sessionId,a.sessionId);assert.equal(f.turns().at(-1)!.ended,true);
   const next=await f.say('我又来了');assert.notEqual(next.sessionId,a.sessionId);assert.equal(f.turns().at(-1)!.turn,1);
  }finally{f.dispose();}
 });
