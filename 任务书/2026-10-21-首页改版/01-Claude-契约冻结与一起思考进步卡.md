@@ -78,6 +78,13 @@
 - 三个目录各放一份契约冒烟测试：新 schema 可解析，新路由在桩阶段返回 `not_implemented`，`problemSecrets` 不出现在 `view()`。另外两路可以替换这份测试。
 - 阶段机单测：倾听至少 2 轮、确定需求只问一次、陪聊停留、6 轮后问一次学习、拒绝后不再问、试探频率上限、安全优先。
 
+### 8. 与已有卡点补丁对齐、记忆与长度的程序门控
+
+- main 上的 `8a97be9` 已有 `stuckPoints` 实体、`record_stuck_point`、`get_latest_feedback` 和 prompt `tutor-d3`。不要另起一套重复的卡点概念：`ProblemRecord.stuckPoint`、`ChatObservation` 与 `stuckPoints` 对齐（复用或写清转换关系）；拆提示词时保留 tutor-d3 的规则；`tests-agent/d/stuck-point.test.ts` 等现有测试继续通过。
+- 「学生确认」只能由程序根据学生的点击或输入写入。现有由模型传入的确认字段改为程序判定，或在 CONTRACT.md 列为待修。
+- `memory-flow` 插件桩加 `selectMemoriesForContext`（zCode 实现），协调器构建 Tutor 上下文时调用；桩阶段保持现有行为。
+- Tutor 回复长度由阶段机做程序校验（建议不超过 80 字），超长重试一次，仍超长截断到句末。
+
 ### 阶段 0 完成标准
 
 全部现有测试和新增测试通过，`npm run build` 成功。写 `交付/claude/CONTRACT.md`，列出所有新导出符号、路由、插件函数签名和挂载位 props。然后停下，请用户确认合入 main 并打 tag `revamp-base`。
