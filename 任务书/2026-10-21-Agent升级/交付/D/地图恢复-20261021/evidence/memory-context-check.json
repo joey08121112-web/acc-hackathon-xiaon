@@ -1,0 +1,5 @@
+{
+  "mode": "synthetic outbound actual messages",
+  "afterDeletionContainsOptionalText": false,
+  "reset": "verified"
+}

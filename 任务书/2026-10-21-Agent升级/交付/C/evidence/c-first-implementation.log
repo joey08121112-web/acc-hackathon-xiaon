@@ -1,0 +1,81 @@
+COMMAND: ['npm', 'run', 'test:agent:c']
+
+> xiaon-learning-companion@1.0.0 test:agent:c
+> node scripts/agent/test.mjs c
+
+✔ 1/3/7/14 days, exact due boundary, absence and same-day repetition never fast-forward (27.332125ms)
+✔ same-day fresh tasks and repeated original cannot advance; attempts stay append-only (7.964083ms)
+✖ help, incorrect and needs_review schedule differently; no outcome for absence (6.133667ms)
+✔ four profiles differ, unknown is optional, stable avoids remedial practice; refresh is idempotent (17.365708ms)
+✔ seen/chat-answer exposure never selected as unseen; catalog exhaustion is explicit (4.119458ms)
+✖ defer/resume/reschedule/lighter keep immutable plans, postponement history and stale guards (7.598083ms)
+✔ Shanghai midnight, host TZ independence, legacy unknown never seeds due or stability (4.075417ms)
+✖ report immutability, correction annotations and queue replay from authoritative grades (7.840083ms)
+✔ restart receipts, queue revisions and immutable snapshots survive real disk reopen (5.296875ms)
+✔ untrusted self-report, stale outcome, reused attempt and stale assessment fail without writes (5.490083ms)
+✔ constraints retain per-session ten calculation tasks and prerequisites; optional memories never read (10.852791ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 8
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 219.950708
+
+✖ failing tests:
+
+test at tests-agent/c/planning.test.ts:1:3436
+✖ help, incorrect and needs_review schedule differently; no outcome for absence (6.133667ms)
+  Error: 结果必须与已保存尝试、暴露、时间和最新评分一致
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/plugins/planning/index.ts:71:248)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:57:16)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:51:20)
+      at SqliteRepository.once (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:54:15)
+      at PlanningEngine.recordOutcome (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/plugins/planning/index.ts:64:23)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/c/planning.test.ts:48:17)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/c/planning.test.ts:1:6185
+✖ defer/resume/reschedule/lighter keep immutable plans, postponement history and stale guards (7.598083ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '{"changes":["学生选择 accept：合成学生接受"],"confirmation":{"action":"accept","actor":"student","confirmedAt":"2026-10-20T04:00:00.000Z","expectedPreviousVersionId":null,"reason":"合成学生接受"},"createdAt":"2026-10-20T04:00:00.000Z","evidenceRevision":4,"goal":"brackets：从提示帮助过渡到独立处理","id":"1724351e-28c0-45df-9c75-3335aeaf89f4","items":[{"estimatedMinutes":3,"evidenceIds":["67490f99-2d3e-4dff-9477-255b89bf81f7"],"goal":"只看当前知识点的一个具体步骤，先提供支持","id":"9a76e652-fc30-4069-9d03-893d0805dd78","knowledgePointId":"brackets","scheduledDate":"2026-10-21","status":"scheduled","task":null,"taskType":"supported_practice"},{"estimatedMinutes":3,"evidenceIds":["67490f99-2d3e-4dff-9477-255b89bf81f7"],"goal":"支持后自选未见新题；完成支持前须再次核对题目暴露","id":"1b38d9a8-eb21-4b31-8d77-f77cfda82926","knowledgePointId":"brackets","scheduledDate":"2026-10-21","status":"scheduled","task":{"taskId":"synthetic-brackets-1","taskVersion":1},"taskType":"independent_transfer"}],"operationId":"a74706a6-fd21-4bc7-b83b-7868b9a1a6a9","previousVersionId":null,"proposalId":"6b2d6fbb-fbb3-406e-91d2-4eaeb5e6ff04","schemaVersion":"1.0.0","version":1}'
+  - '{"schemaVersion":"1.0.0","id":"1724351e-28c0-45df-9c75-3335aeaf89f4","operationId":"a74706a6-fd21-4bc7-b83b-7868b9a1a6a9","evidenceRevision":4,"version":1,"proposalId":"6b2d6fbb-fbb3-406e-91d2-4eaeb5e6ff04","previousVersionId":null,"goal":"brackets：从提示帮助过渡到独立处理","items":[{"id":"9a76e652-fc30-4069-9d03-893d0805dd78","knowledgePointId":"brackets","taskType":"supported_practice","task":null,"estimatedMinutes":3,"scheduledDate":"2026-10-21","evidenceIds":["67490f99-2d3e-4dff-9477-255b89bf81f7"],"goal":"只看当前知识点的一个具体步骤，先提供支持","status":"scheduled"},{"id":"1b38d9a8-eb21-4b31-8d77-f77cfda82926","knowledgePointId":"brackets","taskType":"independent_transfer","task":{"taskId":"synthetic-brackets-1","taskVersion":1},"estimatedMinutes":3,"scheduledDate":"2026-10-21","evidenceIds":["67490f99-2d3e-4dff-9477-255b89bf81f7"],"goal":"支持后自选未见新题；完成支持前须再次核对题目暴露","status":"scheduled"}],"changes":["学生选择 accept：合成学生接受"],"confirmation":{"action":"accept","confirmedAt":"2026-10-20T04:00:00.000Z","actor":"student","expectedPreviousVersionId":null,"reason":"合成学生接受"},"createdAt":"2026-10-20T04:00:00.000Z"}'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/c/planning.test.ts:87:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"changes":["学生选择 accept：合成学生接受"],"confirmation":{"action":"accept","actor":"student","confirmedAt":"2026-10-20T04:00:00.000Z","expectedPreviousVersionId":null,"reason":"合成学生接受"},"createdAt":"2026-10-20T04:00:00.000Z","evidenceRevision":4,"goal":"brackets：从提示帮助过渡到独立处理","id":"1724351e-28c0-45df-9c75-3335aeaf89f4","items":[{"estimatedMinutes":3,"evidenceIds":["67490f99-2d3e-4dff-9477-255b89bf81f7"],"goal":"只看当前知识点的一个具体步骤，先提供支持","id":"9a76e652-fc30-4069-9d03-893d0805dd78","knowledgePointId":"brackets","scheduledDate":"2026-10-21","status":"scheduled","task":null,"taskType":"supported_practice"},{"estimatedMinutes":3,"evidenceIds":["67490f99-2d3e-4dff-9477-255b89bf81f7"],"goal":"支持后自选未见新题；完成支持前须再次核对题目暴露","id":"1b38d9a8-eb21-4b31-8d77-f77cfda82926","knowledgePointId":"brackets","scheduledDate":"2026-10-21","status":"scheduled","task":{"taskId":"synthetic-brackets-1","taskVersion":1},"taskType":"independent_transfer"}],"operationId":"a74706a6-fd21-4bc7-b83b-7868b9a1a6a9","previousVersionId":null,"proposalId":"6b2d6fbb-fbb3-406e-91d2-4eaeb5e6ff04","schemaVersion":"1.0.0","version":1}',
+    expected: '{"schemaVersion":"1.0.0","id":"1724351e-28c0-45df-9c75-3335aeaf89f4","operationId":"a74706a6-fd21-4bc7-b83b-7868b9a1a6a9","evidenceRevision":4,"version":1,"proposalId":"6b2d6fbb-fbb3-406e-91d2-4eaeb5e6ff04","previousVersionId":null,"goal":"brackets：从提示帮助过渡到独立处理","items":[{"id":"9a76e652-fc30-4069-9d03-893d0805dd78","knowledgePointId":"brackets","taskType":"supported_practice","task":null,"estimatedMinutes":3,"scheduledDate":"2026-10-21","evidenceIds":["67490f99-2d3e-4dff-9477-255b89bf81f7"],"goal":"只看当前知识点的一个具体步骤，先提供支持","status":"scheduled"},{"id":"1b38d9a8-eb21-4b31-8d77-f77cfda82926","knowledgePointId":"brackets","taskType":"independent_transfer","task":{"taskId":"synthetic-brackets-1","taskVersion":1},"estimatedMinutes":3,"scheduledDate":"2026-10-21","evidenceIds":["67490f99-2d3e-4dff-9477-255b89bf81f7"],"goal":"支持后自选未见新题；完成支持前须再次核对题目暴露","status":"scheduled"}],"changes":["学生选择 accept：合成学生接受"],"confirmation":{"action":"accept","confirmedAt":"2026-10-20T04:00:00.000Z","actor":"student","expectedPreviousVersionId":null,"reason":"合成学生接受"},"createdAt":"2026-10-20T04:00:00.000Z"}',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/c/planning.test.ts:1:8574
+✖ report immutability, correction annotations and queue replay from authoritative grades (7.840083ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '{"assessmentSnapshotId":"6dd07c87-235a-4ab1-9cac-af1ee23eda1e","changes":["首份观察快照"],"coverage":["计算：1 条依据；覆盖仅限记录任务"],"createdAt":"2026-10-20T04:00:00.000Z","evidenceRevision":4,"id":"48db0315-290c-4613-b4bd-f36167a6739b","operationId":"e6ac525a-9076-4d64-a673-244c41ffec76","recommendations":["已有独立记录，适合延迟新题检查","仅为待验证产品策略；不代表长期掌握或教学效果","合成画像，非 B 实现输出"],"schemaVersion":"1.0.0","statements":[{"evidenceIds":["46f7ec85-e434-4177-979e-0a41f8288a89"],"kind":"fact","text":"brackets：本次知识点状态 first_independent，仅适用于已观察任务"},{"evidenceIds":["46f7ec85-e434-4177-979e-0a41f8288a89"],"kind":"inference","text":"已有独立记录，适合延迟新题检查"}],"supersedesReportId":null}'
+  - '{"schemaVersion":"1.0.0","id":"48db0315-290c-4613-b4bd-f36167a6739b","operationId":"e6ac525a-9076-4d64-a673-244c41ffec76","evidenceRevision":4,"createdAt":"2026-10-20T04:00:00.000Z","assessmentSnapshotId":"6dd07c87-235a-4ab1-9cac-af1ee23eda1e","statements":[{"text":"brackets：本次知识点状态 first_independent，仅适用于已观察任务","kind":"fact","evidenceIds":["46f7ec85-e434-4177-979e-0a41f8288a89"]},{"text":"已有独立记录，适合延迟新题检查","kind":"inference","evidenceIds":["46f7ec85-e434-4177-979e-0a41f8288a89"]}],"coverage":["计算：1 条依据；覆盖仅限记录任务"],"changes":["首份观察快照"],"recommendations":["已有独立记录，适合延迟新题检查","仅为待验证产品策略；不代表长期掌握或教学效果","合成画像，非 B 实现输出"],"supersedesReportId":null}'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/c/planning.test.ts:107:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"assessmentSnapshotId":"6dd07c87-235a-4ab1-9cac-af1ee23eda1e","changes":["首份观察快照"],"coverage":["计算：1 条依据；覆盖仅限记录任务"],"createdAt":"2026-10-20T04:00:00.000Z","evidenceRevision":4,"id":"48db0315-290c-4613-b4bd-f36167a6739b","operationId":"e6ac525a-9076-4d64-a673-244c41ffec76","recommendations":["已有独立记录，适合延迟新题检查","仅为待验证产品策略；不代表长期掌握或教学效果","合成画像，非 B 实现输出"],"schemaVersion":"1.0.0","statements":[{"evidenceIds":["46f7ec85-e434-4177-979e-0a41f8288a89"],"kind":"fact","text":"brackets：本次知识点状态 first_independent，仅适用于已观察任务"},{"evidenceIds":["46f7ec85-e434-4177-979e-0a41f8288a89"],"kind":"inference","text":"已有独立记录，适合延迟新题检查"}],"supersedesReportId":null}',
+    expected: '{"schemaVersion":"1.0.0","id":"48db0315-290c-4613-b4bd-f36167a6739b","operationId":"e6ac525a-9076-4d64-a673-244c41ffec76","evidenceRevision":4,"createdAt":"2026-10-20T04:00:00.000Z","assessmentSnapshotId":"6dd07c87-235a-4ab1-9cac-af1ee23eda1e","statements":[{"text":"brackets：本次知识点状态 first_independent，仅适用于已观察任务","kind":"fact","evidenceIds":["46f7ec85-e434-4177-979e-0a41f8288a89"]},{"text":"已有独立记录，适合延迟新题检查","kind":"inference","evidenceIds":["46f7ec85-e434-4177-979e-0a41f8288a89"]}],"coverage":["计算：1 条依据；覆盖仅限记录任务"],"changes":["首份观察快照"],"recommendations":["已有独立记录，适合延迟新题检查","仅为待验证产品策略；不代表长期掌握或教学效果","合成画像，非 B 实现输出"],"supersedesReportId":null}',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+exitCode=1

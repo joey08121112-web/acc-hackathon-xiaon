@@ -1,0 +1,8 @@
+{
+  "outputs/xiaon/src/App.tsx": "8e7551a2799b9b2f8318532f9fc084fa8d668799dc2747a181eb4c614d7efb4d",
+  "outputs/xiaon/src/components/learning/LearningPages.tsx": "fa1cb31b1af1b749ab80ee8a877b1f46739219c0bcec4ccca81ec6f4388f0fb5",
+  "outputs/xiaon/src/components/learning/ExplorationMap.tsx": "5e446a56d1ca826df4f775043eb47a9ad0c882faa3f5b6c6189c7ecfb2f8bd70",
+  "outputs/xiaon/tests-agent/d/browser.spec.ts": "3743b26f75143b56c9ed309f4ae4b8451fcba63a2e862988e8fc620b50a3424b",
+  "outputs/xiaon/tests-agent/d/map-restoration.spec.ts": "cdc7e4246de3b3dfb4b16856abf222208164ed107bf52731f3d4a3279385af71",
+  "outputs/xiaon/playwright.map.config.ts": "4b03eaf200cc4c38e5d61d00dfaef7c043435031c889bffdc0f90ddf579bc572"
+}

@@ -1,0 +1,21 @@
+COMMAND: npm run test:agent:browser
+UTC: 2026-10-20T16:36:53.909752+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:browser
+> playwright test -c playwright.agent.config.ts
+
+
+Running 2 tests using 1 worker
+
+  ✓  1 tests-agent/a/browser.spec.ts:5:1 › synthetic model browser chat reaches local handler; student API keeps trusted answers server-side (1.9s)
+  ✓  2 tests-agent/a/browser.spec.ts:24:1 › local_rules health preserves existing chat and rest behavior in a fresh browser context (1.7s)
+
+  2 passed (4.8s)
+[WebServer] (node:22482) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22537) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:22550) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+exitCode=0

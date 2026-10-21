@@ -1,0 +1,24 @@
+$ npm run test:agent:d
+
+> xiaon-learning-companion@1.0.0 test:agent:d
+> node scripts/agent/test.mjs d
+
+✔ profiles really differ through B and C: modeling difficulty versus calculation independence (34.686333ms)
+✔ exploration prerequisite and real session limit persist across refresh, support switch and next date (18.266583ms)
+✔ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (57.424917ms)
+✔ Tutor and PlannerReporter native tools are real; six executions/four rounds, illegal tools and forged arguments are gated (8.669458ms)
+✔ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (4.636917ms)
+✔ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (11.582709ms)
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (51.74975ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (20.351417ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (19.839875ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 278.419959
+
+EXIT_CODE=0

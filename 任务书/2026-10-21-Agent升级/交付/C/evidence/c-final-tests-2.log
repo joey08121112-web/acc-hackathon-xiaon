@@ -1,0 +1,40 @@
+COMMAND: ['npm', 'run', 'test:agent:c']
+
+> xiaon-learning-companion@1.0.0 test:agent:c
+> node scripts/agent/test.mjs c
+
+✔ absence and queries are read-only; UTC strings with omitted milliseconds compare by instant (22.227875ms)
+✔ initial anchoring attempt cannot be recycled as a later review outcome (11.679958ms)
+✔ a completed review never schedules the same seen task as the next unseen check (12.914917ms)
+✔ future plan date and queued due cannot silently diverge after rescheduling (9.963375ms)
+✔ out-of-order completion cannot roll due backwards (8.467167ms)
+✔ corrected evidence marks old plans as revised without rewriting student confirmation (6.994708ms)
+✔ stale evidence references in a snapshot cannot be relabelled as current facts (5.393792ms)
+✔ task prerequisite shortage is explicit, budget one never claims a three-minute task fits (5.602958ms)
+✔ due support priority and explicit student choice retain alternative evidence (10.2315ms)
+✔ calendar validation rejects impossible dates and configurable clock intervals are persisted (7.9815ms)
+✔ Shanghai midnight alone cannot advance a review stage; a real day can (8.898083ms)
+✔ a new calendar day refreshes a draft without overwriting the accepted plan (6.8645ms)
+✔ fractional minute budgets remain within budget and produce valid integer estimates (4.500208ms)
+✔ new evidence or an unaccepted draft never prevents the student pausing the current confirmed plan (8.862125ms)
+✔ 1/3/7/14 days, exact due boundary, absence and same-day repetition never fast-forward (37.156084ms)
+✔ same-day fresh tasks and repeated original cannot advance; attempts stay append-only (14.68525ms)
+✔ help, incorrect and needs_review schedule differently; no outcome for absence (22.462708ms)
+✔ four profiles differ, unknown is optional, stable avoids remedial practice; refresh is idempotent (24.641125ms)
+✔ seen/chat-answer exposure never selected as unseen; catalog exhaustion is explicit (5.299292ms)
+✔ defer/resume/reschedule/lighter keep immutable plans, postponement history and stale guards (10.0265ms)
+✔ Shanghai midnight, host TZ independence, legacy unknown never seeds due or stability (5.435291ms)
+✔ report immutability, correction annotations and queue replay from authoritative grades (12.481417ms)
+✔ restart receipts, queue revisions and immutable snapshots survive real disk reopen (5.904583ms)
+✔ untrusted self-report, stale outcome, reused attempt and stale assessment fail without writes (6.283084ms)
+✔ constraints retain per-session ten calculation tasks and prerequisites; optional memories never read (11.33475ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 293.491083
+
+exitCode=0

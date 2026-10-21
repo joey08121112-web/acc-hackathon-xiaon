@@ -1,0 +1,15 @@
+COMMAND: ['node', '--import', 'tsx', '--test', 'tests-agent/a/contracts.test.ts']
+UTC: 2026-10-20T16:53:14.605159+00:00
+✔ JSON Schema artifact exactly matches runtime schemas, all object boundaries reject extras (2.719875ms)
+✔ B/C consumers register independently, unimplemented ports fail explicitly (16.295875ms)
+✔ report/plan/evidence storage retains old immutable revisions without claiming B/C recomputation (4.541666ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 157.636833
+
+exitCode=0

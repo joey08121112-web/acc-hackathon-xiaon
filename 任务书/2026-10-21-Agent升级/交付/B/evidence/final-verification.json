@@ -1,0 +1,35 @@
+{
+  "atUTC": "2026-10-20T16:59:06.756840+00:00",
+  "branch": "main",
+  "HEAD": "773e95ecc3063648a4ece1e67484c48f763ccaff",
+  "productFiles": 13,
+  "productPaths": [
+    "outputs/xiaon/server/plugins/assessment/catalog.ts",
+    "outputs/xiaon/server/plugins/assessment/grading.ts",
+    "outputs/xiaon/server/plugins/assessment/index.ts",
+    "outputs/xiaon/server/plugins/assessment/model-analysis.ts",
+    "outputs/xiaon/server/plugins/assessment/state.ts",
+    "outputs/xiaon/src/learning/assessment/index.ts",
+    "outputs/xiaon/tests-agent/b/boundaries.test.ts",
+    "outputs/xiaon/tests-agent/b/catalog.test.ts",
+    "outputs/xiaon/tests-agent/b/consumer.ts",
+    "outputs/xiaon/tests-agent/b/evidence.test.ts",
+    "outputs/xiaon/tests-agent/b/export-evidence.ts",
+    "outputs/xiaon/tests-agent/b/fixtures.ts",
+    "outputs/xiaon/tests-agent/b/model.test.ts"
+  ],
+  "protectedFilesChecked": 24,
+  "protectedFilesChanged": [],
+  "sourceManifestExitCode": 0,
+  "successfulLogs": [
+    "unit-final.log",
+    "typecheck-delivery.log",
+    "frontend-typecheck.log",
+    "a-contract-recheck.log",
+    "existing-unit.log",
+    "synthetic-scenario.log"
+  ],
+  "schemaVersion": "1.0.0",
+  "scope": "B owned paths only; existing user changes retained",
+  "evidenceLevel": "module self-verification; not independently accepted; real model/browser/device/teaching effects not run"
+}

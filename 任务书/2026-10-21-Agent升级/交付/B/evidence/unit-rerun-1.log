@@ -1,0 +1,34 @@
+COMMAND: ['npm', 'run', 'test:agent:b']
+UTC: 2026-10-20T16:49:53.184880+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:b
+> node scripts/agent/test.mjs b
+
+✔ six explicit subskills have observation, genuinely different transfer and delayed tasks; strict public views hide keys (1.387292ms)
+✔ reference math is independently derived from integer substitutions or explicit language/cost meanings, all typical errors rejected (1.050375ms)
+✔ spatial answers independently derived by trigonometric rotation and edge lengths, with explicit y-up coordinate convention (0.1875ms)
+✔ existing restricted parser accepts equivalents, rejects contradictory chains, defers unsupported syntax and never executes source (0.308958ms)
+✔ candidate constraints filter dimension, knowledge point, exclusions and limit without promising prerequisite mastery (0.316958ms)
+✔ wrong then correct, helped completion, original redo and unseen independent attempts remain distinct immutable facts (27.681958ms)
+✔ no-hint correction is never first independent; no attempt, whitespace and pause do not mean weak ability (8.528792ms)
+✔ hint after submission does not rewrite success; chat help or answer exposure before submission prevents independence (21.014084ms)
+✔ same-day variants cannot establish across-day status; two trusted dates and unseen tasks can; local date uses Shanghai (20.4515ms)
+✔ original opened on an earlier date, repeated raw problem and version aliases do not count as unseen transfer (7.529916ms)
+✔ unknown legacy time/exposure cannot establish independent status, missing grades stay unknown (6.577458ms)
+✔ cross-session rule is configurable and not a standardized assessment (5.237083ms)
+✔ operation retries append no duplicate evidence, different operations for one grade reuse it, fake attempt rejected (5.0675ms)
+✔ real SQLite reopen retains attempts, evidence, snapshots and operation receipts; frozen-port consumer compiles (6.285416ms)
+✔ choice correct alone does not prove reasoning; validated explanation has exact saved-answer quotes (19.228625ms)
+✔ no quote, foreign quote, malformed JSON, unknown points, wrong offsets, extra keys and program/model conflict all defer (45.076916ms)
+✔ model sees only required task/rubric, persisted answer and exposure snapshot, no optional profile/chat/history (5.923417ms)
+✔ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (12.637125ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 227.302667
+
+exitCode=0

@@ -1,0 +1,65 @@
+{"task":"bracket","value":"x+5","expected":true,"actual":true,"result":"PASS"}
+{"task":"bracket","value":"5+x","expected":true,"actual":true,"result":"PASS"}
+{"task":"transfer","value":"4a+2","expected":true,"actual":true,"result":"PASS"}
+{"task":"transfer","value":"4*a+2","expected":true,"actual":true,"result":"PASS"}
+{"task":"transfer","value":"4×a+2","expected":true,"actual":true,"result":"PASS"}
+{"task":"transfer","value":"+4a+2","expected":true,"actual":true,"result":"PASS"}
+{"task":"bracket","value":"3x-2x-5=x+5","expected":false,"actual":false,"result":"PASS"}
+{"task":"bracket","value":"x-5","expected":false,"actual":false,"result":"PASS"}
+{"task":"transfer","value":"4a-2","expected":false,"actual":false,"result":"PASS"}
+{
+  "report": {
+    "dim": "计算",
+    "status": "本次独立完成",
+    "finding": "这次有 1 道不同的题，你在首次尝试时没有使用提示就完成了。",
+    "basis": [
+      {
+        "id": "transfer",
+        "attempts": [
+          {
+            "id": "audit-first",
+            "value": "4*a+2",
+            "correct": true,
+            "hinted": false,
+            "time": "synthetic"
+          },
+          {
+            "id": "audit-second",
+            "value": "4a+2",
+            "correct": true,
+            "hinted": false,
+            "time": "synthetic"
+          }
+        ],
+        "hint": false,
+        "draft": "",
+        "paused": false
+      }
+    ],
+    "next": "在新题中先圈出括号前的符号，再逐项去括号。"
+  },
+  "records": {
+    "transfer": {
+      "id": "transfer",
+      "attempts": [
+        {
+          "id": "audit-first",
+          "value": "4*a+2",
+          "correct": true,
+          "hinted": false,
+          "time": "synthetic"
+        },
+        {
+          "id": "audit-second",
+          "value": "4a+2",
+          "correct": true,
+          "hinted": false,
+          "time": "synthetic"
+        }
+      ],
+      "hint": false,
+      "draft": "",
+      "paused": false
+    }
+  }
+}

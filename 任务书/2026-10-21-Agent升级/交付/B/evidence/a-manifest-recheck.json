@@ -1,0 +1,248 @@
+[
+  {
+    "path": "outputs/xiaon/.env.example",
+    "expected": "dc261a167aaafdc3c0a431714f81f1c62edd7c56775f550608e74658472711a9",
+    "actual": "dc261a167aaafdc3c0a431714f81f1c62edd7c56775f550608e74658472711a9",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/.gitignore",
+    "expected": "93ff2da16293ee6a04a6bbdc855e361754e132eccf9ea7301746fb066e39fe5a",
+    "actual": "93ff2da16293ee6a04a6bbdc855e361754e132eccf9ea7301746fb066e39fe5a",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/package-lock.json",
+    "expected": "fc3e5aa73ccc37ea9423931bba33ea5623ec2797009f337d90ac2a558c02f096",
+    "actual": "fc3e5aa73ccc37ea9423931bba33ea5623ec2797009f337d90ac2a558c02f096",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/package.json",
+    "expected": "47c05cc09e81764e37b0d4e9b010b0f49511d35e263e46a9bdf996deee850313",
+    "actual": "47c05cc09e81764e37b0d4e9b010b0f49511d35e263e46a9bdf996deee850313",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/playwright.agent.config.ts",
+    "expected": "6601b862d3c95f47f8fc59c70daa44dec58edd00268078e072bbc893e137dc10",
+    "actual": "6601b862d3c95f47f8fc59c70daa44dec58edd00268078e072bbc893e137dc10",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/browser-server.ts",
+    "expected": "bfec33493ddcb15f90b893820fc393fd4ac09ce7bc561480c5c40fc288aae886",
+    "actual": "bfec33493ddcb15f90b893820fc393fd4ac09ce7bc561480c5c40fc288aae886",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/bundle-sentinel.mjs",
+    "expected": "23190bbb5f3d52d3ce29480d745bdefd7812e2dcca14762395898521a3e46891",
+    "actual": "23190bbb5f3d52d3ce29480d745bdefd7812e2dcca14762395898521a3e46891",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/real-smoke.ts",
+    "expected": "744698fe46d5f79df5274dc34c617834f330cedf8a1f7a787844cdeac4f2dcf1",
+    "actual": "744698fe46d5f79df5274dc34c617834f330cedf8a1f7a787844cdeac4f2dcf1",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/schema.ts",
+    "expected": "a282ca7fc51bd6c7f9d2a576c4ff6c40d98f6850d57382719771d296e3280d01",
+    "actual": "a282ca7fc51bd6c7f9d2a576c4ff6c40d98f6850d57382719771d296e3280d01",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/service-smoke.mjs",
+    "expected": "98085750dc7860b2237e0c258909f1ff58474a06881c7fb736c754861ea16009",
+    "actual": "98085750dc7860b2237e0c258909f1ff58474a06881c7fb736c754861ea16009",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/test.mjs",
+    "expected": "ee0ae563ba9969e88bf3e3d2ff76997dcf4fb6e81826257e1aa8e98ba94a36ec",
+    "actual": "ee0ae563ba9969e88bf3e3d2ff76997dcf4fb6e81826257e1aa8e98ba94a36ec",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/trace.ts",
+    "expected": "29e18e9370149df0f30a02837a482b3608af6728050a544af4965189e3cde175",
+    "actual": "29e18e9370149df0f30a02837a482b3608af6728050a544af4965189e3cde175",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/bootstrap.ts",
+    "expected": "bd20bb785eb763246dea2494f56cc04086b59cf7839b6e3b50c202d722723a02",
+    "actual": "bd20bb785eb763246dea2494f56cc04086b59cf7839b6e3b50c202d722723a02",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/core/agent.ts",
+    "expected": "d9f16ff261681a850d9320b8e35db129b460a190a88732a2f83afea0e3c210da",
+    "actual": "d9f16ff261681a850d9320b8e35db129b460a190a88732a2f83afea0e3c210da",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/core/clock.ts",
+    "expected": "8edc32fe953276ab7f7780187b045f6a6ffc355f0ed2ddcaa0a268d136694485",
+    "actual": "8edc32fe953276ab7f7780187b045f6a6ffc355f0ed2ddcaa0a268d136694485",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/core/errors.ts",
+    "expected": "c0c0a0ae2a4de241e517bd3ea258ec50ec9560820c1f3f159f4aa0779e55995a",
+    "actual": "c0c0a0ae2a4de241e517bd3ea258ec50ec9560820c1f3f159f4aa0779e55995a",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/core/events.ts",
+    "expected": "4d9d56f788ac9f4feb59a08e08ea8cf1d268bae7116942d1a1ab5eaee6f4c820",
+    "actual": "4d9d56f788ac9f4feb59a08e08ea8cf1d268bae7116942d1a1ab5eaee6f4c820",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/http/server.ts",
+    "expected": "b80d7f992f81352b619203f5696318920230b1e3827793f1a3f587dfe7a84c25",
+    "actual": "b80d7f992f81352b619203f5696318920230b1e3827793f1a3f587dfe7a84c25",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/index.ts",
+    "expected": "79ca43a235bad222aae72c96cd055b9b28e1e95454948ce6ac81219598c5cf55",
+    "actual": "79ca43a235bad222aae72c96cd055b9b28e1e95454948ce6ac81219598c5cf55",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/providers/config.ts",
+    "expected": "78d6b6db2bacb157cedb2602ac4db4b41fd6a4bde7ad7d349141c191327e96ae",
+    "actual": "78d6b6db2bacb157cedb2602ac4db4b41fd6a4bde7ad7d349141c191327e96ae",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/providers/glm.ts",
+    "expected": "8ac2750ca4cdcb37d661dee23f359006d892437c95d0e3327952d09179cd2dcb",
+    "actual": "8ac2750ca4cdcb37d661dee23f359006d892437c95d0e3327952d09179cd2dcb",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/providers/synthetic.ts",
+    "expected": "515262590228bffce149f88cc30f2ae0cd758a43bbdba7900cc96b4b59392f86",
+    "actual": "515262590228bffce149f88cc30f2ae0cd758a43bbdba7900cc96b4b59392f86",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/storage/import-legacy.ts",
+    "expected": "804f321f427fed81bb76c3516e7ce3eabc2a79f9a04f04ed7e0631621062bff3",
+    "actual": "804f321f427fed81bb76c3516e7ce3eabc2a79f9a04f04ed7e0631621062bff3",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/storage/repository.ts",
+    "expected": "6c6901033ed4026e43965ff2213fd18b7f82d8b6a81f69065e999704a141532a",
+    "actual": "6c6901033ed4026e43965ff2213fd18b7f82d8b6a81f69065e999704a141532a",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/storage/testing.ts",
+    "expected": "e16dc6fda58a249d85f873cc69796bcd51fab5daba58800dcf83efc2c3693819",
+    "actual": "e16dc6fda58a249d85f873cc69796bcd51fab5daba58800dcf83efc2c3693819",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/tools/legacy.ts",
+    "expected": "cce8c8ecde63c2d4daee91edb123e13baad2119c654176ec9f9be5b80cad2bf0",
+    "actual": "cce8c8ecde63c2d4daee91edb123e13baad2119c654176ec9f9be5b80cad2bf0",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/server/tools/registry.ts",
+    "expected": "b8c00e9a00f816498d19912857c665ac297a4e752d7de19504a834f218907cfc",
+    "actual": "b8c00e9a00f816498d19912857c665ac297a4e752d7de19504a834f218907cfc",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/shared/learning-contracts.schema.json",
+    "expected": "3c3f1949420c6a0b8768ebf7de56935d5838fb89ef795deb1a80cd0ef1157d01",
+    "actual": "3c3f1949420c6a0b8768ebf7de56935d5838fb89ef795deb1a80cd0ef1157d01",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/shared/learning-contracts.ts",
+    "expected": "8d9f73257ab36ca78a8965c0ffcd879f46b301b5638ee5300092b5b1574509b8",
+    "actual": "8d9f73257ab36ca78a8965c0ffcd879f46b301b5638ee5300092b5b1574509b8",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/src/agent-client/index.ts",
+    "expected": "09c9b9a54ac7d9005bc3923800899ddf04062cea0a396f1ee7c37d5ba7468ea7",
+    "actual": "09c9b9a54ac7d9005bc3923800899ddf04062cea0a396f1ee7c37d5ba7468ea7",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/src/ai.ts",
+    "expected": "a75ae6fbfb6d5513933d9987aa23c19861ff6b19dfcbc2690955353b5d54e0ea",
+    "actual": "a75ae6fbfb6d5513933d9987aa23c19861ff6b19dfcbc2690955353b5d54e0ea",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/src/vite-env.d.ts",
+    "expected": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+    "actual": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/browser.spec.ts",
+    "expected": "1a9096b1aeb60d6a7e8c4f3c3910822565fd696548f45b0a2e666a84ea129649",
+    "actual": "1a9096b1aeb60d6a7e8c4f3c3910822565fd696548f45b0a2e666a84ea129649",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/consumers.ts",
+    "expected": "d0a52af1a4adcfad88ba78aaa6a4c42e7ff4e1b735f8fa806a70feaf1cff0dfb",
+    "actual": "d0a52af1a4adcfad88ba78aaa6a4c42e7ff4e1b735f8fa806a70feaf1cff0dfb",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/contracts.test.ts",
+    "expected": "b2d20169dfe2584eefdaf77b99efc18bc62e60530ee49b09898f5c3a30664dba",
+    "actual": "b2d20169dfe2584eefdaf77b99efc18bc62e60530ee49b09898f5c3a30664dba",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/edges.test.ts",
+    "expected": "2a72033c3d39c18a816ad8f345a83cd4ef719bfded60d9ec52410accd68a0097",
+    "actual": "2a72033c3d39c18a816ad8f345a83cd4ef719bfded60d9ec52410accd68a0097",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/glm-config.test.ts",
+    "expected": "02dece5ee0cc8993f87bfb60bd0659357f650d73f3e88d92b675f27a0baee532",
+    "actual": "02dece5ee0cc8993f87bfb60bd0659357f650d73f3e88d92b675f27a0baee532",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/http.test.ts",
+    "expected": "be945a59c4add478c6e86b8a923a4680f1c49198a3e3a2b946a4c2f003aa723d",
+    "actual": "be945a59c4add478c6e86b8a923a4680f1c49198a3e3a2b946a4c2f003aa723d",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/runtime.test.ts",
+    "expected": "8a3041bdfce451b5db91947d338be445a134385190ad41f53af69714318ae710",
+    "actual": "8a3041bdfce451b5db91947d338be445a134385190ad41f53af69714318ae710",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/tsconfig.agent.json",
+    "expected": "9a5192219e09070a2329a13dc2e672581f13ce8a592457849f45635f9a833645",
+    "actual": "9a5192219e09070a2329a13dc2e672581f13ce8a592457849f45635f9a833645",
+    "match": true
+  },
+  {
+    "path": "outputs/xiaon/vite.config.ts",
+    "expected": "6b4257a6aad41dcd68a259e435b546a4a588027a76d9709e85075732ba9ef199",
+    "actual": "6b4257a6aad41dcd68a259e435b546a4a588027a76d9709e85075732ba9ef199",
+    "match": true
+  }
+]

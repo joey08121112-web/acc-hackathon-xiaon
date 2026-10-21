@@ -1,0 +1,239 @@
+{
+  "capturedAt": "2026-10-21T08:40:25.544218+08:00",
+  "gitHead": "773e95ecc3063648a4ece1e67484c48f763ccaff",
+  "scope": "Read-only source and saved-log inspection for PRD authoring; no product tests or model requests executed by this authoring task. Working tree has uncommitted and possibly concurrent changes.",
+  "sources": [
+    {
+      "path": "audit-stage1-20261020/sources/开发APP需求-原文.txt",
+      "sha256": "d2ed68b1a44f8155504d79ac23fd677bb9e96e06dac7e820fd401bf007666804",
+      "bytes": 3485
+    },
+    {
+      "path": "audit-stage1-20261020/sources/planning-confirmations.md",
+      "sha256": "c9cdd02eb32fcc992930510cd9d0bdd9715f8763ac9262b6216e6ae770c4f423",
+      "bytes": 3851
+    },
+    {
+      "path": "audit-stage1-20261020/sources/01a15834-2d3c-79a1-b4cb-daced9f9ab4c.md",
+      "sha256": "0c42a1035f81dcaccc976ea2801c86b765fb023d253babf2b5a497e5e4871e8c",
+      "bytes": 12550
+    },
+    {
+      "path": "audit-stage3-20261020/REPORT.md",
+      "sha256": "e490b597afc4b3a0b6036e4a767f6a1cf4701ee9d7cd5ac96530ede6e06490dc",
+      "bytes": 17341
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/00-总控与共同约束.md",
+      "sha256": "5de64e81bdf9756eaac80e94164ce30c55be49e007fb31240dff889478e98f5e",
+      "bytes": 10075
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/01-窗口一-工具基础与接口冻结.md",
+      "sha256": "90760aa551114880f203868c1d74463aedec04553b826e1470ea6f0d707e88d2",
+      "bytes": 6481
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/02-窗口二-五维题库判题与证据.md",
+      "sha256": "7972b85fd9c21e7559737c924275b562c9094588f611367c1638b7471a5304ed",
+      "bytes": 6167
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/03-窗口三-复习动态计划与历史.md",
+      "sha256": "fd6229ee544bf1f68e41943701cb04654f351bda8791846c05cfc0beff0ab936",
+      "bytes": 5885
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/04-窗口四-多Agent集成与完整验收.md",
+      "sha256": "ef915c902af95b01370e4e1caea51b96213c4e82d9f0aa67d1409bdd9060c0c8",
+      "bytes": 8461
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/05-模型选择补充-智谱GLM-5.3-Flash.md",
+      "sha256": "701bbab25756441c25c7e28ea4d7bdafb27d9c7b19337d6914f00ce1e12f23b1",
+      "bytes": 3018
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/README.md",
+      "sha256": "3ada03c91ed668087690979c1e6a3dad844d6aa0acb69e420d3b33bb0d695fbb",
+      "bytes": 3345
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/A/HANDOFF.md",
+      "sha256": "960adc9123dc240e85ddeff35c2d2d7b26bc1513a7b61c1554d1c407505e6738",
+      "bytes": 12181
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/B/HANDOFF.md",
+      "sha256": "91b739aab2c26c95403de6b3742c01d8661dead094513d456b569f7aa2b7dd6b",
+      "bytes": 8076
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/C/HANDOFF.md",
+      "sha256": "de34b5fb322dbf1a04a0e5a0ad17a2bbdeb6f9ed7ebe7172f6c60dcc1203510b",
+      "bytes": 7303
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/B/COVERAGE.md",
+      "sha256": "64ccb991de17c920567c7cddf40ce2074ee3c3a752a53538d192b31c6e876335",
+      "bytes": 5244
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/C/排程规则表.md",
+      "sha256": "d481033608a926cd3b3b9295f54aefe6bf5b1176dc9d903aff1935cc463b1b31",
+      "bytes": 4619
+    },
+    {
+      "path": "outputs/xiaon/server/agents/learning.ts",
+      "sha256": "61dc6545e3acdb9bfa7779bbf5f46360c08ecebd17d40465d57c14df17cf727f",
+      "bytes": 16222
+    },
+    {
+      "path": "outputs/xiaon/server/agents/roles.ts",
+      "sha256": "3f79ea08cc3b0f8af496ccd60fc8b585ae6910c07c7d35f4d19b53cd0b9851e4",
+      "bytes": 7225
+    },
+    {
+      "path": "outputs/xiaon/src/App.tsx",
+      "sha256": "b4974905ac411634d28204e2af3f77f3dee0b3d42f66c871e4e423d9060bd8a8",
+      "bytes": 125650
+    },
+    {
+      "path": "outputs/xiaon/src/components/learning/LearningPages.tsx",
+      "sha256": "5f8b179c4acc06256085959f52137b09d9787373498d89f5347af18fb7379cd7",
+      "bytes": 25983
+    },
+    {
+      "path": "outputs/xiaon/server/plugins/assessment/state.ts",
+      "sha256": "a04efcfe45b82b1e0362ddfdc483f217e1afb596ccabf874d86a470b691117a9",
+      "bytes": 9524
+    },
+    {
+      "path": "outputs/xiaon/server/index.ts",
+      "sha256": "f9e6a5892d72539860e6db6fecf7b468b56cc65d78e4e848609d088b365115ad",
+      "bytes": 1240
+    },
+    {
+      "path": "outputs/xiaon/server/providers/config.ts",
+      "sha256": "78d6b6db2bacb157cedb2602ac4db4b41fd6a4bde7ad7d349141c191327e96ae",
+      "bytes": 1556
+    },
+    {
+      "path": "outputs/xiaon/src/agents/useLearning.ts",
+      "sha256": "777d4d1ef36beb3708e502bbcf1ddf3c039371339958a98d1d0711e17643e7f4",
+      "bytes": 4884
+    },
+    {
+      "path": "outputs/xiaon/vite.config.ts",
+      "sha256": "6b4257a6aad41dcd68a259e435b546a4a588027a76d9709e85075732ba9ef199",
+      "bytes": 289
+    },
+    {
+      "path": "outputs/xiaon/package.json",
+      "sha256": "e9990768f19f991e218c150ecab73e1cde7d0697108df1ddc39f142253234be8",
+      "bytes": 1807
+    }
+  ],
+  "savedEvidence": [
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/independent-a.log",
+      "sha256": "ff301a9d107cb955624776497972ab9b2325b46ecd0ece8aba336870c3731d12",
+      "bytes": 2727,
+      "summary": [
+        "ℹ tests 23",
+        "ℹ pass 23",
+        "ℹ fail 0",
+        "EXIT_CODE=0"
+      ]
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/independent-b.log",
+      "sha256": "0578b179abfe45b8b173fa778c9650520103bd0f2e9da48e6bf8113414df05cc",
+      "bytes": 3495,
+      "summary": [
+        "ℹ tests 25",
+        "ℹ pass 25",
+        "ℹ fail 0",
+        "EXIT_CODE=0"
+      ]
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/independent-c.log",
+      "sha256": "6051cbd987926df3f945ab8f01f78fef6dd15c9d0f4382cd86f81cd50908d23b",
+      "bytes": 2748,
+      "summary": [
+        "ℹ tests 25",
+        "ℹ pass 25",
+        "ℹ fail 0",
+        "EXIT_CODE=0"
+      ]
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/integrated-modules.log",
+      "sha256": "37aa92c2211d8afdd947c61e4c356d490e7e438460a217b3cb35a0972fe7fa60",
+      "bytes": 10230,
+      "summary": [
+        "ℹ tests 76",
+        "ℹ pass 74",
+        "ℹ fail 2",
+        "EXIT_CODE=1"
+      ]
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/answer-guard-rerun.log",
+      "sha256": "e7808737a9a018a991e832e397e885ca4ccac1a3c6ab0c99990306146e1c7a9a",
+      "bytes": 1713,
+      "summary": [
+        "ℹ tests 12",
+        "ℹ pass 12",
+        "ℹ fail 0",
+        "EXIT_CODE=0"
+      ]
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/browser-rerun-3.log",
+      "sha256": "e0556ebc49f3207b2da19c6d631b1c83fa4ce8e143a5b8aa33e0a9c82b8daaf6",
+      "bytes": 1162,
+      "summary": [
+        "  3 passed (8.8s)",
+        "EXIT_CODE=0"
+      ]
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/final-build.log",
+      "sha256": "f91e69fdfbd255105d7ba6570f14703d4e9d409516f0a5cb2365a007eaea4eec",
+      "bytes": 445,
+      "summary": [
+        "EXIT_CODE=0"
+      ]
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/real-model.log",
+      "sha256": "72abedcf5244774ab7df4d4b2fcf1c062a073e9ae3994a3091b139a7a8bb311c",
+      "bytes": 198,
+      "summary": [
+        "basic response received",
+        "assessor finished: correct",
+        "tutor finished: failed",
+        "planner finished: completed",
+        "EXIT_CODE=1"
+      ]
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/real-model-rerun.log",
+      "sha256": "68145c5aa7b4eb812755b2ff7a692062e2e91c246f1935dc535bb4abab87679a",
+      "bytes": 201,
+      "summary": [
+        "basic response received",
+        "assessor finished: correct",
+        "tutor finished: completed",
+        "planner finished: completed",
+        "EXIT_CODE=0"
+      ]
+    }
+  ],
+  "missingDeliveryAtCapture": [
+    "任务书/2026-10-21-Agent升级/交付/D/HANDOFF.md",
+    "任务书/2026-10-21-Agent升级/交付/D/ACCEPTANCE.md"
+  ]
+}

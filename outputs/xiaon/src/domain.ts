@@ -3,6 +3,7 @@ import {
   dimensions,
   getTask,
   normalize,
+  tasks,
   type Dimension,
 } from "./data";
 export const PROGRESS_KEY = "xiaon-progress-v1",
@@ -63,6 +64,7 @@ export type State = {
   uploadText: string;
   uploadConfirmed: boolean;
   storageNotice: string;
+  statusTrail: Record<string, { status: string; time: string }[]>;
 };
 export function initial(): State {
   return {
@@ -100,6 +102,7 @@ export function initial(): State {
     uploadText: "3x − (2x − 5)",
     uploadConfirmed: false,
     storageNotice: "",
+    statusTrail: {},
   };
 }
 export function hydrate(raw: string | null): State {
@@ -198,25 +201,23 @@ export function reducer(s: State, a: Action): State {
         r.attempts.some((x) => x.id === a.id)
       )
         return s;
-      return {
-        ...s,
-        records: {
-          ...s.records,
-          [a.taskId]: {
-            ...r,
-            attempts: [
-              ...r.attempts,
-              {
-                id: a.id,
-                value: a.value,
-                correct: correct(getTask(a.taskId), a.value),
-                hinted: r.hint,
-                time: a.time,
-              },
-            ],
-          },
+      const records = {
+        ...s.records,
+        [a.taskId]: {
+          ...r,
+          attempts: [
+            ...r.attempts,
+            {
+              id: a.id,
+              value: a.value,
+              correct: correct(getTask(a.taskId), a.value),
+              hinted: r.hint,
+              time: a.time,
+            },
+          ],
         },
       };
+      return { ...s, records, statusTrail: withTrail(s.statusTrail, records, a.time) };
     }
     case "chat-send":
       if (s.chatStatus === "waiting" || s.chat.some((m) => m.id === a.id))
@@ -255,6 +256,41 @@ export type Observation = {
   basis: RecordItem[];
   next: string;
 };
+function statusFor(basis: RecordItem[]): string {
+  const independent = basis.filter(
+    (r) => r.attempts[0]?.correct && !r.attempts[0]?.hinted,
+  );
+  const hinted = basis.filter((r) =>
+    r.attempts.some((a) => a.correct && a.hinted),
+  );
+  return independent.length >= 2
+    ? "多次独立完成"
+    : independent.length
+      ? "本次独立完成"
+      : hinted.length
+        ? "提示下完成"
+        : basis.length
+          ? "需要继续观察"
+          : "尚未观察";
+}
+function withTrail(
+  trail: State["statusTrail"],
+  records: State["records"],
+  time: string,
+): State["statusTrail"] {
+  const next = { ...trail };
+  for (const dim of dimensions) {
+    const basis = Object.values(records).filter(
+      (r) => getTask(r.id).dim === dim && r.attempts.length,
+    );
+    if (!basis.length) continue;
+    const status = statusFor(basis);
+    const arr = next[dim] || [];
+    if (arr.at(-1)?.status !== status)
+      next[dim] = [...arr, { status, time }];
+  }
+  return next;
+}
 export function observations(s: State): Observation[] {
   return dimensions.map((dim) => {
     const basis = Object.values(s.records).filter(
@@ -266,16 +302,7 @@ export function observations(s: State): Observation[] {
     const hinted = basis.filter((r) =>
       r.attempts.some((a) => a.correct && a.hinted),
     );
-    const status =
-      independent.length >= 2
-        ? "多次独立完成"
-        : independent.length
-          ? "本次独立完成"
-          : hinted.length
-            ? "提示下完成"
-            : basis.length
-              ? "需要继续观察"
-              : "尚未观察";
+    const status = statusFor(basis);
     const signErrors = basis.filter((r) => {
       const t = getTask(r.id),
         wrongSign = t.answer[0].replace("+", "-");
@@ -343,4 +370,101 @@ export function replyFor(text: string, rest = false, questionInvitePaused = fals
   if (/题|试试|开始/.test(text))
     return "我们可以只看一道题，不用一下子做很多。你愿意从一道去括号的题开始吗？";
   return "谢谢你告诉我。我先听着，不急着给你下结论。你希望我继续听你说，还是陪你看一道题？";
+}
+export type PlanTask = {
+  day: string;
+  title: string;
+  note: string;
+  mins: number;
+  taskId?: string;
+};
+export type PlanDraft = {
+  eyebrow: string;
+  goal: string;
+  note: string;
+  tasks: PlanTask[];
+};
+export function nextNewCalcId(s: State): string {
+  return (
+    [
+      "transfer",
+      ...tasks.filter((t) => t.id.startsWith("calc-")).map((t) => t.id),
+    ].find((id) => !s.calcSeen.includes(id)) || "transfer"
+  );
+}
+// 周计划按计算维观察结果分流：有符号错误时先补这个环节，
+// 已能独立完成时转向巩固与检验，避免给所有学生同一份固定建议。
+export function planDraft(s: State): PlanDraft {
+  const calc = observations(s)[2];
+  if (calc.status === "多次独立完成")
+    return {
+      eyebrow: "根据当前计算任务记录",
+      goal: "把去括号的方法用活",
+      note: "你已经在不同的题里独立完成。这周试试把方法讲清楚，再编一道题考考自己。",
+      tasks: [
+        {
+          day: "第 1 次",
+          title: "再检验一道同类新题",
+          note: "约 3 分钟 · 保持不提示",
+          mins: 3,
+          taskId: nextNewCalcId(s),
+        },
+        {
+          day: "第 2 次",
+          title: "自己编一道去括号题",
+          note: "约 3 分钟 · 写出题目和解答",
+          mins: 3,
+        },
+      ],
+    };
+  if (calc.status === "本次独立完成")
+    return {
+      eyebrow: "根据当前计算任务记录",
+      goal: "站稳去括号这一步",
+      note: "这次你独立完成了。再换一道新题，看看是不是每次都稳。",
+      tasks: [
+        {
+          day: "第 1 次",
+          title: "换一道同类新题，自己试试",
+          note: "约 3 分钟 · 优先不提示",
+          mins: 3,
+          taskId: nextNewCalcId(s),
+        },
+        {
+          day: "第 2 次",
+          title: "回看方法，复述关键一步",
+          note: "约 2 分钟",
+          mins: 2,
+        },
+      ],
+    };
+  return {
+    eyebrow: calc.basis.length
+      ? "根据当前计算任务记录"
+      : "尚无作答依据 · 可选建议目标",
+    goal: "看清括号前的负号",
+    note: "先圈符号，再逐项去括号。用新题看看，能不能自己处理好。",
+    tasks: [
+      {
+        day: "第 1 次",
+        title: "一起观察一个括号",
+        note: "约 3 分钟 · 原题尝试与提示",
+        mins: 3,
+        taskId: "bracket",
+      },
+      {
+        day: "第 2 次",
+        title: "换一道同类新题",
+        note: "约 3 分钟 · 优先自己试试",
+        mins: 3,
+        taskId: "transfer",
+      },
+      {
+        day: "第 3 次",
+        title: "回看方法，整理小发现",
+        note: "约 2 分钟 · 复述关键步骤",
+        mins: 2,
+      },
+    ],
+  };
 }

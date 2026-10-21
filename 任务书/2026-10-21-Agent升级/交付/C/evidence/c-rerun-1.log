@@ -1,0 +1,26 @@
+COMMAND: ['npm', 'run', 'test:agent:c']
+
+> xiaon-learning-companion@1.0.0 test:agent:c
+> node scripts/agent/test.mjs c
+
+✔ 1/3/7/14 days, exact due boundary, absence and same-day repetition never fast-forward (29.86875ms)
+✔ same-day fresh tasks and repeated original cannot advance; attempts stay append-only (7.9925ms)
+✔ help, incorrect and needs_review schedule differently; no outcome for absence (18.825084ms)
+✔ four profiles differ, unknown is optional, stable avoids remedial practice; refresh is idempotent (17.488458ms)
+✔ seen/chat-answer exposure never selected as unseen; catalog exhaustion is explicit (4.113417ms)
+✔ defer/resume/reschedule/lighter keep immutable plans, postponement history and stale guards (7.222959ms)
+✔ Shanghai midnight, host TZ independence, legacy unknown never seeds due or stability (4.548667ms)
+✔ report immutability, correction annotations and queue replay from authoritative grades (8.124625ms)
+✔ restart receipts, queue revisions and immutable snapshots survive real disk reopen (5.3935ms)
+✔ untrusted self-report, stale outcome, reused attempt and stale assessment fail without writes (6.099ms)
+✔ constraints retain per-session ten calculation tasks and prerequisites; optional memories never read (11.179791ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 253.240542
+
+exitCode=0

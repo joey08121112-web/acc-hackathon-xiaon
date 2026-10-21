@@ -1,0 +1,5 @@
+COMMAND: ['node', '--import', 'tsx', 'tests-agent/b/export-evidence.ts', '/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/B/evidence/synthetic-scenario.json']
+UTC: 2026-10-20T16:54:47.151108+00:00
+{"fixture":"SYNTHETIC_ONLY","attempts":6,"states":{"assisted":"completed_with_help","firstIndependent":"first_independent","crossSession":"cross_session_independent","recentDifficulty":"cross_session_independent"},"recentDifficulty":true}
+
+exitCode=0

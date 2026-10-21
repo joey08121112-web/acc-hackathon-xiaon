@@ -1,0 +1,43 @@
+COMMAND: ['npm', 'run', 'test:agent:c']
+
+> xiaon-learning-companion@1.0.0 test:agent:c
+> node scripts/agent/test.mjs c
+
+/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/c/edges.test.ts:6
+import { selectReviewTarget, currentReviewItems, planHistory } from '../../src/learning/review';
+                                                 ^
+SyntaxError: The requested module '../../src/learning/review' does not provide an export named 'planHistory'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:463:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:561:5)
+    at async node:internal/modules/esm/loader:650:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.8.2
+✖ tests-agent/c/edges.test.ts (93.874125ms)
+✔ 1/3/7/14 days, exact due boundary, absence and same-day repetition never fast-forward (27.710834ms)
+✔ same-day fresh tasks and repeated original cannot advance; attempts stay append-only (7.761792ms)
+✔ help, incorrect and needs_review schedule differently; no outcome for absence (16.001ms)
+✔ four profiles differ, unknown is optional, stable avoids remedial practice; refresh is idempotent (14.854125ms)
+✔ seen/chat-answer exposure never selected as unseen; catalog exhaustion is explicit (4.38625ms)
+✔ defer/resume/reschedule/lighter keep immutable plans, postponement history and stale guards (6.521583ms)
+✔ Shanghai midnight, host TZ independence, legacy unknown never seeds due or stability (3.894375ms)
+✔ report immutability, correction annotations and queue replay from authoritative grades (8.103375ms)
+✔ restart receipts, queue revisions and immutable snapshots survive real disk reopen (5.453041ms)
+✔ untrusted self-report, stale outcome, reused attempt and stale assessment fail without writes (5.400709ms)
+✔ constraints retain per-session ten calculation tasks and prerequisites; optional memories never read (10.360959ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 198.136875
+
+✖ failing tests:
+
+test at tests-agent/c/edges.test.ts:1:1
+✖ tests-agent/c/edges.test.ts (93.874125ms)
+  'test failed'
+
+exitCode=1

@@ -1,0 +1,96 @@
+{
+  "status": "FAILED",
+  "model": "glm-5.3-flash",
+  "provider": "real_http",
+  "materials": "synthetic preference markers only",
+  "results": [
+    {
+      "stage": "enabled",
+      "status": "failed",
+      "expected": [
+        true,
+        false,
+        false
+      ],
+      "transportMatched": false
+    },
+    {
+      "stage": "corrected",
+      "status": "completed",
+      "expected": [
+        false,
+        true,
+        false
+      ],
+      "transportMatched": true
+    },
+    {
+      "stage": "off",
+      "status": "completed",
+      "expected": [
+        false,
+        false,
+        false
+      ],
+      "transportMatched": true
+    },
+    {
+      "stage": "stopped",
+      "status": "completed",
+      "expected": [
+        false,
+        false,
+        false
+      ],
+      "transportMatched": true
+    },
+    {
+      "stage": "deleted",
+      "status": "completed",
+      "expected": [
+        false,
+        false,
+        false
+      ],
+      "transportMatched": true
+    }
+  ],
+  "captures": [
+    {
+      "stage": "corrected",
+      "contains": [
+        false,
+        true,
+        false
+      ],
+      "httpStatus": 200
+    },
+    {
+      "stage": "off",
+      "contains": [
+        false,
+        false,
+        false
+      ],
+      "httpStatus": 200
+    },
+    {
+      "stage": "stopped",
+      "contains": [
+        false,
+        false,
+        false
+      ],
+      "httpStatus": 200
+    },
+    {
+      "stage": "deleted",
+      "contains": [
+        false,
+        false,
+        false
+      ],
+      "httpStatus": 200
+    }
+  ]
+}

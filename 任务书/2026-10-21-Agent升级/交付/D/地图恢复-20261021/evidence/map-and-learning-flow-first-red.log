@@ -1,0 +1,108 @@
+$ npx playwright test -c playwright.map.config.ts
+[WebServer] (node:41578) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:41616) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 7 tests using 1 worker
+
+(node:41631) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests-agent/d/browser.spec.ts:24:1 › student choice → attempts → evidence → report/plan → later reviews → state/history, refresh and screenshots (30.0s)
+(node:41724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests-agent/d/browser.spec.ts:37:1 › optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh (605ms)
+(node:41729) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests-agent/d/browser.spec.ts:48:1 › browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit (652ms)
+(node:41739) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests-agent/d/browser.spec.ts:54:1 › network retry, model timeout, explicit reanalysis and cancelled late response preserve one saved attempt and draft (30.0s)
+(node:41814) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 tests-agent/d/browser.spec.ts:65:1 › connected main pages retain automated accessibility and reduced-motion support (1.2s)
+  ✓  6 tests-agent/d/map-restoration.spec.ts:6:1 › connected exploration restores the original map, five places and list switch at phone widths (727ms)
+  ✓  7 tests-agent/d/map-restoration.spec.ts:12:1 › map enters the original confirmation, respects exploration order and reflects SQLite attempts after refresh (1.7s)
+
+
+  1) tests-agent/d/browser.spec.ts:24:1 › student choice → attempts → evidence → report/plan → later reviews → state/history, refresh and screenshots 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '由我确认一道未见复习题', exact: true }).first()
+
+
+      30 |  await page.getByRole('button',{name:'看看下一步计划',exact:true}).click();await expect(page.getByRole('heading',{name:/去括号负号：从提示帮助/})).toBeVisible();await page.getByRole('button',{name:'接受这份计划',exact:true}).click();await expect(page.getByText('已确认版本 1',{exact:true})).toBeVisible();await page.screenshot({path:evidence+'/03-plan.png',fullPage:true});
+      31 |  const first=await learning(page);expect(first.attempts).toHaveLength(5);expect(first.optionalMemory).toBe(false);
+    > 32 |  for(const [days,answer] of [[1,'4*a+2'],[3,'12-3x']] as const){await control(page,`advance?days=${days}`);await tab(page,'今日');await page.reload();await page.getByRole('button',{name:'由我确认一道未见复习题',exact:true}).first().click();await page.getByRole('button',{name:'确认开始这道题',exact:true}).click();await expect(page.getByLabel('我的作答与过程',{exact:true})).toBeVisible();await page.reload();await submit(page,answer);await expect(page.getByText('新题独立完成',{exact:true})).toBeVisible();}
+         |                                                                                                                                                                                                                            ^
+      33 |  const final=await learning(page);expect(final.assessment.skills.find((s:{knowledgePointId:string})=>s.knowledgePointId==='negative-brackets').status).toBe('cross_session_independent');expect(final.reviews.find((r:{knowledgePointId:string})=>r.knowledgePointId==='negative-brackets').stage).toBe(2);expect(final.attempts).toHaveLength(7);
+      34 |  await page.getByRole('button',{name:'查看作答证据',exact:true}).click();await page.getByRole('button',{name:'根据当前证据生成报告与计划草案'}).click();await expect.poll(async()=>(await learning(page)).reports.length).toBe(2);await page.getByLabel('报告历史').selectOption(first.reports[0].snapshot.id);await page.screenshot({path:evidence+'/04-history.png',fullPage:true});
+      35 |  writeFileSync(evidence+'/browser-chain.json',JSON.stringify({first,final},null,2));writeFileSync(evidence+'/agent-tool-traces.json',JSON.stringify({runs:final.runs,tools:final.toolCalls},null,2));expect(errors).toEqual([]);
+        at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:32:220
+
+    Error Context: ../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence/browser-artifacts/browser-student-choice-→-a-73d62-ory-refresh-and-screenshots/error-context.md
+
+  2) tests-agent/d/browser.spec.ts:37:1 › optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh 
+
+    TypeError: messages.at is not a function
+
+      37 | test('optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh',async({page})=>{
+      38 |  await onboard(page);await memory(page);await page.getByRole('checkbox',{name:'允许可选长期辅导偏好'}).click();await expect(page.getByRole('checkbox',{name:'允许可选长期辅导偏好'})).toBeChecked();await page.getByLabel('我主动保留的偏好').fill('合成偏好：一次只讲一步');await page.getByRole('button',{name:'确认保留这条偏好'}).click();await expect(page.getByText('合成偏好：一次只讲一步',{exact:true})).toBeVisible();await chat(page,'你好');
+    > 39 |  let messages=await control(page,'messages');expect(JSON.stringify(messages.at(-1))).toContain('合成偏好：一次只讲一步');
+         |                                                                             ^
+      40 |  await memory(page);await page.getByRole('button',{name:'更正',exact:true}).click();await page.getByLabel('更正这条偏好').fill('合成偏好：给我图示');await page.getByRole('button',{name:'保存更正并停止旧条目'}).click();await expect(page.getByText('合成偏好：给我图示',{exact:true})).toBeVisible();await chat(page,'现在呢');messages=await control(page,'messages');expect(JSON.stringify(messages.at(-1))).toContain('合成偏好：给我图示');expect(JSON.stringify(messages.at(-1))).not.toContain('合成偏好：一次只讲一步');
+      41 |  await memory(page);await page.getByRole('checkbox',{name:'允许可选长期辅导偏好'}).click();await expect(page.getByRole('checkbox',{name:'允许可选长期辅导偏好'})).not.toBeChecked();await chat(page,'继续聊');messages=await control(page,'messages');expect(JSON.stringify(messages.at(-1))).not.toContain('合成偏好');
+      42 |  await memory(page);await page.getByRole('checkbox',{name:'允许可选长期辅导偏好'}).click();await expect(page.getByRole('checkbox',{name:'允许可选长期辅导偏好'})).toBeChecked();await page.locator('section.info-paper').filter({hasText:'合成偏好：给我图示'}).getByRole('button',{name:'停止使用'}).click();await chat(page,'再聊');messages=await control(page,'messages');expect(JSON.stringify(messages.at(-1))).not.toContain('合成偏好');
+        at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:39:77
+
+    Error Context: ../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence/browser-artifacts/browser-optional-memory-ch-82e4e-e-and-reset-survive-refresh/error-context.md
+
+  3) tests-agent/d/browser.spec.ts:48:1 › browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: null
+    Received: "2026-10-21T00:00:00.000Z"
+
+      48 | test('browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit',async({page})=>{
+      49 |  await onboard(page);const old={...initial(),onboarded:true,records:{bracket:{id:'bracket',draft:'',hint:false,paused:false,attempts:[{id:'legacy-attempt',value:'x+5',correct:true,hinted:false,time:'10月20日 12:00'}]}}};await page.evaluate(old=>localStorage.setItem('xiaon-progress-v1',JSON.stringify(old)),old);await page.reload();
+    > 50 |  await memory(page);await page.getByText('导入旧浏览器作答（先备份与预览）',{exact:true}).click();const download=page.waitForEvent('download');await page.getByRole('button',{name:'下载旧记录备份并预览'}).click();await(await download).saveAs(evidence+'/legacy-browser-backup.json');await expect(page.getByText('预览：1次尝试',{exact:true})).toBeVisible();await page.getByRole('button',{name:'确认只导入这些尝试'}).click();await expect(page.getByRole('alert')).toContainText('新增 1 次尝试');await page.getByRole('button',{name:'确认只导入这些尝试'}).click();await expect(page.getByRole('alert')).toContainText('新增 0 次尝试');const v=await learning(page);expect(v.attempts[0].sourceTime.occurredAt).toBe(null);expect(v.attempts[0].sessionId).toBe(null);expect(v.attempts[0].classification.independent).toBe(false);
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ^
+      51 |  for(const width of [320,390,430]){await page.setViewportSize({width,height:844});await memory(page);await page.screenshot({path:`${evidence}/mobile-${width}-memory.png`,fullPage:true});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await tab(page,'成长');await page.getByRole('button',{name:'学习观察报告',exact:true}).click();await page.getByRole('button',{name:'根据当前证据生成报告与计划草案'}).click();await expect(page.getByText(/观察快照 · 证据版本/)).toBeVisible();await page.screenshot({path:`${evidence}/mobile-${width}-report.png`,fullPage:true});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.getByRole('button',{name:'看看下一步计划'}).click();await page.screenshot({path:`${evidence}/mobile-${width}-plan.png`,fullPage:true});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);}
+      52 |  writeFileSync(evidence+'/migration-result.json',JSON.stringify(v.attempts,null,2));
+      53 | });
+        at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:50:640
+
+    Error Context: ../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence/browser-artifacts/browser-browser-legacy-imp-e24a1-dates-320-390-430-pages-fit/error-context.md
+
+  4) tests-agent/d/browser.spec.ts:54:1 › network retry, model timeout, explicit reanalysis and cancelled late response preserve one saved attempt and draft 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '先尝试合并同类项', exact: true })
+
+
+      53 | });
+      54 | test('network retry, model timeout, explicit reanalysis and cancelled late response preserve one saved attempt and draft',async({page})=>{
+    > 55 |  await onboard(page);await page.getByRole('button',{name:'一起看一道题',exact:true}).click();await page.getByRole('button',{name:'我愿意，从示例题开始',exact:true}).click();await page.getByRole('button',{name:'先尝试合并同类项',exact:true}).click();await page.getByRole('button',{name:'确认开始这道题',exact:true}).click();await submit(page,'5x-4');await select(page,'一次费用与随数量变化费用');
+         |                                                                                                                                                                                                                          ^
+      56 |  await page.getByLabel('我的作答与过程',{exact:true}).fill('3x+2\n3x是x本的费用；2是只收一次的纸袋费');
+      57 |  await page.route('**/api/learning/submit',route=>route.abort('failed'));await page.getByRole('button',{name:'保存尝试并核对'}).click();await expect(page.getByRole('button',{name:'重试上次请求'})).toBeVisible();await page.unroute('**/api/learning/submit');await page.reload();await expect(page.getByLabel('我的作答与过程',{exact:true})).toHaveValue(/3x\+2/);
+      58 |  await control(page,'provider?mode=timeout');await page.getByRole('button',{name:'重试上次请求'}).click();await expect(page.getByRole('button',{name:'重试分析已保存作答'})).toBeVisible();expect((await learning(page)).attempts.filter((a:{taskId:string})=>a.taskId==='model')).toHaveLength(1);
+        at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:55:218
+
+    Error Context: ../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence/browser-artifacts/browser-network-retry-mode-0d99e-one-saved-attempt-and-draft/error-context.md
+
+  4 failed
+    tests-agent/d/browser.spec.ts:24:1 › student choice → attempts → evidence → report/plan → later reviews → state/history, refresh and screenshots 
+    tests-agent/d/browser.spec.ts:37:1 › optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh 
+    tests-agent/d/browser.spec.ts:48:1 › browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit 
+    tests-agent/d/browser.spec.ts:54:1 › network retry, model timeout, explicit reanalysis and cancelled late response preserve one saved attempt and draft 
+  3 passed (1.1m)
+
+EXIT_CODE=1

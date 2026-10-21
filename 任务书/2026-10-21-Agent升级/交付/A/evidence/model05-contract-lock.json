@@ -1,0 +1,14 @@
+[
+  {
+    "path": "shared/learning-contracts.ts",
+    "beforeSha256": "8d9f73257ab36ca78a8965c0ffcd879f46b301b5638ee5300092b5b1574509b8",
+    "afterSha256": "8d9f73257ab36ca78a8965c0ffcd879f46b301b5638ee5300092b5b1574509b8",
+    "unchanged": true
+  },
+  {
+    "path": "shared/learning-contracts.schema.json",
+    "beforeSha256": "3c3f1949420c6a0b8768ebf7de56935d5838fb89ef795deb1a80cd0ef1157d01",
+    "afterSha256": "3c3f1949420c6a0b8768ebf7de56935d5838fb89ef795deb1a80cd0ef1157d01",
+    "unchanged": true
+  }
+]

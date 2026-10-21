@@ -9,12 +9,27 @@
     "preview": "vite preview --host 0.0.0.0",
     "test": "tsx --test src/domain.test.ts",
     "test:browser": "playwright test",
-    "build:offline": "npm run build && node scripts/build-offline.mjs"
+    "build:offline": "npm run build && node scripts/build-offline.mjs",
+    "server": "node --env-file-if-exists=.env.server --import tsx server/index.ts",
+    "typecheck:agent": "tsc -p tsconfig.agent.json",
+    "test:agent:a": "node scripts/agent/test.mjs a",
+    "test:agent:b": "node scripts/agent/test.mjs b",
+    "test:agent:c": "node scripts/agent/test.mjs c",
+    "test:agent:d": "node scripts/agent/test.mjs d",
+    "test:agent": "node scripts/agent/test.mjs all",
+    "test:all": "npm test && npm run test:agent && npm run build",
+    "schema:agent": "tsx scripts/agent/schema.ts",
+    "test:agent:browser": "playwright test -c playwright.agent.config.ts",
+    "test:agent:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/real-smoke.ts",
+    "dev:learning": "node scripts/agent/dev.mjs",
+    "test:agent:d:browser": "playwright test -c playwright.d.config.ts",
+    "test:agent:d:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/d-real-smoke.ts"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
@@ -26,5 +41,8 @@
     "tsx": "^4.20.6",
     "typescript": "~5.9.3",
     "vite": "^7.1.12"
+  },
+  "engines": {
+    "node": ">=22.13.0"
   }
 }

@@ -1,0 +1,59 @@
+COMMAND: npx tsx --test tests-agent/a/glm-config.test.ts
+UTC: 2026-10-20T16:41:20.184548+00:00
+✖ 05 config defaults personal Coding Plan GLM Flash, one server-side variable namespace, and validates budgets (0.697334ms)
+✔ GLM configured endpoint/token budget and native thinking fields roundtrip without leaking private thought (7.560667ms)
+✔ truncation refuses tool execution; configured provider timeout reports timeout (22.406542ms)
+✔ configured whole-run timeout reaches runtime without browser timeout overriding it (15.042458ms)
+✖ default Coding Plan provider sends the complete chat endpoint while an explicit base still overrides it (0.358416ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 167.21525
+
+✖ failing tests:
+
+test at tests-agent/a/glm-config.test.ts:8:1
+✖ 05 config defaults personal Coding Plan GLM Flash, one server-side variable namespace, and validates budgets (0.697334ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'https://open.bigmodel.cn/api/paas/v4'
+  - 'https://open.bigmodel.cn/api/coding/paas/v4'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/glm-config.test.ts:9:87)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'https://open.bigmodel.cn/api/paas/v4',
+    expected: 'https://open.bigmodel.cn/api/coding/paas/v4',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/a/glm-config.test.ts:40:1
+✖ default Coding Plan provider sends the complete chat endpoint while an explicit base still overrides it (0.358416ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
+  - 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/glm-config.test.ts:44:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+    expected: 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+exitCode=1

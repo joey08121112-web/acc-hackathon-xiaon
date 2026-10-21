@@ -1,0 +1,179 @@
+{
+  "synthetic": true,
+  "clock": "TestClock",
+  "policy": {
+    "schemaVersion": "1.0.0",
+    "id": "c-default-policy",
+    "version": 1,
+    "intervalDays": [
+      1,
+      3,
+      7,
+      14
+    ],
+    "minimumAdvanceHours": 24,
+    "helpRetryHours": 12,
+    "errorRetryHours": 6,
+    "timezone": "Asia/Shanghai"
+  },
+  "timeline": [
+    {
+      "event": "initial",
+      "completedAt": "2026-10-20T04:00:00.000Z",
+      "item": {
+        "createdAt": "2026-10-20T04:00:00.000Z",
+        "dueAt": "2026-10-21T04:00:00.000Z",
+        "evidenceRevision": 4,
+        "exposureIds": [
+          "c058753a-6348-4ad7-800e-93b83c76a2c9"
+        ],
+        "id": "4f273bc3-dd1c-4f5e-ae17-827ee41f00fc",
+        "knowledgePointId": "brackets",
+        "operationId": "295233a2-f7d7-43e0-b8cd-0f772619f3fe",
+        "originalDueAt": "2026-10-21T04:00:00.000Z",
+        "planVersionId": "7d4e3db9-206c-48a6-8cb5-aab8b77b0503",
+        "postponements": [],
+        "reason": "根据可信完成时刻安排延迟新题检查",
+        "revision": 1,
+        "schemaVersion": "1.0.0",
+        "sourceSessionIds": [
+          "e81634d3-a611-4ce5-adf5-42fcb25088a7"
+        ],
+        "stage": 0,
+        "status": "active",
+        "task": {
+          "taskId": "synthetic-brackets-1",
+          "taskVersion": 1
+        }
+      }
+    },
+    {
+      "event": "virtual-clock-review",
+      "completedAt": "2026-10-21T04:00:00.000Z",
+      "item": {
+        "schemaVersion": "1.0.0",
+        "id": "4f273bc3-dd1c-4f5e-ae17-827ee41f00fc",
+        "operationId": "8577e8e0-6d79-4a4a-99a0-35dc846b861c",
+        "evidenceRevision": 8,
+        "revision": 2,
+        "knowledgePointId": "brackets",
+        "stage": 1,
+        "task": null,
+        "originalDueAt": "2026-10-21T04:00:00.000Z",
+        "dueAt": "2026-10-24T04:00:00.000Z",
+        "status": "active",
+        "sourceSessionIds": [
+          "e81634d3-a611-4ce5-adf5-42fcb25088a7",
+          "1ac24477-dda1-4a74-8053-207deab2d4d0"
+        ],
+        "exposureIds": [
+          "c058753a-6348-4ad7-800e-93b83c76a2c9",
+          "7c88a131-a2cb-4cc6-9986-bb975a25c9ab"
+        ],
+        "reason": "延迟未见新题、跨场次独立正确，进入下一阶段",
+        "postponements": [],
+        "planVersionId": "7d4e3db9-206c-48a6-8cb5-aab8b77b0503",
+        "createdAt": "2026-10-20T04:00:00.000Z"
+      }
+    },
+    {
+      "event": "virtual-clock-review",
+      "completedAt": "2026-10-24T04:00:00.000Z",
+      "item": {
+        "schemaVersion": "1.0.0",
+        "id": "4f273bc3-dd1c-4f5e-ae17-827ee41f00fc",
+        "operationId": "ca76dd00-e366-4c35-92a2-a7763cc9732a",
+        "evidenceRevision": 12,
+        "revision": 3,
+        "knowledgePointId": "brackets",
+        "stage": 2,
+        "task": null,
+        "originalDueAt": "2026-10-21T04:00:00.000Z",
+        "dueAt": "2026-10-31T04:00:00.000Z",
+        "status": "active",
+        "sourceSessionIds": [
+          "e81634d3-a611-4ce5-adf5-42fcb25088a7",
+          "1ac24477-dda1-4a74-8053-207deab2d4d0",
+          "f43747fe-5d0d-4a71-879e-e90ebd3f61cf"
+        ],
+        "exposureIds": [
+          "c058753a-6348-4ad7-800e-93b83c76a2c9",
+          "7c88a131-a2cb-4cc6-9986-bb975a25c9ab",
+          "5db5d1bd-5588-4c09-b481-2ef1e41c4687"
+        ],
+        "reason": "延迟未见新题、跨场次独立正确，进入下一阶段",
+        "postponements": [],
+        "planVersionId": "7d4e3db9-206c-48a6-8cb5-aab8b77b0503",
+        "createdAt": "2026-10-20T04:00:00.000Z"
+      }
+    },
+    {
+      "event": "virtual-clock-review",
+      "completedAt": "2026-10-31T04:00:00.000Z",
+      "item": {
+        "schemaVersion": "1.0.0",
+        "id": "4f273bc3-dd1c-4f5e-ae17-827ee41f00fc",
+        "operationId": "fb895a15-fc9b-4297-868d-e8664020ea3f",
+        "evidenceRevision": 16,
+        "revision": 4,
+        "knowledgePointId": "brackets",
+        "stage": 3,
+        "task": null,
+        "originalDueAt": "2026-10-21T04:00:00.000Z",
+        "dueAt": "2026-11-14T04:00:00.000Z",
+        "status": "active",
+        "sourceSessionIds": [
+          "e81634d3-a611-4ce5-adf5-42fcb25088a7",
+          "1ac24477-dda1-4a74-8053-207deab2d4d0",
+          "f43747fe-5d0d-4a71-879e-e90ebd3f61cf",
+          "772ea9a0-ff56-4430-b209-17d0c73adb93"
+        ],
+        "exposureIds": [
+          "c058753a-6348-4ad7-800e-93b83c76a2c9",
+          "7c88a131-a2cb-4cc6-9986-bb975a25c9ab",
+          "5db5d1bd-5588-4c09-b481-2ef1e41c4687",
+          "50736e01-a7e0-42f3-a30b-df46065962ef"
+        ],
+        "reason": "延迟未见新题、跨场次独立正确，进入下一阶段",
+        "postponements": [],
+        "planVersionId": "7d4e3db9-206c-48a6-8cb5-aab8b77b0503",
+        "createdAt": "2026-10-20T04:00:00.000Z"
+      }
+    },
+    {
+      "event": "virtual-clock-review",
+      "completedAt": "2026-11-14T04:00:00.000Z",
+      "item": {
+        "schemaVersion": "1.0.0",
+        "id": "4f273bc3-dd1c-4f5e-ae17-827ee41f00fc",
+        "operationId": "92b06c26-f8f5-4aab-bcdf-93c4a7cb1ab9",
+        "evidenceRevision": 20,
+        "revision": 5,
+        "knowledgePointId": "brackets",
+        "stage": 4,
+        "task": null,
+        "originalDueAt": "2026-10-21T04:00:00.000Z",
+        "dueAt": "2026-11-14T04:00:00.000Z",
+        "status": "completed",
+        "sourceSessionIds": [
+          "e81634d3-a611-4ce5-adf5-42fcb25088a7",
+          "1ac24477-dda1-4a74-8053-207deab2d4d0",
+          "f43747fe-5d0d-4a71-879e-e90ebd3f61cf",
+          "772ea9a0-ff56-4430-b209-17d0c73adb93",
+          "3e032440-e0e6-4bb4-bf75-132ee0f5b4f3"
+        ],
+        "exposureIds": [
+          "c058753a-6348-4ad7-800e-93b83c76a2c9",
+          "7c88a131-a2cb-4cc6-9986-bb975a25c9ab",
+          "5db5d1bd-5588-4c09-b481-2ef1e41c4687",
+          "50736e01-a7e0-42f3-a30b-df46065962ef",
+          "0ae090a5-39ad-49e4-a14d-f0ef9b8d79f4"
+        ],
+        "reason": "已完成本轮延迟独立检查；不等于长期教学效果已证实",
+        "postponements": [],
+        "planVersionId": "7d4e3db9-206c-48a6-8cb5-aab8b77b0503",
+        "createdAt": "2026-10-20T04:00:00.000Z"
+      }
+    }
+  ]
+}

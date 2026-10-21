@@ -1,0 +1,1416 @@
+{
+  "fixture": "SYNTHETIC_ONLY",
+  "schemaVersion": "1.0.0",
+  "providerKind": "offline",
+  "sessions": [
+    {
+      "endedAt": null,
+      "id": "05adbcb1-373f-42b2-a7ad-9f04acea87f5",
+      "mode": "support",
+      "operationId": "synthetic-b-1",
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-20T02:00:00.000Z",
+      "status": "active",
+      "timezone": "Asia/Shanghai"
+    },
+    {
+      "endedAt": null,
+      "id": "c1f0db1f-952f-45eb-b175-07fbb6bc07ac",
+      "mode": "support",
+      "operationId": "synthetic-b-10",
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T02:00:00.000Z",
+      "status": "active",
+      "timezone": "Asia/Shanghai"
+    },
+    {
+      "endedAt": null,
+      "id": "80a24dd7-4df0-4589-b576-63a7a1ad8bff",
+      "mode": "support",
+      "operationId": "synthetic-b-19",
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T02:00:00.000Z",
+      "status": "active",
+      "timezone": "Asia/Shanghai"
+    }
+  ],
+  "exposures": [
+    {
+      "contentSnapshot": null,
+      "hintId": null,
+      "id": "a1f570ea-d566-4eaf-9c31-fdf9d2807782",
+      "kind": "task",
+      "operationId": "synthetic-b-2",
+      "schemaVersion": "1.0.0",
+      "sessionId": "05adbcb1-373f-42b2-a7ad-9f04acea87f5",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-20T02:00:00.000Z",
+        "recordedAt": "2026-10-20T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "bracket",
+      "taskVersion": 2
+    },
+    {
+      "contentSnapshot": "减去括号内每一项：−(2x−5)=−2x+5。",
+      "hintId": "hint-1",
+      "id": "75f37f5f-feaa-4f63-82a2-14e1155e4f52",
+      "kind": "hint",
+      "operationId": "synthetic-b-5",
+      "schemaVersion": "1.0.0",
+      "sessionId": "05adbcb1-373f-42b2-a7ad-9f04acea87f5",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-20T02:00:00.000Z",
+        "recordedAt": "2026-10-20T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "bracket",
+      "taskVersion": 2
+    },
+    {
+      "contentSnapshot": null,
+      "hintId": null,
+      "id": "5c006600-3dc2-453f-bac1-5e42a7bd8419",
+      "kind": "task",
+      "operationId": "synthetic-b-11",
+      "schemaVersion": "1.0.0",
+      "sessionId": "c1f0db1f-952f-45eb-b175-07fbb6bc07ac",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-21T02:00:00.000Z",
+        "recordedAt": "2026-10-21T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "bracket",
+      "taskVersion": 2
+    },
+    {
+      "contentSnapshot": null,
+      "hintId": null,
+      "id": "7aa6c1c4-0f08-4282-8d7a-4b05f1643761",
+      "kind": "task",
+      "operationId": "synthetic-b-14",
+      "schemaVersion": "1.0.0",
+      "sessionId": "c1f0db1f-952f-45eb-b175-07fbb6bc07ac",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-21T02:00:00.000Z",
+        "recordedAt": "2026-10-21T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "transfer",
+      "taskVersion": 2
+    },
+    {
+      "contentSnapshot": null,
+      "hintId": null,
+      "id": "d66c20bd-ca0a-4fce-a5cb-f0244e3a4b51",
+      "kind": "task",
+      "operationId": "synthetic-b-20",
+      "schemaVersion": "1.0.0",
+      "sessionId": "80a24dd7-4df0-4589-b576-63a7a1ad8bff",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T02:00:00.000Z",
+        "recordedAt": "2026-10-22T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "b-neg-delayed",
+      "taskVersion": 2
+    },
+    {
+      "contentSnapshot": null,
+      "hintId": null,
+      "id": "859bf2f8-022c-48ec-88ec-0d03d63da055",
+      "kind": "task",
+      "operationId": "synthetic-b-24",
+      "schemaVersion": "1.0.0",
+      "sessionId": "80a24dd7-4df0-4589-b576-63a7a1ad8bff",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T02:00:00.000Z",
+        "recordedAt": "2026-10-22T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "calc-0",
+      "taskVersion": 2
+    }
+  ],
+  "attempts": [
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "a1f570ea-d566-4eaf-9c31-fdf9d2807782"
+      ],
+      "hintSnapshot": [],
+      "id": "610fb8c5-272d-481d-84bd-47614906f45d",
+      "operationId": "synthetic-b-3",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "05adbcb1-373f-42b2-a7ad-9f04acea87f5",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-20T02:00:00.000Z",
+        "recordedAt": "2026-10-20T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "value": "x-5"
+    },
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "a1f570ea-d566-4eaf-9c31-fdf9d2807782",
+        "75f37f5f-feaa-4f63-82a2-14e1155e4f52"
+      ],
+      "hintSnapshot": [
+        {
+          "id": "hint-1",
+          "level": 1,
+          "text": "减去括号内每一项：−(2x−5)=−2x+5。"
+        }
+      ],
+      "id": "ad8cff73-1f40-4e00-9da4-468ec0bcf86d",
+      "operationId": "synthetic-b-6",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "05adbcb1-373f-42b2-a7ad-9f04acea87f5",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-20T02:00:00.000Z",
+        "recordedAt": "2026-10-20T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "value": "x+5"
+    },
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "a1f570ea-d566-4eaf-9c31-fdf9d2807782",
+        "75f37f5f-feaa-4f63-82a2-14e1155e4f52",
+        "5c006600-3dc2-453f-bac1-5e42a7bd8419"
+      ],
+      "hintSnapshot": [
+        {
+          "id": "hint-1",
+          "level": 1,
+          "text": "减去括号内每一项：−(2x−5)=−2x+5。"
+        }
+      ],
+      "id": "6ba2c670-5b0c-4c1d-b0d1-5d7bf8aaa42e",
+      "operationId": "synthetic-b-12",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "c1f0db1f-952f-45eb-b175-07fbb6bc07ac",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-21T02:00:00.000Z",
+        "recordedAt": "2026-10-21T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "value": "x+5"
+    },
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "7aa6c1c4-0f08-4282-8d7a-4b05f1643761"
+      ],
+      "hintSnapshot": [],
+      "id": "59cc8ea3-1596-4325-8400-afe18008f113",
+      "operationId": "synthetic-b-15",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "c1f0db1f-952f-45eb-b175-07fbb6bc07ac",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-21T02:00:00.000Z",
+        "recordedAt": "2026-10-21T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "transfer",
+      "taskVersion": 2,
+      "value": "4*a+2"
+    },
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "d66c20bd-ca0a-4fce-a5cb-f0244e3a4b51"
+      ],
+      "hintSnapshot": [],
+      "id": "e740dcb9-31ed-4538-9411-47f79a34aba7",
+      "operationId": "synthetic-b-21",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "80a24dd7-4df0-4589-b576-63a7a1ad8bff",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T02:00:00.000Z",
+        "recordedAt": "2026-10-22T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "b-neg-delayed",
+      "taskVersion": 2,
+      "value": "12-3x"
+    },
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "859bf2f8-022c-48ec-88ec-0d03d63da055"
+      ],
+      "hintSnapshot": [],
+      "id": "b338a5d6-f149-4720-9daa-b45a07296931",
+      "operationId": "synthetic-b-25",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "80a24dd7-4df0-4589-b576-63a7a1ad8bff",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T02:00:00.000Z",
+        "recordedAt": "2026-10-22T02:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "calc-0",
+      "taskVersion": 2,
+      "value": "3x-1"
+    }
+  ],
+  "evidence": [
+    {
+      "attemptId": "610fb8c5-272d-481d-84bd-47614906f45d",
+      "createdAt": "2026-10-20T02:00:00.000Z",
+      "errorClues": [
+        "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+      ],
+      "evidenceRevision": 4,
+      "explanation": "可解析的一次式或等号链存在与可信结果不等价的步骤",
+      "id": "e6e6fdaa-6716-48ed-b820-3635daa322da",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 3,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "x-5",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "unsupported",
+      "supersedesEvidenceId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "uncertainties": []
+    },
+    {
+      "attemptId": "ad8cff73-1f40-4e00-9da4-468ec0bcf86d",
+      "createdAt": "2026-10-20T02:00:00.000Z",
+      "errorClues": [],
+      "evidenceRevision": 8,
+      "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+      "id": "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 3,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "x+5",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "supported",
+      "supersedesEvidenceId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "uncertainties": []
+    },
+    {
+      "attemptId": "6ba2c670-5b0c-4c1d-b0d1-5d7bf8aaa42e",
+      "createdAt": "2026-10-21T02:00:00.000Z",
+      "errorClues": [],
+      "evidenceRevision": 12,
+      "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+      "id": "361f1e34-079e-44e8-85e8-8c2a04f0415a",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 3,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "x+5",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "supported",
+      "supersedesEvidenceId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "uncertainties": []
+    },
+    {
+      "attemptId": "59cc8ea3-1596-4325-8400-afe18008f113",
+      "createdAt": "2026-10-21T02:00:00.000Z",
+      "errorClues": [],
+      "evidenceRevision": 16,
+      "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+      "id": "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 5,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "4*a+2",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "supported",
+      "supersedesEvidenceId": null,
+      "taskId": "transfer",
+      "taskVersion": 2,
+      "uncertainties": []
+    },
+    {
+      "attemptId": "e740dcb9-31ed-4538-9411-47f79a34aba7",
+      "createdAt": "2026-10-22T02:00:00.000Z",
+      "errorClues": [],
+      "evidenceRevision": 20,
+      "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+      "id": "07e7070a-cf99-455c-bb6b-2dc7472c44b0",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 5,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "12-3x",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "supported",
+      "supersedesEvidenceId": null,
+      "taskId": "b-neg-delayed",
+      "taskVersion": 2,
+      "uncertainties": []
+    },
+    {
+      "attemptId": "b338a5d6-f149-4720-9daa-b45a07296931",
+      "createdAt": "2026-10-22T02:00:00.000Z",
+      "errorClues": [
+        "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+      ],
+      "evidenceRevision": 24,
+      "explanation": "可解析的一次式或等号链存在与可信结果不等价的步骤",
+      "id": "132d25b1-3eb6-4d88-8226-7e4528ebec00",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 4,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "3x-1",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "unsupported",
+      "supersedesEvidenceId": null,
+      "taskId": "calc-0",
+      "taskVersion": 2,
+      "uncertainties": []
+    }
+  ],
+  "gradings": [
+    {
+      "attemptId": "610fb8c5-272d-481d-84bd-47614906f45d",
+      "createdAt": "2026-10-20T02:00:00.000Z",
+      "errorClues": [
+        "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+      ],
+      "evidenceIds": [
+        "e6e6fdaa-6716-48ed-b820-3635daa322da"
+      ],
+      "evidenceRevision": 4,
+      "id": "6c4f59bd-8a02-42c6-b94a-db75999d0c05",
+      "method": "rubric_program",
+      "operationId": "synthetic-b-4",
+      "points": [
+        {
+          "evidenceIds": [
+            "e6e6fdaa-6716-48ed-b820-3635daa322da"
+          ],
+          "pointId": "result",
+          "status": "unsupported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "incorrect"
+    },
+    {
+      "attemptId": "ad8cff73-1f40-4e00-9da4-468ec0bcf86d",
+      "createdAt": "2026-10-20T02:00:00.000Z",
+      "errorClues": [],
+      "evidenceIds": [
+        "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b"
+      ],
+      "evidenceRevision": 8,
+      "id": "5b6604ee-2455-4aec-9265-570872806137",
+      "method": "rubric_program",
+      "operationId": "synthetic-b-7",
+      "points": [
+        {
+          "evidenceIds": [
+            "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b"
+          ],
+          "pointId": "result",
+          "status": "supported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "correct"
+    },
+    {
+      "attemptId": "6ba2c670-5b0c-4c1d-b0d1-5d7bf8aaa42e",
+      "createdAt": "2026-10-21T02:00:00.000Z",
+      "errorClues": [],
+      "evidenceIds": [
+        "361f1e34-079e-44e8-85e8-8c2a04f0415a"
+      ],
+      "evidenceRevision": 12,
+      "id": "7c7c13fb-3215-4665-b1d3-a24d2a3a1e42",
+      "method": "rubric_program",
+      "operationId": "synthetic-b-13",
+      "points": [
+        {
+          "evidenceIds": [
+            "361f1e34-079e-44e8-85e8-8c2a04f0415a"
+          ],
+          "pointId": "result",
+          "status": "supported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "correct"
+    },
+    {
+      "attemptId": "59cc8ea3-1596-4325-8400-afe18008f113",
+      "createdAt": "2026-10-21T02:00:00.000Z",
+      "errorClues": [],
+      "evidenceIds": [
+        "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4"
+      ],
+      "evidenceRevision": 16,
+      "id": "bfd5240b-1e7a-4e3b-bb2e-47edefb3541f",
+      "method": "rubric_program",
+      "operationId": "synthetic-b-16",
+      "points": [
+        {
+          "evidenceIds": [
+            "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4"
+          ],
+          "pointId": "result",
+          "status": "supported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "correct"
+    },
+    {
+      "attemptId": "e740dcb9-31ed-4538-9411-47f79a34aba7",
+      "createdAt": "2026-10-22T02:00:00.000Z",
+      "errorClues": [],
+      "evidenceIds": [
+        "07e7070a-cf99-455c-bb6b-2dc7472c44b0"
+      ],
+      "evidenceRevision": 20,
+      "id": "6587aee3-d299-4ba0-bf17-6340067eaf2b",
+      "method": "rubric_program",
+      "operationId": "synthetic-b-22",
+      "points": [
+        {
+          "evidenceIds": [
+            "07e7070a-cf99-455c-bb6b-2dc7472c44b0"
+          ],
+          "pointId": "result",
+          "status": "supported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "correct"
+    },
+    {
+      "attemptId": "b338a5d6-f149-4720-9daa-b45a07296931",
+      "createdAt": "2026-10-22T02:00:00.000Z",
+      "errorClues": [
+        "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+      ],
+      "evidenceIds": [
+        "132d25b1-3eb6-4d88-8226-7e4528ebec00"
+      ],
+      "evidenceRevision": 24,
+      "id": "62911580-bd6d-4606-94d5-0f4014f62cb6",
+      "method": "rubric_program",
+      "operationId": "synthetic-b-26",
+      "points": [
+        {
+          "evidenceIds": [
+            "132d25b1-3eb6-4d88-8226-7e4528ebec00"
+          ],
+          "pointId": "result",
+          "status": "unsupported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "incorrect"
+    }
+  ],
+  "snapshots": {
+    "assisted": {
+      "schemaVersion": "1.0.0",
+      "id": "887a604e-8e7e-4aa5-89c4-9bf551aaaaf1",
+      "evidenceRevision": 8,
+      "createdAt": "2026-10-20T02:00:00.000Z",
+      "skills": [
+        {
+          "schemaVersion": "1.0.0",
+          "id": "096aa3f9-d8c9-476b-af8b-cf3fba45a64d",
+          "evidenceRevision": 8,
+          "knowledgePointId": "math-language",
+          "dimension": "理解",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "数学语句与条件提取：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖先后运算关系及条件解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-20T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "d02f0f17-1bb9-49e8-bcb3-60b819fc925e",
+          "evidenceRevision": 8,
+          "knowledgePointId": "counterexample",
+          "dimension": "逻辑",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "反例与条件结论：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-20T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "3e8a3acb-73df-4553-96d9-a7d587210b2e",
+          "evidenceRevision": 8,
+          "knowledgePointId": "negative-brackets",
+          "dimension": "计算",
+          "status": "completed_with_help",
+          "evidenceIds": [
+            "e6e6fdaa-6716-48ed-b820-3635daa322da",
+            "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b"
+          ],
+          "attemptIds": [
+            "610fb8c5-272d-481d-84bd-47614906f45d",
+            "ad8cff73-1f40-4e00-9da4-468ec0bcf86d"
+          ],
+          "observedTaskIds": [
+            "bracket"
+          ],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "去括号负号处理：2次有效尝试，0道未见题独立完成，1次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-20T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "1ff4a5a3-6885-43f6-983a-09c2d6388546",
+          "evidenceRevision": 8,
+          "knowledgePointId": "like-terms",
+          "dimension": "计算",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "合并同类项：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式系数和常数合并结果，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-20T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "b06a70ba-02c6-4753-99f9-3c23106cbe08",
+          "evidenceRevision": 8,
+          "knowledgePointId": "fixed-variable-cost",
+          "dimension": "建模",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "一次费用与随数量变化费用：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖单一线性数量关系及费用来源解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-20T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "ef14681f-8fc0-4696-b355-45b1365a6896",
+          "evidenceRevision": 8,
+          "knowledgePointId": "rotation-2d",
+          "dimension": "空间想象",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "二维旋转与位置关系：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-20T02:00:00.000Z"
+        }
+      ],
+      "coverage": [
+        {
+          "dimension": "理解",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：数学语句与条件提取",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "逻辑",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：反例与条件结论",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "计算",
+          "knowledgePointIds": [
+            "negative-brackets"
+          ],
+          "evidenceCount": 2,
+          "lastObservedAt": "2026-10-20T02:00:00.000Z",
+          "unknowns": [
+            "尚未观察：合并同类项",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "建模",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：一次费用与随数量变化费用",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "空间想象",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：二维旋转与位置关系",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "e6e6fdaa-6716-48ed-b820-3635daa322da",
+        "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b"
+      ],
+      "limitations": [
+        "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+        "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+        "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+      ]
+    },
+    "firstIndependent": {
+      "schemaVersion": "1.0.0",
+      "id": "5d91a6e3-8ea8-4655-a15c-adedcd96fae9",
+      "evidenceRevision": 16,
+      "createdAt": "2026-10-21T02:00:00.000Z",
+      "skills": [
+        {
+          "schemaVersion": "1.0.0",
+          "id": "4e50fabc-562a-44c6-b695-824283b247f6",
+          "evidenceRevision": 16,
+          "knowledgePointId": "math-language",
+          "dimension": "理解",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "数学语句与条件提取：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖先后运算关系及条件解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "23c95836-1736-4a6e-8981-8afa396fdddd",
+          "evidenceRevision": 16,
+          "knowledgePointId": "counterexample",
+          "dimension": "逻辑",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "反例与条件结论：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "d0286255-740d-4c80-9313-df9a4a01b2c1",
+          "evidenceRevision": 16,
+          "knowledgePointId": "negative-brackets",
+          "dimension": "计算",
+          "status": "first_independent",
+          "evidenceIds": [
+            "e6e6fdaa-6716-48ed-b820-3635daa322da",
+            "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b",
+            "361f1e34-079e-44e8-85e8-8c2a04f0415a",
+            "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4"
+          ],
+          "attemptIds": [
+            "610fb8c5-272d-481d-84bd-47614906f45d",
+            "ad8cff73-1f40-4e00-9da4-468ec0bcf86d",
+            "6ba2c670-5b0c-4c1d-b0d1-5d7bf8aaa42e",
+            "59cc8ea3-1596-4325-8400-afe18008f113"
+          ],
+          "observedTaskIds": [
+            "bracket",
+            "transfer"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21"
+          ],
+          "recentDifficulty": false,
+          "coverage": "去括号负号处理：4次有效尝试，1道未见题独立完成，2次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "d27aa83c-2b6e-45bb-b9de-f2515a4f303c",
+          "evidenceRevision": 16,
+          "knowledgePointId": "like-terms",
+          "dimension": "计算",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "合并同类项：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式系数和常数合并结果，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "a3b87727-d990-41c3-8733-c91ffdaa8afb",
+          "evidenceRevision": 16,
+          "knowledgePointId": "fixed-variable-cost",
+          "dimension": "建模",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "一次费用与随数量变化费用：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖单一线性数量关系及费用来源解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "65bab508-5570-479f-ba9c-d65892740674",
+          "evidenceRevision": 16,
+          "knowledgePointId": "rotation-2d",
+          "dimension": "空间想象",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "二维旋转与位置关系：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T02:00:00.000Z"
+        }
+      ],
+      "coverage": [
+        {
+          "dimension": "理解",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：数学语句与条件提取",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "逻辑",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：反例与条件结论",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "计算",
+          "knowledgePointIds": [
+            "negative-brackets"
+          ],
+          "evidenceCount": 4,
+          "lastObservedAt": "2026-10-21T02:00:00.000Z",
+          "unknowns": [
+            "尚未观察：合并同类项",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "建模",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：一次费用与随数量变化费用",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "空间想象",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：二维旋转与位置关系",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "e6e6fdaa-6716-48ed-b820-3635daa322da",
+        "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b",
+        "361f1e34-079e-44e8-85e8-8c2a04f0415a",
+        "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4"
+      ],
+      "limitations": [
+        "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+        "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+        "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+      ]
+    },
+    "crossSession": {
+      "schemaVersion": "1.0.0",
+      "id": "929aaddc-80f6-4812-b64a-07583bf97396",
+      "evidenceRevision": 20,
+      "createdAt": "2026-10-22T02:00:00.000Z",
+      "skills": [
+        {
+          "schemaVersion": "1.0.0",
+          "id": "ddb04789-3f65-4a13-8229-864f51f25415",
+          "evidenceRevision": 20,
+          "knowledgePointId": "math-language",
+          "dimension": "理解",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "数学语句与条件提取：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖先后运算关系及条件解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "0305ce73-7ff6-4235-b656-3533538bbc33",
+          "evidenceRevision": 20,
+          "knowledgePointId": "counterexample",
+          "dimension": "逻辑",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "反例与条件结论：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "97d13e1c-ca55-45cf-bd9a-58648844fadf",
+          "evidenceRevision": 20,
+          "knowledgePointId": "negative-brackets",
+          "dimension": "计算",
+          "status": "cross_session_independent",
+          "evidenceIds": [
+            "e6e6fdaa-6716-48ed-b820-3635daa322da",
+            "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b",
+            "361f1e34-079e-44e8-85e8-8c2a04f0415a",
+            "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4",
+            "07e7070a-cf99-455c-bb6b-2dc7472c44b0"
+          ],
+          "attemptIds": [
+            "610fb8c5-272d-481d-84bd-47614906f45d",
+            "ad8cff73-1f40-4e00-9da4-468ec0bcf86d",
+            "6ba2c670-5b0c-4c1d-b0d1-5d7bf8aaa42e",
+            "59cc8ea3-1596-4325-8400-afe18008f113",
+            "e740dcb9-31ed-4538-9411-47f79a34aba7"
+          ],
+          "observedTaskIds": [
+            "bracket",
+            "transfer",
+            "b-neg-delayed"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21",
+            "2026-10-22"
+          ],
+          "recentDifficulty": false,
+          "coverage": "去括号负号处理：5次有效尝试，2道未见题独立完成，2次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "72150b84-d0df-440d-93ff-a6099b8457e6",
+          "evidenceRevision": 20,
+          "knowledgePointId": "like-terms",
+          "dimension": "计算",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "合并同类项：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式系数和常数合并结果，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "f1a7c3eb-7fe3-46c9-b8d8-1f0463111a23",
+          "evidenceRevision": 20,
+          "knowledgePointId": "fixed-variable-cost",
+          "dimension": "建模",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "一次费用与随数量变化费用：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖单一线性数量关系及费用来源解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "2e9871ce-34ff-4963-a141-434ef0134bde",
+          "evidenceRevision": 20,
+          "knowledgePointId": "rotation-2d",
+          "dimension": "空间想象",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "二维旋转与位置关系：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        }
+      ],
+      "coverage": [
+        {
+          "dimension": "理解",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：数学语句与条件提取",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "逻辑",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：反例与条件结论",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "计算",
+          "knowledgePointIds": [
+            "negative-brackets"
+          ],
+          "evidenceCount": 5,
+          "lastObservedAt": "2026-10-22T02:00:00.000Z",
+          "unknowns": [
+            "尚未观察：合并同类项",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "建模",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：一次费用与随数量变化费用",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "空间想象",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：二维旋转与位置关系",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "e6e6fdaa-6716-48ed-b820-3635daa322da",
+        "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b",
+        "361f1e34-079e-44e8-85e8-8c2a04f0415a",
+        "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4",
+        "07e7070a-cf99-455c-bb6b-2dc7472c44b0"
+      ],
+      "limitations": [
+        "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+        "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+        "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+      ]
+    },
+    "recentDifficulty": {
+      "schemaVersion": "1.0.0",
+      "id": "aeed9c5e-380e-44d5-8b19-5c0404ed5054",
+      "evidenceRevision": 24,
+      "createdAt": "2026-10-22T02:00:00.000Z",
+      "skills": [
+        {
+          "schemaVersion": "1.0.0",
+          "id": "c677ba26-e3f2-41b1-97f6-d462c6031265",
+          "evidenceRevision": 24,
+          "knowledgePointId": "math-language",
+          "dimension": "理解",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "数学语句与条件提取：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖先后运算关系及条件解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "3c53f775-745f-479a-9454-e201f5ca8608",
+          "evidenceRevision": 24,
+          "knowledgePointId": "counterexample",
+          "dimension": "逻辑",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "反例与条件结论：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "d651965b-a26e-439b-9ebe-b6d8681c08fb",
+          "evidenceRevision": 24,
+          "knowledgePointId": "negative-brackets",
+          "dimension": "计算",
+          "status": "cross_session_independent",
+          "evidenceIds": [
+            "e6e6fdaa-6716-48ed-b820-3635daa322da",
+            "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b",
+            "361f1e34-079e-44e8-85e8-8c2a04f0415a",
+            "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4",
+            "07e7070a-cf99-455c-bb6b-2dc7472c44b0",
+            "132d25b1-3eb6-4d88-8226-7e4528ebec00"
+          ],
+          "attemptIds": [
+            "610fb8c5-272d-481d-84bd-47614906f45d",
+            "ad8cff73-1f40-4e00-9da4-468ec0bcf86d",
+            "6ba2c670-5b0c-4c1d-b0d1-5d7bf8aaa42e",
+            "59cc8ea3-1596-4325-8400-afe18008f113",
+            "e740dcb9-31ed-4538-9411-47f79a34aba7",
+            "b338a5d6-f149-4720-9daa-b45a07296931"
+          ],
+          "observedTaskIds": [
+            "bracket",
+            "transfer",
+            "b-neg-delayed",
+            "calc-0"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21",
+            "2026-10-22"
+          ],
+          "recentDifficulty": true,
+          "coverage": "去括号负号处理：6次有效尝试，2道未见题独立完成，2次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度",
+            "最近一次有效评分仍有困难，需要再观察；此前成功仍保留"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "78a8729b-73ef-4a50-9664-7323c73bbe6c",
+          "evidenceRevision": 24,
+          "knowledgePointId": "like-terms",
+          "dimension": "计算",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "合并同类项：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式系数和常数合并结果，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "40a4ef58-62dc-4a85-8fd2-a22dade534f1",
+          "evidenceRevision": 24,
+          "knowledgePointId": "fixed-variable-cost",
+          "dimension": "建模",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "一次费用与随数量变化费用：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖单一线性数量关系及费用来源解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "aceb9438-a59b-44a9-90c5-66e4af827840",
+          "evidenceRevision": 24,
+          "knowledgePointId": "rotation-2d",
+          "dimension": "空间想象",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "二维旋转与位置关系：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-22T02:00:00.000Z"
+        }
+      ],
+      "coverage": [
+        {
+          "dimension": "理解",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：数学语句与条件提取",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "逻辑",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：反例与条件结论",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "计算",
+          "knowledgePointIds": [
+            "negative-brackets"
+          ],
+          "evidenceCount": 6,
+          "lastObservedAt": "2026-10-22T02:00:00.000Z",
+          "unknowns": [
+            "尚未观察：合并同类项",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "建模",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：一次费用与随数量变化费用",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "空间想象",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：二维旋转与位置关系",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "e6e6fdaa-6716-48ed-b820-3635daa322da",
+        "80e1a7c5-8a2f-4f80-bc81-91ee1a0eee9b",
+        "361f1e34-079e-44e8-85e8-8c2a04f0415a",
+        "8ccb9ff5-9a4b-41cb-a28a-06c8c683dbe4",
+        "07e7070a-cf99-455c-bb6b-2dc7472c44b0",
+        "132d25b1-3eb6-4d88-8226-7e4528ebec00"
+      ],
+      "limitations": [
+        "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+        "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+        "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+      ]
+    }
+  }
+}

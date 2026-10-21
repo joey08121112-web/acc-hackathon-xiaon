@@ -7,7 +7,9 @@ import {
   reducer,
   observations,
   memoryAfter,
+  planDraft,
   replyFor,
+  taskStatus,
   type State,
   type Memory,
 } from "./domain";
@@ -195,4 +197,94 @@ test("旧进度兼容新增邀请状态，休息与安全暂停仍优先", () =>
   assert.equal(open(s).questionInvitePaused, true);
   assert.match(replyFor("谢谢", true, true), /今天不用急着回到题目/);
   assert.match(replyFor("今天先休息", true, true), /休息也是你的选择/);
+});
+
+test("数学等价写法（显式乘号、前置正号）被正确接受，错误答案仍判错", () => {
+  const t = getTask("transfer");
+  for (const value of ["4a+2", "4*a+2", "4×a+2", "+4a+2", "2+4a", "2+4*a"]) {
+    assert.equal(correct(t, value), true, value);
+  }
+  for (const value of ["4a-2", "4*a-2", "4a+2=", "4a+2=x+5", "4a*2"]) {
+    assert.equal(correct(t, value), false, value);
+  }
+  const b = getTask("bracket");
+  assert.equal(correct(b, "x*+5"), false);
+  assert.equal(correct(b, "(x+5)"), true);
+  assert.equal(correct(b, "3x−(2x−5)=4*a+2".replace("4*a+2", "x+5")), true);
+});
+
+test("等价写法的首次独立完成被如实记录，不退化为需要继续观察", () => {
+  let s = open(initial(), "transfer");
+  s = answer(s, "4*a+2", "first", "transfer");
+  assert.equal(s.records.transfer.attempts[0].correct, true);
+  const o = observations(s)[2];
+  assert.equal(o.status, "本次独立完成");
+  assert.doesNotMatch(o.finding, /还没有完成正确解答|需要继续了解具体步骤/);
+});
+
+test("周计划按计算观察结果分化，不再对所有人给同一份固定建议", () => {
+  const none = planDraft(initial());
+  assert.equal(none.goal, "看清括号前的负号");
+  assert.match(none.eyebrow, /尚无作答依据/);
+  assert.equal(none.tasks.length, 3);
+
+  let hinted = answer(open(initial()), "x-5");
+  hinted = reducer(hinted, { type: "hint", id: "bracket" });
+  hinted = answer(hinted, "x+5", "2");
+  const d1 = planDraft(hinted);
+  assert.equal(d1.goal, "看清括号前的负号");
+  assert.match(d1.eyebrow, /根据当前计算任务记录/);
+
+  let independent = answer(open(initial()), "x+5");
+  const d2 = planDraft(independent);
+  assert.equal(d2.goal, "站稳去括号这一步");
+  assert.equal(d2.tasks.length, 2);
+  assert.equal(d2.tasks[0].taskId, "transfer");
+  assert.equal(taskStatus(independent, d2.tasks[0].taskId!), "未开始");
+
+  independent = answer(
+    open(independent, "transfer"),
+    "4a+2",
+    "3",
+    "transfer",
+  );
+  const d3 = planDraft(independent);
+  assert.equal(d3.goal, "把去括号的方法用活");
+  assert.equal(d3.tasks[0].taskId, "calc-0");
+});
+
+test("结论轨迹如实保留状态变化，不因新证据悄悄丢失", () => {
+  let s = answer(open(initial()), "x-5");
+  assert.deepEqual(
+    s.statusTrail["计算"].map((x) => x.status),
+    ["需要继续观察"],
+  );
+  s = reducer(s, { type: "hint", id: "bracket" });
+  s = answer(s, "x+5", "2");
+  assert.deepEqual(
+    s.statusTrail["计算"].map((x) => x.status),
+    ["需要继续观察", "提示下完成"],
+  );
+  s = answer(open(s, "transfer"), "4a+2", "3", "transfer");
+  assert.deepEqual(
+    s.statusTrail["计算"].map((x) => x.status),
+    ["需要继续观察", "提示下完成", "本次独立完成"],
+  );
+  const kept = JSON.parse(JSON.stringify(s.statusTrail));
+  s = answer(s, "4a+2", "dup", "transfer");
+  assert.deepEqual(s.statusTrail, kept);
+  s = answer(open(s, "calc-0"), "3x+1", "5", "calc-0");
+  assert.deepEqual(
+    s.statusTrail["计算"].map((x) => x.status),
+    ["需要继续观察", "提示下完成", "本次独立完成", "多次独立完成"],
+  );
+  assert.equal(s.statusTrail["理解"], undefined);
+});
+
+test("旧进度缺少结论轨迹字段时可正常加载并继续使用", () => {
+  const legacy = answer(open(initial()), "x+5");
+  delete (legacy as Partial<typeof legacy>).statusTrail;
+  const s = hydrate(JSON.stringify(legacy));
+  assert.deepEqual(s.statusTrail, {});
+  assert.equal(planDraft(s).goal, "站稳去括号这一步");
 });

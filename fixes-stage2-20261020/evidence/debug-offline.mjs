@@ -1,0 +1,12 @@
+import { chromium } from "../../outputs/xiaon/node_modules/playwright-core/index.mjs";
+const browser = await chromium.launch();
+const page = await (await browser.newContext({ viewport: { width: 390, height: 844 } })).newPage();
+page.on("pageerror", (e) => console.log("PAGEERROR:", e.message));
+page.on("console", (m) => m.type() === "error" && console.log("CONSOLE:", m.text()));
+await page.goto("http://localhost:5173/offline.html");
+await page.waitForTimeout(2000);
+console.log("body text head:", (await page.locator("body").innerText().catch(() => "<无>")).slice(0, 120));
+console.log("root children:", await page.locator("#root, body > div").count());
+const h1 = await page.locator("h1").allInnerTexts().catch(() => []);
+console.log("h1s:", JSON.stringify(h1));
+await browser.close();

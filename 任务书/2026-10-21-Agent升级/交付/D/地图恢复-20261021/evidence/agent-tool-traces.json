@@ -1,0 +1,313 @@
+{
+  "runs": [
+    {
+      "callIds": [
+        "4b7092f7-3c7c-4a78-90fd-c2fdf603195b"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "assess-e399d1ce-c0ae-4a51-94d3-d526ebda9e6f",
+      "operationId": "4b7092f7-3c7c-4a78-90fd-c2fdf603195b",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-1a749a42-a0de-4219-8374-663fcab13d4e",
+      "operationId": "d02037cb-048f-4d3c-8260-67d61653d920",
+      "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    },
+    {
+      "callIds": [
+        "0a05a9f9-b112-47e4-9be9-c7ac8268f170"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "assess-87ffc5f4-6d56-4d82-a59d-5770e76b6d44",
+      "operationId": "0a05a9f9-b112-47e4-9be9-c7ac8268f170",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-056677f3-0cb6-442e-ad09-b939cc89bfaa",
+      "operationId": "0fcb1ce3-fb0b-4c95-88cd-614d46914373",
+      "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    },
+    {
+      "callIds": [
+        "8a99df49-08a6-480a-a94a-b438f62a0e1c"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "assess-29bdc2e2-24af-4150-8402-24e29f161a15",
+      "operationId": "8a99df49-08a6-480a-a94a-b438f62a0e1c",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "ea3d9235-4407-4b30-8718-51f24568dfbe"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "assess-3223e2c5-5981-4220-b766-27e44c26d3d3",
+      "operationId": "ea3d9235-4407-4b30-8718-51f24568dfbe",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "assess-b7bb4f92-b5ed-4131-ac4a-d6956592b887",
+      "operationId": "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "s-2"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-bf1f380c-38d6-45f0-85d6-29a0c43c901f",
+      "operationId": "b46cdf4a-71d8-43d3-baf0-32e23680938d-agent",
+      "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+      "providerKind": "synthetic",
+      "role": "planner",
+      "rounds": 2,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "02889cdb-f330-4dea-bca8-b8850b5388b3"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-22T00:00:00.000Z",
+      "id": "assess-c7313d83-9bca-4c66-8d63-09ccb0354fae",
+      "operationId": "02889cdb-f330-4dea-bca8-b8850b5388b3",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "3685e2d4-8242-4998-bb58-e7b1e427156d"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-25T00:00:00.000Z",
+      "id": "assess-392e3c14-b5be-4599-bc36-08ca730ace85",
+      "operationId": "3685e2d4-8242-4998-bb58-e7b1e427156d",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-25T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    }
+  ],
+  "tools": [
+    {
+      "argumentsHash": "c5c973e6687dad59a380871ae9306efdda0a3384f89b5c91c242ec7a587929d7",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "4b7092f7-3c7c-4a78-90fd-c2fdf603195b",
+      "dataVersion": 21,
+      "errorCode": null,
+      "evidenceIds": [
+        "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+      ],
+      "id": "call-3f8b9aa58ee718b421d78021a00186eeba8a91b50d964111",
+      "name": "grade_attempt",
+      "runId": "assess-e399d1ce-c0ae-4a51-94d3-d526ebda9e6f",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "4b736ec8e10f344f680d189b8794c88d8c94b6d0da9e450c757615fda864a915",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "0a05a9f9-b112-47e4-9be9-c7ac8268f170",
+      "dataVersion": 44,
+      "errorCode": null,
+      "evidenceIds": [
+        "84c89e14-f226-45f7-9681-83257c20e58e",
+        "ec8cc893-2a14-46e8-b730-43557b0b8788"
+      ],
+      "id": "call-ea21b17cf5134c1821b3fadcc081754cf0b450998c2f49c8",
+      "name": "grade_attempt",
+      "runId": "assess-87ffc5f4-6d56-4d82-a59d-5770e76b6d44",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "699c9f284d7e5f4c60840148e40937bf1fc2ea783857ebae8fb45b207d2fe928",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "8a99df49-08a6-480a-a94a-b438f62a0e1c",
+      "dataVersion": 67,
+      "errorCode": null,
+      "evidenceIds": [
+        "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+        "0db049fe-661c-4d0e-8523-14da09843771"
+      ],
+      "id": "call-1e1c6e22d98afe1791773c422ee196eba997132281c51123",
+      "name": "grade_attempt",
+      "runId": "assess-29bdc2e2-24af-4150-8402-24e29f161a15",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "e9547fc26b1928bb313376396197a586b1397cdbd75bff66609660a8fed30ef7",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "ea3d9235-4407-4b30-8718-51f24568dfbe",
+      "dataVersion": 88,
+      "errorCode": null,
+      "evidenceIds": [
+        "66d66cbc-ab5f-4879-8b78-e4d3df34498b"
+      ],
+      "id": "call-7d4aba81009a45512a6b641c346fabf5edc09d27fe9a330b",
+      "name": "grade_attempt",
+      "runId": "assess-3223e2c5-5981-4220-b766-27e44c26d3d3",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "68d5ef77e46aee9316a891f09f2fb7424bb12de49a6349e6cfc51f02394fd6be",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "c8f22f6a-3a75-403e-9365-affe4a9c6551",
+      "dataVersion": 98,
+      "errorCode": null,
+      "evidenceIds": [],
+      "id": "call-f5be7dcc0ba5065585655573ec2c6c013da630784040d782",
+      "name": "get_hint",
+      "runId": "hint-c8f22f6a-3a75-403e-9365-affe4a9c6551",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "66358a1411b8348a3ab226e29d0112e7c798d7837a32c34df1afd799b2fe802c",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb",
+      "dataVersion": 109,
+      "errorCode": null,
+      "evidenceIds": [
+        "67afffcc-6959-4012-9b9b-76019f627787"
+      ],
+      "id": "call-632502053d771ace98ba064bfb430791e6a012931af76f77",
+      "name": "grade_attempt",
+      "runId": "assess-b7bb4f92-b5ed-4131-ac4a-d6956592b887",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "c89a148be40e6752261e3038609a4b68de22fa3bfdaf32f884edffb8480b9bbe",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "s-2",
+      "dataVersion": 134,
+      "errorCode": null,
+      "evidenceIds": [
+        "84c89e14-f226-45f7-9681-83257c20e58e",
+        "ec8cc893-2a14-46e8-b730-43557b0b8788",
+        "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+        "0db049fe-661c-4d0e-8523-14da09843771",
+        "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+        "67afffcc-6959-4012-9b9b-76019f627787",
+        "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+      ],
+      "id": "call-d81344e27167496513a9ab601d95912694568abd43aae059",
+      "name": "get_skill_state",
+      "runId": "d-run-bf1f380c-38d6-45f0-85d6-29a0c43c901f",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "62e9edfa5cd244e6d0833ec080081bb5c8ba78ff8bfa106d45baca5c2e6b29ba",
+      "at": "2026-10-22T00:00:00.000Z",
+      "callId": "02889cdb-f330-4dea-bca8-b8850b5388b3",
+      "dataVersion": 153,
+      "errorCode": null,
+      "evidenceIds": [
+        "07690dd0-5b39-4402-b068-55e459d8f524"
+      ],
+      "id": "call-11719560837abdf8a8a911cee7a63c365756b98a17e2a3c2",
+      "name": "grade_attempt",
+      "runId": "assess-c7313d83-9bca-4c66-8d63-09ccb0354fae",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "ac8113581295f1b13e6d51ac9c22a0d336cdc83d85d7a0944e4d0b40825c89bd",
+      "at": "2026-10-25T00:00:00.000Z",
+      "callId": "3685e2d4-8242-4998-bb58-e7b1e427156d",
+      "dataVersion": 178,
+      "errorCode": null,
+      "evidenceIds": [
+        "67935923-dbc9-4897-844a-bdbd627cfcd6"
+      ],
+      "id": "call-877eea73db5adbfdb99fef0002694e7a611d50139b968f1f",
+      "name": "grade_attempt",
+      "runId": "assess-392e3c14-b5be-4599-bc36-08ca730ace85",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    }
+  ]
+}

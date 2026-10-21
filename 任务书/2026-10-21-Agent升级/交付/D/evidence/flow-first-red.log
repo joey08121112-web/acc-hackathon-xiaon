@@ -1,0 +1,60 @@
+$ npm run test:agent:d
+
+> xiaon-learning-companion@1.0.0 test:agent:d
+> node scripts/agent/test.mjs d
+
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/agents/learning' imported from /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/flow.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveBaseSync (file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:11092)
+    at resolveDirectorySync (file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:12398)
+    at resolveTsPathsSync (file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:13605)
+    at resolve (file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:16832) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/ami/Documents/%E4%B8%AA%E4%BA%BA/ACC%E9%BB%91%E5%AE%A2%E6%9D%BE/outputs/xiaon/server/agents/learning'
+}
+
+Node.js v26.8.2
+✖ tests-agent/d/flow.test.ts (95.364959ms)
+✖ B real catalog and C proposal interoperate without fixture catalog (11.775833ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.242292
+
+✖ failing tests:
+
+test at tests-agent/d/flow.test.ts:1:1
+✖ tests-agent/d/flow.test.ts (95.364959ms)
+  'test failed'
+
+test at tests-agent/d/preflight.test.ts:1:300
+✖ B real catalog and C proposal interoperate without fixture catalog (11.775833ms)
+  Error: 候选题数范围0–100
+      at AssessmentCatalog.candidates (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/plugins/assessment/catalog.ts:52:75)
+      at selectReviewTarget (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/src/learning/review/index.ts:53:35)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/plugins/planning/index.ts:119:17)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:57:16)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:51:20)
+      at SqliteRepository.once (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:54:15)
+      at PlanningEngine.propose (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/plugins/planning/index.ts:115:23)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/preflight.test.ts:12:29)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+EXIT_CODE=1

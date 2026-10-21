@@ -1,0 +1,55 @@
+COMMAND: ['npm', 'run', 'test:agent:b']
+UTC: 2026-10-20T16:49:19.504827+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:b
+> node scripts/agent/test.mjs b
+
+✔ six explicit subskills have observation, genuinely different transfer and delayed tasks; strict public views hide keys (1.486834ms)
+✔ reference math is independently derived from integer substitutions or explicit language/cost meanings, all typical errors rejected (1.430542ms)
+✔ spatial answers independently derived by trigonometric rotation and edge lengths, with explicit y-up coordinate convention (0.224ms)
+✔ existing restricted parser accepts equivalents, rejects contradictory chains, defers unsupported syntax and never executes source (0.319042ms)
+✔ candidate constraints filter dimension, knowledge point, exclusions and limit without promising prerequisite mastery (0.328875ms)
+✔ wrong then correct, helped completion, original redo and unseen independent attempts remain distinct immutable facts (28.0675ms)
+✔ no-hint correction is never first independent; no attempt, whitespace and pause do not mean weak ability (8.932209ms)
+✔ hint after submission does not rewrite success; chat help or answer exposure before submission prevents independence (22.430792ms)
+✔ same-day variants cannot establish across-day status; two trusted dates and unseen tasks can; local date uses Shanghai (18.76325ms)
+✔ original opened on an earlier date, repeated raw problem and version aliases do not count as unseen transfer (5.073666ms)
+✔ unknown legacy time/exposure cannot establish independent status, missing grades stay unknown (6.557417ms)
+✔ cross-session rule is configurable and not a standardized assessment (6.614792ms)
+✔ operation retries append no duplicate evidence, different operations for one grade reuse it, fake attempt rejected (4.915083ms)
+✔ real SQLite reopen retains attempts, evidence, snapshots and operation receipts; frozen-port consumer compiles (5.899167ms)
+✔ choice correct alone does not prove reasoning; validated explanation has exact saved-answer quotes (20.902417ms)
+✔ no quote, foreign quote, malformed JSON, unknown points, wrong offsets, extra keys and program/model conflict all defer (47.66475ms)
+✔ model sees only required task/rubric, persisted answer and exposure snapshot, no optional profile/chat/history (5.991625ms)
+✖ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (11.32525ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 17
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 253.635291
+
+✖ failing tests:
+
+test at tests-agent/b/model.test.ts:1:3798
+✖ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (11.32525ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '{"answerExposed":false,"exposureHistory":"complete","exposureIds":["07e3ff88-3ed8-4e72-9753-8ea42caf1ee0"],"hintSnapshot":[],"id":"670c33b6-1dee-49f2-96b7-6b5807546df5","operationId":"synthetic-b-3","origin":"student_api","schemaVersion":"1.0.0","sessionId":"109e82d8-a085-4ed9-b731-0c85e4d90c80","sourceTime":{"legacyLabel":null,"occurredAt":"2026-10-20T02:00:00.000Z","recordedAt":"2026-10-20T02:00:00.000Z","timezone":"Asia/Shanghai","trust":"server"},"supersedesAttemptId":null,"taskId":"logic","taskVersion":2,"value":"A\\n两个数都是负数，但相加等于负五，不是正数。"}'
+  - '{"schemaVersion":"1.0.0","id":"670c33b6-1dee-49f2-96b7-6b5807546df5","operationId":"synthetic-b-3","taskId":"logic","taskVersion":2,"sessionId":"109e82d8-a085-4ed9-b731-0c85e4d90c80","value":"A\\n两个数都是负数，但相加等于负五，不是正数。","sourceTime":{"occurredAt":"2026-10-20T02:00:00.000Z","recordedAt":"2026-10-20T02:00:00.000Z","timezone":"Asia/Shanghai","trust":"server","legacyLabel":null},"exposureIds":["07e3ff88-3ed8-4e72-9753-8ea42caf1ee0"],"hintSnapshot":[],"answerExposed":false,"origin":"student_api","exposureHistory":"complete","supersedesAttemptId":null}'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/b/model.test.ts:58:63)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{"answerExposed":false,"exposureHistory":"complete","exposureIds":["07e3ff88-3ed8-4e72-9753-8ea42caf1ee0"],"hintSnapshot":[],"id":"670c33b6-1dee-49f2-96b7-6b5807546df5","operationId":"synthetic-b-3","origin":"student_api","schemaVersion":"1.0.0","sessionId":"109e82d8-a085-4ed9-b731-0c85e4d90c80","sourceTime":{"legacyLabel":null,"occurredAt":"2026-10-20T02:00:00.000Z","recordedAt":"2026-10-20T02:00:00.000Z","timezone":"Asia/Shanghai","trust":"server"},"supersedesAttemptId":null,"taskId":"logic","taskVersion":2,"value":"A\\n两个数都是负数，但相加等于负五，不是正数。"}',
+    expected: '{"schemaVersion":"1.0.0","id":"670c33b6-1dee-49f2-96b7-6b5807546df5","operationId":"synthetic-b-3","taskId":"logic","taskVersion":2,"sessionId":"109e82d8-a085-4ed9-b731-0c85e4d90c80","value":"A\\n两个数都是负数，但相加等于负五，不是正数。","sourceTime":{"occurredAt":"2026-10-20T02:00:00.000Z","recordedAt":"2026-10-20T02:00:00.000Z","timezone":"Asia/Shanghai","trust":"server","legacyLabel":null},"exposureIds":["07e3ff88-3ed8-4e72-9753-8ea42caf1ee0"],"hintSnapshot":[],"answerExposed":false,"origin":"student_api","exposureHistory":"complete","supersedesAttemptId":null}',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+exitCode=1

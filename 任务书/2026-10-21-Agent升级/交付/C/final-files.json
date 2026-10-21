@@ -1,0 +1,42 @@
+[
+  {
+    "path": "outputs/xiaon/src/learning/review/index.ts",
+    "sha256": "fd0d3e2e246961e2cf4dbe5bd2103f26fd6765fa1910d697d2c93fb8c8bc28c3",
+    "bytes": 5608
+  },
+  {
+    "path": "outputs/xiaon/server/plugins/planning/evidence.ts",
+    "sha256": "9d2cca7001237d6823e04eb613e1a22baaac511620430ebbd243d122193b4e02",
+    "bytes": 3679
+  },
+  {
+    "path": "outputs/xiaon/server/plugins/planning/index.ts",
+    "sha256": "c0b18d04aa670b34f3d626f59f67511b0241a667b1405487f510906f324d6157",
+    "bytes": 21333
+  },
+  {
+    "path": "outputs/xiaon/server/plugins/planning/register-example.ts",
+    "sha256": "786b245b9194345907bc4fb18768fefffc817be0113403aa3d3ce89b9a85d370",
+    "bytes": 358
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/c/edges.test.ts",
+    "sha256": "6d23a62aad9dc7c917ebe863f59b7ba1d0250e325ec4b1f881cb74bf65ebe9c0",
+    "bytes": 9718
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/c/examples.ts",
+    "sha256": "c6381468cbec3df6e26403db1cb5e8742caa8674e28c06a5a21ca2816ff2c7cd",
+    "bytes": 3226
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/c/fixtures.ts",
+    "sha256": "3853e834cd54a5cf5e12af6d4f89ac5e04c39faf5bbdbe7338df1d1213f4a0e0",
+    "bytes": 5577
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/c/planning.test.ts",
+    "sha256": "67c7995bbbcf99bafdd8693a01351ba77758cac5ea1e18aa41d7c8136e32c815",
+    "bytes": 13456
+  }
+]

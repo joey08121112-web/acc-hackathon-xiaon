@@ -1,0 +1,63 @@
+ M README.md
+ M audit-stage2-20261020/REPORT.md
+ M outputs/evidence/06-report-hinted.png
+ M outputs/evidence/07-report-changed.png
+ M outputs/evidence/08-map.png
+ M outputs/evidence/10-plan.png
+ M outputs/evidence/11-today.png
+ M outputs/evidence/12-memory.png
+ M "outputs/team/\345\205\210\347\234\213\350\277\231\351\207\214-\344\275\277\347\224\250\350\257\264\346\230\216.txt"
+ M "outputs/team/\345\217\214\345\207\273\346\211\223\345\274\200-\345\255\246\344\274\264\345\260\217N.html"
+ M outputs/xiaon/.gitignore
+ M outputs/xiaon/README.md
+ M outputs/xiaon/index.html
+ M outputs/xiaon/package-lock.json
+ M outputs/xiaon/package.json
+ M outputs/xiaon/public/offline.html
+ M "outputs/xiaon/public/team/\345\255\246\344\274\264\345\260\217N-\351\230\237\345\217\213\344\275\223\351\252\214\345\214\205.zip"
+ M outputs/xiaon/scripts/build-offline.mjs
+ M outputs/xiaon/src/App.tsx
+ M outputs/xiaon/src/data.ts
+ M outputs/xiaon/src/domain.test.ts
+ M outputs/xiaon/src/domain.ts
+ M outputs/xiaon/vite.config.ts
+ M "outputs/\345\255\246\344\274\264\345\260\217N-\351\230\237\345\217\213\344\275\223\351\252\214\345\214\205.zip"
+?? audit-stage1-20261020-r2/
+?? audit-stage2-20261020/HANDOFF.md
+?? audit-stage2-20261020/evidence/40-hint-before-click.png
+?? audit-stage2-20261020/evidence/40-hint-before-click.txt
+?? audit-stage2-20261020/evidence/41-hint-after-click.png
+?? audit-stage2-20261020/evidence/41-hint-after-click.txt
+?? audit-stage2-20261020/evidence/42-hint-report-intact.png
+?? audit-stage2-20261020/evidence/42-hint-report-intact.txt
+?? audit-stage2-20261020/evidence/interrupted-run.json
+?? audit-stage2-20261020/evidence/verify-post-answer-hint.mjs
+?? audit-stage3-20261020/
+?? fixes-stage2-20261020/
+?? fixes-stage3-20261020/
+?? outputs/evidence/browser-1792492963924.json
+?? outputs/evidence/browser-1792493904848.json
+?? outputs/evidence/browser-1792493914187.json
+?? outputs/evidence/browser-1792494249095.json
+?? outputs/evidence/browser-1792495084717.json
+?? outputs/evidence/browser-1792495092415.json
+?? outputs/evidence/browser-stage2fix.json
+?? outputs/evidence/browser-stage2fix2.json
+?? outputs/evidence/browser-stage3fix.json
+?? outputs/team/demo-preview.png
+?? outputs/xiaon/.env.example
+?? outputs/xiaon/playwright.agent.config.ts
+?? outputs/xiaon/scripts/agent/
+?? outputs/xiaon/server/
+?? outputs/xiaon/shared/
+?? outputs/xiaon/src/agent-client/
+?? outputs/xiaon/src/ai.ts
+?? outputs/xiaon/src/learning/
+?? outputs/xiaon/src/vite-env.d.ts
+?? outputs/xiaon/tests-agent/
+?? outputs/xiaon/tsconfig.agent.json
+?? "outputs/\345\255\246\344\274\264\345\260\217N-\351\230\237\345\217\213\344\275\223\351\252\214\345\214\205 2.zip"
+?? "outputs/\345\255\246\344\274\264\345\260\217N-\351\230\266\346\256\2652\344\277\256\345\244\215\346\272\220\347\240\201 2.zip"
+?? "outputs/\345\255\246\344\274\264\345\260\217N-\351\230\266\346\256\2652\344\277\256\345\244\215\346\272\220\347\240\201.zip"
+?? "\344\273\273\345\212\241\344\271\246/"
+773e95ecc3063648a4ece1e67484c48f763ccaff

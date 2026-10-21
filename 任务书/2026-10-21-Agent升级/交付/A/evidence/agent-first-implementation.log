@@ -1,0 +1,158 @@
+COMMAND: npx tsx --test tests-agent/a/runtime.test.ts
+UTC: 2026-10-20T16:22:28.688482+00:00
+✖ strict schema and browser public view deny answer, role, learner and invalid versions (4.507ms)
+✖ native synthetic tool loop really queries SQLite and returns a tool result to model (1.829125ms)
+✖ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (1.863083ms)
+✖ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (3.437209ms)
+✖ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (1.794625ms)
+✖ restart preserves attempts, operation receipts and sessions in a real SQLite file (1.964208ms)
+✖ timeout, cancellation, unsupported provider and budget do not fake completion (1.685333ms)
+✖ legacy import preview, transaction rollback, retry and unknown time keep original untouched (1.924625ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 0
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 149.374125
+
+✖ failing tests:
+
+test at tests-agent/a/runtime.test.ts:24:1
+✖ strict schema and browser public view deny answer, role, learner and invalid versions (4.507ms)
+  Error: 无效的持久化契约对象
+      at SqliteRepository.append (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:41:84)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:71)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:49:20)
+      at createRuntime (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:13)
+      at fixture (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:14:19)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:28:13)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/a/runtime.test.ts:36:1
+✖ native synthetic tool loop really queries SQLite and returns a tool result to model (1.829125ms)
+  Error: 无效的持久化契约对象
+      at SqliteRepository.append (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:41:84)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:71)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:49:20)
+      at createRuntime (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:13)
+      at fixture (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:14:19)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:37:55)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/a/runtime.test.ts:50:1
+✖ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (1.863083ms)
+  Error: 无效的持久化契约对象
+      at SqliteRepository.append (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:41:84)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:71)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:49:20)
+      at createRuntime (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:13)
+      at fixture (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:14:19)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:51:13)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/a/runtime.test.ts:67:1
+✖ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (3.437209ms)
+  Error: 无效的持久化契约对象
+      at SqliteRepository.append (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:41:84)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:71)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:49:20)
+      at createRuntime (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:13)
+      at fixture (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:14:19)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:68:13)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/a/runtime.test.ts:82:1
+✖ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (1.794625ms)
+  Error: 无效的持久化契约对象
+      at SqliteRepository.append (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:41:84)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:71)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:49:20)
+      at createRuntime (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:13)
+      at fixture (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:14:19)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:83:11)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/a/runtime.test.ts:99:1
+✖ restart preserves attempts, operation receipts and sessions in a real SQLite file (1.964208ms)
+  Error: 无效的持久化契约对象
+      at SqliteRepository.append (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:41:84)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:71)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:49:20)
+      at createRuntime (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:13)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:101:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/a/runtime.test.ts:105:1
+✖ timeout, cancellation, unsupported provider and budget do not fake completion (1.685333ms)
+  Error: 无效的持久化契约对象
+      at SqliteRepository.append (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:41:84)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:71)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:49:20)
+      at createRuntime (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:13)
+      at fixture (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:14:19)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:107:13)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/a/runtime.test.ts:117:1
+✖ legacy import preview, transaction rollback, retry and unknown time keep original untouched (1.924625ms)
+  Error: 无效的持久化契约对象
+      at SqliteRepository.append (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:41:84)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:71)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:49:20)
+      at createRuntime (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/bootstrap.ts:18:13)
+      at fixture (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:14:19)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:118:11)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+exitCode=1

@@ -1,0 +1,8 @@
+$ node --env-file-if-exists=.env.server --import tsx scripts/agent/d-real-memory.ts
+enabled completed
+corrected completed
+off completed
+stopped completed
+deleted completed
+
+EXIT_CODE=0

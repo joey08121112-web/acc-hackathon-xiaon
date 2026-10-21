@@ -1,0 +1,101 @@
+{
+  "startedAt": "2026-10-20T15:34:22.579Z",
+  "results": {
+    "welcome-hero-half": {
+      "pass": true,
+      "detail": "欢迎页形象高度 265px，占视口 31%"
+    },
+    "onboard-fast-pass": {
+      "pass": true,
+      "detail": ""
+    },
+    "task-question-visible": {
+      "pass": true,
+      "detail": "题目在任务页可见"
+    },
+    "task-btn-我先试试": {
+      "pass": true,
+      "detail": ""
+    },
+    "task-btn-给一点提示": {
+      "pass": true,
+      "detail": ""
+    },
+    "task-btn-先暂停": {
+      "pass": true,
+      "detail": ""
+    },
+    "task-btn-recognition": {
+      "pass": true,
+      "detail": ""
+    },
+    "task-focus-no-map": {
+      "pass": true,
+      "detail": "任务页无地图节点（专注模式）"
+    },
+    "pause-home-resume": {
+      "pass": true,
+      "detail": "暂停回主页保留继续入口"
+    },
+    "resume-draft": {
+      "pass": true,
+      "detail": ""
+    },
+    "resume-hint": {
+      "pass": true,
+      "detail": ""
+    },
+    "report-status-hinted": {
+      "pass": true,
+      "detail": ""
+    },
+    "report-not-independent": {
+      "pass": true,
+      "detail": ""
+    },
+    "report-evidence-visible": {
+      "pass": false,
+      "detail": "报告直接可见两次作答记录"
+    },
+    "report-expand-works": {
+      "pass": false,
+      "detail": "未找到展开按钮（依据可能直接展示）"
+    },
+    "map-five-places": {
+      "pass": true,
+      "detail": "五地点齐备"
+    },
+    "map-dimension-naming": {
+      "pass": false,
+      "detail": "地图/列表是否出现维度名：否（仅在任务页与报告出现）"
+    },
+    "map-calc-status-honest": {
+      "pass": false,
+      "detail": "提示后完成不作“完成”展示（记录状态）"
+    },
+    "s1-01-map-nodes-present": {
+      "pass": true,
+      "detail": "探索页地图节点数=5"
+    },
+    "s1-01-large-name": {
+      "pass": true,
+      "detail": "地点名 14.1px → 18px"
+    },
+    "s1-01-large-status": {
+      "pass": true,
+      "detail": "状态 12px → 15.12px"
+    },
+    "s1-01-normal-status-size": {
+      "pass": true,
+      "detail": "普通模式状态字号 12px（约12px）"
+    },
+    "s1-01-no-overflow": {
+      "pass": true,
+      "detail": "320px 横向溢出 large=0 normal=0"
+    },
+    "w430-home-no-overflow": {
+      "pass": true,
+      "detail": "430px主页溢出=0px"
+    }
+  }
+}

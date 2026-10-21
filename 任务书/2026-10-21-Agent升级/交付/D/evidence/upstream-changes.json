@@ -1,0 +1,91 @@
+{
+  "A": {
+    "originalCount": 41,
+    "DChanged": [
+      {
+        "path": "outputs/xiaon/.env.example",
+        "before": "dc261a167aaafdc3c0a431714f81f1c62edd7c56775f550608e74658472711a9",
+        "after": "5badadd763c704b80a8f07776e2c2d46ffb84f4d55160ed291737906f3261303"
+      },
+      {
+        "path": "outputs/xiaon/package.json",
+        "before": "47c05cc09e81764e37b0d4e9b010b0f49511d35e263e46a9bdf996deee850313",
+        "after": "e9990768f19f991e218c150ecab73e1cde7d0697108df1ddc39f142253234be8"
+      },
+      {
+        "path": "outputs/xiaon/scripts/agent/service-smoke.mjs",
+        "before": "98085750dc7860b2237e0c258909f1ff58474a06881c7fb736c754861ea16009",
+        "after": "eb03927b2a40e81c4c6baeabf60e706d40ac573b6046984242255b6c8bbdae07"
+      },
+      {
+        "path": "outputs/xiaon/server/core/agent.ts",
+        "before": "d9f16ff261681a850d9320b8e35db129b460a190a88732a2f83afea0e3c210da",
+        "after": "4b2d0eb3c85d62159a6c14732f199855c060693cc9164f85d95e15a980bb1333"
+      },
+      {
+        "path": "outputs/xiaon/server/http/server.ts",
+        "before": "b80d7f992f81352b619203f5696318920230b1e3827793f1a3f587dfe7a84c25",
+        "after": "9c3ca5a7e54348c13a99d649e8d05849eb5bc1e691d9a239d546f1c32ed00672"
+      },
+      {
+        "path": "outputs/xiaon/server/index.ts",
+        "before": "79ca43a235bad222aae72c96cd055b9b28e1e95454948ce6ac81219598c5cf55",
+        "after": "f9e6a5892d72539860e6db6fecf7b468b56cc65d78e4e848609d088b365115ad"
+      },
+      {
+        "path": "outputs/xiaon/server/storage/repository.ts",
+        "before": "6c6901033ed4026e43965ff2213fd18b7f82d8b6a81f69065e999704a141532a",
+        "after": "b467e346866c1df208056e1d16a8b84b79d664bbf3c2d2fdea1ae76ec2f46651"
+      },
+      {
+        "path": "outputs/xiaon/server/tools/registry.ts",
+        "before": "b8c00e9a00f816498d19912857c665ac297a4e752d7de19504a834f218907cfc",
+        "after": "2e67003b1601b43035f9375a1dbebaf0b94b9306050f411d7f2b063ddda13acd"
+      },
+      {
+        "path": "outputs/xiaon/shared/learning-contracts.schema.json",
+        "before": "3c3f1949420c6a0b8768ebf7de56935d5838fb89ef795deb1a80cd0ef1157d01",
+        "after": "75be61b83e32af116b9fb67c7af045cd80d6334df8140ae879f34250bcb340c4"
+      },
+      {
+        "path": "outputs/xiaon/shared/learning-contracts.ts",
+        "before": "8d9f73257ab36ca78a8965c0ffcd879f46b301b5638ee5300092b5b1574509b8",
+        "after": "6a8b015561877209aa222cf4235d00bc922f46c1a01f155700f694b17545198e"
+      },
+      {
+        "path": "outputs/xiaon/src/agent-client/index.ts",
+        "before": "09c9b9a54ac7d9005bc3923800899ddf04062cea0a396f1ee7c37d5ba7468ea7",
+        "after": "4853925bf530ad391cbb290dc903223de5649a9526b0ff2b5ce891df1c9f6e26"
+      },
+      {
+        "path": "outputs/xiaon/src/ai.ts",
+        "before": "a75ae6fbfb6d5513933d9987aa23c19861ff6b19dfcbc2690955353b5d54e0ea",
+        "after": "cfaf203b62040fb1b311d736cfbb0fbe488b65ff096bdccfc3aad977b9706cfa"
+      },
+      {
+        "path": "outputs/xiaon/tests-agent/a/runtime.test.ts",
+        "before": "8a3041bdfce451b5db91947d338be445a134385190ad41f53af69714318ae710",
+        "after": "1a495479b401d98e4a2c0b3f42c7d215ff11e82f9742d3388385f3f56e3ba7d7"
+      }
+    ]
+  },
+  "B": {
+    "originalCount": 13,
+    "DChanged": []
+  },
+  "C": {
+    "originalCount": 8,
+    "DChanged": [
+      {
+        "path": "outputs/xiaon/src/learning/review/index.ts",
+        "before": "fd0d3e2e246961e2cf4dbe5bd2103f26fd6765fa1910d697d2c93fb8c8bc28c3",
+        "after": "2fb90f5ecc27571d9f5b70f22e193e2e5896ff412b3f3f8d7dd019ff3a31002f"
+      },
+      {
+        "path": "outputs/xiaon/server/plugins/planning/evidence.ts",
+        "before": "9d2cca7001237d6823e04eb613e1a22baaac511620430ebbd243d122193b4e02",
+        "after": "aba23abc0d0a8801f3989ccddd4d888e9f271965db619fa6e763b55b40b2496f"
+      }
+    ]
+  }
+}

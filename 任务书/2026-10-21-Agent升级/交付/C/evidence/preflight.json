@@ -1,0 +1,133 @@
+{
+  "checkedAtUtc": "2026-10-20T16:15:33.823150+00:00",
+  "scope": "C preflight only; no product implementation",
+  "cFilesBefore": [],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exitCode": 0,
+      "stdout": " M README.md\n M audit-stage2-20261020/REPORT.md\n M outputs/evidence/08-map.png\n M outputs/evidence/12-memory.png\n M \"outputs/team/\\345\\205\\210\\347\\234\\213\\350\\277\\231\\351\\207\\214-\\344\\275\\277\\347\\224\\250\\350\\257\\264\\346\\230\\216.txt\"\n M \"outputs/team/\\345\\217\\214\\345\\207\\273\\346\\211\\223\\345\\274\\200-\\345\\255\\246\\344\\274\\264\\345\\260\\217N.html\"\n M outputs/xiaon/.gitignore\n M outputs/xiaon/README.md\n M outputs/xiaon/index.html\n M outputs/xiaon/package-lock.json\n M outputs/xiaon/package.json\n M outputs/xiaon/public/offline.html\n M \"outputs/xiaon/public/team/\\345\\255\\246\\344\\274\\264\\345\\260\\217N-\\351\\230\\237\\345\\217\\213\\344\\275\\223\\351\\252\\214\\345\\214\\205.zip\"\n M outputs/xiaon/scripts/build-offline.mjs\n M outputs/xiaon/src/App.tsx\n M outputs/xiaon/src/data.ts\n M outputs/xiaon/src/domain.test.ts\n M \"outputs/\\345\\255\\246\\344\\274\\264\\345\\260\\217N-\\351\\230\\237\\345\\217\\213\\344\\275\\223\\351\\252\\214\\345\\214\\205.zip\"\n?? audit-stage1-20261020-r2/\n?? audit-stage2-20261020/HANDOFF.md\n?? audit-stage2-20261020/evidence/40-hint-before-click.png\n?? audit-stage2-20261020/evidence/40-hint-before-click.txt\n?? audit-stage2-20261020/evidence/41-hint-after-click.png\n?? audit-stage2-20261020/evidence/41-hint-after-click.txt\n?? audit-stage2-20261020/evidence/42-hint-report-intact.png\n?? audit-stage2-20261020/evidence/42-hint-report-intact.txt\n?? audit-stage2-20261020/evidence/interrupted-run.json\n?? audit-stage2-20261020/evidence/verify-post-answer-hint.mjs\n?? audit-stage3-20261020/\n?? fixes-stage2-20261020/\n?? outputs/evidence/browser-1792492963924.json\n?? outputs/evidence/browser-1792493904848.json\n?? outputs/evidence/browser-1792493914187.json\n?? outputs/evidence/browser-1792494249095.json\n?? outputs/evidence/browser-1792495084717.json\n?? outputs/evidence/browser-1792495092415.json\n?? outputs/evidence/browser-stage2fix.json\n?? outputs/evidence/browser-stage2fix2.json\n?? outputs/team/demo-preview.png\n?? outputs/xiaon/.env.example\n?? outputs/xiaon/src/ai.ts\n?? outputs/xiaon/src/vite-env.d.ts\n?? \"outputs/\\345\\255\\246\\344\\274\\264\\345\\260\\217N-\\351\\230\\237\\345\\217\\213\\344\\275\\223\\351\\252\\214\\345\\214\\205 2.zip\"\n?? \"outputs/\\345\\255\\246\\344\\274\\264\\345\\260\\217N-\\351\\230\\266\\346\\256\\2652\\344\\277\\256\\345\\244\\215\\346\\272\\220\\347\\240\\201 2.zip\"\n?? \"outputs/\\345\\255\\246\\344\\274\\264\\345\\260\\217N-\\351\\230\\266\\346\\256\\2652\\344\\277\\256\\345\\244\\215\\346\\272\\220\\347\\240\\201.zip\"\n?? \"\\344\\273\\273\\345\\212\\241\\344\\271\\246/\"\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "exitCode": 0,
+      "stdout": "main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "773e95ecc3063648a4ece1e67484c48f763ccaff\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "worktree",
+        "list"
+      ],
+      "exitCode": 0,
+      "stdout": "\"/Users/ami/Documents/\\344\\270\\252\\344\\272\\272/ACC\\351\\273\\221\\345\\256\\242\\346\\235\\276\" 773e95e [main]\n",
+      "stderr": ""
+    }
+  ],
+  "ownedPathsBefore": [
+    {
+      "path": "outputs/xiaon/src/learning/review",
+      "exists": false,
+      "files": []
+    },
+    {
+      "path": "outputs/xiaon/server/plugins/planning",
+      "exists": false,
+      "files": []
+    },
+    {
+      "path": "outputs/xiaon/tests-agent/c",
+      "exists": false,
+      "files": []
+    }
+  ],
+  "prerequisites": [
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/A/HANDOFF.md",
+      "exists": false
+    },
+    {
+      "path": "outputs/xiaon/shared/learning-contracts.ts",
+      "exists": false
+    },
+    {
+      "path": "outputs/xiaon/shared/learning-contracts.schema.json",
+      "exists": false
+    },
+    {
+      "path": "outputs/xiaon/server",
+      "exists": false
+    },
+    {
+      "path": "outputs/xiaon/tests-agent",
+      "exists": false
+    },
+    {
+      "path": "outputs/xiaon/src/agent-client",
+      "exists": false
+    }
+  ],
+  "aEvidenceInventory": [
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-files.json",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/.env.example",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/.gitignore",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/README.md",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/package-lock.json",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/package.json",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/playwright.config.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/scripts/build-offline.mjs",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/App.tsx",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/Art.tsx",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/Upload.tsx",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/ai.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/data.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/domain.test.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/domain.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/main.tsx",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/src/vite-env.d.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/tests/accessibility.spec.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/tests/experience.spec.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/tests/offline.spec.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/tsconfig.json",
+    "任务书/2026-10-21-Agent升级/交付/A/baseline-source/vite.config.ts",
+    "任务书/2026-10-21-Agent升级/交付/A/evidence/baseline-git-diff-stat.log",
+    "任务书/2026-10-21-Agent升级/交付/A/evidence/baseline-git-head.log",
+    "任务书/2026-10-21-Agent升级/交付/A/evidence/baseline-git-status.log",
+    "任务书/2026-10-21-Agent升级/交付/A/evidence/baseline-git-worktrees.log",
+    "任务书/2026-10-21-Agent升级/交付/A/evidence/baseline-listeners.log",
+    "任务书/2026-10-21-Agent升级/交付/A/evidence/build-baseline.log",
+    "任务书/2026-10-21-Agent升级/交付/A/evidence/unit-baseline.log",
+    "任务书/2026-10-21-Agent升级/交付/A/run.py"
+  ],
+  "readSourceHashes": {
+    "README.md": "cf907c9ffd8866afc22f5a111224f9b4ba6e51afe7bce7464b459692421781b1",
+    "outputs/xiaon/README.md": "0e4406686c2916180646a5637053004a6c70c74fdfee4ee981e70248022f9725",
+    "audit-stage3-20261020/REPORT.md": "e490b597afc4b3a0b6036e4a767f6a1cf4701ee9d7cd5ac96530ede6e06490dc",
+    "fixes-stage2-20261020/FIX-REPORT.md": "357e43dd060d1c361f5c75d6798366ec200efddebca1cb148ad335746df047c1",
+    "outputs/xiaon/src/domain.ts": "dfa9036aba07bfa33aa7af43de9eec94018bbf47dd7dd02492d69d6ae6ad427c",
+    "outputs/xiaon/src/data.ts": "4350219001e9d8d11f1d4d5a512642e16f10ade6340ea4dfea0098994371ee38",
+    "outputs/xiaon/package.json": "a88a641b862c8daf0858c70cbb60ae11c0bd58f470d66216d1425a504f6327ca",
+    "任务书/2026-10-21-Agent升级/00-总控与共同约束.md": "cd901ba7bcae67717122a78945d580d2137226b7f55487d789148bf4c27538f9",
+    "任务书/2026-10-21-Agent升级/03-窗口三-复习动态计划与历史.md": "fd6229ee544bf1f68e41943701cb04654f351bda8791846c05cfc0beff0ab936"
+  }
+}

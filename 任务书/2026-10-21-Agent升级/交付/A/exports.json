@@ -1,0 +1,217 @@
+[
+  {
+    "kind": "const",
+    "name": "SCHEMA_VERSION",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "const",
+    "name": "schemas",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "TaskDefinition",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "TaskPublicView",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "SessionEvent",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "LearningSession",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "Attempt",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ExposureEvent",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "GradingResult",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "Evidence",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "SkillState",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "AssessmentSnapshot",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ReviewPolicy",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ReviewItem",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ReviewOutcome",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ReportSnapshot",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "PlanProposal",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "PlanVersion",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "MemoryItem",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ConsentState",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ToolCall",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ToolResult",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "AgentRun",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "RolePolicy",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "Failure",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "SourceTime",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "SubmitAttempt",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ChatRequest",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "Dimension",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "Clock",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "EntityMap",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "LearningRepository",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "TaskSelection",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "TaskCatalog",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "EngineContext",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "AssessmentEnginePort",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "PlanningEnginePort",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "EngineRegistration",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "NativeToolCall",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ModelMessage",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "ToolDefinition",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "interface",
+    "name": "ModelProvider",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  },
+  {
+    "kind": "type",
+    "name": "AgentReply",
+    "path": "outputs/xiaon/shared/learning-contracts.ts"
+  }
+]

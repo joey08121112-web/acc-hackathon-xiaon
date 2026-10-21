@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-21T08:43:04.175394+08:00",
+  "pages": 15,
+  "functionalRequirementCount": 14,
+  "acceptanceScenarioCount": 18,
+  "tables": 15,
+  "markdownToDocxMissingSegments": [],
+  "visualReview": "All 15 final rendered PNG pages opened and inspected. Chinese glyphs, black title without border, table wrapping, repeating table headers and page numbering checked. Initial missing-glyph renders preserved as internal failed QA; final render uses a task-local Fontconfig with existing macOS Arial Unicode MS font.",
+  "scope": "Document verification only. No product tests, real API requests, device or student acceptance performed in this task.",
+  "deliverables": {
+    "学伴小N-产品需求文档-v1.0.md": {
+      "sha256": "35fee4c17059ef4e449cea72a90daeebef06430d9bda4e4b7d49e55df4edc84d",
+      "bytes": 34165
+    },
+    "学伴小N-产品需求文档-v1.0.docx": {
+      "sha256": "60d1701bfd066fe62b345848877aee751920853e597e57bad4e8ffc23fe2400c",
+      "bytes": 58865
+    }
+  }
+}

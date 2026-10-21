@@ -1,0 +1,19 @@
+{
+  "wrongAnswerStillRejected": true,
+  "hintedCompletionIntact": true,
+  "equivalentFormAccepted": true,
+  "backRestoresPreviousTask": {
+    "restoredQuestionEqualsOpened": true,
+    "attemptsLabel": "1 次尝试"
+  },
+  "reportRecordsIndependent": true,
+  "reportFirstAttemptEvidence": true,
+  "restResumePausesInvite": {
+    "bannerGone": true,
+    "pausedNotice": true,
+    "manualEntry": true,
+    "quickInviteGone": true
+  },
+  "pausedSurvivesReload": true,
+  "manualRestartStillWorks": true
+}

@@ -1,0 +1,28 @@
+{
+  "status": "Stopped at user request; stage 2 review assigned to ZCode",
+  "date": "2026-10-20",
+  "source_files_checked": 45,
+  "source_unchanged": false,
+  "changed": [
+    "index.html",
+    "tsconfig.tsbuildinfo",
+    "README.md",
+    ".gitignore",
+    "public/offline.html",
+    "scripts/build-offline.mjs",
+    "src/data.ts",
+    "src/App.tsx",
+    "src/domain.test.ts",
+    "public/team/学伴小N-队友体验包.zip"
+  ],
+  "unit_tests": "20/20 passed in runtime copy",
+  "typecheck_build": "passed in runtime copy",
+  "math_probe": "6/9 cases passed; 3 equivalent-answer cases failed; not fixed",
+  "real_mobile_keyboard_tested": false,
+  "browser_suite_rerun": false,
+  "final_stage_verdict": "Not issued",
+  "rejected_screenshot": "01-first-entry.png captured during viewport transition; not mobile evidence",
+  "runtime_server": "Audit-owned port 5182 stopped",
+  "note": "This audit did not edit product files. Shared node_modules cache may have been updated by Vite. Live product hashes changed, so snapshot results must not be applied to current source without re-verification.",
+  "evidence_scope": "Initial runtime snapshot only; live product changed during review, author not determined; no overwrite or rollback performed"
+}

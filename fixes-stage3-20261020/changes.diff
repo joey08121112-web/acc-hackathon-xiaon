@@ -1,0 +1,526 @@
+--- fixes-stage3-20261020/before/domain.ts	2026-10-21 00:26:25
++++ outputs/xiaon/src/domain.ts	2026-10-21 00:30:43
+@@ -3,6 +3,7 @@
+   dimensions,
+   getTask,
+   normalize,
++  tasks,
+   type Dimension,
+ } from "./data";
+ export const PROGRESS_KEY = "xiaon-progress-v1",
+@@ -63,6 +64,7 @@
+   uploadText: string;
+   uploadConfirmed: boolean;
+   storageNotice: string;
++  statusTrail: Record<string, { status: string; time: string }[]>;
+ };
+ export function initial(): State {
+   return {
+@@ -100,6 +102,7 @@
+     uploadText: "3x − (2x − 5)",
+     uploadConfirmed: false,
+     storageNotice: "",
++    statusTrail: {},
+   };
+ }
+ export function hydrate(raw: string | null): State {
+@@ -198,25 +201,23 @@
+         r.attempts.some((x) => x.id === a.id)
+       )
+         return s;
+-      return {
+-        ...s,
+-        records: {
+-          ...s.records,
+-          [a.taskId]: {
+-            ...r,
+-            attempts: [
+-              ...r.attempts,
+-              {
+-                id: a.id,
+-                value: a.value,
+-                correct: correct(getTask(a.taskId), a.value),
+-                hinted: r.hint,
+-                time: a.time,
+-              },
+-            ],
+-          },
++      const records = {
++        ...s.records,
++        [a.taskId]: {
++          ...r,
++          attempts: [
++            ...r.attempts,
++            {
++              id: a.id,
++              value: a.value,
++              correct: correct(getTask(a.taskId), a.value),
++              hinted: r.hint,
++              time: a.time,
++            },
++          ],
+         },
+       };
++      return { ...s, records, statusTrail: withTrail(s.statusTrail, records, a.time) };
+     }
+     case "chat-send":
+       if (s.chatStatus === "waiting" || s.chat.some((m) => m.id === a.id))
+@@ -255,6 +256,41 @@
+   basis: RecordItem[];
+   next: string;
+ };
++function statusFor(basis: RecordItem[]): string {
++  const independent = basis.filter(
++    (r) => r.attempts[0]?.correct && !r.attempts[0]?.hinted,
++  );
++  const hinted = basis.filter((r) =>
++    r.attempts.some((a) => a.correct && a.hinted),
++  );
++  return independent.length >= 2
++    ? "多次独立完成"
++    : independent.length
++      ? "本次独立完成"
++      : hinted.length
++        ? "提示下完成"
++        : basis.length
++          ? "需要继续观察"
++          : "尚未观察";
++}
++function withTrail(
++  trail: State["statusTrail"],
++  records: State["records"],
++  time: string,
++): State["statusTrail"] {
++  const next = { ...trail };
++  for (const dim of dimensions) {
++    const basis = Object.values(records).filter(
++      (r) => getTask(r.id).dim === dim && r.attempts.length,
++    );
++    if (!basis.length) continue;
++    const status = statusFor(basis);
++    const arr = next[dim] || [];
++    if (arr.at(-1)?.status !== status)
++      next[dim] = [...arr, { status, time }];
++  }
++  return next;
++}
+ export function observations(s: State): Observation[] {
+   return dimensions.map((dim) => {
+     const basis = Object.values(s.records).filter(
+@@ -266,16 +302,7 @@
+     const hinted = basis.filter((r) =>
+       r.attempts.some((a) => a.correct && a.hinted),
+     );
+-    const status =
+-      independent.length >= 2
+-        ? "多次独立完成"
+-        : independent.length
+-          ? "本次独立完成"
+-          : hinted.length
+-            ? "提示下完成"
+-            : basis.length
+-              ? "需要继续观察"
+-              : "尚未观察";
++    const status = statusFor(basis);
+     const signErrors = basis.filter((r) => {
+       const t = getTask(r.id),
+         wrongSign = t.answer[0].replace("+", "-");
+@@ -343,4 +370,101 @@
+   if (/题|试试|开始/.test(text))
+     return "我们可以只看一道题，不用一下子做很多。你愿意从一道去括号的题开始吗？";
+   return "谢谢你告诉我。我先听着，不急着给你下结论。你希望我继续听你说，还是陪你看一道题？";
++}
++export type PlanTask = {
++  day: string;
++  title: string;
++  note: string;
++  mins: number;
++  taskId?: string;
++};
++export type PlanDraft = {
++  eyebrow: string;
++  goal: string;
++  note: string;
++  tasks: PlanTask[];
++};
++export function nextNewCalcId(s: State): string {
++  return (
++    [
++      "transfer",
++      ...tasks.filter((t) => t.id.startsWith("calc-")).map((t) => t.id),
++    ].find((id) => !s.calcSeen.includes(id)) || "transfer"
++  );
+ }
++// 周计划按计算维观察结果分流：有符号错误时先补这个环节，
++// 已能独立完成时转向巩固与检验，避免给所有学生同一份固定建议。
++export function planDraft(s: State): PlanDraft {
++  const calc = observations(s)[2];
++  if (calc.status === "多次独立完成")
++    return {
++      eyebrow: "根据当前计算任务记录",
++      goal: "把去括号的方法用活",
++      note: "你已经在不同的题里独立完成。这周试试把方法讲清楚，再编一道题考考自己。",
++      tasks: [
++        {
++          day: "第 1 次",
++          title: "再检验一道同类新题",
++          note: "约 3 分钟 · 保持不提示",
++          mins: 3,
++          taskId: nextNewCalcId(s),
++        },
++        {
++          day: "第 2 次",
++          title: "自己编一道去括号题",
++          note: "约 3 分钟 · 写出题目和解答",
++          mins: 3,
++        },
++      ],
++    };
++  if (calc.status === "本次独立完成")
++    return {
++      eyebrow: "根据当前计算任务记录",
++      goal: "站稳去括号这一步",
++      note: "这次你独立完成了。再换一道新题，看看是不是每次都稳。",
++      tasks: [
++        {
++          day: "第 1 次",
++          title: "换一道同类新题，自己试试",
++          note: "约 3 分钟 · 优先不提示",
++          mins: 3,
++          taskId: nextNewCalcId(s),
++        },
++        {
++          day: "第 2 次",
++          title: "回看方法，复述关键一步",
++          note: "约 2 分钟",
++          mins: 2,
++        },
++      ],
++    };
++  return {
++    eyebrow: calc.basis.length
++      ? "根据当前计算任务记录"
++      : "尚无作答依据 · 可选建议目标",
++    goal: "看清括号前的负号",
++    note: "先圈符号，再逐项去括号。用新题看看，能不能自己处理好。",
++    tasks: [
++      {
++        day: "第 1 次",
++        title: "一起观察一个括号",
++        note: "约 3 分钟 · 原题尝试与提示",
++        mins: 3,
++        taskId: "bracket",
++      },
++      {
++        day: "第 2 次",
++        title: "换一道同类新题",
++        note: "约 3 分钟 · 优先自己试试",
++        mins: 3,
++        taskId: "transfer",
++      },
++      {
++        day: "第 3 次",
++        title: "回看方法，整理小发现",
++        note: "约 2 分钟 · 复述关键步骤",
++        mins: 2,
++      },
++    ],
++  };
++}
+--- fixes-stage3-20261020/before/domain.test.ts	2026-10-21 00:26:25
++++ outputs/xiaon/src/domain.test.ts	2026-10-21 00:30:50
+@@ -7,7 +7,9 @@
+   reducer,
+   observations,
+   memoryAfter,
++  planDraft,
+   replyFor,
++  taskStatus,
+   type State,
+   type Memory,
+ } from "./domain";
+@@ -219,3 +221,70 @@
+   assert.equal(o.status, "本次独立完成");
+   assert.doesNotMatch(o.finding, /还没有完成正确解答|需要继续了解具体步骤/);
+ });
++
++test("周计划按计算观察结果分化，不再对所有人给同一份固定建议", () => {
++  const none = planDraft(initial());
++  assert.equal(none.goal, "看清括号前的负号");
++  assert.match(none.eyebrow, /尚无作答依据/);
++  assert.equal(none.tasks.length, 3);
++
++  let hinted = answer(open(initial()), "x-5");
++  hinted = reducer(hinted, { type: "hint", id: "bracket" });
++  hinted = answer(hinted, "x+5", "2");
++  const d1 = planDraft(hinted);
++  assert.equal(d1.goal, "看清括号前的负号");
++  assert.match(d1.eyebrow, /根据当前计算任务记录/);
++
++  let independent = answer(open(initial()), "x+5");
++  const d2 = planDraft(independent);
++  assert.equal(d2.goal, "站稳去括号这一步");
++  assert.equal(d2.tasks.length, 2);
++  assert.equal(d2.tasks[0].taskId, "transfer");
++  assert.equal(taskStatus(independent, d2.tasks[0].taskId!), "未开始");
++
++  independent = answer(
++    open(independent, "transfer"),
++    "4a+2",
++    "3",
++    "transfer",
++  );
++  const d3 = planDraft(independent);
++  assert.equal(d3.goal, "把去括号的方法用活");
++  assert.equal(d3.tasks[0].taskId, "calc-0");
++});
++
++test("结论轨迹如实保留状态变化，不因新证据悄悄丢失", () => {
++  let s = answer(open(initial()), "x-5");
++  assert.deepEqual(
++    s.statusTrail["计算"].map((x) => x.status),
++    ["需要继续观察"],
++  );
++  s = reducer(s, { type: "hint", id: "bracket" });
++  s = answer(s, "x+5", "2");
++  assert.deepEqual(
++    s.statusTrail["计算"].map((x) => x.status),
++    ["需要继续观察", "提示下完成"],
++  );
++  s = answer(open(s, "transfer"), "4a+2", "3", "transfer");
++  assert.deepEqual(
++    s.statusTrail["计算"].map((x) => x.status),
++    ["需要继续观察", "提示下完成", "本次独立完成"],
++  );
++  const kept = JSON.parse(JSON.stringify(s.statusTrail));
++  s = answer(s, "4a+2", "dup", "transfer");
++  assert.deepEqual(s.statusTrail, kept);
++  s = answer(open(s, "calc-0"), "3x+1", "5", "calc-0");
++  assert.deepEqual(
++    s.statusTrail["计算"].map((x) => x.status),
++    ["需要继续观察", "提示下完成", "本次独立完成", "多次独立完成"],
++  );
++  assert.equal(s.statusTrail["理解"], undefined);
++});
++
++test("旧进度缺少结论轨迹字段时可正常加载并继续使用", () => {
++  const legacy = answer(open(initial()), "x+5");
++  delete (legacy as Partial<typeof legacy>).statusTrail;
++  const s = hydrate(JSON.stringify(legacy));
++  assert.deepEqual(s.statusTrail, {});
++  assert.equal(planDraft(s).goal, "站稳去括号这一步");
++});
+--- fixes-stage3-20261020/before/App.tsx	2026-10-21 00:26:25
++++ outputs/xiaon/src/App.tsx	2026-10-21 00:29:39
+@@ -45,7 +45,6 @@
+   dimensionDetails,
+   dimensions,
+   getTask,
+-  tasks,
+   type Dimension,
+ } from "./data";
+ import {
+@@ -53,7 +52,9 @@
+   initial,
+   memoryAfter,
+   MEMORY_KEY,
++  nextNewCalcId,
+   observations,
++  planDraft,
+   PROGRESS_KEY,
+   reducer,
+   replyFor,
+@@ -393,6 +394,9 @@
+     say("这台设备上的演示进度、图片和记忆已清空。");
+   };
+   const report = observations(s),
++    plan = planDraft(s),
++    planTasks =
++      s.plan === "lighter" ? plan.tasks.slice(0, -1) : plan.tasks,
+     doneCount = dimensions.filter((d) =>
+       report
+         .find((o) => o.dim === d)!
+@@ -400,11 +404,7 @@
+     ).length;
+   const task = s.activeTask ? getTask(s.activeTask) : null,
+     record = task ? s.records[task.id] : null;
+-  const reviewId =
+-    [
+-      "transfer",
+-      ...tasks.filter((t) => t.id.startsWith("calc-")).map((t) => t.id),
+-    ].find((id) => !s.calcSeen.includes(id)) || "transfer";
++  const reviewId = nextNewCalcId(s);
+   const headerTitles: Record<string, string> = {
+     home: "学伴小N",
+     chat: "和小N聊聊",
+@@ -1632,6 +1632,17 @@
+                           <h2>{o.dim}</h2>
+                           <Tag>{o.status}</Tag>
+                         </header>
++                        {(s.statusTrail?.[o.dim]?.length ?? 0) > 1 && (
++                          <p className="small muted">
++                            结论轨迹：
++                            {s.statusTrail[o.dim].map((t, j) => (
++                              <span key={`${t.time}-${t.status}`}>
++                                {j > 0 && " → "}
++                                {t.time} {t.status}
++                              </span>
++                            ))}
++                          </p>
++                        )}
+                         <h3>本次发现</h3>
+                         <p>{o.finding}</p>
+                         <details>
+@@ -1710,41 +1721,13 @@
+                     计划为你服务。少一点、晚一点，或者暂时不开始，都可以。
+                   </SectionHeading>
+                   <div className="plan-goal">
+-                    <span className="eyebrow">
+-                      {report[2].basis.length
+-                        ? "根据当前计算任务记录"
+-                        : "尚无作答依据 · 可选建议目标"}
+-                    </span>
+-                    <h2>看清括号前的负号</h2>
+-                    <p>
+-                      先圈符号，再逐项去括号。
+-                      <br />
+-                      用新题看看，能不能自己处理好。
+-                    </p>
++                    <span className="eyebrow">{plan.eyebrow}</span>
++                    <h2>{plan.goal}</h2>
++                    <p>{plan.note}</p>
+                     <Target size={65} />
+                   </div>
+                   <div className="plan-timeline">
+-                    {[
+-                      {
+-                        day: "第 1 次",
+-                        title: "一起观察一个括号",
+-                        note: "约 3 分钟 · 原题尝试与提示",
+-                      },
+-                      {
+-                        day: "第 2 次",
+-                        title: "换一道同类新题",
+-                        note: "约 3 分钟 · 优先自己试试",
+-                      },
+-                      ...(s.plan === "lighter"
+-                        ? []
+-                        : [
+-                            {
+-                              day: "第 3 次",
+-                              title: "回看方法，整理小发现",
+-                              note: "约 2 分钟 · 复述关键步骤",
+-                            },
+-                          ]),
+-                    ].map((t, i) => (
++                    {planTasks.map((t, i) => (
+                       <div key={t.day}>
+                         <span>{i + 1}</span>
+                         <div>
+@@ -1763,7 +1746,7 @@
+                         : s.plan === "rescheduled"
+                           ? `已改期至 ${s.planDate}。到时也由你主动开始。`
+                           : s.plan === "lighter"
+-                            ? "已减量为 2 个小任务，总计约 6 分钟。"
++                            ? `已减量为 ${planTasks.length} 个小任务，总计约 ${planTasks.reduce((n, t) => n + t.mins, 0)} 分钟。`
+                             : "已接受这周计划。随时可以调整。"}
+                     </div>
+                   )}
+@@ -1781,7 +1764,9 @@
+                       <button
+                         onClick={() => {
+                           patch({ plan: "lighter" });
+-                          say("已减量：只保留原题尝试与一题新题。");
++                          say(
++                            `已减量：只保留前 ${Math.max(plan.tasks.length - 1, 1)} 个小任务。`,
++                          );
+                         }}
+                       >
+                         <Minus size={18} />
+@@ -1876,48 +1861,49 @@
+                         <header>
+                           <Tag>我的主要目标</Tag>
+                           <span>
+-                            <Clock3 size={15} />约 3 分钟
++                            <Clock3 size={15} />约 {plan.tasks[0].mins} 分钟
+                           </span>
+                         </header>
+-                        <h2>看清括号前的负号</h2>
++                        <h2>{plan.goal}</h2>
+                         <div className="ticket-divider" />
+-                        <div className="today-task">
+-                          <span className="task-check">
+-                            {taskStatus(s, "bracket") === "完成" ? (
+-                              <Check size={19} />
+-                            ) : (
+-                              1
+-                            )}
+-                          </span>
+-                          <div>
+-                            <h3>先观察，再去括号</h3>
+-                            <p>3x − (2x − 5)</p>
+-                            <small>{taskStatus(s, "bracket")}</small>
+-                          </div>
+-                        </div>
+-                        <div className="today-task">
+-                          <span className="task-check">
+-                            {taskStatus(s, "transfer") === "完成" ? (
+-                              <Check size={19} />
+-                            ) : (
+-                              2
+-                            )}
+-                          </span>
+-                          <div>
+-                            <h3>换一道，自己试一试</h3>
+-                            <p>用同类新题检验方法</p>
+-                            <small>{taskStatus(s, "transfer")}</small>
+-                          </div>
+-                        </div>
++                        {plan.tasks.slice(0, 2).map((t, i) => {
++                          const st = t.taskId
++                            ? taskStatus(s, t.taskId)
++                            : "";
++                          return (
++                            <div className="today-task" key={t.day}>
++                              <span className="task-check">
++                                {t.taskId && st === "完成" ? (
++                                  <Check size={19} />
++                                ) : (
++                                  i + 1
++                                )}
++                              </span>
++                              <div>
++                                <h3>{t.title}</h3>
++                                <p>
++                                  {t.taskId
++                                    ? getTask(t.taskId).question.replace(
++                                        /^化简：/,
++                                        "",
++                                      )
++                                    : t.note}
++                                </p>
++                                <small>{t.taskId ? st : "自由安排"}</small>
++                              </div>
++                            </div>
++                          );
++                        })}
+                         <button
+                           className="primary wide"
+-                          onClick={() =>
+-                            openTask(
+-                              taskStatus(s, "bracket") === "完成"
+-                                ? "transfer"
+-                                : "bracket",
+-                            )
+-                          }
++                          onClick={() => {
++                            const target = plan.tasks
++                              .map((t) => t.taskId)
++                              .filter(Boolean)
++                              .find((id) => taskStatus(s, id!) !== "完成");
++                            if (target) openTask(target);
++                            else navigate("review", "成长");
++                          }}
+                         >
+                           开始今日小任务 <Play size={17} />
+                         </button>

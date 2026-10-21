@@ -1,0 +1,67 @@
+[
+  {
+    "path": "outputs/xiaon/server/plugins/assessment/catalog.ts",
+    "sha256": "ced733640671ca5a5dad6d1c956c1e26c6c558084c02bfc8cb20fca2fb9cff40",
+    "bytes": 10591
+  },
+  {
+    "path": "outputs/xiaon/server/plugins/assessment/grading.ts",
+    "sha256": "761370dc93a2de1144d066b61b01eb9278221b368b69f9e909e12115fecd2ac9",
+    "bytes": 4532
+  },
+  {
+    "path": "outputs/xiaon/server/plugins/assessment/index.ts",
+    "sha256": "897e0f2ff8c4eaf1af6f0b97266d3c3b7bc0cd7672f3da1fc6f55f59f2ed674c",
+    "bytes": 6143
+  },
+  {
+    "path": "outputs/xiaon/server/plugins/assessment/model-analysis.ts",
+    "sha256": "e674608a7d2abc998c656831dfbfdca9723100b9b7bec848f271b2ca233cd58a",
+    "bytes": 4072
+  },
+  {
+    "path": "outputs/xiaon/server/plugins/assessment/state.ts",
+    "sha256": "a04efcfe45b82b1e0362ddfdc483f217e1afb596ccabf874d86a470b691117a9",
+    "bytes": 9524
+  },
+  {
+    "path": "outputs/xiaon/src/learning/assessment/index.ts",
+    "sha256": "d8d2472776c6264094c5dbaa5fab34fa0495568ae4fadb63bac7a13f7ff264e8",
+    "bytes": 818
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/b/boundaries.test.ts",
+    "sha256": "aa754b83144006de4572fd420c231e310b0e7e637881e7fc0002f22554f61072",
+    "bytes": 4968
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/b/catalog.test.ts",
+    "sha256": "dfff7d1415e3112c6e5b735f479469cb2e86b2d066f0dc3e2a84fe8e738a4d40",
+    "bytes": 5717
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/b/consumer.ts",
+    "sha256": "1ac7b89f76fd8826d559b160cb3997bdf98c72b28328f80761cbf9f8f3e1c103",
+    "bytes": 808
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/b/evidence.test.ts",
+    "sha256": "e6cc3d8a4d6a396d7924aa30a9530c9bab734c9b435eb27191c58a01d1d07ea5",
+    "bytes": 9113
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/b/export-evidence.ts",
+    "sha256": "4db73e049bf1cc060da0a0792ddefc0f303e18b2b8851108300707bd868ecf23",
+    "bytes": 1779
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/b/fixtures.ts",
+    "sha256": "b7e057cf20a977dbad038a55da2a463657051bdd87cdbc734c358ec45804ed96",
+    "bytes": 1974
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/b/model.test.ts",
+    "sha256": "2e5dc73ec7fe30c6a76617ef56a4faef6684f15bdd4cae2be9e1b8455bb114b9",
+    "bytes": 5122
+  }
+]

@@ -1,0 +1,110 @@
+{
+  "status": "VERIFIED",
+  "model": "glm-5.3-flash",
+  "provider": "real_http",
+  "materials": "synthetic preference markers only",
+  "results": [
+    {
+      "stage": "enabled",
+      "status": "completed",
+      "error": null,
+      "expected": [
+        true,
+        false,
+        false
+      ],
+      "transportMatched": true
+    },
+    {
+      "stage": "corrected",
+      "status": "completed",
+      "error": null,
+      "expected": [
+        false,
+        true,
+        false
+      ],
+      "transportMatched": true
+    },
+    {
+      "stage": "off",
+      "status": "completed",
+      "error": null,
+      "expected": [
+        false,
+        false,
+        false
+      ],
+      "transportMatched": true
+    },
+    {
+      "stage": "stopped",
+      "status": "completed",
+      "error": null,
+      "expected": [
+        false,
+        false,
+        false
+      ],
+      "transportMatched": true
+    },
+    {
+      "stage": "deleted",
+      "status": "completed",
+      "error": null,
+      "expected": [
+        false,
+        false,
+        false
+      ],
+      "transportMatched": true
+    }
+  ],
+  "captures": [
+    {
+      "stage": "enabled",
+      "contains": [
+        true,
+        false,
+        false
+      ],
+      "httpStatus": 200
+    },
+    {
+      "stage": "corrected",
+      "contains": [
+        false,
+        true,
+        false
+      ],
+      "httpStatus": 200
+    },
+    {
+      "stage": "off",
+      "contains": [
+        false,
+        false,
+        false
+      ],
+      "httpStatus": 200
+    },
+    {
+      "stage": "stopped",
+      "contains": [
+        false,
+        false,
+        false
+      ],
+      "httpStatus": 200
+    },
+    {
+      "stage": "deleted",
+      "contains": [
+        false,
+        false,
+        false
+      ],
+      "httpStatus": 200
+    }
+  ]
+}

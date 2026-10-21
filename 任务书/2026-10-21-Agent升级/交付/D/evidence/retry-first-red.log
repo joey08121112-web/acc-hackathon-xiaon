@@ -1,0 +1,48 @@
+$ npm run test:agent:d
+
+> xiaon-learning-companion@1.0.0 test:agent:d
+> node scripts/agent/test.mjs d
+
+✔ profiles really differ through B and C: modeling difficulty versus calculation independence (32.67525ms)
+✔ exploration prerequisite and real session limit persist across refresh, support switch and next date (17.33775ms)
+✔ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (57.026583ms)
+✔ Tutor and PlannerReporter native tools are real; six executions/four rounds, illegal tools and forged arguments are gated (8.229459ms)
+✔ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (4.684833ms)
+✔ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (11.461709ms)
+✖ retry analysis after timeout uses saved attempt and appends grading revision; report flags old basis (59.896959ms)
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (52.800917ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (8.629125ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (19.072417ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 320.39375
+
+✖ failing tests:
+
+test at tests-agent/d/controls.test.ts:1:8027
+✖ retry analysis after timeout uses saved attempt and appends grading revision; report flags old basis (59.896959ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'needs_review'
+  - 'correct'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/controls.test.ts:69:86)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processTimers (node:internal/timers:615:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'needs_review',
+    expected: 'correct',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+EXIT_CODE=1

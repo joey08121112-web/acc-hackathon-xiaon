@@ -1,0 +1,10 @@
+Product files: 8 within C owned paths
+Protected baseline changes: 0
+Concurrent B paths separately excluded: 11
+Unexpected new paths: 0
+Frozen contract hashes: match
+Four synthetic profiles: present
+Virtual 25-day timeline: completed
+C tests: 25/25; typecheck: 0; A contracts: 3/3; process-TZ subset: 5/5
+HANDOFF: READY_FOR_D_PLANNING
+exitCode=0

@@ -39,12 +39,15 @@ import {
   X,
 } from "lucide-react";
 import { HeroArt, MapArt, Mascot, SpaceShape } from "./Art";
+import { explorationStatus } from "./components/learning/ExplorationMap";
+import { useLearning } from "./agents/useLearning";
+import { LearningPages, LearningStatus } from "./components/learning/LearningPages";
+import { aiConfigured, chatWithAI } from "./ai";
 import {
   correct,
   dimensionDetails,
   dimensions,
   getTask,
-  tasks,
   type Dimension,
 } from "./data";
 import {
@@ -52,7 +55,9 @@ import {
   initial,
   memoryAfter,
   MEMORY_KEY,
+  nextNewCalcId,
   observations,
+  planDraft,
   PROGRESS_KEY,
   reducer,
   replyFor,
@@ -101,6 +106,8 @@ function SectionHeading({
   );
 }
 function App() {
+  const learning = useLearning();
+  const learningPages = ["chat","explore","task","growth","report","plan","today","review","memory"];
   const [s, dispatch] = useReducer(reducer, null, () => {
     try {
       return hydrate(localStorage.getItem(PROGRESS_KEY));
@@ -174,13 +181,21 @@ function App() {
   useEffect(() => {
     window.history.replaceState({ page: s.page, tab: s.tab }, "", `#${s.page}`);
     const pop = (e: PopStateEvent) => {
-      if (e.state?.page) {
-        const valid = e.state.page !== "task" || stateRef.current.activeTask;
+      if (!e.state?.page) return;
+      if (e.state.page === "task" && e.state.taskId) {
+        const known = stateRef.current.records[e.state.taskId];
         patch({
-          page: valid ? e.state.page : "home",
-          tab: valid ? e.state.tab || "小N" : "小N",
+          page: known ? "task" : "home",
+          tab: known ? e.state.tab || stateRef.current.tab : "小N",
+          activeTask: known ? e.state.taskId : stateRef.current.activeTask,
         });
+        return;
       }
+      const valid = e.state.page !== "task" || stateRef.current.activeTask;
+      patch({
+        page: valid ? e.state.page : "home",
+        tab: valid ? e.state.tab || "小N" : "小N",
+      });
     };
     window.addEventListener("popstate", pop);
     return () => window.removeEventListener("popstate", pop);
@@ -226,19 +241,39 @@ function App() {
     return () => clearTimeout(t);
   }, [toast]);
   useEffect(() => {
-    if (s.chatStatus !== "waiting") return;
-    const timer = setTimeout(() => {
-      if (offline || !navigator.onLine) {
-        patch({ chatStatus: "failed" });
-        return;
-      }
+    if (learning.enabled || s.chatStatus !== "waiting") return;
+    let cancelled = false;
+    const replyLocally = () =>
       dispatch({
         type: "chat-reply",
         text: replyFor(s.pendingChat, s.rest, s.questionInvitePaused),
       });
+    const timer = setTimeout(async () => {
+      if (offline || !navigator.onLine) {
+        patch({ chatStatus: "failed" });
+        return;
+      }
+      if (!aiConfigured()) {
+        replyLocally();
+        return;
+      }
+      try {
+        const reply = await chatWithAI(
+          s.chat.map((m) => ({
+            role: m.role === "ai" ? ("assistant" as const) : ("user" as const),
+            content: m.text,
+          })),
+        );
+        if (!cancelled) dispatch({ type: "chat-reply", text: reply });
+      } catch {
+        if (!cancelled) replyLocally();
+      }
     }, 1000);
-    return () => clearTimeout(timer);
-  }, [s.chatStatus, offline, s.rest, s.questionInvitePaused]);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [s.chatStatus, s.chat, offline, s.rest, s.questionInvitePaused]);
   useEffect(() => {
     if (s.rights !== "processing") return;
     const timer = setTimeout(() => patch({ rights: "result" }), 1000);
@@ -261,7 +296,8 @@ function App() {
     },
     [],
   );
-  const openTask = (id: string) => {
+  const openTask = (id: string, entryMode: "support" | "exploration" = "support") => {
+    if (learning.enabled) { const candidate = learning.view?.tasks.find(t=>t.id===id); if (candidate) { learning.choose(candidate, entryMode); learning.update({reviewLink:null}); navigate("task"); } else say("本地服务未就绪，请先连接后选择题目。"); return; }
     if (s.safety) {
       say("当前已暂停学习。请在支持页面中自主选择恢复。");
       return;
@@ -275,7 +311,11 @@ function App() {
       return;
     }
     dispatch({ type: "open-task", id });
-    window.history.pushState({ page: "task", tab: s.tab }, "", "#task");
+    window.history.pushState(
+      { page: "task", tab: s.tab, taskId: id },
+      "",
+      "#task",
+    );
   };
   const chatSend = (text: string) => {
     if (!text.trim() || s.chatStatus === "waiting" || s.chatStatus === "paused")
@@ -294,6 +334,7 @@ function App() {
       });
   };
   const rest = () => {
+    if (learning.enabled) void learning.pause().catch(()=>{});
     patch({
       rest: true,
       chatStatus: s.chatStatus === "waiting" ? "paused" : s.chatStatus,
@@ -303,6 +344,7 @@ function App() {
     say("今天先休息。任务提醒已暂停，回来时由你决定。");
   };
   const help = () => {
+    if (learning.enabled) { learning.cancel(); void learning.pause().catch(()=>{}); }
     if (taskTimer.current) clearTimeout(taskTimer.current);
     submitLock.current = false;
     setSubmitting(false);
@@ -343,7 +385,8 @@ function App() {
         });
     }, 600);
   };
-  const reset = () => {
+  const reset = async () => {
+    if (learning.enabled) { try { await learning.reset(); } catch { say("新版服务未完成清除，请重连服务后重试；原数据保留。"); return; } }
     if (taskTimer.current) clearTimeout(taskTimer.current);
     submitLock.current = false;
     setSubmitting(false);
@@ -359,7 +402,13 @@ function App() {
     window.history.replaceState({ page: "home", tab: "小N" }, "", "#home");
     say("这台设备上的演示进度、图片和记忆已清空。");
   };
+  useEffect(()=>{
+    if (s.onboarded && learning.connected && learning.view && !learning.view.consentConfigured && !learning.busy) void learning.run('consent',{optionalMemory:s.longMemory},{persist:false}).catch(()=>{});
+  },[s.onboarded,learning.connected,learning.view?.consentConfigured]);
   const report = observations(s),
+    plan = planDraft(s),
+    planTasks =
+      s.plan === "lighter" ? plan.tasks.slice(0, -1) : plan.tasks,
     doneCount = dimensions.filter((d) =>
       report
         .find((o) => o.dim === d)!
@@ -367,11 +416,7 @@ function App() {
     ).length;
   const task = s.activeTask ? getTask(s.activeTask) : null,
     record = task ? s.records[task.id] : null;
-  const reviewId =
-    [
-      "transfer",
-      ...tasks.filter((t) => t.id.startsWith("calc-")).map((t) => t.id),
-    ].find((id) => !s.calcSeen.includes(id)) || "transfer";
+  const reviewId = nextNewCalcId(s);
   const headerTitles: Record<string, string> = {
     home: "学伴小N",
     chat: "和小N聊聊",
@@ -549,7 +594,7 @@ function App() {
               年龄段、年级、教材，以及你在演示中提交的作答与任务进度，用于提供合适的内容和恢复学习。
             </p>
             <p className="small">
-              仅存于本机浏览器，不连接真实学生资料。请勿输入真实姓名、学校或联系方式。
+              本机模式保存在浏览器或本地 SQLite。启用真实模型时，会发送必要对话、作答和许可偏好到智谱。请勿输入真实姓名、学校或联系方式。
             </p>
           </div>
           <label className="check-row">
@@ -627,7 +672,7 @@ function App() {
         </div>
       )}
       <footer className="onboard-footer">
-        一个本地演示 · 没有真实模型或消息服务
+        本机合成材料体验 · 模型模式见连接状态 · 通知为演示
       </footer>
     </div>
   );
@@ -656,7 +701,7 @@ function App() {
           <span className="aside-foot">
             七年级数学 · 交互原型
             <br />
-            原创形象 / 合成内容 / 仅本机保存
+            原创形象 / 合成材料 / 模式见页面说明
           </span>
         </div>
         <span className="aside-bottom">
@@ -729,7 +774,10 @@ function App() {
               </div>
             )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
+            <LearningStatus l={learning} />
+            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">新版学习记录、评分、报告、计划保存在本机SQLite；草稿是浏览器恢复缓存。真实模型模式会向智谱发送当前消息、必要题目/作答/评分依据和获准偏好。以下旧授权、身份与通知仍为演示；上传仍无OCR。学习记忆请以新版记忆页为准。</div>}
             <main className={`page page-${s.page}`}>
+              {learning.enabled && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>setModal(`dimension-${index}`)} safety={s.safety} />}
               {s.page === "home" && (
                 <>
                   <div className="home-heading">
@@ -764,7 +812,7 @@ function App() {
                       <button
                         className="primary wide"
                         onClick={() => {
-                          patch({ rest: false });
+                          patch({ rest: false, questionInvitePaused: true });
                           navigate("chat");
                         }}
                       >
@@ -848,7 +896,7 @@ function App() {
                   </div>
                 </>
               )}
-              {s.page === "chat" && (
+              {!learning.enabled && s.page === "chat" && (
                 <div className="chat-page">
                   <div className="chat-identity">
                     <Mascot small />
@@ -1001,7 +1049,7 @@ function App() {
                   </p>
                 </div>
               )}
-              {s.page === "explore" && (
+              {!learning.enabled && s.page === "explore" && (
                 <>
                   <SectionHeading
                     eyebrow="A SMALL WORLD TO EXPLORE"
@@ -1134,7 +1182,7 @@ function App() {
                   </p>
                 </>
               )}
-              {s.page === "task" && task && record && (
+              {!learning.enabled && s.page === "task" && task && record && (
                 <>
                   <div className="task-top">
                     <Tag>
@@ -1472,7 +1520,7 @@ function App() {
                   )}
                 </>
               )}
-              {s.page === "growth" && (
+              {!learning.enabled && s.page === "growth" && (
                 <>
                   <SectionHeading
                     eyebrow="LITTLE STEPS, REAL CHANGES"
@@ -1561,7 +1609,7 @@ function App() {
                   </div>
                 </>
               )}
-              {s.page === "report" && (
+              {!learning.enabled && s.page === "report" && (
                 <>
                   <SectionHeading
                     eyebrow="OBSERVATIONS, WITH EVIDENCE"
@@ -1599,6 +1647,17 @@ function App() {
                           <h2>{o.dim}</h2>
                           <Tag>{o.status}</Tag>
                         </header>
+                        {(s.statusTrail?.[o.dim]?.length ?? 0) > 1 && (
+                          <p className="small muted">
+                            结论轨迹：
+                            {s.statusTrail[o.dim].map((t, j) => (
+                              <span key={`${t.time}-${t.status}`}>
+                                {j > 0 && " → "}
+                                {t.time} {t.status}
+                              </span>
+                            ))}
+                          </p>
+                        )}
                         <h3>本次发现</h3>
                         <p>{o.finding}</p>
                         <details>
@@ -1668,7 +1727,7 @@ function App() {
                   </button>
                 </>
               )}
-              {s.page === "plan" && (
+              {!learning.enabled && s.page === "plan" && (
                 <>
                   <SectionHeading
                     eyebrow="A GENTLE PLAN FOR THIS WEEK"
@@ -1677,41 +1736,13 @@ function App() {
                     计划为你服务。少一点、晚一点，或者暂时不开始，都可以。
                   </SectionHeading>
                   <div className="plan-goal">
-                    <span className="eyebrow">
-                      {report[2].basis.length
-                        ? "根据当前计算任务记录"
-                        : "尚无作答依据 · 可选建议目标"}
-                    </span>
-                    <h2>看清括号前的负号</h2>
-                    <p>
-                      先圈符号，再逐项去括号。
-                      <br />
-                      用新题看看，能不能自己处理好。
-                    </p>
+                    <span className="eyebrow">{plan.eyebrow}</span>
+                    <h2>{plan.goal}</h2>
+                    <p>{plan.note}</p>
                     <Target size={65} />
                   </div>
                   <div className="plan-timeline">
-                    {[
-                      {
-                        day: "第 1 次",
-                        title: "一起观察一个括号",
-                        note: "约 3 分钟 · 原题尝试与提示",
-                      },
-                      {
-                        day: "第 2 次",
-                        title: "换一道同类新题",
-                        note: "约 3 分钟 · 优先自己试试",
-                      },
-                      ...(s.plan === "lighter"
-                        ? []
-                        : [
-                            {
-                              day: "第 3 次",
-                              title: "回看方法，整理小发现",
-                              note: "约 2 分钟 · 复述关键步骤",
-                            },
-                          ]),
-                    ].map((t, i) => (
+                    {planTasks.map((t, i) => (
                       <div key={t.day}>
                         <span>{i + 1}</span>
                         <div>
@@ -1730,7 +1761,7 @@ function App() {
                         : s.plan === "rescheduled"
                           ? `已改期至 ${s.planDate}。到时也由你主动开始。`
                           : s.plan === "lighter"
-                            ? "已减量为 2 个小任务，总计约 6 分钟。"
+                            ? `已减量为 ${planTasks.length} 个小任务，总计约 ${planTasks.reduce((n, t) => n + t.mins, 0)} 分钟。`
                             : "已接受这周计划。随时可以调整。"}
                     </div>
                   )}
@@ -1748,7 +1779,9 @@ function App() {
                       <button
                         onClick={() => {
                           patch({ plan: "lighter" });
-                          say("已减量：只保留原题尝试与一题新题。");
+                          say(
+                            `已减量：只保留前 ${Math.max(plan.tasks.length - 1, 1)} 个小任务。`,
+                          );
                         }}
                       >
                         <Minus size={18} />
@@ -1777,7 +1810,7 @@ function App() {
                   </div>
                 </>
               )}
-              {s.page === "today" && (
+              {!learning.enabled && s.page === "today" && (
                 <>
                   <SectionHeading
                     eyebrow="A LITTLE IS ENOUGH TODAY"
@@ -1843,48 +1876,49 @@ function App() {
                         <header>
                           <Tag>我的主要目标</Tag>
                           <span>
-                            <Clock3 size={15} />约 3 分钟
+                            <Clock3 size={15} />约 {plan.tasks[0].mins} 分钟
                           </span>
                         </header>
-                        <h2>看清括号前的负号</h2>
+                        <h2>{plan.goal}</h2>
                         <div className="ticket-divider" />
-                        <div className="today-task">
-                          <span className="task-check">
-                            {taskStatus(s, "bracket") === "完成" ? (
-                              <Check size={19} />
-                            ) : (
-                              1
-                            )}
-                          </span>
-                          <div>
-                            <h3>先观察，再去括号</h3>
-                            <p>3x − (2x − 5)</p>
-                            <small>{taskStatus(s, "bracket")}</small>
-                          </div>
-                        </div>
-                        <div className="today-task">
-                          <span className="task-check">
-                            {taskStatus(s, "transfer") === "完成" ? (
-                              <Check size={19} />
-                            ) : (
-                              2
-                            )}
-                          </span>
-                          <div>
-                            <h3>换一道，自己试一试</h3>
-                            <p>用同类新题检验方法</p>
-                            <small>{taskStatus(s, "transfer")}</small>
-                          </div>
-                        </div>
+                        {plan.tasks.slice(0, 2).map((t, i) => {
+                          const st = t.taskId
+                            ? taskStatus(s, t.taskId)
+                            : "";
+                          return (
+                            <div className="today-task" key={t.day}>
+                              <span className="task-check">
+                                {t.taskId && st === "完成" ? (
+                                  <Check size={19} />
+                                ) : (
+                                  i + 1
+                                )}
+                              </span>
+                              <div>
+                                <h3>{t.title}</h3>
+                                <p>
+                                  {t.taskId
+                                    ? getTask(t.taskId).question.replace(
+                                        /^化简：/,
+                                        "",
+                                      )
+                                    : t.note}
+                                </p>
+                                <small>{t.taskId ? st : "自由安排"}</small>
+                              </div>
+                            </div>
+                          );
+                        })}
                         <button
                           className="primary wide"
-                          onClick={() =>
-                            openTask(
-                              taskStatus(s, "bracket") === "完成"
-                                ? "transfer"
-                                : "bracket",
-                            )
-                          }
+                          onClick={() => {
+                            const target = plan.tasks
+                              .map((t) => t.taskId)
+                              .filter(Boolean)
+                              .find((id) => taskStatus(s, id!) !== "完成");
+                            if (target) openTask(target);
+                            else navigate("review", "成长");
+                          }}
                         >
                           开始今日小任务 <Play size={17} />
                         </button>
@@ -1923,7 +1957,7 @@ function App() {
                   )}
                 </>
               )}
-              {s.page === "review" && (
+              {!learning.enabled && s.page === "review" && (
                 <>
                   <SectionHeading
                     eyebrow="NOTICE WHAT HAS CHANGED"
@@ -2110,11 +2144,11 @@ function App() {
                   <p className="center small muted">
                     学伴小N · 交互原型 1.0
                     <br />
-                    本地预设内容，未接入真实 AI 模型或外部消息服务。
+                    模型状态见连接栏；真实模式会外发必要学习上下文，通知仍为演示。
                   </p>
                 </>
               )}
-              {s.page === "memory" && (
+              {!learning.enabled && s.page === "memory" && (
                 <>
                   <SectionHeading
                     eyebrow="YOU DECIDE WHAT STAYS"
@@ -2316,7 +2350,7 @@ function App() {
                     </div>
                     <div>
                       <strong>跨会话长期记忆 · 可选</strong>
-                      <Tag>{s.longMemory ? "开启" : "关闭"}</Tag>
+                      <Tag>{(learning.enabled ? learning.view?.optionalMemory : s.longMemory) ? "开启" : "关闭"}</Tag>
                       <p>仅保存主动保留的偏好、任务表现与观察，独立存储。</p>
                       <button onClick={() => navigate("memory")}>
                         管理记忆与开关 <ArrowRight size={15} />
@@ -2336,12 +2370,11 @@ function App() {
                   <div className="info-paper">
                     <h3>第三方服务与生成来源</h3>
                     <p>
-                      没有接入真实
-                      AI、OCR、身份核验、联系人通知或研究平台。聊天来自本地规则与预设文本；观察来自本机作答；插画为原创矢量绘制。没有虚构供应商、跨境处理安排或安全认证。
+                      {learning.enabled ? "已接入本机受控Agent服务；真实模型模式向智谱发送当前消息、必要题目/原始作答/rubric与许可偏好。报告事实与计划来自程序核验的证据。" : "当前为离线规则原型，聊天来自本地预设，观察来自本机作答。"} OCR、身份核验、通知和研究平台仍未接入，插画为原创矢量绘制，未宣称安全认证。
                     </p>
                     <h3>保存与删除</h3>
                     <p>
-                      本机浏览器保存演示进度、可选记忆与处理后的图片，直至你主动清除或浏览器清理。没有服务器副本或远程删除承诺。移除图片会清掉对应核对内容；重置演示会清空本原型的全部本机数据。
+                      {learning.enabled ? "新版学习记录、报告、计划与许可偏好保存在本机SQLite；草稿和导航使用浏览器恢复缓存。旧浏览器资料保留，需主动预览导入。" : "离线版在浏览器保留进度、可选记忆与图片。"} 移除图片清除对应核对内容；重置会同时请求清除新版SQLite与旧浏览器数据；服务未连接时不假装完成清除。
                     </p>
                     <h3>信息权利与反馈</h3>
                     <p>
@@ -2732,7 +2765,7 @@ function App() {
                     陪你做日常数学学习，不评判智力或人格，不诊断心理疾病，不承诺治疗或保证提高成绩。
                   </p>
                   <p>
-                    当前回复来自本地预设与规则，可能不理解你的完整意思。数学步骤和学习观察也请与老师一起核对。
+                    服务未连接时使用离线规则；连接后运行受控Tutor、Assessor与PlannerReporter。真实模型会收到当前消息、必要题目/作答/rubric和获准偏好；模型可能出错，数学步骤与观察请一起核对。
                   </p>
                   <p>
                     你可以随时暂停、休息、关闭可选记忆；需要现实中的帮助时，去找值得信任的人。
@@ -2788,6 +2821,10 @@ function App() {
                       i
                     ],
                     Icon = icons[i];
+                  const hasExplored = (taskId: "understand" | "logic") => learning.enabled
+                    ? !!learning.view?.session && learning.view.attempts.some(a=>a.sessionId===learning.view?.session?.id && a.taskId===taskId)
+                    : !!s.records[taskId]?.attempts.length;
+                  const status = learning.enabled && learning.view ? explorationStatus(learning.view,d.name) : taskStatus(s,id);
                   return (
                     <>
                       <span
@@ -2797,15 +2834,14 @@ function App() {
                         <Icon size={29} />
                       </span>
                       <span className="eyebrow">
-                        {d.name} · {taskStatus(s, id)}
+                        {d.name} · {status}
                       </span>
                       <h2>欢迎来到{d.place}</h2>
                       <p>
                         通过几个小任务，看看你现在怎样理解和解决问题。你可以随时暂停，结果只代表这些任务中的表现。
                       </p>
                       {i > 1 &&
-                      (!s.records.understand?.attempts.length ||
-                        !s.records.logic?.attempts.length) ? (
+                      (!hasExplored("understand") || !hasExplored("logic")) ? (
                         <>
                           <div className="notice">
                             这次探索先从理解与逻辑两站开始。不需要答对才能继续，暂停也不代表能力弱。
@@ -2815,13 +2851,12 @@ function App() {
                             onClick={() => {
                               setModal(null);
                               openTask(
-                                s.records.understand?.attempts.length
-                                  ? "logic"
-                                  : "understand",
+                                hasExplored("understand") ? "logic" : "understand",
+                                "exploration",
                               );
                             }}
                           >
-                            {s.records.understand?.attempts.length
+                            {hasExplored("understand")
                               ? "先去逻辑小桥"
                               : "先去理解花园"}{" "}
                             <ArrowRight size={17} />
@@ -2832,7 +2867,7 @@ function App() {
                           className="primary wide"
                           onClick={() => {
                             setModal(null);
-                            openTask(id);
+                            openTask(id, "exploration");
                           }}
                         >
                           我愿意，进入这个小任务 <ArrowRight size={17} />
@@ -2882,9 +2917,10 @@ function App() {
                   <Trash2 size={30} />
                   <h2>清空这台设备的演示？</h2>
                   <p>
-                    将删除本原型的聊天、作答、计划、长期记忆和图片，重新开始首次介绍。这个本机删除无法撤销，不涉及真实后台。
+                    将删除本原型的聊天、作答、计划、长期记忆和图片，重新开始首次介绍。这个本机删除无法撤销。新版会同时请求本地服务清除SQLite记录。
                   </p>
-                  <button className="primary wide danger-fill" onClick={reset}>
+                  <p>连接新版时，同时清除本机 SQLite 的作答、证据、历史报告、计划、偏好和新版草稿，以及旧浏览器进度与图片。服务未连接时会停止清除，避免刷新后记录复活。</p>
+                  <button className="primary wide danger-fill" onClick={()=>void reset()}>
                     确认清空本机演示
                   </button>
                   <button

@@ -1,0 +1,141 @@
+{
+  "model": "glm-5.3-flash",
+  "baseUrl": "https://open.bigmodel.cn/api/coding/paas/v4",
+  "material": "synthetic only",
+  "startedAt": "2026-10-21T00:31:48.650Z",
+  "basic": {
+    "completed": true,
+    "toolCalls": 0
+  },
+  "assessor": {
+    "verdict": "correct",
+    "method": "model_assisted",
+    "evidenceIds": [
+      "184c0c7a-3f3f-40a1-bf4f-db4e3a8cc285",
+      "a6e4d3da-e3ad-42d1-a6d0-5ecddeb1dfa0"
+    ]
+  },
+  "tutor": {
+    "status": "failed",
+    "tools": 1,
+    "error": {
+      "code": "forbidden",
+      "message": "未作答题的解答已拦截，请主动请求分级提示",
+      "recoverable": true
+    }
+  },
+  "plannerReporter": {
+    "status": "completed",
+    "error": null,
+    "reportId": "d04ff244-e610-418f-85c3-d52e6f1948fe",
+    "proposalId": "d8136a06-4182-4a14-8c73-6ce93efb0624",
+    "automaticallyAccepted": 0
+  },
+  "status": "FAILED",
+  "runs": [
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-c0d70de9-dd26-4978-a370-89fe8ac669fa",
+      "operationId": "764c4226-6cec-41cf-ac50-2d2aaf413a38",
+      "permissionFingerprint": "9284223d42190d3a4abeeea96b760e0cfeff0195304572f4a6a92ccce9631cfc",
+      "providerKind": "real_http",
+      "role": "assessor",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    },
+    {
+      "callIds": [
+        "eb53e6e8-a0b2-4127-8cf1-f93deb1af0b9"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "assess-c5c95a81-a644-4d92-bcec-95efaefdd469",
+      "operationId": "eb53e6e8-a0b2-4127-8cf1-f93deb1af0b9",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "real_http",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "call_-7147933922624536098"
+      ],
+      "error": {
+        "code": "forbidden",
+        "message": "未作答题的解答已拦截，请主动请求分级提示",
+        "recoverable": true
+      },
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-37dedbb3-7cd0-4d06-a36d-6d33c08f999f",
+      "operationId": "9b61349e-31e4-49fa-9e8a-ed0f0dd484fd",
+      "permissionFingerprint": "9284223d42190d3a4abeeea96b760e0cfeff0195304572f4a6a92ccce9631cfc",
+      "providerKind": "real_http",
+      "role": "tutor",
+      "rounds": 2,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "failed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-8d56097c-43ee-4922-9fc8-2352e7567b0e",
+      "operationId": "0aa980a6-94fd-44a4-82bd-7225b58de01e-agent",
+      "permissionFingerprint": "9284223d42190d3a4abeeea96b760e0cfeff0195304572f4a6a92ccce9631cfc",
+      "providerKind": "real_http",
+      "role": "planner",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    }
+  ],
+  "tools": [
+    {
+      "argumentsHash": "5139017f5fcd47b34f3f77e8e09766bc2910b52feff892c5be71dfe0eefdc850",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "eb53e6e8-a0b2-4127-8cf1-f93deb1af0b9",
+      "dataVersion": 24,
+      "errorCode": null,
+      "evidenceIds": [
+        "184c0c7a-3f3f-40a1-bf4f-db4e3a8cc285",
+        "a6e4d3da-e3ad-42d1-a6d0-5ecddeb1dfa0"
+      ],
+      "id": "call-6b19327dabe9e9d86c443605fc68c878524a6c24785684c5",
+      "name": "grade_attempt",
+      "runId": "assess-c5c95a81-a644-4d92-bcec-95efaefdd469",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "b05c9620d58e3cdbe0e7126cd6929e412951df9cfc733a7b3d582ad17c2b5bb9",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "call_-7147933922624536098",
+      "dataVersion": 27,
+      "errorCode": null,
+      "evidenceIds": [
+        "2f9b685b-72dc-48ea-b568-a6967affc806",
+        "184c0c7a-3f3f-40a1-bf4f-db4e3a8cc285",
+        "a6e4d3da-e3ad-42d1-a6d0-5ecddeb1dfa0"
+      ],
+      "id": "call-30be95317dd77f842f547b92f25260ad1b331ed053dea5d4",
+      "name": "query_learning_evidence",
+      "runId": "d-run-37dedbb3-7cd0-4d06-a36d-6d33c08f999f",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    }
+  ],
+  "finishedAt": "2026-10-21T00:32:59.217Z"
+}

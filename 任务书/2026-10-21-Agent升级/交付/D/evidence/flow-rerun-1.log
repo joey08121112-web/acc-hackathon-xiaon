@@ -1,0 +1,18 @@
+$ npm run test:agent:d
+
+> xiaon-learning-companion@1.0.0 test:agent:d
+> node scripts/agent/test.mjs d
+
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (48.269417ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (11.476ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (17.90175ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 180.513166
+
+EXIT_CODE=0

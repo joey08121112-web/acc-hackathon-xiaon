@@ -1,0 +1,98 @@
+$ npm run test:agent:d
+
+> xiaon-learning-companion@1.0.0 test:agent:d
+> node scripts/agent/test.mjs d
+
+✖ profiles really differ through B and C: modeling difficulty versus calculation independence (26.2195ms)
+✔ exploration prerequisite and real session limit persist across refresh, support switch and next date (18.85575ms)
+✖ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (61.158292ms)
+✔ Tutor and PlannerReporter native tools are real; six executions/four rounds, illegal tools and forged arguments are gated (9.293042ms)
+✖ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (4.753833ms)
+✖ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (13.27075ms)
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (56.5745ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (8.705917ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (18.944625ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 5
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 272.663875
+
+✖ failing tests:
+
+test at tests-agent/d/controls.test.ts:1:1095
+✖ profiles really differ through B and C: modeling difficulty versus calculation independence (26.2195ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'needs_review'
+  - 'incorrect'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/controls.test.ts:16:82)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'needs_review',
+    expected: 'incorrect',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/d/controls.test.ts:1:3415
+✖ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (61.158292ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(f.r.repository.list('runs').some(r=>r.status==='timeout'))
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/controls.test.ts:35:345)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at listOnTimeout (node:internal/timers:644:9)
+      at process.processTimers (node:internal/timers:618:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests-agent/d/controls.test.ts:1:5757
+✖ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (4.753833ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+  
+  '迟到合成回复'
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/controls.test.ts:54:273)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at listOnTimeout (node:internal/timers:644:9)
+      at process.processTimers (node:internal/timers:618:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '迟到合成回复',
+    expected: '迟到合成回复',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/d/controls.test.ts:1:6857
+✖ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (13.27075ms)
+  Error: database is not open
+      at SqliteRepository.close (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:71:18)
+      at Object.dispose (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/testing.ts:10:70)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/controls.test.ts:63:103)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at listOnTimeout (node:internal/timers:644:9)
+      at process.processTimers (node:internal/timers:618:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'ERR_INVALID_STATE'
+  }
+
+EXIT_CODE=1

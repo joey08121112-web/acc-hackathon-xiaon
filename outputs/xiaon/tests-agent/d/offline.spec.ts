@@ -1,0 +1,8 @@
+import { test,expect } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+const evidence='../../任务书/2026-10-21-Agent升级/交付/D/evidence';
+test('new offline candidate is self-contained, never connects agents, and retains local rules without touching the shared ZIP',async({page})=>{
+ const html=await readFile(evidence+'/offline-candidate/双击打开-学伴小N.html','utf8');const requests:string[]=[],errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/*',async route=>{if(route.request().isNavigationRequest())await route.fulfill({contentType:'text/html',body:html});else{requests.push(route.request().url());await route.abort();}});
+ await page.goto('/d-offline');await page.getByRole('button',{name:'认识一下小N',exact:true}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByText('离线规则版 · 无后台Agent',{exact:true})).toBeVisible();await page.getByRole('button',{name:'一起看一道题',exact:true}).click();await page.getByRole('button',{name:'我愿意，从示例题开始',exact:true}).click();await page.getByLabel('你的解题步骤').fill('x+5');await page.getByRole('button',{name:'我先试试',exact:true}).click();await expect(page.getByText('这次，你独立完成了。',{exact:true})).toBeVisible();await page.reload();await expect(page.getByLabel('你的解题步骤')).toHaveValue('x+5');await page.screenshot({path:evidence+'/06-offline.png',fullPage:true});expect(errors).toEqual([]);expect(requests).toEqual([]);expect(await page.locator('script[src],link[rel="stylesheet"][href]').count()).toBe(0);
+});

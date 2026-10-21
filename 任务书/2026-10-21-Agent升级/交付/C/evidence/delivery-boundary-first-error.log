@@ -1,0 +1,5 @@
+Delivery inventory check only, not a product test.
+Initial assertion: no new source files outside C.
+Result: AssertionError, exitCode=1.
+Inspection: 11 newly appearing files are within B-owned paths; protected baseline hashes unchanged.
+Correction: inventory and exclude concurrent B paths; never modify or include them in C deliverables.

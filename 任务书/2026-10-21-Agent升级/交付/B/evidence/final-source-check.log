@@ -1,0 +1,16 @@
+COMMAND: ['shasum', '-a', '256', '-c', '/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/B/final-source.sha256']
+outputs/xiaon/server/plugins/assessment/catalog.ts: OK
+outputs/xiaon/server/plugins/assessment/grading.ts: OK
+outputs/xiaon/server/plugins/assessment/index.ts: OK
+outputs/xiaon/server/plugins/assessment/model-analysis.ts: OK
+outputs/xiaon/server/plugins/assessment/state.ts: OK
+outputs/xiaon/src/learning/assessment/index.ts: OK
+outputs/xiaon/tests-agent/b/boundaries.test.ts: OK
+outputs/xiaon/tests-agent/b/catalog.test.ts: OK
+outputs/xiaon/tests-agent/b/consumer.ts: OK
+outputs/xiaon/tests-agent/b/evidence.test.ts: OK
+outputs/xiaon/tests-agent/b/export-evidence.ts: OK
+outputs/xiaon/tests-agent/b/fixtures.ts: OK
+outputs/xiaon/tests-agent/b/model.test.ts: OK
+
+exitCode=0

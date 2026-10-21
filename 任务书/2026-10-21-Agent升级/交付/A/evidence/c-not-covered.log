@@ -1,0 +1,9 @@
+COMMAND: npm run test:agent:c
+UTC: 2026-10-20T16:29:57.821255+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:c
+> node scripts/agent/test.mjs c
+
+NOT_COVERED: C has no tests yet
+
+exitCode=2

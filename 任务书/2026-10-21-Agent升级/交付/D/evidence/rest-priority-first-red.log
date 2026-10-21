@@ -1,0 +1,45 @@
+$ npm run test:agent:d
+
+> xiaon-learning-companion@1.0.0 test:agent:d
+> node scripts/agent/test.mjs d
+
+✔ profiles really differ through B and C: modeling difficulty versus calculation independence (37.13875ms)
+✔ exploration prerequisite and real session limit persist across refresh, support switch and next date (18.956583ms)
+✔ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (58.291791ms)
+✔ Tutor and PlannerReporter native tools are real; six executions/four rounds, illegal tools and forged arguments are gated (10.254958ms)
+✔ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (6.14725ms)
+✔ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (12.872ms)
+✔ retry analysis after timeout uses saved attempt and appends grading revision; report flags old basis (67.79575ms)
+✔ Tutor may quote an already submitted cost expression that coincides with an unused calculation answer, but cannot reveal a current unseen task (10.8595ms)
+✖ student rest takes priority over an in-flight model operation and cancels its late text (4.426458ms)
+ℹ Error: Test "student rest takes priority over an in-flight model operation and cancels its late text" at tests-agent/d/controls.test.ts:1:10432 generated asynchronous activity after the test ended. This activity created the error "Error: database is not open" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (58.672459ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (8.549ms)
+✔ protected D HTTP routes reject self-granted roles, bypasses, clock input and malicious import atomically (40.924375ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (21.759625ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 374.778541
+
+✖ failing tests:
+
+test at tests-agent/d/controls.test.ts:1:10432
+✖ student rest takes priority over an in-flight model operation and cancels its late text (4.426458ms)
+  Error: 已有学习操作进行中，请等待或取消
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/agents/learning.ts:47:40)
+      at LearningCoordinator.preference (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/agents/learning.ts:94:116)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/controls.test.ts:77:493)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processTimers (node:internal/timers:615:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'invalid_state',
+    recoverable: true
+  }
+
+EXIT_CODE=1

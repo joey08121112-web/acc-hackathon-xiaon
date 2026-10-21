@@ -1,0 +1,14 @@
+COMMAND: node scripts/agent/bundle-sentinel.mjs
+UTC: 2026-10-20T16:30:20.119477+00:00
+
+> xiaon-learning-companion@1.0.0 build
+> tsc -b && vite build
+
+src/domain.test.ts(224,16): error TS2304: Cannot find name 'planDraft'.
+src/domain.test.ts(232,14): error TS2304: Cannot find name 'planDraft'.
+src/domain.test.ts(237,14): error TS2304: Cannot find name 'planDraft'.
+src/domain.test.ts(241,16): error TS2304: Cannot find name 'taskStatus'.
+src/domain.test.ts(249,14): error TS2304: Cannot find name 'planDraft'.
+src/domain.test.ts(287,16): error TS2304: Cannot find name 'planDraft'.
+
+exitCode=1

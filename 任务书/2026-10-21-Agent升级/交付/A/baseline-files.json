@@ -1,0 +1,194 @@
+[
+  {
+    "path": "outputs/xiaon/index.html",
+    "sha256": "b84245b70a552fdc11323d6a8009ec7c2fb430c8816f962a2bb5ef201144b79b"
+  },
+  {
+    "path": "outputs/xiaon/tsconfig.tsbuildinfo",
+    "sha256": "1f7acb6959fafb3a28fb4b7a9252ad78b7c79f6aa3ec57795d76ca1fb5b77582"
+  },
+  {
+    "path": "outputs/xiaon/THIRD_PARTY_LICENSES.txt",
+    "sha256": "db6339fdcd94b8da747d856fcb1f81b805059de7b134830026c285d6bdba6303"
+  },
+  {
+    "path": "outputs/xiaon/README.md",
+    "sha256": "0e4406686c2916180646a5637053004a6c70c74fdfee4ee981e70248022f9725"
+  },
+  {
+    "path": "outputs/xiaon/.gitignore",
+    "sha256": "a491e3574cd54c2528f39475004dfc1d349acc81447496166e19b1be61f923c5"
+  },
+  {
+    "path": "outputs/xiaon/package-lock.json",
+    "sha256": "6c46d2309206e94d6a485289a7ac6c669e1dcf9c09856e5ef9d0274f1dc1ba2e"
+  },
+  {
+    "path": "outputs/xiaon/package.json",
+    "sha256": "2461b63bad1bf516818365419272edb3040fa6a3b680e4df2e89bcd784b5ed54"
+  },
+  {
+    "path": "outputs/xiaon/tsconfig.json",
+    "sha256": "b2b281880189dca3e9f2039b7dea03e3d8f094c0a7af4976a5bf7748a8cf6e50"
+  },
+  {
+    "path": "outputs/xiaon/playwright.config.ts",
+    "sha256": "b22fa7040733d46fb475e58117f1c17ad7a535fcb487362088daa14be7a5e36c"
+  },
+  {
+    "path": "outputs/xiaon/.env.example",
+    "sha256": "055c90b2eec0afeff1b8d245c387e81e2fd21ed442e715e767225d29d8f0dd6e"
+  },
+  {
+    "path": "outputs/xiaon/vite.config.ts",
+    "sha256": "61a7fbafe09ff8d83d4d30ac8358a2c0a38d93cb94f5ee4de839bf5e0c95db1a"
+  },
+  {
+    "path": "outputs/xiaon/tests/accessibility.spec.ts",
+    "sha256": "a21114479d9eeca24431b14bda9a18e16efcd0ff6741fb863a2ada0e8aeb309a"
+  },
+  {
+    "path": "outputs/xiaon/tests/experience.spec.ts",
+    "sha256": "770975060216751c3d451218b1c0f06bfc86288adc671493dea59fbf9deb712b"
+  },
+  {
+    "path": "outputs/xiaon/tests/offline.spec.ts",
+    "sha256": "885713184ef034e72568bf133cd02f370a7ef30c36eea2e96063c011acb630f4"
+  },
+  {
+    "path": "outputs/xiaon/public/offline.html",
+    "sha256": "1961008f1dbc0301e467551ca914f08f47b1448cad2ddd16ffc54c690487c513"
+  },
+  {
+    "path": "outputs/xiaon/public/review.html",
+    "sha256": "132d6f6f8c03eae20fbafd95065596eb8bd6d8bcbc7bf5eb2ee47fa095b9daaf"
+  },
+  {
+    "path": "outputs/xiaon/public/share.html",
+    "sha256": "761e3cf5fd01de574c03c987bba89b46b3231c8486da21f553275a336a830910"
+  },
+  {
+    "path": "outputs/xiaon/scripts/build-offline.mjs",
+    "sha256": "5ef1c3e3e6a4334d02330e5fb501c33ee10c70ad8f5e62b3e7a60ad9eb77ed6e"
+  },
+  {
+    "path": "outputs/xiaon/src/data.ts",
+    "sha256": "4350219001e9d8d11f1d4d5a512642e16f10ade6340ea4dfea0098994371ee38"
+  },
+  {
+    "path": "outputs/xiaon/src/App.tsx",
+    "sha256": "1c3aba29567a05264cc59d4d32f407e179d6402c7bdc028ebe77eed964a073b6"
+  },
+  {
+    "path": "outputs/xiaon/src/main.tsx",
+    "sha256": "0149f7a69d4d5aeb746722160f8fbcd57defdf78e80e1fe3d9038dc76f84361e"
+  },
+  {
+    "path": "outputs/xiaon/src/domain.test.ts",
+    "sha256": "f3638c1f9cc1d214b30dd126c29cc071d55c874ad177beecf58d4068025184b3"
+  },
+  {
+    "path": "outputs/xiaon/src/vite-env.d.ts",
+    "sha256": "af0367190428a4819dd9427568332e72886a89c994d3d6e31377346fa0685cbd"
+  },
+  {
+    "path": "outputs/xiaon/src/ai.ts",
+    "sha256": "d933ecc6bf90961d23fbba74a8792e93d660f1d4739ed342cebcbf13d3f96a76"
+  },
+  {
+    "path": "outputs/xiaon/src/style.css",
+    "sha256": "7549d412b4e9e8960e2d39bf40ecebfde0ef22e8cc2762fce155e4ddd8827f24"
+  },
+  {
+    "path": "outputs/xiaon/src/Upload.tsx",
+    "sha256": "ee8e8f4699c540c69813f13dc0d63c1706daecf5ad9a805865c04251167d2dda"
+  },
+  {
+    "path": "outputs/xiaon/src/domain.ts",
+    "sha256": "dfa9036aba07bfa33aa7af43de9eec94018bbf47dd7dd02492d69d6ae6ad427c"
+  },
+  {
+    "path": "outputs/xiaon/src/Art.tsx",
+    "sha256": "211c3a2a9eaf098f2956298752b5ebd3ed21d276908d58644f5f77c67a624c7c"
+  },
+  {
+    "path": "outputs/xiaon/public/team/学伴小N-队友体验包.zip",
+    "sha256": "ad5de861c03b4fcb82d1aef4c4d5645bdaaa0bfab91dcd1f044a0d6db04370b0"
+  },
+  {
+    "path": "outputs/xiaon/public/review/13-upload-mask.png",
+    "sha256": "c1f9e9078c3562662f1040e754cec23bcdd93a1002e02593aa84a4181ffdff85"
+  },
+  {
+    "path": "outputs/xiaon/public/review/14-upload-confirmed.png",
+    "sha256": "4d259ac79729ad58c755afc598a0643f6037066f48e8bd11a4abbde673339eec"
+  },
+  {
+    "path": "outputs/xiaon/public/review/18-guardian.png",
+    "sha256": "a5b963fe65dcf4670cf162f33e585e54176c9ba2dbc1d179caec7eb429593ba9"
+  },
+  {
+    "path": "outputs/xiaon/public/review/04-rest.png",
+    "sha256": "ea0432c470aa907ae436f27bf8839ebe62d50eea267fee257261f9810f11049b"
+  },
+  {
+    "path": "outputs/xiaon/public/review/02-consent.png",
+    "sha256": "ddc42add4fd104f13d0f1977f45e17cec6a2da5185206e02bac9d8c4423a4bf8"
+  },
+  {
+    "path": "outputs/xiaon/public/review/12-memory.png",
+    "sha256": "f876dbefea7a3fdfc918e51e5793743b4ce2a0e2e3d45b9c7bdf8f4b61be7c48"
+  },
+  {
+    "path": "outputs/xiaon/public/review/05-task-hint.png",
+    "sha256": "d56d5ad802ca7b10bcbae690d2831f028102984281597f0dee8e52dd1b40da14"
+  },
+  {
+    "path": "outputs/xiaon/public/review/08-map.png",
+    "sha256": "fc5dfb3a48e7a234d15049236fe5dfb57652f9b02481f04e349081600c3592b9"
+  },
+  {
+    "path": "outputs/xiaon/public/review/06-report-hinted.png",
+    "sha256": "d65c8ec68bff86e156c8c008a1e3482cb4c6909325f567ff86ad3d1e010f8128"
+  },
+  {
+    "path": "outputs/xiaon/public/review/19-large-reduced-motion.png",
+    "sha256": "39bf62aa4001ed8e0978d608f453c0944f42070657aed936f5d216f1bdc89a70"
+  },
+  {
+    "path": "outputs/xiaon/public/review/07-report-changed.png",
+    "sha256": "b8e7e0d528c41cdf2dbc5453ccaf666b8e28943c214e52f21cf3f3beb4ea8e04"
+  },
+  {
+    "path": "outputs/xiaon/public/review/01-onboarding.png",
+    "sha256": "e2f3693d9290bf05abfc23ff5d0644402940441bf7e56fe0cb063aa8f4b02b1f"
+  },
+  {
+    "path": "outputs/xiaon/public/review/17-chat.png",
+    "sha256": "e41b1c6c016d8e3ebad31932eb437ddd7a8d372960376fae7fc8238d7fb3c400"
+  },
+  {
+    "path": "outputs/xiaon/public/review/03-home.png",
+    "sha256": "b8e8fe268f4d62ee6c7ebadf11fd0b4775b13e589e3a8fe5be382bd73ff6f397"
+  },
+  {
+    "path": "outputs/xiaon/public/review/15-help-failed.png",
+    "sha256": "912970468e913513aeebc14eb0be8b673f232e4d9d9ef911596a4df020d01bc6"
+  },
+  {
+    "path": "outputs/xiaon/public/review/09-spatial.png",
+    "sha256": "853c98fee08948cadd9341dd24b2d85e962f5ddfe88129a8dec49bf0a9cc46fd"
+  },
+  {
+    "path": "outputs/xiaon/public/review/10-plan.png",
+    "sha256": "a83f572719315e9f376228212db9713335bc3dd039c2443f268d2546fdcc3bbe"
+  },
+  {
+    "path": "outputs/xiaon/public/review/16-help-alternative.png",
+    "sha256": "df13a7bed74432b79e29e78022292159f553183965436ff6e7834e58515b9e86"
+  },
+  {
+    "path": "outputs/xiaon/public/review/11-today.png",
+    "sha256": "e5a8d1a629ad9752d5c1d8dc4cb1c9e5b9d2ffaded91e61b0099c1c4e9b00d60"
+  }
+]

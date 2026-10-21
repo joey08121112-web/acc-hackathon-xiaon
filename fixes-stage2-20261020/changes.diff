@@ -1,0 +1,154 @@
+# 阶段2修复改动（fixes-stage2-20261020/before/ 与当前 outputs/xiaon 的差异）
+
+## outputs/xiaon/src/data.ts
+--- before/src/data.ts	2026-10-20 18:45:54
++++ ../outputs/xiaon/src/data.ts	2026-10-20 18:46:27
+@@ -169,7 +169,6 @@
+   const normalized = normalize(value);
+   if (task.choices) return task.answer.some((a) => normalize(a) === normalized);
+   const steps = normalized.split("=");
+-  if (!task.answer.some((a) => normalize(a) === steps.at(-1))) return false;
+   const target = linear(normalize(task.answer[0]));
+   return steps.every((step) => {
+     const v = linear(step);
+
+## outputs/xiaon/src/App.tsx
+--- before/src/App.tsx	2026-10-20 18:45:54
++++ ../outputs/xiaon/src/App.tsx	2026-10-20 18:47:09
+@@ -175,13 +175,21 @@
+   useEffect(() => {
+     window.history.replaceState({ page: s.page, tab: s.tab }, "", `#${s.page}`);
+     const pop = (e: PopStateEvent) => {
+-      if (e.state?.page) {
+-        const valid = e.state.page !== "task" || stateRef.current.activeTask;
++      if (!e.state?.page) return;
++      if (e.state.page === "task" && e.state.taskId) {
++        const known = stateRef.current.records[e.state.taskId];
+         patch({
+-          page: valid ? e.state.page : "home",
+-          tab: valid ? e.state.tab || "小N" : "小N",
++          page: known ? "task" : "home",
++          tab: known ? e.state.tab || stateRef.current.tab : "小N",
++          activeTask: known ? e.state.taskId : stateRef.current.activeTask,
+         });
++        return;
+       }
++      const valid = e.state.page !== "task" || stateRef.current.activeTask;
++      patch({
++        page: valid ? e.state.page : "home",
++        tab: valid ? e.state.tab || "小N" : "小N",
++      });
+     };
+     window.addEventListener("popstate", pop);
+     return () => window.removeEventListener("popstate", pop);
+@@ -296,7 +304,11 @@
+       return;
+     }
+     dispatch({ type: "open-task", id });
+-    window.history.pushState({ page: "task", tab: s.tab }, "", "#task");
++    window.history.pushState(
++      { page: "task", tab: s.tab, taskId: id },
++      "",
++      "#task",
++    );
+   };
+   const chatSend = (text: string) => {
+     if (!text.trim() || s.chatStatus === "waiting" || s.chatStatus === "paused")
+@@ -785,7 +797,7 @@
+                       <button
+                         className="primary wide"
+                         onClick={() => {
+-                          patch({ rest: false });
++                          patch({ rest: false, questionInvitePaused: true });
+                           navigate("chat");
+                         }}
+                       >
+
+## outputs/xiaon/src/domain.test.ts
+--- before/src/domain.test.ts	2026-10-20 18:45:54
++++ ../outputs/xiaon/src/domain.test.ts	2026-10-20 18:46:12
+@@ -196,3 +196,26 @@
+   assert.match(replyFor("谢谢", true, true), /今天不用急着回到题目/);
+   assert.match(replyFor("今天先休息", true, true), /休息也是你的选择/);
+ });
++
++test("数学等价写法（显式乘号、前置正号）被正确接受，错误答案仍判错", () => {
++  const t = getTask("transfer");
++  for (const value of ["4a+2", "4*a+2", "4×a+2", "+4a+2", "2+4a", "2+4*a"]) {
++    assert.equal(correct(t, value), true, value);
++  }
++  for (const value of ["4a-2", "4*a-2", "4a+2=", "4a+2=x+5", "4a*2"]) {
++    assert.equal(correct(t, value), false, value);
++  }
++  const b = getTask("bracket");
++  assert.equal(correct(b, "x*+5"), false);
++  assert.equal(correct(b, "(x+5)"), true);
++  assert.equal(correct(b, "3x−(2x−5)=4*a+2".replace("4*a+2", "x+5")), true);
++});
++
++test("等价写法的首次独立完成被如实记录，不退化为需要继续观察", () => {
++  let s = open(initial(), "transfer");
++  s = answer(s, "4*a+2", "first", "transfer");
++  assert.equal(s.records.transfer.attempts[0].correct, true);
++  const o = observations(s)[2];
++  assert.equal(o.status, "本次独立完成");
++  assert.doesNotMatch(o.finding, /还没有完成正确解答|需要继续了解具体步骤/);
++});
+
+## outputs/xiaon/scripts/build-offline.mjs
+--- before/scripts/build-offline.mjs	2026-10-20 19:02:48
++++ ../outputs/xiaon/scripts/build-offline.mjs	2026-10-20 19:03:13
+@@ -16,12 +16,20 @@
+   // A future code-splitting/import change must fail the offline build explicitly.
+   new Script(js, { filename: match[1] });
+   html = html.replace(match[0], '');
+-  html = html.replace('</body>', `<script>${js.replace(/<\/script/gi, '<\\/script')}</script></body>`);
++  // Function replacements keep $ sequences in the bundle literal; a string
++  // replacement would interpret $&, $$ or $' inside the code and corrupt it.
++  html = html.replace(
++    '</body>',
++    () => `<script>${js.replace(/<\/script/gi, '<\\/script')}</script></body>`,
++  );
+ }
+ for (const match of styles) {
+   const css = await readFile(path.join(dist, match[1].replace(/^\//, '')), 'utf8');
+   if (/url\(\s*['"]?(?:https?:|\/assets\/)/i.test(css)) throw new Error('External CSS resource detected.');
+-  html = html.replace(match[0], `<style>${css.replace(/<\/style/gi, '<\\/style')}</style>`);
++  html = html.replace(
++    match[0],
++    () => `<style>${css.replace(/<\/style/gi, '<\\/style')}</style>`,
++  );
+ }
+ const markup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
+ if (/<(?:script|link)\b[^>]*(?:src|href)="(?:https?:|\/assets\/)/i.test(markup)) throw new Error('An external asset is still referenced.');
+
+## outputs/xiaon/README.md
+--- before/README.md	2026-10-20 18:45:54
++++ ../outputs/xiaon/README.md	2026-10-20 18:58:13
+@@ -28,7 +28,7 @@
+ ```sh
+ npm run build       # TypeScript 检查和生产构建
+ npm run preview     # 预览生产构建，默认 4173 端口
+-npm test            # 17 项纯业务规则测试
++npm test            # 22 项纯业务规则测试
+ npx playwright install chromium  # 首次运行浏览器测试前安装测试浏览器
+ npm run test:browser # 17 条核心流程及无障碍检查 + 1 条单文件分享测试
+ ```
+@@ -55,7 +55,7 @@
+ ## 设计说明
+ 
+ - **自己的节奏**：首页把“聊聊、看题、休息”放在同一层选择中，先听意愿；休息后隐藏学习邀请，今日页停止任务安排。恢复由学生主动选择。
+-- **暂不看题**：选择“现在先不看”，或明确输入“不想看题 / 不想探索 / 只想聊聊”后，暂停当前聊天的看题邀请与同义快捷项，后续本地回复也不再邀请。该选择随演示进度保存，刷新或往返页面后仍有效；通过保留的主动入口并确认进入任务后恢复。自然语言只覆盖这些示例表达，不代表真实语义理解。
++- **暂不看题**：选择“现在先不看”，或明确输入“不想看题 / 不想探索 / 只想聊聊”后，暂停当前聊天的看题邀请与同义快捷项，后续本地回复也不再邀请。休息后从“我想继续聊聊”返回时同样先不邀请，由学生经“我想开始看题”主动恢复。该选择随演示进度保存，刷新或往返页面后仍有效；通过保留的主动入口并确认进入任务后恢复。自然语言只覆盖这些示例表达，不代表真实语义理解。
+ - **地图阅读**：地点名与关键状态普通模式约14px/12px，大字体为18px/15.12px。地图增加竖向空间，列表入口继续保留。
+ - **安静的识别度**：奶油纸色、鼠尾草绿、少量暖黄；原创小芽形象采用 SVG 渐变、柔和轮廓与轻微呼吸动画。没有系统 emoji 品牌头像，也没有图片或字体外部请求。
+ - **探索与专注分开**：地图像一本小小的旅行手记；进入任务后收起地图与大型形象，保留题目、作答、提示和暂停。
+@@ -66,7 +66,7 @@
+ 
+ 首次介绍与授权、可恢复聊天、看题与步骤记录、提示、失败重试、暂停恢复、图片选择/裁剪/遮挡/编辑、五维地图和列表、五类完整任务、基于作答的观察、证据展开、文本导出、周计划/今日/阶段回顾、记忆管理、隐私说明、求助及不安全联系人分流、监护确认和查阅申请状态。
+ 
+-题目化简使用确定性的一次式解析与最终结果核对，不执行输入文字。可以提交结果或以 `=` 连接的等式步骤；不是任意数学证明或自然语言解题理解。错误等式不能靠最后写一个正确答案蒙混过关。
++题目化简使用确定性的一次式解析与等价判断，不执行输入文字。可以提交结果或以 `=` 连接的等式步骤；`4a+2`、`4*a+2`、`4×a+2`、`+4a+2` 等数学等价写法都会被判对，错误等式不能靠最后写一个正确答案蒙混过关；不是任意数学证明或自然语言解题理解。从一题进入另一题后，浏览器返回会恢复上一题并保留其作答记录。
+ 
+ 计算题数量按**本次已打开的不同计算题**计数，最多 10 题，包含原题、同类新题和错误后邀请的补充题。失败重试、修改与刷新不会增加同一题的计数，计算达到上限后仍可回看已打开题目。暂停和未完成不计入“弱”。
+ 

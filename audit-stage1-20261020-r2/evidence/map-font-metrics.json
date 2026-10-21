@@ -1,0 +1,12 @@
+{
+  "large": {
+    "name": "18px",
+    "status": "15.12px",
+    "overflowX": 0
+  },
+  "normal": {
+    "name": "14.1px",
+    "status": "12px",
+    "overflowX": 0
+  }
+}

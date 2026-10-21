@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-21",
+  "branch": "main",
+  "HEAD": "773e95ecc3063648a4ece1e67484c48f763ccaff",
+  "changedProductFiles": 38,
+  "sourceHashesMatch": true,
+  "checks": {
+    "independent-a": "EXIT_CODE=0",
+    "independent-b": "EXIT_CODE=0",
+    "independent-c": "EXIT_CODE=0",
+    "final-upstream-and-build": "EXIT_CODE=0",
+    "typecheck-delivery": "EXIT_CODE=0",
+    "browser-complete-delivery": "EXIT_CODE=0",
+    "process-restart": "EXIT_CODE=0",
+    "real-model-rerun": "EXIT_CODE=0",
+    "real-memory-context-rerun": "EXIT_CODE=0"
+  },
+  "rules": 25,
+  "agentTests": 88,
+  "browserTests": 23,
+  "moduleIndependentRecheck": {
+    "A": 23,
+    "B": 25,
+    "C": 25
+  },
+  "integrationEvidence": "self_verified",
+  "syntheticModel": "verified",
+  "realModelAPI": "verified_synthetic_materials",
+  "realMemoryTransport": "verified_synthetic_markers",
+  "realDevice": "not_run",
+  "longTermTeachingEffect": "not_run",
+  "wholeProductIndependentAcceptance": "not_run",
+  "legacyClientAnswerSecrecy": "not_claimed",
+  "committed": false,
+  "pushed": false,
+  "deployed": false
+}

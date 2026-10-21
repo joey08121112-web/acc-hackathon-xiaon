@@ -1,0 +1,18 @@
+COMMAND: node scripts/agent/bundle-sentinel.mjs
+UTC: 2026-10-20T16:27:55.412496+00:00
+
+> xiaon-learning-companion@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 1662 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   2.27 kB │ gzip:   1.41 kB
+dist/assets/index-BSRWGeMu.css   41.80 kB │ gzip:  10.16 kB
+dist/assets/index-DGzgM5oc.js   397.57 kB │ gzip: 123.11 kB
+✓ built in 691ms
+{"check":"actual_frontend_bundle_sentinel","artifactsChecked":26,"leakedFiles":[],"offlineArtifactRegenerated":false}
+
+exitCode=0

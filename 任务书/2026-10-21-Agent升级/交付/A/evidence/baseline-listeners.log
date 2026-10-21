@@ -1,0 +1,20 @@
+COMMAND    PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+rapportd   647  ami   10u  IPv4 0x3b08ade2e3400117      0t0  TCP *:49152 (LISTEN)
+rapportd   647  ami   12u  IPv6 0xf614c4849d36a6a8      0t0  TCP *:49152 (LISTEN)
+ControlCe  659  ami    9u  IPv4 0x95b40cb649ca54a1      0t0  TCP *:7000 (LISTEN)
+ControlCe  659  ami   10u  IPv6 0xd9f192577dce4561      0t0  TCP *:7000 (LISTEN)
+ControlCe  659  ami   11u  IPv4 0xa865922ea4345095      0t0  TCP *:5000 (LISTEN)
+ControlCe  659  ami   12u  IPv6 0x4cc06e66ae505baf      0t0  TCP *:5000 (LISTEN)
+node       885  ami   15u  IPv4 0x93c4cb30d8065f1b      0t0  TCP 127.0.0.1:8787 (LISTEN)
+WeChat    1014  ami  213u  IPv4 0xdf46c18a0e187216      0t0  TCP 127.0.0.1:14013 (LISTEN)
+WeChat    1014  ami  219u  IPv4  0xc1fc9a50c9c0689      0t0  TCP 127.0.0.1:14016 (LISTEN)
+WeChat    1014  ami  224u  IPv4 0x3c7c190c6d03f14e      0t0  TCP 127.0.0.1:14019 (LISTEN)
+WeChat    1014  ami  229u  IPv4 0xb19d9b3c44944fba      0t0  TCP 127.0.0.1:14022 (LISTEN)
+WeChat    1014  ami  235u  IPv4 0xb96c10e0d2ebadea      0t0  TCP 127.0.0.1:14023 (LISTEN)
+AutoClaw  2504  ami   38u  IPv4 0x5cf7c63a3a2e6a81      0t0  TCP 127.0.0.1:54677 (LISTEN)
+AutoClaw  2504  ami   59u  IPv4  0x5cb825497fc80ef      0t0  TCP 127.0.0.1:18432 (LISTEN)
+AutoClaw  2504  ami   64u  IPv4 0x52202e72eaa3e52a      0t0  TCP 127.0.0.1:54676 (LISTEN)
+AutoClaw  2504  ami   65u  IPv4 0xd5a799166a412d6b      0t0  TCP 127.0.0.1:3917 (LISTEN)
+node      3840  ami   16u  IPv4 0xdb3e168a94e15b56      0t0  TCP *:5173 (LISTEN)
+
+exitCode=0

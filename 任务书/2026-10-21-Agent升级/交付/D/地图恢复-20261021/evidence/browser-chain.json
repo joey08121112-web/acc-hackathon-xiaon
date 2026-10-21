@@ -1,0 +1,4725 @@
+{
+  "first": {
+    "now": "2026-10-21T00:00:00.000Z",
+    "session": {
+      "endedAt": null,
+      "id": "b2e55151-6605-48cc-9155-444ad802fc7d",
+      "mode": "support",
+      "operationId": "82573180-5c20-47e8-bf5d-cc7e6079b647-s",
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "active",
+      "timezone": "Asia/Shanghai"
+    },
+    "paused": false,
+    "assessment": {
+      "schemaVersion": "1.0.0",
+      "id": "fb5a3822-2950-4213-b38c-5e3cddb289d6",
+      "evidenceRevision": 22,
+      "createdAt": "2026-10-21T00:00:00.000Z",
+      "skills": [
+        {
+          "schemaVersion": "1.0.0",
+          "id": "37ab7aed-184e-4461-9e7c-06136795eb42",
+          "evidenceRevision": 22,
+          "knowledgePointId": "math-language",
+          "dimension": "理解",
+          "status": "first_independent",
+          "evidenceIds": [
+            "84c89e14-f226-45f7-9681-83257c20e58e",
+            "ec8cc893-2a14-46e8-b730-43557b0b8788"
+          ],
+          "attemptIds": [
+            "d344c726-d81d-4e5e-86f5-caae6e784290"
+          ],
+          "observedTaskIds": [
+            "understand"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21"
+          ],
+          "recentDifficulty": false,
+          "coverage": "数学语句与条件提取：1次有效尝试，1道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖先后运算关系及条件解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "afe5146c-9130-42f7-9049-380304675b9a",
+          "evidenceRevision": 22,
+          "knowledgePointId": "counterexample",
+          "dimension": "逻辑",
+          "status": "first_independent",
+          "evidenceIds": [
+            "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+            "0db049fe-661c-4d0e-8523-14da09843771"
+          ],
+          "attemptIds": [
+            "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228"
+          ],
+          "observedTaskIds": [
+            "logic"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21"
+          ],
+          "recentDifficulty": false,
+          "coverage": "反例与条件结论：1次有效尝试，1道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "ef5a3347-d84e-4c8d-bc6e-e18cf667831c",
+          "evidenceRevision": 22,
+          "knowledgePointId": "negative-brackets",
+          "dimension": "计算",
+          "status": "completed_with_help",
+          "evidenceIds": [
+            "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+            "67afffcc-6959-4012-9b9b-76019f627787"
+          ],
+          "attemptIds": [
+            "1e4cdc63-06a4-4161-982e-78e7a1f2a322",
+            "a5bf7a64-60ce-47d5-8a62-08a7aab58a26"
+          ],
+          "observedTaskIds": [
+            "bracket"
+          ],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "去括号负号处理：2次有效尝试，0道未见题独立完成，1次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "067eec08-5b5e-40a6-9ed9-0ef3f9e0839a",
+          "evidenceRevision": 22,
+          "knowledgePointId": "like-terms",
+          "dimension": "计算",
+          "status": "first_independent",
+          "evidenceIds": [
+            "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+          ],
+          "attemptIds": [
+            "755e8d9e-7156-45c8-abbc-67573f66a5a1"
+          ],
+          "observedTaskIds": [
+            "b-like-observation"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21"
+          ],
+          "recentDifficulty": false,
+          "coverage": "合并同类项：1次有效尝试，1道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式系数和常数合并结果，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "615ae702-9b1d-4638-a225-b25fc665b464",
+          "evidenceRevision": 22,
+          "knowledgePointId": "fixed-variable-cost",
+          "dimension": "建模",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "一次费用与随数量变化费用：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖单一线性数量关系及费用来源解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "7d1590c6-a5cc-4d04-a8de-0c00595c313a",
+          "evidenceRevision": 22,
+          "knowledgePointId": "rotation-2d",
+          "dimension": "空间想象",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "二维旋转与位置关系：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-21T00:00:00.000Z"
+        }
+      ],
+      "coverage": [
+        {
+          "dimension": "理解",
+          "knowledgePointIds": [
+            "math-language"
+          ],
+          "evidenceCount": 2,
+          "lastObservedAt": "2026-10-21T00:00:00.000Z",
+          "unknowns": [
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "逻辑",
+          "knowledgePointIds": [
+            "counterexample"
+          ],
+          "evidenceCount": 2,
+          "lastObservedAt": "2026-10-21T00:00:00.000Z",
+          "unknowns": [
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "计算",
+          "knowledgePointIds": [
+            "negative-brackets",
+            "like-terms"
+          ],
+          "evidenceCount": 3,
+          "lastObservedAt": "2026-10-21T00:00:00.000Z",
+          "unknowns": [
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "建模",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：一次费用与随数量变化费用",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "空间想象",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：二维旋转与位置关系",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "84c89e14-f226-45f7-9681-83257c20e58e",
+        "ec8cc893-2a14-46e8-b730-43557b0b8788",
+        "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+        "0db049fe-661c-4d0e-8523-14da09843771",
+        "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+        "67afffcc-6959-4012-9b9b-76019f627787",
+        "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+      ],
+      "limitations": [
+        "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+        "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+        "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+      ]
+    },
+    "tasks": [
+      {
+        "schemaVersion": "1.0.0",
+        "id": "understand",
+        "version": 2,
+        "title": "数学语句与条件提取",
+        "question": "“比 x 的 2 倍少 3”可以怎样表示？第一行写式子，另起一行解释先后关系。",
+        "choices": [],
+        "knowledgePoints": [
+          "math-language"
+        ],
+        "primaryDimension": "理解",
+        "auxiliaryDimensions": [],
+        "familyId": "family-math-language",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-language-transfer",
+        "version": 2,
+        "title": "数学语句与条件提取",
+        "question": "先把 a 增加 2，再把所得结果乘 3。第一行写式子，另起一行说明运算次序。",
+        "choices": [],
+        "knowledgePoints": [
+          "math-language"
+        ],
+        "primaryDimension": "理解",
+        "auxiliaryDimensions": [],
+        "familyId": "family-math-language",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-language-delayed",
+        "version": 2,
+        "title": "数学语句与条件提取",
+        "question": "一根长 x 厘米的绳先剪去 4 厘米，另一根长为剩下部分的 2 倍。第一行写另一根绳长度的式子，另起一行说明条件。",
+        "choices": [],
+        "knowledgePoints": [
+          "math-language"
+        ],
+        "primaryDimension": "理解",
+        "auxiliaryDimensions": [],
+        "familyId": "family-math-language",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "logic",
+        "version": 2,
+        "title": "反例与条件结论",
+        "question": "小林说“两个负数的和一定是正数”。哪个例子否定这句话？第一行写选项字母，另起一行说明前提与结论。",
+        "choices": [
+          "A: (-2)+(-3)=-5",
+          "B: 2+3=5",
+          "C: (-2)×(-3)=6"
+        ],
+        "knowledgePoints": [
+          "counterexample"
+        ],
+        "primaryDimension": "逻辑",
+        "auxiliaryDimensions": [],
+        "familyId": "family-counterexample",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-logic-transfer",
+        "version": 2,
+        "title": "反例与条件结论",
+        "question": "有人说“两个正数中，较大的数的平方反而较小”。哪个例子能反驳？第一行写选项字母，另起一行解释。",
+        "choices": [
+          "A: -2<-1，但4>1",
+          "B: 1=1，平方也相等",
+          "C: 1<2，且1<4"
+        ],
+        "knowledgePoints": [
+          "counterexample"
+        ],
+        "primaryDimension": "逻辑",
+        "auxiliaryDimensions": [],
+        "familyId": "family-counterexample",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-logic-delayed",
+        "version": 2,
+        "title": "反例与条件结论",
+        "question": "“两个奇数的和一定是奇数”，哪个例子能反驳？第一行写选项字母，另起一行解释。",
+        "choices": [
+          "A: 2+3=5",
+          "B: 3+5=8",
+          "C: 3×5=15"
+        ],
+        "knowledgePoints": [
+          "counterexample"
+        ],
+        "primaryDimension": "逻辑",
+        "auxiliaryDimensions": [],
+        "familyId": "family-counterexample",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "bracket",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：3x − (2x − 5)。可写一次式或以等号相连的完整等价步骤。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "transfer",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：7a − (3a − 2)。可写一次式或以等号相连的完整等价步骤。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-neg-delayed",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：8 − (3x − 4)。可写一次式或以等号相连的完整等价步骤。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-like-observation",
+        "version": 2,
+        "title": "合并同类项",
+        "question": "化简：2x + 3x − 4。",
+        "choices": [],
+        "knowledgePoints": [
+          "like-terms"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-like-terms",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-like-transfer",
+        "version": 2,
+        "title": "合并同类项",
+        "question": "化简：7a + 2 − 4a + 5。",
+        "choices": [],
+        "knowledgePoints": [
+          "like-terms"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-like-terms",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-like-delayed",
+        "version": 2,
+        "title": "合并同类项",
+        "question": "化简：6 − 2x + 5x − 1。",
+        "choices": [],
+        "knowledgePoints": [
+          "like-terms"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-like-terms",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "model",
+        "version": 2,
+        "title": "一次费用与随数量变化费用",
+        "question": "每本练习本3元，买x本，另付一次纸袋费2元。第一行写总费用式子，另起一行说明两部分来源。",
+        "choices": [],
+        "knowledgePoints": [
+          "fixed-variable-cost"
+        ],
+        "primaryDimension": "建模",
+        "auxiliaryDimensions": [
+          "理解"
+        ],
+        "familyId": "family-fixed-variable-cost",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-cost-transfer",
+        "version": 2,
+        "title": "一次费用与随数量变化费用",
+        "question": "租自行车每小时5元，另付一次头盔租金8元。租a小时，第一行写总费用式子，另起一行解释各项。",
+        "choices": [],
+        "knowledgePoints": [
+          "fixed-variable-cost"
+        ],
+        "primaryDimension": "建模",
+        "auxiliaryDimensions": [
+          "理解"
+        ],
+        "familyId": "family-fixed-variable-cost",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-cost-delayed",
+        "version": 2,
+        "title": "一次费用与随数量变化费用",
+        "question": "寄件先收一次包装费12元，每件运费2元，共x件。第一行写总费用式子，另起一行解释各项。",
+        "choices": [],
+        "knowledgePoints": [
+          "fixed-variable-cost"
+        ],
+        "primaryDimension": "建模",
+        "auxiliaryDimensions": [
+          "理解"
+        ],
+        "familyId": "family-fixed-variable-cost",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "space",
+        "version": 2,
+        "title": "二维旋转与位置关系",
+        "question": "坐标横轴向右、纵轴向上。折线依次为(0,0)、(0,3)、(1,3)，绕(0,0)顺时针90°。哪个选项给出旋转后的对应顶点？第一行写字母。",
+        "choices": [
+          "A",
+          "B",
+          "C"
+        ],
+        "knowledgePoints": [
+          "rotation-2d"
+        ],
+        "primaryDimension": "空间想象",
+        "auxiliaryDimensions": [],
+        "familyId": "family-rotation-2d",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": {
+          "kind": "rotation2d",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "center": [
+            0,
+            0
+          ],
+          "clockwiseDegrees": 90,
+          "options": [
+            {
+              "label": "A",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  -3,
+                  0
+                ],
+                [
+                  -3,
+                  1
+                ]
+              ]
+            },
+            {
+              "label": "B",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  -1
+                ]
+              ]
+            },
+            {
+              "label": "C",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  -3
+                ],
+                [
+                  1,
+                  -3
+                ]
+              ]
+            }
+          ]
+        },
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-space-transfer",
+        "version": 2,
+        "title": "二维旋转与位置关系",
+        "question": "坐标横轴向右、纵轴向上。折线依次为(1,1)、(3,1)、(3,2)，绕(1,1)顺时针180°。哪个选项给出对应顶点？第一行写字母。",
+        "choices": [
+          "A",
+          "B",
+          "C"
+        ],
+        "knowledgePoints": [
+          "rotation-2d"
+        ],
+        "primaryDimension": "空间想象",
+        "auxiliaryDimensions": [],
+        "familyId": "family-rotation-2d",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": {
+          "kind": "rotation2d",
+          "points": [
+            [
+              1,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "center": [
+            1,
+            1
+          ],
+          "clockwiseDegrees": 180,
+          "options": [
+            {
+              "label": "A",
+              "points": [
+                [
+                  1,
+                  1
+                ],
+                [
+                  -1,
+                  1
+                ],
+                [
+                  -1,
+                  0
+                ]
+              ]
+            },
+            {
+              "label": "B",
+              "points": [
+                [
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  -1
+                ],
+                [
+                  2,
+                  -1
+                ]
+              ]
+            },
+            {
+              "label": "C",
+              "points": [
+                [
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  3
+                ],
+                [
+                  0,
+                  3
+                ]
+              ]
+            }
+          ]
+        },
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-space-delayed",
+        "version": 2,
+        "title": "二维旋转与位置关系",
+        "question": "坐标横轴向右、纵轴向上。折线依次为(-1,0)、(-1,2)、(2,2)，绕(-1,0)顺时针270°。哪个选项给出对应顶点？第一行写字母。",
+        "choices": [
+          "A",
+          "B",
+          "C"
+        ],
+        "knowledgePoints": [
+          "rotation-2d"
+        ],
+        "primaryDimension": "空间想象",
+        "auxiliaryDimensions": [],
+        "familyId": "family-rotation-2d",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": {
+          "kind": "rotation2d",
+          "points": [
+            [
+              -1,
+              0
+            ],
+            [
+              -1,
+              2
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          "center": [
+            -1,
+            0
+          ],
+          "clockwiseDegrees": 270,
+          "options": [
+            {
+              "label": "A",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -1,
+                  -2
+                ],
+                [
+                  -4,
+                  -2
+                ]
+              ]
+            },
+            {
+              "label": "B",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ],
+                [
+                  1,
+                  -3
+                ]
+              ]
+            },
+            {
+              "label": "C",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -3,
+                  0
+                ],
+                [
+                  -3,
+                  3
+                ]
+              ]
+            }
+          ]
+        },
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-0",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：5x − (2x − 1)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-1",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：6x − (3x − 2)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-2",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：7x − (4x − 3)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-3",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：8x − (5x − 4)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-4",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：9x − (6x − 5)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-5",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：10x − (7x − 6)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-6",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：11x − (8x − 7)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-7",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：12x − (9x − 8)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-8",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：13x − (10x − 9)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-9",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：14x − (11x − 10)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      }
+    ],
+    "attempts": [
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "885ee069-cca4-496a-b337-bb4117b32e71"
+        ],
+        "hintSnapshot": [],
+        "id": "755e8d9e-7156-45c8-abbc-67573f66a5a1",
+        "operationId": "4b7092f7-3c7c-4a78-90fd-c2fdf603195b",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "b-like-observation",
+        "taskVersion": 2,
+        "value": "5x-4",
+        "classification": {
+          "kind": "new_independent",
+          "novelty": "unseen",
+          "learningDate": "2026-10-21",
+          "independent": true,
+          "delayedRetention": false,
+          "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "1bb0f4ba-02da-4735-b959-b2abd8e73a26"
+        ],
+        "hintSnapshot": [],
+        "id": "d344c726-d81d-4e5e-86f5-caae6e784290",
+        "operationId": "0a05a9f9-b112-47e4-9be9-c7ac8268f170",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "understand",
+        "taskVersion": 2,
+        "value": "2x-3\n先求x的2倍，再减去3。",
+        "classification": {
+          "kind": "new_independent",
+          "novelty": "unseen",
+          "learningDate": "2026-10-21",
+          "independent": true,
+          "delayedRetention": false,
+          "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "4918a08e-c43d-4a63-a17d-e7ce6520de11"
+        ],
+        "hintSnapshot": [],
+        "id": "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228",
+        "operationId": "8a99df49-08a6-480a-a94a-b438f62a0e1c",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "logic",
+        "taskVersion": 2,
+        "value": "A\n两个负数的和为负数，满足前提但结论不成立。",
+        "classification": {
+          "kind": "new_independent",
+          "novelty": "unseen",
+          "learningDate": "2026-10-21",
+          "independent": true,
+          "delayedRetention": false,
+          "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "ca68ca43-4864-40c4-aef9-bce96208b4af"
+        ],
+        "hintSnapshot": [],
+        "id": "1e4cdc63-06a4-4161-982e-78e7a1f2a322",
+        "operationId": "ea3d9235-4407-4b30-8718-51f24568dfbe",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "bracket",
+        "taskVersion": 2,
+        "value": "x-5",
+        "classification": {
+          "kind": "incorrect",
+          "novelty": "unseen",
+          "learningDate": "2026-10-21",
+          "independent": false,
+          "delayedRetention": false,
+          "reason": "这次作答的评分点未通过；保留具体证据，不推断人格或智力"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "ca68ca43-4864-40c4-aef9-bce96208b4af",
+          "699d1ed3-515d-4a65-8721-3a3ebd05a097"
+        ],
+        "hintSnapshot": [
+          {
+            "id": "hint-1",
+            "level": 1,
+            "text": "减去括号内每一项：−(2x−5)=−2x+5。"
+          }
+        ],
+        "id": "a5bf7a64-60ce-47d5-8a62-08a7aab58a26",
+        "operationId": "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "bracket",
+        "taskVersion": 2,
+        "value": "x+5",
+        "classification": {
+          "kind": "completed_with_help",
+          "novelty": "seen",
+          "learningDate": "2026-10-21",
+          "independent": false,
+          "delayedRetention": false,
+          "reason": "作答之前存在提示、答案或聊天关键帮助"
+        }
+      }
+    ],
+    "exposures": [
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "885ee069-cca4-496a-b337-bb4117b32e71",
+        "kind": "task",
+        "operationId": "82573180-5c20-47e8-bf5d-cc7e6079b647-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "b-like-observation",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "1bb0f4ba-02da-4735-b959-b2abd8e73a26",
+        "kind": "task",
+        "operationId": "7af38e56-c366-45cd-94f0-271500eaf419-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "understand",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "4918a08e-c43d-4a63-a17d-e7ce6520de11",
+        "kind": "task",
+        "operationId": "aeb7b240-89de-4797-9e0a-083e24268224-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "logic",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "ca68ca43-4864-40c4-aef9-bce96208b4af",
+        "kind": "task",
+        "operationId": "5280f315-6047-4c4e-8c2d-412dda916a00-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": "减去括号内每一项：−(2x−5)=−2x+5。",
+        "hintId": "hint-1",
+        "id": "699d1ed3-515d-4a65-8721-3a3ebd05a097",
+        "kind": "hint",
+        "operationId": "c8f22f6a-3a75-403e-9365-affe4a9c6551-expose",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "bracket",
+        "taskVersion": 2
+      }
+    ],
+    "gradings": [
+      {
+        "attemptId": "755e8d9e-7156-45c8-abbc-67573f66a5a1",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+        ],
+        "evidenceRevision": 4,
+        "id": "c0c1eb46-6676-49f4-9a1f-91638a59f8cb",
+        "method": "rubric_program",
+        "operationId": "grade-bfe7d5dfdd4b1622779b4d6b6dad375e6ad18f8663f6b968",
+        "points": [
+          {
+            "evidenceIds": [
+              "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      {
+        "attemptId": "d344c726-d81d-4e5e-86f5-caae6e784290",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "84c89e14-f226-45f7-9681-83257c20e58e",
+          "ec8cc893-2a14-46e8-b730-43557b0b8788"
+        ],
+        "evidenceRevision": 9,
+        "id": "afddcc2a-2623-4fba-ae2f-f044a8abe2e4",
+        "method": "model_assisted",
+        "operationId": "grade-04cc75f50815829a14b6d2b5a97980db2a5a6ae50d86f128",
+        "points": [
+          {
+            "evidenceIds": [
+              "84c89e14-f226-45f7-9681-83257c20e58e"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          },
+          {
+            "evidenceIds": [
+              "ec8cc893-2a14-46e8-b730-43557b0b8788"
+            ],
+            "pointId": "reason",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      {
+        "attemptId": "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+          "0db049fe-661c-4d0e-8523-14da09843771"
+        ],
+        "evidenceRevision": 14,
+        "id": "fb6b55b3-a7a0-4123-a4d9-07d97fa95c1a",
+        "method": "model_assisted",
+        "operationId": "grade-48ef85f51e30e5c3f735fad39cbad9daf22ebfc613a3af50",
+        "points": [
+          {
+            "evidenceIds": [
+              "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          },
+          {
+            "evidenceIds": [
+              "0db049fe-661c-4d0e-8523-14da09843771"
+            ],
+            "pointId": "reason",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      {
+        "attemptId": "1e4cdc63-06a4-4161-982e-78e7a1f2a322",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [
+          "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+        ],
+        "evidenceIds": [
+          "66d66cbc-ab5f-4879-8b78-e4d3df34498b"
+        ],
+        "evidenceRevision": 18,
+        "id": "0f1fedf2-c78a-41f7-9d7c-7168e28b85c7",
+        "method": "rubric_program",
+        "operationId": "grade-527eb06345c684cff50d60c6951dbd023611697af91cf4c9",
+        "points": [
+          {
+            "evidenceIds": [
+              "66d66cbc-ab5f-4879-8b78-e4d3df34498b"
+            ],
+            "pointId": "result",
+            "status": "unsupported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "incorrect"
+      },
+      {
+        "attemptId": "a5bf7a64-60ce-47d5-8a62-08a7aab58a26",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "67afffcc-6959-4012-9b9b-76019f627787"
+        ],
+        "evidenceRevision": 22,
+        "id": "26e748aa-48d2-479f-93f7-dff2d49e6b39",
+        "method": "rubric_program",
+        "operationId": "grade-23865b0dd8ad56cf6df57206c8a79422b2be504d1c0b4ef2",
+        "points": [
+          {
+            "evidenceIds": [
+              "67afffcc-6959-4012-9b9b-76019f627787"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      }
+    ],
+    "evidence": [
+      {
+        "attemptId": "755e8d9e-7156-45c8-abbc-67573f66a5a1",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 4,
+        "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+        "id": "f74cf15d-1615-424d-9e7d-e0ced0aa9df6",
+        "knowledgePointId": "like-terms",
+        "location": {
+          "end": 4,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "5x-4",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "b-like-observation",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "d344c726-d81d-4e5e-86f5-caae6e784290",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 9,
+        "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+        "id": "84c89e14-f226-45f7-9681-83257c20e58e",
+        "knowledgePointId": "math-language",
+        "location": {
+          "end": 4,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "2x-3",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "understand",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "d344c726-d81d-4e5e-86f5-caae6e784290",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 9,
+        "explanation": "合成分析：只引用当前作答原文，不代表真实模型效果",
+        "id": "ec8cc893-2a14-46e8-b730-43557b0b8788",
+        "knowledgePointId": "math-language",
+        "location": {
+          "end": 17,
+          "start": 5
+        },
+        "pointId": "reason",
+        "quote": "先求x的2倍，再减去3。",
+        "schemaVersion": "1.0.0",
+        "source": "model",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "understand",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 14,
+        "explanation": "只核对选项，不据此推断理由理解",
+        "id": "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+        "knowledgePointId": "counterexample",
+        "location": {
+          "end": 1,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "A",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "logic",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 14,
+        "explanation": "合成分析：只引用当前作答原文，不代表真实模型效果",
+        "id": "0db049fe-661c-4d0e-8523-14da09843771",
+        "knowledgePointId": "counterexample",
+        "location": {
+          "end": 23,
+          "start": 2
+        },
+        "pointId": "reason",
+        "quote": "两个负数的和为负数，满足前提但结论不成立。",
+        "schemaVersion": "1.0.0",
+        "source": "model",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "logic",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "1e4cdc63-06a4-4161-982e-78e7a1f2a322",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [
+          "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+        ],
+        "evidenceRevision": 18,
+        "explanation": "可解析的一次式或等号链存在与可信结果不等价的步骤",
+        "id": "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+        "knowledgePointId": "negative-brackets",
+        "location": {
+          "end": 3,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "x-5",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "unsupported",
+        "supersedesEvidenceId": null,
+        "taskId": "bracket",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "a5bf7a64-60ce-47d5-8a62-08a7aab58a26",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 22,
+        "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+        "id": "67afffcc-6959-4012-9b9b-76019f627787",
+        "knowledgePointId": "negative-brackets",
+        "location": {
+          "end": 3,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "x+5",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "bracket",
+        "taskVersion": 2,
+        "uncertainties": []
+      }
+    ],
+    "reports": [
+      {
+        "snapshot": {
+          "assessmentSnapshotId": "b24b93e6-a1d1-41cd-bc4d-fd7e2927afc1",
+          "changes": [
+            "首份观察快照",
+            "math-language：新增观察 first_independent",
+            "counterexample：新增观察 first_independent",
+            "negative-brackets：新增观察 completed_with_help",
+            "like-terms：新增观察 first_independent",
+            "fixed-variable-cost：新增观察 unobserved",
+            "rotation-2d：新增观察 unobserved"
+          ],
+          "coverage": [
+            "理解：2 条依据；覆盖仅限列出的子技能，不能解释为完整五维测量",
+            "逻辑：2 条依据；覆盖仅限列出的子技能，不能解释为完整五维测量",
+            "计算：3 条依据；覆盖仅限列出的子技能，不能解释为完整五维测量",
+            "建模：0 条依据；尚未观察：一次费用与随数量变化费用；覆盖仅限列出的子技能，不能解释为完整五维测量",
+            "空间想象：0 条依据；尚未观察：二维旋转与位置关系；覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ],
+          "createdAt": "2026-10-21T00:00:00.000Z",
+          "evidenceRevision": 22,
+          "id": "c8662583-de4b-4d3d-8786-f48ce71c9a8d",
+          "operationId": "b46cdf4a-71d8-43d3-baf0-32e23680938d-r",
+          "recommendations": [
+            "提示依赖：先支持，再用未见同类题检查",
+            "仅为待验证产品策略；不代表长期掌握或教学效果",
+            "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+            "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+            "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+          ],
+          "schemaVersion": "1.0.0",
+          "statements": [
+            {
+              "evidenceIds": [
+                "84c89e14-f226-45f7-9681-83257c20e58e",
+                "ec8cc893-2a14-46e8-b730-43557b0b8788"
+              ],
+              "kind": "fact",
+              "text": "math-language：本次知识点状态 first_independent，仅适用于已观察任务"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖先后运算关系及条件解释，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [
+                "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+                "0db049fe-661c-4d0e-8523-14da09843771"
+              ],
+              "kind": "fact",
+              "text": "counterexample：本次知识点状态 first_independent，仅适用于已观察任务"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [
+                "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+                "67afffcc-6959-4012-9b9b-76019f627787"
+              ],
+              "kind": "fact",
+              "text": "negative-brackets：本次知识点状态 completed_with_help，仅适用于已观察任务"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [
+                "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+              ],
+              "kind": "fact",
+              "text": "like-terms：本次知识点状态 first_independent，仅适用于已观察任务"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖受限一次式系数和常数合并结果，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "fixed-variable-cost：尚无足够依据，不推断能力弱"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖单一线性数量关系及费用来源解释，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "rotation-2d：尚无足够依据，不推断能力弱"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [
+                "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+                "67afffcc-6959-4012-9b9b-76019f627787"
+              ],
+              "kind": "inference",
+              "text": "提示依赖：先支持，再用未见同类题检查"
+            }
+          ],
+          "supersedesReportId": null
+        },
+        "basisRevised": false,
+        "replacementId": null
+      }
+    ],
+    "plans": [
+      {
+        "snapshot": {
+          "changes": [
+            "学生选择 accept：学生明确选择接受"
+          ],
+          "confirmation": {
+            "action": "accept",
+            "actor": "student",
+            "confirmedAt": "2026-10-21T00:00:00.000Z",
+            "expectedPreviousVersionId": null,
+            "reason": "学生明确选择接受"
+          },
+          "createdAt": "2026-10-21T00:00:00.000Z",
+          "evidenceRevision": 22,
+          "goal": "negative-brackets：从提示帮助过渡到独立处理",
+          "id": "4f0feafe-f7fb-49d8-a4fa-d2e7d23f315d",
+          "items": [
+            {
+              "estimatedMinutes": 3,
+              "evidenceIds": [
+                "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+                "67afffcc-6959-4012-9b9b-76019f627787"
+              ],
+              "goal": "只看当前知识点的一个具体步骤，先提供支持",
+              "id": "5b587091-17ba-4dbc-b5f4-76883c49d3de",
+              "knowledgePointId": "negative-brackets",
+              "scheduledDate": "2026-10-21",
+              "status": "scheduled",
+              "task": null,
+              "taskType": "supported_practice"
+            },
+            {
+              "estimatedMinutes": 3,
+              "evidenceIds": [
+                "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+                "67afffcc-6959-4012-9b9b-76019f627787"
+              ],
+              "goal": "支持后自选未见新题；完成支持前须再次核对题目暴露",
+              "id": "ed4ec1d9-ee8d-4fb4-a40c-cafdc0b2d9b7",
+              "knowledgePointId": "negative-brackets",
+              "scheduledDate": "2026-10-21",
+              "status": "scheduled",
+              "task": {
+                "taskId": "transfer",
+                "taskVersion": 2
+              },
+              "taskType": "independent_transfer"
+            }
+          ],
+          "operationId": "636834be-6585-4093-b7da-84a656ef1fc5",
+          "previousVersionId": null,
+          "proposalId": "9eb8d4af-0350-47e3-8f93-228087695f80",
+          "schemaVersion": "1.0.0",
+          "version": 1
+        },
+        "basisRevised": false,
+        "replacementId": null
+      }
+    ],
+    "proposal": {
+      "alternatives": [
+        "提示依赖：先支持，再用未见同类题检查",
+        "fixed-variable-cost：学生可改选另一知识点",
+        "rotation-2d：学生可改选另一知识点",
+        "counterexample：学生可改选另一知识点",
+        "like-terms：学生可改选另一知识点",
+        "math-language：学生可改选另一知识点",
+        "原题回顾：bracket（已见，不作为未见检验）"
+      ],
+      "assessmentSnapshotId": "b24b93e6-a1d1-41cd-bc4d-fd7e2927afc1",
+      "constraints": {
+        "calculationLimit": 10,
+        "requireUnderstandLogicFirst": true,
+        "timeBudgetMinutes": 6
+      },
+      "createdAt": "2026-10-21T00:00:00.000Z",
+      "evidenceRevision": 22,
+      "goal": "negative-brackets：从提示帮助过渡到独立处理",
+      "id": "9eb8d4af-0350-47e3-8f93-228087695f80",
+      "items": [
+        {
+          "estimatedMinutes": 3,
+          "evidenceIds": [
+            "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+            "67afffcc-6959-4012-9b9b-76019f627787"
+          ],
+          "goal": "只看当前知识点的一个具体步骤，先提供支持",
+          "id": "5b587091-17ba-4dbc-b5f4-76883c49d3de",
+          "knowledgePointId": "negative-brackets",
+          "scheduledDate": "2026-10-21",
+          "status": "proposed",
+          "task": null,
+          "taskType": "supported_practice"
+        },
+        {
+          "estimatedMinutes": 3,
+          "evidenceIds": [
+            "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+            "67afffcc-6959-4012-9b9b-76019f627787"
+          ],
+          "goal": "支持后自选未见新题；完成支持前须再次核对题目暴露",
+          "id": "ed4ec1d9-ee8d-4fb4-a40c-cafdc0b2d9b7",
+          "knowledgePointId": "negative-brackets",
+          "scheduledDate": "2026-10-21",
+          "status": "proposed",
+          "task": {
+            "taskId": "transfer",
+            "taskVersion": 2
+          },
+          "taskType": "independent_transfer"
+        }
+      ],
+      "operationId": "b46cdf4a-71d8-43d3-baf0-32e23680938d-p",
+      "schemaVersion": "1.0.0",
+      "statements": [
+        {
+          "evidenceIds": [
+            "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+            "67afffcc-6959-4012-9b9b-76019f627787"
+          ],
+          "kind": "inference",
+          "text": "提示依赖：先支持，再用未见同类题检查"
+        }
+      ],
+      "supersedesProposalId": null
+    },
+    "reviews": [
+      {
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "dueAt": "2026-10-21T12:00:00.000Z",
+        "evidenceRevision": 22,
+        "exposureIds": [
+          "ca68ca43-4864-40c4-aef9-bce96208b4af",
+          "699d1ed3-515d-4a65-8721-3a3ebd05a097"
+        ],
+        "id": "b15aa1db-ed61-4fe7-8223-7d0121f24000",
+        "knowledgePointId": "negative-brackets",
+        "operationId": "636834be-6585-4093-b7da-84a656ef1fc5",
+        "originalDueAt": "2026-10-21T12:00:00.000Z",
+        "planVersionId": "4f0feafe-f7fb-49d8-a4fa-d2e7d23f315d",
+        "postponements": [],
+        "reason": "提示/帮助后完成，较早复查",
+        "revision": 1,
+        "schemaVersion": "1.0.0",
+        "sourceSessionIds": [
+          "b2e55151-6605-48cc-9155-444ad802fc7d"
+        ],
+        "stage": 0,
+        "status": "active",
+        "task": {
+          "taskId": "transfer",
+          "taskVersion": 2
+        }
+      }
+    ],
+    "consentConfigured": true,
+    "optionalMemory": false,
+    "memories": [],
+    "runs": [
+      {
+        "callIds": [
+          "4b7092f7-3c7c-4a78-90fd-c2fdf603195b"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-e399d1ce-c0ae-4a51-94d3-d526ebda9e6f",
+        "operationId": "4b7092f7-3c7c-4a78-90fd-c2fdf603195b",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "d-run-1a749a42-a0de-4219-8374-663fcab13d4e",
+        "operationId": "d02037cb-048f-4d3c-8260-67d61653d920",
+        "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 1,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 0
+      },
+      {
+        "callIds": [
+          "0a05a9f9-b112-47e4-9be9-c7ac8268f170"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-87ffc5f4-6d56-4d82-a59d-5770e76b6d44",
+        "operationId": "0a05a9f9-b112-47e4-9be9-c7ac8268f170",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "d-run-056677f3-0cb6-442e-ad09-b939cc89bfaa",
+        "operationId": "0fcb1ce3-fb0b-4c95-88cd-614d46914373",
+        "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 1,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 0
+      },
+      {
+        "callIds": [
+          "8a99df49-08a6-480a-a94a-b438f62a0e1c"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-29bdc2e2-24af-4150-8402-24e29f161a15",
+        "operationId": "8a99df49-08a6-480a-a94a-b438f62a0e1c",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [
+          "ea3d9235-4407-4b30-8718-51f24568dfbe"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-3223e2c5-5981-4220-b766-27e44c26d3d3",
+        "operationId": "ea3d9235-4407-4b30-8718-51f24568dfbe",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [
+          "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-b7bb4f92-b5ed-4131-ac4a-d6956592b887",
+        "operationId": "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [
+          "s-2"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "d-run-bf1f380c-38d6-45f0-85d6-29a0c43c901f",
+        "operationId": "b46cdf4a-71d8-43d3-baf0-32e23680938d-agent",
+        "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+        "providerKind": "synthetic",
+        "role": "planner",
+        "rounds": 2,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      }
+    ],
+    "toolCalls": [
+      {
+        "argumentsHash": "c5c973e6687dad59a380871ae9306efdda0a3384f89b5c91c242ec7a587929d7",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "4b7092f7-3c7c-4a78-90fd-c2fdf603195b",
+        "dataVersion": 21,
+        "errorCode": null,
+        "evidenceIds": [
+          "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+        ],
+        "id": "call-3f8b9aa58ee718b421d78021a00186eeba8a91b50d964111",
+        "name": "grade_attempt",
+        "runId": "assess-e399d1ce-c0ae-4a51-94d3-d526ebda9e6f",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "4b736ec8e10f344f680d189b8794c88d8c94b6d0da9e450c757615fda864a915",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "0a05a9f9-b112-47e4-9be9-c7ac8268f170",
+        "dataVersion": 44,
+        "errorCode": null,
+        "evidenceIds": [
+          "84c89e14-f226-45f7-9681-83257c20e58e",
+          "ec8cc893-2a14-46e8-b730-43557b0b8788"
+        ],
+        "id": "call-ea21b17cf5134c1821b3fadcc081754cf0b450998c2f49c8",
+        "name": "grade_attempt",
+        "runId": "assess-87ffc5f4-6d56-4d82-a59d-5770e76b6d44",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "699c9f284d7e5f4c60840148e40937bf1fc2ea783857ebae8fb45b207d2fe928",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "8a99df49-08a6-480a-a94a-b438f62a0e1c",
+        "dataVersion": 67,
+        "errorCode": null,
+        "evidenceIds": [
+          "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+          "0db049fe-661c-4d0e-8523-14da09843771"
+        ],
+        "id": "call-1e1c6e22d98afe1791773c422ee196eba997132281c51123",
+        "name": "grade_attempt",
+        "runId": "assess-29bdc2e2-24af-4150-8402-24e29f161a15",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "e9547fc26b1928bb313376396197a586b1397cdbd75bff66609660a8fed30ef7",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "ea3d9235-4407-4b30-8718-51f24568dfbe",
+        "dataVersion": 88,
+        "errorCode": null,
+        "evidenceIds": [
+          "66d66cbc-ab5f-4879-8b78-e4d3df34498b"
+        ],
+        "id": "call-7d4aba81009a45512a6b641c346fabf5edc09d27fe9a330b",
+        "name": "grade_attempt",
+        "runId": "assess-3223e2c5-5981-4220-b766-27e44c26d3d3",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "68d5ef77e46aee9316a891f09f2fb7424bb12de49a6349e6cfc51f02394fd6be",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "c8f22f6a-3a75-403e-9365-affe4a9c6551",
+        "dataVersion": 98,
+        "errorCode": null,
+        "evidenceIds": [],
+        "id": "call-f5be7dcc0ba5065585655573ec2c6c013da630784040d782",
+        "name": "get_hint",
+        "runId": "hint-c8f22f6a-3a75-403e-9365-affe4a9c6551",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "66358a1411b8348a3ab226e29d0112e7c798d7837a32c34df1afd799b2fe802c",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb",
+        "dataVersion": 109,
+        "errorCode": null,
+        "evidenceIds": [
+          "67afffcc-6959-4012-9b9b-76019f627787"
+        ],
+        "id": "call-632502053d771ace98ba064bfb430791e6a012931af76f77",
+        "name": "grade_attempt",
+        "runId": "assess-b7bb4f92-b5ed-4131-ac4a-d6956592b887",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "c89a148be40e6752261e3038609a4b68de22fa3bfdaf32f884edffb8480b9bbe",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "s-2",
+        "dataVersion": 134,
+        "errorCode": null,
+        "evidenceIds": [
+          "84c89e14-f226-45f7-9681-83257c20e58e",
+          "ec8cc893-2a14-46e8-b730-43557b0b8788",
+          "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+          "0db049fe-661c-4d0e-8523-14da09843771",
+          "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+          "67afffcc-6959-4012-9b9b-76019f627787",
+          "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+        ],
+        "id": "call-d81344e27167496513a9ab601d95912694568abd43aae059",
+        "name": "get_skill_state",
+        "runId": "d-run-bf1f380c-38d6-45f0-85d6-29a0c43c901f",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      }
+    ]
+  },
+  "final": {
+    "now": "2026-10-25T00:00:00.000Z",
+    "session": {
+      "endedAt": null,
+      "id": "7738a46c-746f-4856-97be-03dc2c21cf14",
+      "mode": "review",
+      "operationId": "f49b218b-afc5-40a2-8004-745c17f69e1a-s",
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-25T00:00:00.000Z",
+      "status": "active",
+      "timezone": "Asia/Shanghai"
+    },
+    "paused": false,
+    "assessment": {
+      "schemaVersion": "1.0.0",
+      "id": "f6f47a0c-81fc-40c4-9414-37bbafd8fa0e",
+      "evidenceRevision": 30,
+      "createdAt": "2026-10-25T00:00:00.000Z",
+      "skills": [
+        {
+          "schemaVersion": "1.0.0",
+          "id": "3690868c-9167-4b4f-ad9a-c072d0dba67b",
+          "evidenceRevision": 30,
+          "knowledgePointId": "math-language",
+          "dimension": "理解",
+          "status": "first_independent",
+          "evidenceIds": [
+            "84c89e14-f226-45f7-9681-83257c20e58e",
+            "ec8cc893-2a14-46e8-b730-43557b0b8788"
+          ],
+          "attemptIds": [
+            "d344c726-d81d-4e5e-86f5-caae6e784290"
+          ],
+          "observedTaskIds": [
+            "understand"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21"
+          ],
+          "recentDifficulty": false,
+          "coverage": "数学语句与条件提取：1次有效尝试，1道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖先后运算关系及条件解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-25T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "7ed2dd0a-110c-447c-80d7-51c024b8ed1e",
+          "evidenceRevision": 30,
+          "knowledgePointId": "counterexample",
+          "dimension": "逻辑",
+          "status": "first_independent",
+          "evidenceIds": [
+            "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+            "0db049fe-661c-4d0e-8523-14da09843771"
+          ],
+          "attemptIds": [
+            "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228"
+          ],
+          "observedTaskIds": [
+            "logic"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21"
+          ],
+          "recentDifficulty": false,
+          "coverage": "反例与条件结论：1次有效尝试，1道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-25T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "932e2d92-be11-418b-b648-abcfe6f77ef2",
+          "evidenceRevision": 30,
+          "knowledgePointId": "negative-brackets",
+          "dimension": "计算",
+          "status": "cross_session_independent",
+          "evidenceIds": [
+            "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+            "67afffcc-6959-4012-9b9b-76019f627787",
+            "07690dd0-5b39-4402-b068-55e459d8f524",
+            "67935923-dbc9-4897-844a-bdbd627cfcd6"
+          ],
+          "attemptIds": [
+            "1e4cdc63-06a4-4161-982e-78e7a1f2a322",
+            "a5bf7a64-60ce-47d5-8a62-08a7aab58a26",
+            "a05afb06-a235-40b8-b055-486f0cb8a046",
+            "fe49e144-d5c4-4454-bc53-b1db1371cf9a"
+          ],
+          "observedTaskIds": [
+            "bracket",
+            "transfer",
+            "b-neg-delayed"
+          ],
+          "trustedLearningDates": [
+            "2026-10-22",
+            "2026-10-25"
+          ],
+          "recentDifficulty": false,
+          "coverage": "去括号负号处理：4次有效尝试，2道未见题独立完成，1次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度"
+          ],
+          "computedAt": "2026-10-25T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "9a130fad-8504-44e3-a71e-49a29c97c645",
+          "evidenceRevision": 30,
+          "knowledgePointId": "like-terms",
+          "dimension": "计算",
+          "status": "first_independent",
+          "evidenceIds": [
+            "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+          ],
+          "attemptIds": [
+            "755e8d9e-7156-45c8-abbc-67573f66a5a1"
+          ],
+          "observedTaskIds": [
+            "b-like-observation"
+          ],
+          "trustedLearningDates": [
+            "2026-10-21"
+          ],
+          "recentDifficulty": false,
+          "coverage": "合并同类项：1次有效尝试，1道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖受限一次式系数和常数合并结果，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-25T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "13d574eb-c8e6-445c-a8a3-fce99ad6edf7",
+          "evidenceRevision": 30,
+          "knowledgePointId": "fixed-variable-cost",
+          "dimension": "建模",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "一次费用与随数量变化费用：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖单一线性数量关系及费用来源解释，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-25T00:00:00.000Z"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "7b858c68-28f2-4614-8ed5-21be3a62d5f8",
+          "evidenceRevision": 30,
+          "knowledgePointId": "rotation-2d",
+          "dimension": "空间想象",
+          "status": "unobserved",
+          "evidenceIds": [],
+          "attemptIds": [],
+          "observedTaskIds": [],
+          "trustedLearningDates": [],
+          "recentDifficulty": false,
+          "coverage": "二维旋转与位置关系：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+          "unknowns": [
+            "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度",
+            "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+          ],
+          "computedAt": "2026-10-25T00:00:00.000Z"
+        }
+      ],
+      "coverage": [
+        {
+          "dimension": "理解",
+          "knowledgePointIds": [
+            "math-language"
+          ],
+          "evidenceCount": 2,
+          "lastObservedAt": "2026-10-21T00:00:00.000Z",
+          "unknowns": [
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "逻辑",
+          "knowledgePointIds": [
+            "counterexample"
+          ],
+          "evidenceCount": 2,
+          "lastObservedAt": "2026-10-21T00:00:00.000Z",
+          "unknowns": [
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "计算",
+          "knowledgePointIds": [
+            "negative-brackets",
+            "like-terms"
+          ],
+          "evidenceCount": 5,
+          "lastObservedAt": "2026-10-25T00:00:00.000Z",
+          "unknowns": [
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "建模",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：一次费用与随数量变化费用",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        },
+        {
+          "dimension": "空间想象",
+          "knowledgePointIds": [],
+          "evidenceCount": 0,
+          "lastObservedAt": null,
+          "unknowns": [
+            "尚未观察：二维旋转与位置关系",
+            "覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "84c89e14-f226-45f7-9681-83257c20e58e",
+        "ec8cc893-2a14-46e8-b730-43557b0b8788",
+        "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+        "0db049fe-661c-4d0e-8523-14da09843771",
+        "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+        "67afffcc-6959-4012-9b9b-76019f627787",
+        "07690dd0-5b39-4402-b068-55e459d8f524",
+        "67935923-dbc9-4897-844a-bdbd627cfcd6",
+        "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+      ],
+      "limitations": [
+        "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+        "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+        "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+      ]
+    },
+    "tasks": [
+      {
+        "schemaVersion": "1.0.0",
+        "id": "understand",
+        "version": 2,
+        "title": "数学语句与条件提取",
+        "question": "“比 x 的 2 倍少 3”可以怎样表示？第一行写式子，另起一行解释先后关系。",
+        "choices": [],
+        "knowledgePoints": [
+          "math-language"
+        ],
+        "primaryDimension": "理解",
+        "auxiliaryDimensions": [],
+        "familyId": "family-math-language",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-language-transfer",
+        "version": 2,
+        "title": "数学语句与条件提取",
+        "question": "先把 a 增加 2，再把所得结果乘 3。第一行写式子，另起一行说明运算次序。",
+        "choices": [],
+        "knowledgePoints": [
+          "math-language"
+        ],
+        "primaryDimension": "理解",
+        "auxiliaryDimensions": [],
+        "familyId": "family-math-language",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-language-delayed",
+        "version": 2,
+        "title": "数学语句与条件提取",
+        "question": "一根长 x 厘米的绳先剪去 4 厘米，另一根长为剩下部分的 2 倍。第一行写另一根绳长度的式子，另起一行说明条件。",
+        "choices": [],
+        "knowledgePoints": [
+          "math-language"
+        ],
+        "primaryDimension": "理解",
+        "auxiliaryDimensions": [],
+        "familyId": "family-math-language",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "logic",
+        "version": 2,
+        "title": "反例与条件结论",
+        "question": "小林说“两个负数的和一定是正数”。哪个例子否定这句话？第一行写选项字母，另起一行说明前提与结论。",
+        "choices": [
+          "A: (-2)+(-3)=-5",
+          "B: 2+3=5",
+          "C: (-2)×(-3)=6"
+        ],
+        "knowledgePoints": [
+          "counterexample"
+        ],
+        "primaryDimension": "逻辑",
+        "auxiliaryDimensions": [],
+        "familyId": "family-counterexample",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-logic-transfer",
+        "version": 2,
+        "title": "反例与条件结论",
+        "question": "有人说“两个正数中，较大的数的平方反而较小”。哪个例子能反驳？第一行写选项字母，另起一行解释。",
+        "choices": [
+          "A: -2<-1，但4>1",
+          "B: 1=1，平方也相等",
+          "C: 1<2，且1<4"
+        ],
+        "knowledgePoints": [
+          "counterexample"
+        ],
+        "primaryDimension": "逻辑",
+        "auxiliaryDimensions": [],
+        "familyId": "family-counterexample",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-logic-delayed",
+        "version": 2,
+        "title": "反例与条件结论",
+        "question": "“两个奇数的和一定是奇数”，哪个例子能反驳？第一行写选项字母，另起一行解释。",
+        "choices": [
+          "A: 2+3=5",
+          "B: 3+5=8",
+          "C: 3×5=15"
+        ],
+        "knowledgePoints": [
+          "counterexample"
+        ],
+        "primaryDimension": "逻辑",
+        "auxiliaryDimensions": [],
+        "familyId": "family-counterexample",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "bracket",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：3x − (2x − 5)。可写一次式或以等号相连的完整等价步骤。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "transfer",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：7a − (3a − 2)。可写一次式或以等号相连的完整等价步骤。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-neg-delayed",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：8 − (3x − 4)。可写一次式或以等号相连的完整等价步骤。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-like-observation",
+        "version": 2,
+        "title": "合并同类项",
+        "question": "化简：2x + 3x − 4。",
+        "choices": [],
+        "knowledgePoints": [
+          "like-terms"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-like-terms",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-like-transfer",
+        "version": 2,
+        "title": "合并同类项",
+        "question": "化简：7a + 2 − 4a + 5。",
+        "choices": [],
+        "knowledgePoints": [
+          "like-terms"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-like-terms",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-like-delayed",
+        "version": 2,
+        "title": "合并同类项",
+        "question": "化简：6 − 2x + 5x − 1。",
+        "choices": [],
+        "knowledgePoints": [
+          "like-terms"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-like-terms",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "model",
+        "version": 2,
+        "title": "一次费用与随数量变化费用",
+        "question": "每本练习本3元，买x本，另付一次纸袋费2元。第一行写总费用式子，另起一行说明两部分来源。",
+        "choices": [],
+        "knowledgePoints": [
+          "fixed-variable-cost"
+        ],
+        "primaryDimension": "建模",
+        "auxiliaryDimensions": [
+          "理解"
+        ],
+        "familyId": "family-fixed-variable-cost",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-cost-transfer",
+        "version": 2,
+        "title": "一次费用与随数量变化费用",
+        "question": "租自行车每小时5元，另付一次头盔租金8元。租a小时，第一行写总费用式子，另起一行解释各项。",
+        "choices": [],
+        "knowledgePoints": [
+          "fixed-variable-cost"
+        ],
+        "primaryDimension": "建模",
+        "auxiliaryDimensions": [
+          "理解"
+        ],
+        "familyId": "family-fixed-variable-cost",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-cost-delayed",
+        "version": 2,
+        "title": "一次费用与随数量变化费用",
+        "question": "寄件先收一次包装费12元，每件运费2元，共x件。第一行写总费用式子，另起一行解释各项。",
+        "choices": [],
+        "knowledgePoints": [
+          "fixed-variable-cost"
+        ],
+        "primaryDimension": "建模",
+        "auxiliaryDimensions": [
+          "理解"
+        ],
+        "familyId": "family-fixed-variable-cost",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 4,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "space",
+        "version": 2,
+        "title": "二维旋转与位置关系",
+        "question": "坐标横轴向右、纵轴向上。折线依次为(0,0)、(0,3)、(1,3)，绕(0,0)顺时针90°。哪个选项给出旋转后的对应顶点？第一行写字母。",
+        "choices": [
+          "A",
+          "B",
+          "C"
+        ],
+        "knowledgePoints": [
+          "rotation-2d"
+        ],
+        "primaryDimension": "空间想象",
+        "auxiliaryDimensions": [],
+        "familyId": "family-rotation-2d",
+        "variantKind": "observation",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": {
+          "kind": "rotation2d",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "center": [
+            0,
+            0
+          ],
+          "clockwiseDegrees": 90,
+          "options": [
+            {
+              "label": "A",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  -3,
+                  0
+                ],
+                [
+                  -3,
+                  1
+                ]
+              ]
+            },
+            {
+              "label": "B",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  -1
+                ]
+              ]
+            },
+            {
+              "label": "C",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  -3
+                ],
+                [
+                  1,
+                  -3
+                ]
+              ]
+            }
+          ]
+        },
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-space-transfer",
+        "version": 2,
+        "title": "二维旋转与位置关系",
+        "question": "坐标横轴向右、纵轴向上。折线依次为(1,1)、(3,1)、(3,2)，绕(1,1)顺时针180°。哪个选项给出对应顶点？第一行写字母。",
+        "choices": [
+          "A",
+          "B",
+          "C"
+        ],
+        "knowledgePoints": [
+          "rotation-2d"
+        ],
+        "primaryDimension": "空间想象",
+        "auxiliaryDimensions": [],
+        "familyId": "family-rotation-2d",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": {
+          "kind": "rotation2d",
+          "points": [
+            [
+              1,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "center": [
+            1,
+            1
+          ],
+          "clockwiseDegrees": 180,
+          "options": [
+            {
+              "label": "A",
+              "points": [
+                [
+                  1,
+                  1
+                ],
+                [
+                  -1,
+                  1
+                ],
+                [
+                  -1,
+                  0
+                ]
+              ]
+            },
+            {
+              "label": "B",
+              "points": [
+                [
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  -1
+                ],
+                [
+                  2,
+                  -1
+                ]
+              ]
+            },
+            {
+              "label": "C",
+              "points": [
+                [
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  3
+                ],
+                [
+                  0,
+                  3
+                ]
+              ]
+            }
+          ]
+        },
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "b-space-delayed",
+        "version": 2,
+        "title": "二维旋转与位置关系",
+        "question": "坐标横轴向右、纵轴向上。折线依次为(-1,0)、(-1,2)、(2,2)，绕(-1,0)顺时针270°。哪个选项给出对应顶点？第一行写字母。",
+        "choices": [
+          "A",
+          "B",
+          "C"
+        ],
+        "knowledgePoints": [
+          "rotation-2d"
+        ],
+        "primaryDimension": "空间想象",
+        "auxiliaryDimensions": [],
+        "familyId": "family-rotation-2d",
+        "variantKind": "delayed",
+        "difficulty": "introductory",
+        "prerequisites": [],
+        "estimatedMinutes": 3,
+        "visual": {
+          "kind": "rotation2d",
+          "points": [
+            [
+              -1,
+              0
+            ],
+            [
+              -1,
+              2
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          "center": [
+            -1,
+            0
+          ],
+          "clockwiseDegrees": 270,
+          "options": [
+            {
+              "label": "A",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -1,
+                  -2
+                ],
+                [
+                  -4,
+                  -2
+                ]
+              ]
+            },
+            {
+              "label": "B",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ],
+                [
+                  1,
+                  -3
+                ]
+              ]
+            },
+            {
+              "label": "C",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -3,
+                  0
+                ],
+                [
+                  -3,
+                  3
+                ]
+              ]
+            }
+          ]
+        },
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-0",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：5x − (2x − 1)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-1",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：6x − (3x − 2)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-2",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：7x − (4x − 3)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-3",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：8x − (5x − 4)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-4",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：9x − (6x − 5)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-5",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：10x − (7x − 6)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-6",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：11x − (8x − 7)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-7",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：12x − (9x − 8)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-8",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：13x − (10x − 9)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "calc-9",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：14x − (11x − 10)。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true,
+        "eligible": true
+      }
+    ],
+    "attempts": [
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "885ee069-cca4-496a-b337-bb4117b32e71"
+        ],
+        "hintSnapshot": [],
+        "id": "755e8d9e-7156-45c8-abbc-67573f66a5a1",
+        "operationId": "4b7092f7-3c7c-4a78-90fd-c2fdf603195b",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "b-like-observation",
+        "taskVersion": 2,
+        "value": "5x-4",
+        "classification": {
+          "kind": "new_independent",
+          "novelty": "unseen",
+          "learningDate": "2026-10-21",
+          "independent": true,
+          "delayedRetention": false,
+          "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "1bb0f4ba-02da-4735-b959-b2abd8e73a26"
+        ],
+        "hintSnapshot": [],
+        "id": "d344c726-d81d-4e5e-86f5-caae6e784290",
+        "operationId": "0a05a9f9-b112-47e4-9be9-c7ac8268f170",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "understand",
+        "taskVersion": 2,
+        "value": "2x-3\n先求x的2倍，再减去3。",
+        "classification": {
+          "kind": "new_independent",
+          "novelty": "unseen",
+          "learningDate": "2026-10-21",
+          "independent": true,
+          "delayedRetention": false,
+          "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "4918a08e-c43d-4a63-a17d-e7ce6520de11"
+        ],
+        "hintSnapshot": [],
+        "id": "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228",
+        "operationId": "8a99df49-08a6-480a-a94a-b438f62a0e1c",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "logic",
+        "taskVersion": 2,
+        "value": "A\n两个负数的和为负数，满足前提但结论不成立。",
+        "classification": {
+          "kind": "new_independent",
+          "novelty": "unseen",
+          "learningDate": "2026-10-21",
+          "independent": true,
+          "delayedRetention": false,
+          "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "ca68ca43-4864-40c4-aef9-bce96208b4af"
+        ],
+        "hintSnapshot": [],
+        "id": "1e4cdc63-06a4-4161-982e-78e7a1f2a322",
+        "operationId": "ea3d9235-4407-4b30-8718-51f24568dfbe",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "bracket",
+        "taskVersion": 2,
+        "value": "x-5",
+        "classification": {
+          "kind": "incorrect",
+          "novelty": "unseen",
+          "learningDate": "2026-10-21",
+          "independent": false,
+          "delayedRetention": false,
+          "reason": "这次作答的评分点未通过；保留具体证据，不推断人格或智力"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "ca68ca43-4864-40c4-aef9-bce96208b4af",
+          "699d1ed3-515d-4a65-8721-3a3ebd05a097"
+        ],
+        "hintSnapshot": [
+          {
+            "id": "hint-1",
+            "level": 1,
+            "text": "减去括号内每一项：−(2x−5)=−2x+5。"
+          }
+        ],
+        "id": "a5bf7a64-60ce-47d5-8a62-08a7aab58a26",
+        "operationId": "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "bracket",
+        "taskVersion": 2,
+        "value": "x+5",
+        "classification": {
+          "kind": "completed_with_help",
+          "novelty": "seen",
+          "learningDate": "2026-10-21",
+          "independent": false,
+          "delayedRetention": false,
+          "reason": "作答之前存在提示、答案或聊天关键帮助"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "1745e24b-06b1-45df-aecd-90799a795ca0"
+        ],
+        "hintSnapshot": [],
+        "id": "a05afb06-a235-40b8-b055-486f0cb8a046",
+        "operationId": "02889cdb-f330-4dea-bca8-b8850b5388b3",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "c7648614-e867-4bb1-a968-8382c9ba1ac3",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-22T00:00:00.000Z",
+          "recordedAt": "2026-10-22T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "transfer",
+        "taskVersion": 2,
+        "value": "4*a+2",
+        "classification": {
+          "kind": "new_independent",
+          "novelty": "unseen",
+          "learningDate": "2026-10-22",
+          "independent": true,
+          "delayedRetention": false,
+          "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+        }
+      },
+      {
+        "answerExposed": false,
+        "exposureHistory": "complete",
+        "exposureIds": [
+          "d11c45a1-59d7-4b32-a631-f95522a150a1"
+        ],
+        "hintSnapshot": [],
+        "id": "fe49e144-d5c4-4454-bc53-b1db1371cf9a",
+        "operationId": "3685e2d4-8242-4998-bb58-e7b1e427156d",
+        "origin": "student_api",
+        "schemaVersion": "1.0.0",
+        "sessionId": "7738a46c-746f-4856-97be-03dc2c21cf14",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-25T00:00:00.000Z",
+          "recordedAt": "2026-10-25T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "supersedesAttemptId": null,
+        "taskId": "b-neg-delayed",
+        "taskVersion": 2,
+        "value": "12-3x",
+        "classification": {
+          "kind": "new_independent",
+          "novelty": "unseen",
+          "learningDate": "2026-10-25",
+          "independent": true,
+          "delayedRetention": false,
+          "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+        }
+      }
+    ],
+    "exposures": [
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "885ee069-cca4-496a-b337-bb4117b32e71",
+        "kind": "task",
+        "operationId": "82573180-5c20-47e8-bf5d-cc7e6079b647-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "b-like-observation",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "1bb0f4ba-02da-4735-b959-b2abd8e73a26",
+        "kind": "task",
+        "operationId": "7af38e56-c366-45cd-94f0-271500eaf419-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "understand",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "4918a08e-c43d-4a63-a17d-e7ce6520de11",
+        "kind": "task",
+        "operationId": "aeb7b240-89de-4797-9e0a-083e24268224-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "logic",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "ca68ca43-4864-40c4-aef9-bce96208b4af",
+        "kind": "task",
+        "operationId": "5280f315-6047-4c4e-8c2d-412dda916a00-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": "减去括号内每一项：−(2x−5)=−2x+5。",
+        "hintId": "hint-1",
+        "id": "699d1ed3-515d-4a65-8721-3a3ebd05a097",
+        "kind": "hint",
+        "operationId": "c8f22f6a-3a75-403e-9365-affe4a9c6551-expose",
+        "schemaVersion": "1.0.0",
+        "sessionId": "b2e55151-6605-48cc-9155-444ad802fc7d",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-21T00:00:00.000Z",
+          "recordedAt": "2026-10-21T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "1745e24b-06b1-45df-aecd-90799a795ca0",
+        "kind": "task",
+        "operationId": "ca7abdbd-e5ac-4ffe-9753-0b7a9762c656-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "c7648614-e867-4bb1-a968-8382c9ba1ac3",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-22T00:00:00.000Z",
+          "recordedAt": "2026-10-22T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "transfer",
+        "taskVersion": 2
+      },
+      {
+        "contentSnapshot": null,
+        "hintId": null,
+        "id": "d11c45a1-59d7-4b32-a631-f95522a150a1",
+        "kind": "task",
+        "operationId": "f49b218b-afc5-40a2-8004-745c17f69e1a-o",
+        "schemaVersion": "1.0.0",
+        "sessionId": "7738a46c-746f-4856-97be-03dc2c21cf14",
+        "sourceTime": {
+          "legacyLabel": null,
+          "occurredAt": "2026-10-25T00:00:00.000Z",
+          "recordedAt": "2026-10-25T00:00:00.000Z",
+          "timezone": "Asia/Shanghai",
+          "trust": "server"
+        },
+        "taskId": "b-neg-delayed",
+        "taskVersion": 2
+      }
+    ],
+    "gradings": [
+      {
+        "attemptId": "755e8d9e-7156-45c8-abbc-67573f66a5a1",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+        ],
+        "evidenceRevision": 4,
+        "id": "c0c1eb46-6676-49f4-9a1f-91638a59f8cb",
+        "method": "rubric_program",
+        "operationId": "grade-bfe7d5dfdd4b1622779b4d6b6dad375e6ad18f8663f6b968",
+        "points": [
+          {
+            "evidenceIds": [
+              "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      {
+        "attemptId": "d344c726-d81d-4e5e-86f5-caae6e784290",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "84c89e14-f226-45f7-9681-83257c20e58e",
+          "ec8cc893-2a14-46e8-b730-43557b0b8788"
+        ],
+        "evidenceRevision": 9,
+        "id": "afddcc2a-2623-4fba-ae2f-f044a8abe2e4",
+        "method": "model_assisted",
+        "operationId": "grade-04cc75f50815829a14b6d2b5a97980db2a5a6ae50d86f128",
+        "points": [
+          {
+            "evidenceIds": [
+              "84c89e14-f226-45f7-9681-83257c20e58e"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          },
+          {
+            "evidenceIds": [
+              "ec8cc893-2a14-46e8-b730-43557b0b8788"
+            ],
+            "pointId": "reason",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      {
+        "attemptId": "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+          "0db049fe-661c-4d0e-8523-14da09843771"
+        ],
+        "evidenceRevision": 14,
+        "id": "fb6b55b3-a7a0-4123-a4d9-07d97fa95c1a",
+        "method": "model_assisted",
+        "operationId": "grade-48ef85f51e30e5c3f735fad39cbad9daf22ebfc613a3af50",
+        "points": [
+          {
+            "evidenceIds": [
+              "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          },
+          {
+            "evidenceIds": [
+              "0db049fe-661c-4d0e-8523-14da09843771"
+            ],
+            "pointId": "reason",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      {
+        "attemptId": "1e4cdc63-06a4-4161-982e-78e7a1f2a322",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [
+          "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+        ],
+        "evidenceIds": [
+          "66d66cbc-ab5f-4879-8b78-e4d3df34498b"
+        ],
+        "evidenceRevision": 18,
+        "id": "0f1fedf2-c78a-41f7-9d7c-7168e28b85c7",
+        "method": "rubric_program",
+        "operationId": "grade-527eb06345c684cff50d60c6951dbd023611697af91cf4c9",
+        "points": [
+          {
+            "evidenceIds": [
+              "66d66cbc-ab5f-4879-8b78-e4d3df34498b"
+            ],
+            "pointId": "result",
+            "status": "unsupported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "incorrect"
+      },
+      {
+        "attemptId": "a5bf7a64-60ce-47d5-8a62-08a7aab58a26",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "67afffcc-6959-4012-9b9b-76019f627787"
+        ],
+        "evidenceRevision": 22,
+        "id": "26e748aa-48d2-479f-93f7-dff2d49e6b39",
+        "method": "rubric_program",
+        "operationId": "grade-23865b0dd8ad56cf6df57206c8a79422b2be504d1c0b4ef2",
+        "points": [
+          {
+            "evidenceIds": [
+              "67afffcc-6959-4012-9b9b-76019f627787"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      {
+        "attemptId": "a05afb06-a235-40b8-b055-486f0cb8a046",
+        "createdAt": "2026-10-22T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "07690dd0-5b39-4402-b068-55e459d8f524"
+        ],
+        "evidenceRevision": 26,
+        "id": "f6c57095-c3f0-4f15-9ed1-eeb01d28277d",
+        "method": "rubric_program",
+        "operationId": "grade-d767f8434d45bfe09b499170b32c2877b7fd1eff67c9fd18",
+        "points": [
+          {
+            "evidenceIds": [
+              "07690dd0-5b39-4402-b068-55e459d8f524"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      {
+        "attemptId": "fe49e144-d5c4-4454-bc53-b1db1371cf9a",
+        "createdAt": "2026-10-25T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "67935923-dbc9-4897-844a-bdbd627cfcd6"
+        ],
+        "evidenceRevision": 30,
+        "id": "db9ab23c-c551-4c92-b28d-c28dc0af7ffa",
+        "method": "rubric_program",
+        "operationId": "grade-bcf71920d3c422bf92b6160ac596805eb04a51c80c4ebf4f",
+        "points": [
+          {
+            "evidenceIds": [
+              "67935923-dbc9-4897-844a-bdbd627cfcd6"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      }
+    ],
+    "evidence": [
+      {
+        "attemptId": "755e8d9e-7156-45c8-abbc-67573f66a5a1",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 4,
+        "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+        "id": "f74cf15d-1615-424d-9e7d-e0ced0aa9df6",
+        "knowledgePointId": "like-terms",
+        "location": {
+          "end": 4,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "5x-4",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "b-like-observation",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "d344c726-d81d-4e5e-86f5-caae6e784290",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 9,
+        "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+        "id": "84c89e14-f226-45f7-9681-83257c20e58e",
+        "knowledgePointId": "math-language",
+        "location": {
+          "end": 4,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "2x-3",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "understand",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "d344c726-d81d-4e5e-86f5-caae6e784290",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 9,
+        "explanation": "合成分析：只引用当前作答原文，不代表真实模型效果",
+        "id": "ec8cc893-2a14-46e8-b730-43557b0b8788",
+        "knowledgePointId": "math-language",
+        "location": {
+          "end": 17,
+          "start": 5
+        },
+        "pointId": "reason",
+        "quote": "先求x的2倍，再减去3。",
+        "schemaVersion": "1.0.0",
+        "source": "model",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "understand",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 14,
+        "explanation": "只核对选项，不据此推断理由理解",
+        "id": "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+        "knowledgePointId": "counterexample",
+        "location": {
+          "end": 1,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "A",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "logic",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "f5f8c7a4-05f0-4b2e-86ac-9cd0d1268228",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 14,
+        "explanation": "合成分析：只引用当前作答原文，不代表真实模型效果",
+        "id": "0db049fe-661c-4d0e-8523-14da09843771",
+        "knowledgePointId": "counterexample",
+        "location": {
+          "end": 23,
+          "start": 2
+        },
+        "pointId": "reason",
+        "quote": "两个负数的和为负数，满足前提但结论不成立。",
+        "schemaVersion": "1.0.0",
+        "source": "model",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "logic",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "1e4cdc63-06a4-4161-982e-78e7a1f2a322",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [
+          "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+        ],
+        "evidenceRevision": 18,
+        "explanation": "可解析的一次式或等号链存在与可信结果不等价的步骤",
+        "id": "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+        "knowledgePointId": "negative-brackets",
+        "location": {
+          "end": 3,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "x-5",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "unsupported",
+        "supersedesEvidenceId": null,
+        "taskId": "bracket",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "a5bf7a64-60ce-47d5-8a62-08a7aab58a26",
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 22,
+        "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+        "id": "67afffcc-6959-4012-9b9b-76019f627787",
+        "knowledgePointId": "negative-brackets",
+        "location": {
+          "end": 3,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "x+5",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "bracket",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "a05afb06-a235-40b8-b055-486f0cb8a046",
+        "createdAt": "2026-10-22T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 26,
+        "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+        "id": "07690dd0-5b39-4402-b068-55e459d8f524",
+        "knowledgePointId": "negative-brackets",
+        "location": {
+          "end": 5,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "4*a+2",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "transfer",
+        "taskVersion": 2,
+        "uncertainties": []
+      },
+      {
+        "attemptId": "fe49e144-d5c4-4454-bc53-b1db1371cf9a",
+        "createdAt": "2026-10-25T00:00:00.000Z",
+        "errorClues": [],
+        "evidenceRevision": 30,
+        "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+        "id": "67935923-dbc9-4897-844a-bdbd627cfcd6",
+        "knowledgePointId": "negative-brackets",
+        "location": {
+          "end": 5,
+          "start": 0
+        },
+        "pointId": "result",
+        "quote": "12-3x",
+        "schemaVersion": "1.0.0",
+        "source": "program",
+        "status": "supported",
+        "supersedesEvidenceId": null,
+        "taskId": "b-neg-delayed",
+        "taskVersion": 2,
+        "uncertainties": []
+      }
+    ],
+    "reports": [
+      {
+        "snapshot": {
+          "assessmentSnapshotId": "b24b93e6-a1d1-41cd-bc4d-fd7e2927afc1",
+          "changes": [
+            "首份观察快照",
+            "math-language：新增观察 first_independent",
+            "counterexample：新增观察 first_independent",
+            "negative-brackets：新增观察 completed_with_help",
+            "like-terms：新增观察 first_independent",
+            "fixed-variable-cost：新增观察 unobserved",
+            "rotation-2d：新增观察 unobserved"
+          ],
+          "coverage": [
+            "理解：2 条依据；覆盖仅限列出的子技能，不能解释为完整五维测量",
+            "逻辑：2 条依据；覆盖仅限列出的子技能，不能解释为完整五维测量",
+            "计算：3 条依据；覆盖仅限列出的子技能，不能解释为完整五维测量",
+            "建模：0 条依据；尚未观察：一次费用与随数量变化费用；覆盖仅限列出的子技能，不能解释为完整五维测量",
+            "空间想象：0 条依据；尚未观察：二维旋转与位置关系；覆盖仅限列出的子技能，不能解释为完整五维测量"
+          ],
+          "createdAt": "2026-10-21T00:00:00.000Z",
+          "evidenceRevision": 22,
+          "id": "c8662583-de4b-4d3d-8786-f48ce71c9a8d",
+          "operationId": "b46cdf4a-71d8-43d3-baf0-32e23680938d-r",
+          "recommendations": [
+            "提示依赖：先支持，再用未见同类题检查",
+            "仅为待验证产品策略；不代表长期掌握或教学效果",
+            "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+            "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+            "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+          ],
+          "schemaVersion": "1.0.0",
+          "statements": [
+            {
+              "evidenceIds": [
+                "84c89e14-f226-45f7-9681-83257c20e58e",
+                "ec8cc893-2a14-46e8-b730-43557b0b8788"
+              ],
+              "kind": "fact",
+              "text": "math-language：本次知识点状态 first_independent，仅适用于已观察任务"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖先后运算关系及条件解释，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [
+                "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+                "0db049fe-661c-4d0e-8523-14da09843771"
+              ],
+              "kind": "fact",
+              "text": "counterexample：本次知识点状态 first_independent，仅适用于已观察任务"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [
+                "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+                "67afffcc-6959-4012-9b9b-76019f627787"
+              ],
+              "kind": "fact",
+              "text": "negative-brackets：本次知识点状态 completed_with_help，仅适用于已观察任务"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [
+                "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+              ],
+              "kind": "fact",
+              "text": "like-terms：本次知识点状态 first_independent，仅适用于已观察任务"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖受限一次式系数和常数合并结果，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "fixed-variable-cost：尚无足够依据，不推断能力弱"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖单一线性数量关系及费用来源解释，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "rotation-2d：尚无足够依据，不推断能力弱"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度"
+            },
+            {
+              "evidenceIds": [],
+              "kind": "unknown",
+              "text": "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+            },
+            {
+              "evidenceIds": [
+                "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+                "67afffcc-6959-4012-9b9b-76019f627787"
+              ],
+              "kind": "inference",
+              "text": "提示依赖：先支持，再用未见同类题检查"
+            }
+          ],
+          "supersedesReportId": null
+        },
+        "basisRevised": false,
+        "replacementId": null
+      }
+    ],
+    "plans": [
+      {
+        "snapshot": {
+          "changes": [
+            "学生选择 accept：学生明确选择接受"
+          ],
+          "confirmation": {
+            "action": "accept",
+            "actor": "student",
+            "confirmedAt": "2026-10-21T00:00:00.000Z",
+            "expectedPreviousVersionId": null,
+            "reason": "学生明确选择接受"
+          },
+          "createdAt": "2026-10-21T00:00:00.000Z",
+          "evidenceRevision": 22,
+          "goal": "negative-brackets：从提示帮助过渡到独立处理",
+          "id": "4f0feafe-f7fb-49d8-a4fa-d2e7d23f315d",
+          "items": [
+            {
+              "estimatedMinutes": 3,
+              "evidenceIds": [
+                "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+                "67afffcc-6959-4012-9b9b-76019f627787"
+              ],
+              "goal": "只看当前知识点的一个具体步骤，先提供支持",
+              "id": "5b587091-17ba-4dbc-b5f4-76883c49d3de",
+              "knowledgePointId": "negative-brackets",
+              "scheduledDate": "2026-10-21",
+              "status": "scheduled",
+              "task": null,
+              "taskType": "supported_practice"
+            },
+            {
+              "estimatedMinutes": 3,
+              "evidenceIds": [
+                "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+                "67afffcc-6959-4012-9b9b-76019f627787"
+              ],
+              "goal": "支持后自选未见新题；完成支持前须再次核对题目暴露",
+              "id": "ed4ec1d9-ee8d-4fb4-a40c-cafdc0b2d9b7",
+              "knowledgePointId": "negative-brackets",
+              "scheduledDate": "2026-10-21",
+              "status": "scheduled",
+              "task": {
+                "taskId": "transfer",
+                "taskVersion": 2
+              },
+              "taskType": "independent_transfer"
+            }
+          ],
+          "operationId": "636834be-6585-4093-b7da-84a656ef1fc5",
+          "previousVersionId": null,
+          "proposalId": "9eb8d4af-0350-47e3-8f93-228087695f80",
+          "schemaVersion": "1.0.0",
+          "version": 1
+        },
+        "basisRevised": false,
+        "replacementId": null
+      }
+    ],
+    "proposal": {
+      "alternatives": [
+        "提示依赖：先支持，再用未见同类题检查",
+        "fixed-variable-cost：学生可改选另一知识点",
+        "rotation-2d：学生可改选另一知识点",
+        "counterexample：学生可改选另一知识点",
+        "like-terms：学生可改选另一知识点",
+        "math-language：学生可改选另一知识点",
+        "原题回顾：bracket（已见，不作为未见检验）"
+      ],
+      "assessmentSnapshotId": "b24b93e6-a1d1-41cd-bc4d-fd7e2927afc1",
+      "constraints": {
+        "calculationLimit": 10,
+        "requireUnderstandLogicFirst": true,
+        "timeBudgetMinutes": 6
+      },
+      "createdAt": "2026-10-21T00:00:00.000Z",
+      "evidenceRevision": 22,
+      "goal": "negative-brackets：从提示帮助过渡到独立处理",
+      "id": "9eb8d4af-0350-47e3-8f93-228087695f80",
+      "items": [
+        {
+          "estimatedMinutes": 3,
+          "evidenceIds": [
+            "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+            "67afffcc-6959-4012-9b9b-76019f627787"
+          ],
+          "goal": "只看当前知识点的一个具体步骤，先提供支持",
+          "id": "5b587091-17ba-4dbc-b5f4-76883c49d3de",
+          "knowledgePointId": "negative-brackets",
+          "scheduledDate": "2026-10-21",
+          "status": "proposed",
+          "task": null,
+          "taskType": "supported_practice"
+        },
+        {
+          "estimatedMinutes": 3,
+          "evidenceIds": [
+            "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+            "67afffcc-6959-4012-9b9b-76019f627787"
+          ],
+          "goal": "支持后自选未见新题；完成支持前须再次核对题目暴露",
+          "id": "ed4ec1d9-ee8d-4fb4-a40c-cafdc0b2d9b7",
+          "knowledgePointId": "negative-brackets",
+          "scheduledDate": "2026-10-21",
+          "status": "proposed",
+          "task": {
+            "taskId": "transfer",
+            "taskVersion": 2
+          },
+          "taskType": "independent_transfer"
+        }
+      ],
+      "operationId": "b46cdf4a-71d8-43d3-baf0-32e23680938d-p",
+      "schemaVersion": "1.0.0",
+      "statements": [
+        {
+          "evidenceIds": [
+            "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+            "67afffcc-6959-4012-9b9b-76019f627787"
+          ],
+          "kind": "inference",
+          "text": "提示依赖：先支持，再用未见同类题检查"
+        }
+      ],
+      "supersedesProposalId": null
+    },
+    "reviews": [
+      {
+        "createdAt": "2026-10-21T00:00:00.000Z",
+        "dueAt": "2026-11-01T00:00:00.000Z",
+        "evidenceRevision": 30,
+        "exposureIds": [
+          "ca68ca43-4864-40c4-aef9-bce96208b4af",
+          "699d1ed3-515d-4a65-8721-3a3ebd05a097",
+          "1745e24b-06b1-45df-aecd-90799a795ca0",
+          "d11c45a1-59d7-4b32-a631-f95522a150a1"
+        ],
+        "id": "b15aa1db-ed61-4fe7-8223-7d0121f24000",
+        "knowledgePointId": "negative-brackets",
+        "operationId": "3685e2d4-8242-4998-bb58-e7b1e427156d-out",
+        "originalDueAt": "2026-10-21T12:00:00.000Z",
+        "planVersionId": "4f0feafe-f7fb-49d8-a4fa-d2e7d23f315d",
+        "postponements": [],
+        "reason": "延迟未见新题、跨场次独立正确，进入下一阶段",
+        "revision": 3,
+        "schemaVersion": "1.0.0",
+        "sourceSessionIds": [
+          "b2e55151-6605-48cc-9155-444ad802fc7d",
+          "c7648614-e867-4bb1-a968-8382c9ba1ac3",
+          "7738a46c-746f-4856-97be-03dc2c21cf14"
+        ],
+        "stage": 2,
+        "status": "active",
+        "task": null
+      }
+    ],
+    "consentConfigured": true,
+    "optionalMemory": false,
+    "memories": [],
+    "runs": [
+      {
+        "callIds": [
+          "4b7092f7-3c7c-4a78-90fd-c2fdf603195b"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-e399d1ce-c0ae-4a51-94d3-d526ebda9e6f",
+        "operationId": "4b7092f7-3c7c-4a78-90fd-c2fdf603195b",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "d-run-1a749a42-a0de-4219-8374-663fcab13d4e",
+        "operationId": "d02037cb-048f-4d3c-8260-67d61653d920",
+        "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 1,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 0
+      },
+      {
+        "callIds": [
+          "0a05a9f9-b112-47e4-9be9-c7ac8268f170"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-87ffc5f4-6d56-4d82-a59d-5770e76b6d44",
+        "operationId": "0a05a9f9-b112-47e4-9be9-c7ac8268f170",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "d-run-056677f3-0cb6-442e-ad09-b939cc89bfaa",
+        "operationId": "0fcb1ce3-fb0b-4c95-88cd-614d46914373",
+        "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 1,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 0
+      },
+      {
+        "callIds": [
+          "8a99df49-08a6-480a-a94a-b438f62a0e1c"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-29bdc2e2-24af-4150-8402-24e29f161a15",
+        "operationId": "8a99df49-08a6-480a-a94a-b438f62a0e1c",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [
+          "ea3d9235-4407-4b30-8718-51f24568dfbe"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-3223e2c5-5981-4220-b766-27e44c26d3d3",
+        "operationId": "ea3d9235-4407-4b30-8718-51f24568dfbe",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [
+          "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "assess-b7bb4f92-b5ed-4131-ac4a-d6956592b887",
+        "operationId": "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [
+          "s-2"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-21T00:00:00.000Z",
+        "id": "d-run-bf1f380c-38d6-45f0-85d6-29a0c43c901f",
+        "operationId": "b46cdf4a-71d8-43d3-baf0-32e23680938d-agent",
+        "permissionFingerprint": "64efa85c149b87c0306299d21633fd91ccaffe44db5802b72d55b36c241f639f",
+        "providerKind": "synthetic",
+        "role": "planner",
+        "rounds": 2,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-21T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [
+          "02889cdb-f330-4dea-bca8-b8850b5388b3"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-22T00:00:00.000Z",
+        "id": "assess-c7313d83-9bca-4c66-8d63-09ccb0354fae",
+        "operationId": "02889cdb-f330-4dea-bca8-b8850b5388b3",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-22T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      },
+      {
+        "callIds": [
+          "3685e2d4-8242-4998-bb58-e7b1e427156d"
+        ],
+        "error": null,
+        "finishedAt": "2026-10-25T00:00:00.000Z",
+        "id": "assess-392e3c14-b5be-4599-bc36-08ca730ace85",
+        "operationId": "3685e2d4-8242-4998-bb58-e7b1e427156d",
+        "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "providerKind": "synthetic",
+        "role": "assessor",
+        "rounds": 0,
+        "schemaVersion": "1.0.0",
+        "startedAt": "2026-10-25T00:00:00.000Z",
+        "status": "completed",
+        "toolExecutions": 1
+      }
+    ],
+    "toolCalls": [
+      {
+        "argumentsHash": "c5c973e6687dad59a380871ae9306efdda0a3384f89b5c91c242ec7a587929d7",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "4b7092f7-3c7c-4a78-90fd-c2fdf603195b",
+        "dataVersion": 21,
+        "errorCode": null,
+        "evidenceIds": [
+          "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+        ],
+        "id": "call-3f8b9aa58ee718b421d78021a00186eeba8a91b50d964111",
+        "name": "grade_attempt",
+        "runId": "assess-e399d1ce-c0ae-4a51-94d3-d526ebda9e6f",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "4b736ec8e10f344f680d189b8794c88d8c94b6d0da9e450c757615fda864a915",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "0a05a9f9-b112-47e4-9be9-c7ac8268f170",
+        "dataVersion": 44,
+        "errorCode": null,
+        "evidenceIds": [
+          "84c89e14-f226-45f7-9681-83257c20e58e",
+          "ec8cc893-2a14-46e8-b730-43557b0b8788"
+        ],
+        "id": "call-ea21b17cf5134c1821b3fadcc081754cf0b450998c2f49c8",
+        "name": "grade_attempt",
+        "runId": "assess-87ffc5f4-6d56-4d82-a59d-5770e76b6d44",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "699c9f284d7e5f4c60840148e40937bf1fc2ea783857ebae8fb45b207d2fe928",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "8a99df49-08a6-480a-a94a-b438f62a0e1c",
+        "dataVersion": 67,
+        "errorCode": null,
+        "evidenceIds": [
+          "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+          "0db049fe-661c-4d0e-8523-14da09843771"
+        ],
+        "id": "call-1e1c6e22d98afe1791773c422ee196eba997132281c51123",
+        "name": "grade_attempt",
+        "runId": "assess-29bdc2e2-24af-4150-8402-24e29f161a15",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "e9547fc26b1928bb313376396197a586b1397cdbd75bff66609660a8fed30ef7",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "ea3d9235-4407-4b30-8718-51f24568dfbe",
+        "dataVersion": 88,
+        "errorCode": null,
+        "evidenceIds": [
+          "66d66cbc-ab5f-4879-8b78-e4d3df34498b"
+        ],
+        "id": "call-7d4aba81009a45512a6b641c346fabf5edc09d27fe9a330b",
+        "name": "grade_attempt",
+        "runId": "assess-3223e2c5-5981-4220-b766-27e44c26d3d3",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "68d5ef77e46aee9316a891f09f2fb7424bb12de49a6349e6cfc51f02394fd6be",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "c8f22f6a-3a75-403e-9365-affe4a9c6551",
+        "dataVersion": 98,
+        "errorCode": null,
+        "evidenceIds": [],
+        "id": "call-f5be7dcc0ba5065585655573ec2c6c013da630784040d782",
+        "name": "get_hint",
+        "runId": "hint-c8f22f6a-3a75-403e-9365-affe4a9c6551",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "66358a1411b8348a3ab226e29d0112e7c798d7837a32c34df1afd799b2fe802c",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "24e7ba96-77ef-47f5-98f6-8e45fa9d0fcb",
+        "dataVersion": 109,
+        "errorCode": null,
+        "evidenceIds": [
+          "67afffcc-6959-4012-9b9b-76019f627787"
+        ],
+        "id": "call-632502053d771ace98ba064bfb430791e6a012931af76f77",
+        "name": "grade_attempt",
+        "runId": "assess-b7bb4f92-b5ed-4131-ac4a-d6956592b887",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "c89a148be40e6752261e3038609a4b68de22fa3bfdaf32f884edffb8480b9bbe",
+        "at": "2026-10-21T00:00:00.000Z",
+        "callId": "s-2",
+        "dataVersion": 134,
+        "errorCode": null,
+        "evidenceIds": [
+          "84c89e14-f226-45f7-9681-83257c20e58e",
+          "ec8cc893-2a14-46e8-b730-43557b0b8788",
+          "ed4b27ec-fc8c-436f-b051-10ce9ce5afd5",
+          "0db049fe-661c-4d0e-8523-14da09843771",
+          "66d66cbc-ab5f-4879-8b78-e4d3df34498b",
+          "67afffcc-6959-4012-9b9b-76019f627787",
+          "f74cf15d-1615-424d-9e7d-e0ced0aa9df6"
+        ],
+        "id": "call-d81344e27167496513a9ab601d95912694568abd43aae059",
+        "name": "get_skill_state",
+        "runId": "d-run-bf1f380c-38d6-45f0-85d6-29a0c43c901f",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "62e9edfa5cd244e6d0833ec080081bb5c8ba78ff8bfa106d45baca5c2e6b29ba",
+        "at": "2026-10-22T00:00:00.000Z",
+        "callId": "02889cdb-f330-4dea-bca8-b8850b5388b3",
+        "dataVersion": 153,
+        "errorCode": null,
+        "evidenceIds": [
+          "07690dd0-5b39-4402-b068-55e459d8f524"
+        ],
+        "id": "call-11719560837abdf8a8a911cee7a63c365756b98a17e2a3c2",
+        "name": "grade_attempt",
+        "runId": "assess-c7313d83-9bca-4c66-8d63-09ccb0354fae",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      },
+      {
+        "argumentsHash": "ac8113581295f1b13e6d51ac9c22a0d336cdc83d85d7a0944e4d0b40825c89bd",
+        "at": "2026-10-25T00:00:00.000Z",
+        "callId": "3685e2d4-8242-4998-bb58-e7b1e427156d",
+        "dataVersion": 178,
+        "errorCode": null,
+        "evidenceIds": [
+          "67935923-dbc9-4897-844a-bdbd627cfcd6"
+        ],
+        "id": "call-877eea73db5adbfdb99fef0002694e7a611d50139b968f1f",
+        "name": "grade_attempt",
+        "runId": "assess-392e3c14-b5be-4599-bc36-08ca730ace85",
+        "schemaVersion": "1.0.0",
+        "status": "succeeded"
+      }
+    ]
+  }
+}

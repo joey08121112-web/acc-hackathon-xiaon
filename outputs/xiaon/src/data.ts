@@ -169,7 +169,6 @@ export const correct = (task: Task, value: string) => {
   const normalized = normalize(value);
   if (task.choices) return task.answer.some((a) => normalize(a) === normalized);
   const steps = normalized.split("=");
-  if (!task.answer.some((a) => normalize(a) === steps.at(-1))) return false;
   const target = linear(normalize(task.answer[0]));
   return steps.every((step) => {
     const v = linear(step);

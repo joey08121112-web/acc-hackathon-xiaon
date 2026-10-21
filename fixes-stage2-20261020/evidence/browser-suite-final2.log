@@ -1,0 +1,4 @@
+  ✓  17 tests/experience.spec.ts:525:1 › 16 重新首次介绍保留进度，重置演示清空进度与图片 (2.3s)
+  ✓  18 tests/offline.spec.ts:3:1 › 单文件体验版无需其他资源即可走通看题与恢复；分享包可下载 (2.5s)
+
+  18 passed (1.0m)

@@ -1,0 +1,63 @@
+- banner:
+  - button "返回":
+    - img
+  - heading "一起看题" [level=2]
+  - button "帮助与支持":
+    - img
+  - button "我的与设置":
+    - img
+- main:
+  - text: 计算 · 轻量探索
+  - button "先暂停":
+    - img
+    - text: 先暂停
+  - text: 只专注这一小步
+  - heading "一起看看这个括号" [level=1]
+  - paragraph: 化简：3x − (2x − 5)
+  - text: 写下你的答案或关键一步
+  - textbox "你的解题步骤":
+    - /placeholder: 写化简结果，也可用 = 连接等式步骤…
+    - text: x+5
+  - button "−"
+  - button "+"
+  - button "("
+  - button ")"
+  - button "x"
+  - button "a"
+  - button "="
+  - button "给一点提示":
+    - img
+    - text: 给一点提示
+  - button "提交修改":
+    - img
+    - text: 提交修改
+  - img
+  - text: 一级提示
+  - paragraph: 括号前是减号，括号里的每一项都要变号：−(2x − 5) = −2x + 5。
+  - text: 使用提示后完成，会如实记为“提示下完成”。 小N · AI · 基于这次作答
+  - heading "你在提示后完成了这一步。" [level=3]
+  - paragraph: 3x − (2x − 5) = 3x − 2x + 5 = x + 5。减去 −5，相当于加上 5。
+  - img
+  - text: 已整理一张方法笔记 固定学习成果 · 不重复领取
+  - button "用一道新题检验":
+    - text: 用一道新题检验
+    - img
+  - button "看看这次学习观察"
+  - group: 查看作答与提示记录 2 次尝试
+  - button "题目识别错了？重新核对":
+    - img
+    - text: 题目识别错了？重新核对
+  - paragraph: 本次计算已打开 1/10 题 · 修改与重试不重复计题
+- navigation "主导航":
+  - button "小N":
+    - img
+    - text: 小N
+  - button "探索":
+    - img
+    - text: 探索
+  - button "今日":
+    - img
+    - text: 今日
+  - button "成长":
+    - img
+    - text: 成长

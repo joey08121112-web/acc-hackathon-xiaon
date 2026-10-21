@@ -10,7 +10,7 @@
 
 阶段2核心路径本身可以走通：首次进入 → 必要授权 → 拒绝可选功能 → 小N交流 → 主动看题 → 初次作答 → 提示 → 修改 → 学习观察，全程实际操作并留有证据；初次/提示后/修改的作答区分、失败重试不重复计题、聊天等待与失败状态均表现正确。但答案核对在可枚举的**数学等价写法**上把正确答案判为错误，并连带让学习观察报告漏记首次独立完成（S2-01，P1）。按共同规则「仍有未解决的 P0/P1 就不能写本阶段通过」，本轮判不通过。修复 S2-01 后可针对性复验，无需重跑全部检查。
 
-另有 1 项 P2（跨题后浏览器返回不接续）和 1 项 P3（休息返回聊天时邀请立即出现），不阻塞通过。
+另有 1 项 P2（跨题后浏览器返回不接续）和 2 项 P3（休息返回聊天时邀请立即出现；作答后再点提示会追溯改写反馈标题——该条为 [HANDOFF.md](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/HANDOFF.md) 线索 4，2026-10-20 晚补录复验，见 S2-04），不阻塞通过。
 
 ## 2. 审查依据与范围
 
@@ -26,7 +26,8 @@
 ### 版本与环境
 
 - 产品路径 `/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon`（阶段1修复后版本）。非 Git 仓库。审查开始时 45 项文件哈希记录于 [source-before.json](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/source-before.json)；本轮结束时抽验 `src/data.ts` 哈希仍为 `9fd87a20…`，与记录一致，产品源码未变。
-- 运行副本 `audit-stage2-20261020/runtime/`，`diff` 确认与产品 `src/`、`package.json` 完全一致；在 127.0.0.1:5178 独立启动，不接触 5173 产品端口。
+- 运行副本 `audit-stage2-20261020/runtime/`，`diff` 确认与产品 `src/`、`package.json` 完全一致；前段（Codex）在其独立 origin 5182 运行取证（据 [HANDOFF.md](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/HANDOFF.md)），后段（ZCode）复验时以 5178 运行同一副本，均不接触 5173 产品端口。
+- 版本关系：前段证据 01–30 对应审查开始时的源码快照（[source-before.json](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/source-before.json)）；审查期间产品源码被修复更新（见 [fixes-stage2-20261020/FIX-REPORT.md](/Users/ami/Documents/个人/ACC黑客松/fixes-stage2-20261020/FIX-REPORT.md)）。S2-01/02/03 的后段复验（证据 31–39）发生在修复**前**、用于确认问题；三项的修复验证见 FIX-REPORT（修复后）。补录的 S2-04 在修复**后**的当前版本上复验（证据 40–42），确认仍未修复。前段 `01-first-entry.png` 属视口切换过渡画面，不作为手机证据。
 - 前段环境：Codex 内置浏览器（桌面引擎手机视口 390×844）。后段复验环境：Playwright chromium 1248 无头浏览器，390×844 视口，Node v26.8.2。均为桌面引擎，非真机。
 - 构建、类型检查与 20/20 单元测试结果见 [build-current.log](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/build-current.log)、[unit-current.log](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/unit-current.log)（前段采集）。
 - 全程虚构年龄/年级、合成对话与原创示例题；未发送任何真实通知，未修改产品代码，未发布。
@@ -78,6 +79,20 @@
 - **位置：**[App.tsx:918](/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/src/App.tsx:918) 邀请条仅由 `!rest && !questionInvitePaused` 控制；[App.tsx:762-767](/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/src/App.tsx:762) 「我想继续聊聊」仅置 `rest:false`；[domain.ts:151](/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/src/domain.ts:151) 进入任务时清除暂缓。
 - **最小修复方向（非阻塞建议）：**从「我想继续聊聊」入口返回聊天时，暂缓邀请至学生完成一轮倾诉；或邀请条延迟到对话首个回合后再出现。不改变拒绝/恢复的既有语义。
 
+### S2-04 · P3 · 作答成功后再点提示，反馈标题被追溯改写为「提示后完成」
+
+**事实，已复现（交接线索 4；前段证据 23 + 后段在当前版本复验 40–42）。**新题首次**未用提示**独立答对（如 `5x−(2x−1)` 答 `3x+1`、`7a−(3a−2)` 答 `4*a+2`），反馈标题为「这次，你独立完成了。」；随后点击仍处于可用状态的「给一点提示」，标题立即变为「你在提示后完成了这一步。」，提示框也显示「使用提示后完成，会如实记为"提示下完成"」。但同屏作答记录仍为「第一次尝试 · 未用提示 · 结果正确」，学习观察报告也仍记为独立完成——**底层记录没有被改写**，仅当前反馈标题与提示框文案与记录矛盾。
+
+- **实际影响：**学生独立做成后出于好奇查看提示，却被即时反馈告知「你在提示帮助下完成」，与其下方两指宽处的诚实记录直接矛盾，削弱独立完成的成就感；不污染任何持久数据（作答、报告、记忆条目均正确）。
+- **对应需求：**阶段2「不同回答是否产生相应反馈」；原始提示词「原始回答、提示后回答、独立完成分别记录」的展示一致性精神（记录层已满足，展示层未满足）。本条是「独立完成被标为提示后」的反向错标，危害低于 S2-01 类正向错标，且需「成功后点提示」这一少见操作触发，故定 P3（交接稿初判 P2，复验后据记录层无误下调）。
+- **前置条件：**任意题目首次无提示答对；答对后「给一点提示」按钮仍可点击。
+- **复现：**答对 → 点击「给一点提示」→ 观察反馈标题。脚本见 [verify-post-answer-hint.mjs](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/verify-post-answer-hint.mjs)。
+- **预期：**已记录作答的反馈标题不应随其后的提示点击改变；提示框可展示提示内容，但不应宣称该次作作为提示下完成。
+- **实际：**标题从「这次，你独立完成了。」翻转为「你在提示后完成了这一步。」；记录与报告不变。
+- **证据：**[23 前段快照](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/23-post-answer-hint.png)、[40 点击前](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/40-hint-before-click.png)、[41 点击后](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/41-hint-after-click.png)（标题翻转）、[42 报告不受影响](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/42-hint-report-intact.png)（「多次独立完成」，两题首次均「未用提示 · 正确」）。
+- **位置：**[App.tsx:1356](/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/src/App.tsx:1356) 反馈标题使用累计状态 `record.hint`，未使用该次作答的 `record.attempts.at(-1)!.hinted`。
+- **最小修复方向：**标题判定改用该次作答的 `hinted` 标记；可同时考虑答对后隐藏或弱化提示按钮。不应影响提示的正常获取路径与记录结构。
+
 ## 4. 验收矩阵
 
 | 阶段2要求 | 验证方式 | 结果 | 证据 |
@@ -89,7 +104,7 @@
 | 示例数学题、答案、提示和反馈正确 | 确定性探针 + 实际作答 | **失败（S2-01）** | math-probe.log、31 复跑、15/16 |
 | 初次/提示后/修改分别记录 | 实际作答后查作答记录 | 通过 | [09-13](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/13-report-evidence.png)（首次 x−5 待观察·未用提示；提示后完成如实标注） |
 | 不同回答产生相应反馈，报告依赖作答 | 不同作答路径对比报告 | 通过 | [13](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/13-report-evidence.png) 提示下完成 → [24](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/24-independent-report.png) 本次独立完成（注：S2-01 场景下结论被误导，已在问题中记录） |
-| 提示后完成不标为独立掌握 | 提示后答对查报告 | 通过 | [12](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/12-correct-hinted.png)、[13](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/13-report-evidence.png) |
+| 提示后完成不标为独立掌握 | 提示后答对查报告 | 通过 | [12](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/12-correct-hinted.png)、[13](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/13-report-evidence.png)；反向错标见 S2-04（P3，仅展示层） |
 | 无证据/未完成不解释为能力弱 | 查未作答维度报告 | 通过 | [24](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/24-independent-report.png)（尚未观察 + 「未开始或暂停，都不代表能力弱」） |
 | 暂停、刷新、恢复接续正确 | 暂停→刷新→恢复；离线提交→恢复重试 | 通过 | [10-11](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/11-resume.png)、[21-22](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/22-retry-once-restored.png)、[29](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/29-chat-paused-restored.png) |
 | 浏览器返回接续正确 | 原题→新题→返回 | **失败（S2-02）** | 25-27、33-34 |
@@ -116,12 +131,17 @@
 - 验收方法：休息→「我想继续聊聊」后邀请暂缓至首轮倾诉完成；正常聊天邀请、拒绝语义、刷新持久化不变。
 - 不应影响：S1-02 已修复的拒绝/重启语义。
 
+**M4（对应 S2-04，P3，补录）**
+- 修改范围：仅 [App.tsx](/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/src/App.tsx) 反馈标题判定（`record.hint` → `record.attempts.at(-1)!.hinted`）。
+- 验收方法：无提示独立答对后点提示，标题保持「这次，你独立完成了。」；先提示后答对仍显示「你在提示后完成了这一步。」；记录与报告不变。
+- 不应影响：提示获取、hint 记录、attempt 结构、报告判定。
+
 本轮按审查要求停在报告，不实施修改。
 
 ## 6. 证据与后续
 
-- 证据目录：[evidence/](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/)。01–30 及日志为前段（Codex）采集；31–39 与两个可重跑脚本（verify-issues.mjs、verify-rest.mjs）为后段（ZCode）复验；35、36 编号因前段脚本中断空缺。
+- 证据目录：[evidence/](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/)。01–30 及日志为前段（Codex）采集，中途交接说明见 [HANDOFF.md](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/HANDOFF.md) 与 [interrupted-run.json](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/evidence/interrupted-run.json)；31–39 与两个可重跑脚本（verify-issues.mjs、verify-rest.mjs）为后段（ZCode）修复前复验；35、36 编号因前段脚本中断空缺；40–42 与 verify-post-answer-hint.mjs 为 2026-10-20 晚依据交接线索 4 在**当前已修复版本**上的补录复验。
 - 需求快照与运行副本：[sources/](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/sources/)、[runtime/](/Users/ami/Documents/个人/ACC黑客松/audit-stage2-20261020/runtime/)（与产品源码逐字一致，见第2节）。
 - 模拟能力边界不变：聊天为本地预设、OCR 为固定示例、监护核验/通知/权利申请均为演示，本轮未见虚假能力承诺（05/06/28/30 均如实标注 AI 与演示状态）。
 - 仍需人工或真机验证：软键盘遮挡与缩放行为、真实 iOS/Android 浏览器、系统字号与读屏、真实学生试用；「拒绝探索」的完整浏览器链路可在阶段3一并覆盖。
-- 后续顺序建议：实施 M1 → 针对性复验 S2-01（探针 + 浏览器报告链路）→ 阶段2可改判；M2、M3 可随阶段3修复批次处理。
+- 后续顺序建议：M1–M3 与打包脚本缺陷已于 2026-10-20 晚修复（[FIX-REPORT](/Users/ami/Documents/个人/ACC黑客松/fixes-stage2-20261020/FIX-REPORT.md)，自验 22/22 单元、18/18 浏览器、math-probe 9/9）；**M4（S2-04）尚未修复**，属一行改动，可与阶段2复验一并处理。独立复验通过后阶段2可改判。

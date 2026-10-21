@@ -1,0 +1,9 @@
+Command: ls -ld 任务书/2026-10-21-Agent升级/交付/A/HANDOFF.md outputs/xiaon/shared/learning-contracts.ts outputs/xiaon/shared/learning-contracts.schema.json outputs/xiaon/server outputs/xiaon/tests-agent
+Exit code: 1
+ls: outputs/xiaon/server: No such file or directory
+ls: outputs/xiaon/shared/learning-contracts.schema.json: No such file or directory
+ls: outputs/xiaon/shared/learning-contracts.ts: No such file or directory
+ls: outputs/xiaon/tests-agent: No such file or directory
+ls: 任务书/2026-10-21-Agent升级/交付/A/HANDOFF.md: No such file or directory
+
+This is a prerequisite failure, not a B unit-test failure. No implementation or test retry was attempted.

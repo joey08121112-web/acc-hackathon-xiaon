@@ -1,0 +1,5 @@
+COMMAND: node scripts/agent/service-smoke.mjs
+UTC: 2026-10-20T16:27:06.682405+00:00
+{"service":"actual_child_process_restart","bind":"127.0.0.1","port":18922,"attemptCount":1,"idempotencyPreserved":true,"mode":"local_rules","realModel":"NOT_RUN_NO_CONFIGURED_KEY"}
+
+exitCode=0

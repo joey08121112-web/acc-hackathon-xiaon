@@ -1,0 +1,4 @@
+$ node scripts/build-offline.mjs ../../任务书/2026-10-21-Agent升级/交付/D/evidence/offline-candidate
+Offline HTML: /Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/offline-candidate/双击打开-学伴小N.html (477155 bytes)
+
+EXIT_CODE=0

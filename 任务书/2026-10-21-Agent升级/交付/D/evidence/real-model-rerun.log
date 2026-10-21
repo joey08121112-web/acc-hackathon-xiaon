@@ -1,0 +1,7 @@
+$ node --env-file-if-exists=.env.server --import tsx scripts/agent/d-real-smoke.ts
+basic response received
+assessor finished: correct
+tutor finished: completed
+planner finished: completed
+
+EXIT_CODE=0

@@ -1,0 +1,196 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/node_modules/.bin/playwright",
+      "test",
+      "tests/offline.spec.ts"
+    ],
+    "configFile": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/playwright.config.ts",
+    "rootDir": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/ami/Documents/个人/ACC黑客松/work/browser-1792493904848",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/ami/Documents/个人/ACC黑客松/work/browser-1792493904848",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests",
+        "snapshotDir": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://localhost:5173",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "zh-CN",
+          "timezoneId": "Asia/Shanghai",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../evidence/browser-1792493904848.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "offline.spec.ts",
+      "file": "offline.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "单文件体验版无需其他资源即可走通看题与恢复；分享包可下载",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5244,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '慢慢来， 也会到达。' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '慢慢来， 也会到达。' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '慢慢来， 也会到达。' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '慢慢来， 也会到达。' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '慢慢来， 也会到达。' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '慢慢来， 也会到达。' })\u001b[22m\n\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests/offline.spec.ts:12:62",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests/offline.spec.ts",
+                      "column": 62,
+                      "line": 12
+                    },
+                    "snippet": "  10 |  });\n  11 |  await page.goto('/offline.html');\n> 12 |  await expect(page.getByRole('heading',{name:'慢慢来， 也会到达。'})).toBeVisible();\n     |                                                              ^\n  13 |  expect(await page.locator('script[src],link[rel=\"stylesheet\"][href]').count()).toBe(0);\n  14 |  await page.getByRole('button',{name:'认识一下小N',exact:true}).click();\n  15 |  await page.getByRole('combobox',{name:'年龄段',exact:true}).selectOption('adult');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests/offline.spec.ts",
+                        "column": 62,
+                        "line": 12
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '慢慢来， 也会到达。' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '慢慢来， 也会到达。' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '慢慢来， 也会到达。' })\u001b[22m\n\n\n  10 |  });\n  11 |  await page.goto('/offline.html');\n> 12 |  await expect(page.getByRole('heading',{name:'慢慢来， 也会到达。'})).toBeVisible();\n     |                                                              ^\n  13 |  expect(await page.locator('script[src],link[rel=\"stylesheet\"][href]').count()).toBe(0);\n  14 |  await page.getByRole('button',{name:'认识一下小N',exact:true}).click();\n  15 |  await page.getByRole('combobox',{name:'年龄段',exact:true}).selectOption('adult');\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests/offline.spec.ts:12:62"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:58:25.024Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/work/browser-1792493905018/offline-单文件体验版无需其他资源即可走通看题与恢复；分享包可下载/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/work/browser-1792493905018/offline-单文件体验版无需其他资源即可走通看题与恢复；分享包可下载/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/work/browser-1792493905018/offline-单文件体验版无需其他资源即可走通看题与恢复；分享包可下载/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests/offline.spec.ts",
+                    "column": 62,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-b46f0a1186de79992769",
+          "file": "offline.spec.ts",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-20T10:58:24.850Z",
+    "duration": 5597.277,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

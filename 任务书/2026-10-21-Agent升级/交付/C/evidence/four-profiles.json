@@ -1,0 +1,580 @@
+{
+  "synthetic": true,
+  "description": "预设 AssessmentSnapshot/评分；不代表 B 或真实学生/模型验证",
+  "profiles": [
+    {
+      "name": "去括号提示依赖",
+      "synthetic": true,
+      "input": {
+        "assessment": {
+          "schemaVersion": "1.0.0",
+          "id": "4aba6ec3-3b5e-45e1-a01a-fac3ed89681d",
+          "evidenceRevision": 5,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "skills": [
+            {
+              "schemaVersion": "1.0.0",
+              "id": "f0033bbe-c37f-4d07-b5af-103e19f30e8a",
+              "evidenceRevision": 5,
+              "knowledgePointId": "brackets",
+              "dimension": "计算",
+              "status": "completed_with_help",
+              "evidenceIds": [
+                "05ab2c9e-5a37-490f-9a8e-423c775835ae"
+              ],
+              "attemptIds": [
+                "c37c9ac5-16d3-4507-a42e-1bc6bce467fd"
+              ],
+              "observedTaskIds": [
+                "synthetic-brackets-0"
+              ],
+              "trustedLearningDates": [],
+              "recentDifficulty": false,
+              "coverage": "合成覆盖",
+              "unknowns": [],
+              "computedAt": "2026-10-20T04:00:00.000Z"
+            }
+          ],
+          "coverage": [
+            {
+              "dimension": "计算",
+              "knowledgePointIds": [
+                "brackets"
+              ],
+              "evidenceCount": 1,
+              "lastObservedAt": "2026-10-20T04:00:00.000Z",
+              "unknowns": []
+            }
+          ],
+          "evidenceIds": [
+            "05ab2c9e-5a37-490f-9a8e-423c775835ae"
+          ],
+          "limitations": [
+            "合成画像，非 B 实现输出"
+          ]
+        },
+        "timeBudgetMinutes": 6
+      },
+      "output": {
+        "proposal": {
+          "schemaVersion": "1.0.0",
+          "id": "14bf21e7-ad65-4212-bb9b-bccf00f87f90",
+          "operationId": "ab3fdd90-ffe6-4a8e-8eea-aa5722b63d81",
+          "evidenceRevision": 5,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "assessmentSnapshotId": "4aba6ec3-3b5e-45e1-a01a-fac3ed89681d",
+          "goal": "brackets：从提示帮助过渡到独立处理",
+          "items": [
+            {
+              "id": "047df6fd-332a-4be2-866f-92ab853f23f7",
+              "knowledgePointId": "brackets",
+              "taskType": "supported_practice",
+              "task": null,
+              "estimatedMinutes": 3,
+              "scheduledDate": "2026-10-21",
+              "evidenceIds": [
+                "05ab2c9e-5a37-490f-9a8e-423c775835ae"
+              ],
+              "goal": "只看当前知识点的一个具体步骤，先提供支持",
+              "status": "proposed"
+            },
+            {
+              "id": "b0e42850-6d45-4758-b989-8b4332cf80ef",
+              "knowledgePointId": "brackets",
+              "taskType": "independent_transfer",
+              "task": {
+                "taskId": "synthetic-brackets-1",
+                "taskVersion": 1
+              },
+              "estimatedMinutes": 3,
+              "scheduledDate": "2026-10-21",
+              "evidenceIds": [
+                "05ab2c9e-5a37-490f-9a8e-423c775835ae"
+              ],
+              "goal": "支持后自选未见新题；完成支持前须再次核对题目暴露",
+              "status": "proposed"
+            }
+          ],
+          "statements": [
+            {
+              "text": "提示依赖：先支持，再用未见同类题检查",
+              "kind": "inference",
+              "evidenceIds": [
+                "05ab2c9e-5a37-490f-9a8e-423c775835ae"
+              ]
+            }
+          ],
+          "alternatives": [
+            "提示依赖：先支持，再用未见同类题检查",
+            "原题回顾：synthetic-brackets-0（已见，不作为未见检验）"
+          ],
+          "constraints": {
+            "calculationLimit": 10,
+            "requireUnderstandLogicFirst": true,
+            "timeBudgetMinutes": 6
+          },
+          "supersedesProposalId": null
+        },
+        "report": {
+          "schemaVersion": "1.0.0",
+          "id": "ff224290-2814-41c1-a25c-5ed81d1b2211",
+          "operationId": "cafd45cf-7b44-4c72-962e-428f81224510",
+          "evidenceRevision": 5,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "assessmentSnapshotId": "4aba6ec3-3b5e-45e1-a01a-fac3ed89681d",
+          "statements": [
+            {
+              "text": "brackets：本次知识点状态 completed_with_help，仅适用于已观察任务",
+              "kind": "fact",
+              "evidenceIds": [
+                "05ab2c9e-5a37-490f-9a8e-423c775835ae"
+              ]
+            },
+            {
+              "text": "提示依赖：先支持，再用未见同类题检查",
+              "kind": "inference",
+              "evidenceIds": [
+                "05ab2c9e-5a37-490f-9a8e-423c775835ae"
+              ]
+            }
+          ],
+          "coverage": [
+            "计算：1 条依据；覆盖仅限记录任务"
+          ],
+          "changes": [
+            "首份观察快照",
+            "brackets：新增观察 completed_with_help"
+          ],
+          "recommendations": [
+            "提示依赖：先支持，再用未见同类题检查",
+            "仅为待验证产品策略；不代表长期掌握或教学效果",
+            "合成画像，非 B 实现输出"
+          ],
+          "supersedesReportId": null
+        }
+      }
+    },
+    {
+      "name": "建模关系困难",
+      "synthetic": true,
+      "input": {
+        "assessment": {
+          "schemaVersion": "1.0.0",
+          "id": "4d7a2692-f1f9-4287-99f1-c3187baad70c",
+          "evidenceRevision": 4,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "skills": [
+            {
+              "schemaVersion": "1.0.0",
+              "id": "40be6bab-abcb-400f-ad85-c45409feba11",
+              "evidenceRevision": 4,
+              "knowledgePointId": "relations",
+              "dimension": "建模",
+              "status": "needs_support",
+              "evidenceIds": [
+                "252737f6-ba91-4308-a245-4b9a96d27d62"
+              ],
+              "attemptIds": [
+                "21a72cdc-e352-48ad-aabd-11438920e3ab"
+              ],
+              "observedTaskIds": [
+                "synthetic-relations-0"
+              ],
+              "trustedLearningDates": [],
+              "recentDifficulty": true,
+              "coverage": "合成覆盖",
+              "unknowns": [],
+              "computedAt": "2026-10-20T04:00:00.000Z"
+            }
+          ],
+          "coverage": [
+            {
+              "dimension": "建模",
+              "knowledgePointIds": [
+                "relations"
+              ],
+              "evidenceCount": 1,
+              "lastObservedAt": "2026-10-20T04:00:00.000Z",
+              "unknowns": []
+            }
+          ],
+          "evidenceIds": [
+            "252737f6-ba91-4308-a245-4b9a96d27d62"
+          ],
+          "limitations": [
+            "合成画像，非 B 实现输出"
+          ]
+        },
+        "timeBudgetMinutes": 6
+      },
+      "output": {
+        "proposal": {
+          "schemaVersion": "1.0.0",
+          "id": "f0b3d3a6-81d6-4ba9-bc55-979c04480e0a",
+          "operationId": "89eebd66-3ff2-4302-a4b9-cd7859cc1d68",
+          "evidenceRevision": 4,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "assessmentSnapshotId": "4d7a2692-f1f9-4287-99f1-c3187baad70c",
+          "goal": "relations：厘清具体关系与步骤，再复测",
+          "items": [
+            {
+              "id": "018da886-0d5f-46e3-926f-50ac36741f5d",
+              "knowledgePointId": "relations",
+              "taskType": "supported_practice",
+              "task": null,
+              "estimatedMinutes": 3,
+              "scheduledDate": "2026-10-20",
+              "evidenceIds": [
+                "252737f6-ba91-4308-a245-4b9a96d27d62"
+              ],
+              "goal": "只看当前知识点的一个具体步骤，先提供支持",
+              "status": "proposed"
+            },
+            {
+              "id": "205df436-e3b6-400f-84d8-bde2f80cfa47",
+              "knowledgePointId": "relations",
+              "taskType": "independent_transfer",
+              "task": {
+                "taskId": "synthetic-relations-1",
+                "taskVersion": 1
+              },
+              "estimatedMinutes": 3,
+              "scheduledDate": "2026-10-20",
+              "evidenceIds": [
+                "252737f6-ba91-4308-a245-4b9a96d27d62"
+              ],
+              "goal": "支持后自选未见新题；完成支持前须再次核对题目暴露",
+              "status": "proposed"
+            }
+          ],
+          "statements": [
+            {
+              "text": "近期困难：针对当前知识点提供支持",
+              "kind": "inference",
+              "evidenceIds": [
+                "252737f6-ba91-4308-a245-4b9a96d27d62"
+              ]
+            }
+          ],
+          "alternatives": [
+            "近期困难：针对当前知识点提供支持",
+            "原题回顾：synthetic-relations-0（已见，不作为未见检验）"
+          ],
+          "constraints": {
+            "calculationLimit": 10,
+            "requireUnderstandLogicFirst": true,
+            "timeBudgetMinutes": 6
+          },
+          "supersedesProposalId": null
+        },
+        "report": {
+          "schemaVersion": "1.0.0",
+          "id": "3ba1458f-9c2a-4787-b7c6-87eddc662c95",
+          "operationId": "b199e3a0-88d3-46da-9f14-82c35c4a984a",
+          "evidenceRevision": 4,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "assessmentSnapshotId": "4d7a2692-f1f9-4287-99f1-c3187baad70c",
+          "statements": [
+            {
+              "text": "relations：本次知识点状态 needs_support，仅适用于已观察任务",
+              "kind": "fact",
+              "evidenceIds": [
+                "252737f6-ba91-4308-a245-4b9a96d27d62"
+              ]
+            },
+            {
+              "text": "近期困难：针对当前知识点提供支持",
+              "kind": "inference",
+              "evidenceIds": [
+                "252737f6-ba91-4308-a245-4b9a96d27d62"
+              ]
+            }
+          ],
+          "coverage": [
+            "建模：1 条依据；覆盖仅限记录任务"
+          ],
+          "changes": [
+            "首份观察快照",
+            "relations：新增观察 needs_support"
+          ],
+          "recommendations": [
+            "近期困难：针对当前知识点提供支持",
+            "仅为待验证产品策略；不代表长期掌握或教学效果",
+            "合成画像，非 B 实现输出"
+          ],
+          "supersedesReportId": null
+        }
+      }
+    },
+    {
+      "name": "已有跨次独立记录",
+      "synthetic": true,
+      "input": {
+        "assessment": {
+          "schemaVersion": "1.0.0",
+          "id": "2de198e3-a68d-4deb-90cf-da734cbc9ede",
+          "evidenceRevision": 8,
+          "createdAt": "2026-10-23T04:00:00.000Z",
+          "skills": [
+            {
+              "schemaVersion": "1.0.0",
+              "id": "65761bf9-41c5-43f0-a3b9-28fa587a7d63",
+              "evidenceRevision": 8,
+              "knowledgePointId": "brackets",
+              "dimension": "计算",
+              "status": "cross_session_independent",
+              "evidenceIds": [
+                "485f54b1-7e71-43f1-a347-a944cb34cec4",
+                "f713a215-ad73-4f4b-9347-4cd41553a201"
+              ],
+              "attemptIds": [
+                "44daaa43-ceca-40ec-a528-5c295d986ae8",
+                "36cd0e8f-b9d8-4a81-9ee7-7263057d424f"
+              ],
+              "observedTaskIds": [
+                "synthetic-brackets-0",
+                "synthetic-brackets-1"
+              ],
+              "trustedLearningDates": [],
+              "recentDifficulty": false,
+              "coverage": "合成覆盖",
+              "unknowns": [],
+              "computedAt": "2026-10-23T04:00:00.000Z"
+            }
+          ],
+          "coverage": [
+            {
+              "dimension": "计算",
+              "knowledgePointIds": [
+                "brackets"
+              ],
+              "evidenceCount": 2,
+              "lastObservedAt": "2026-10-23T04:00:00.000Z",
+              "unknowns": []
+            }
+          ],
+          "evidenceIds": [
+            "485f54b1-7e71-43f1-a347-a944cb34cec4",
+            "f713a215-ad73-4f4b-9347-4cd41553a201"
+          ],
+          "limitations": [
+            "合成画像，非 B 实现输出"
+          ]
+        },
+        "timeBudgetMinutes": 6
+      },
+      "output": {
+        "proposal": {
+          "schemaVersion": "1.0.0",
+          "id": "749cc780-cedc-48f9-88bf-6d3b0bee7c44",
+          "operationId": "f855f6dd-3f60-443e-9891-494579c26ec5",
+          "evidenceRevision": 8,
+          "createdAt": "2026-10-23T04:00:00.000Z",
+          "assessmentSnapshotId": "2de198e3-a68d-4deb-90cf-da734cbc9ede",
+          "goal": "brackets：延迟新题检查，观察跨次独立表现",
+          "items": [
+            {
+              "id": "b305869e-27df-4fe1-b05b-2b855e6e373c",
+              "knowledgePointId": "brackets",
+              "taskType": "delayed_check",
+              "task": {
+                "taskId": "synthetic-brackets-2",
+                "taskVersion": 1
+              },
+              "estimatedMinutes": 3,
+              "scheduledDate": "2026-10-24",
+              "evidenceIds": [
+                "485f54b1-7e71-43f1-a347-a944cb34cec4",
+                "f713a215-ad73-4f4b-9347-4cd41553a201"
+              ],
+              "goal": "延迟未见同类题检查；题库不足时等待补充可信题目",
+              "status": "proposed"
+            }
+          ],
+          "statements": [
+            {
+              "text": "已有独立记录，适合延迟新题检查",
+              "kind": "inference",
+              "evidenceIds": [
+                "485f54b1-7e71-43f1-a347-a944cb34cec4",
+                "f713a215-ad73-4f4b-9347-4cd41553a201"
+              ]
+            }
+          ],
+          "alternatives": [
+            "已有独立记录，适合延迟新题检查",
+            "原题回顾：synthetic-brackets-0（已见，不作为未见检验）",
+            "原题回顾：synthetic-brackets-1（已见，不作为未见检验）"
+          ],
+          "constraints": {
+            "calculationLimit": 10,
+            "requireUnderstandLogicFirst": true,
+            "timeBudgetMinutes": 6
+          },
+          "supersedesProposalId": null
+        },
+        "report": {
+          "schemaVersion": "1.0.0",
+          "id": "9ca18209-716a-4fb4-8674-b160213eb9cb",
+          "operationId": "67a74e00-e9d6-471b-9a97-9315f6c52577",
+          "evidenceRevision": 8,
+          "createdAt": "2026-10-23T04:00:00.000Z",
+          "assessmentSnapshotId": "2de198e3-a68d-4deb-90cf-da734cbc9ede",
+          "statements": [
+            {
+              "text": "brackets：本次知识点状态 cross_session_independent，仅适用于已观察任务",
+              "kind": "fact",
+              "evidenceIds": [
+                "485f54b1-7e71-43f1-a347-a944cb34cec4",
+                "f713a215-ad73-4f4b-9347-4cd41553a201"
+              ]
+            },
+            {
+              "text": "已有独立记录，适合延迟新题检查",
+              "kind": "inference",
+              "evidenceIds": [
+                "485f54b1-7e71-43f1-a347-a944cb34cec4",
+                "f713a215-ad73-4f4b-9347-4cd41553a201"
+              ]
+            }
+          ],
+          "coverage": [
+            "计算：2 条依据；覆盖仅限记录任务"
+          ],
+          "changes": [
+            "首份观察快照",
+            "brackets：新增观察 cross_session_independent"
+          ],
+          "recommendations": [
+            "已有独立记录，适合延迟新题检查",
+            "仅为待验证产品策略；不代表长期掌握或教学效果",
+            "合成画像，非 B 实现输出"
+          ],
+          "supersedesReportId": null
+        }
+      }
+    },
+    {
+      "name": "完全无记录",
+      "synthetic": true,
+      "input": {
+        "assessment": {
+          "schemaVersion": "1.0.0",
+          "id": "4ebc3deb-7409-409f-89c6-305b5359695a",
+          "evidenceRevision": 0,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "skills": [
+            {
+              "schemaVersion": "1.0.0",
+              "id": "a0580d2c-3474-4d25-8582-c0d2de3869b4",
+              "evidenceRevision": 0,
+              "knowledgePointId": "meaning",
+              "dimension": "理解",
+              "status": "unobserved",
+              "evidenceIds": [],
+              "attemptIds": [],
+              "observedTaskIds": [],
+              "trustedLearningDates": [],
+              "recentDifficulty": false,
+              "coverage": "合成覆盖",
+              "unknowns": [],
+              "computedAt": "2026-10-20T04:00:00.000Z"
+            }
+          ],
+          "coverage": [
+            {
+              "dimension": "理解",
+              "knowledgePointIds": [
+                "meaning"
+              ],
+              "evidenceCount": 0,
+              "lastObservedAt": "2026-10-20T04:00:00.000Z",
+              "unknowns": []
+            }
+          ],
+          "evidenceIds": [],
+          "limitations": [
+            "合成画像，非 B 实现输出"
+          ]
+        },
+        "timeBudgetMinutes": 6
+      },
+      "output": {
+        "proposal": {
+          "schemaVersion": "1.0.0",
+          "id": "39e94a83-3d06-4422-a261-4b75cedfde4d",
+          "operationId": "97d2d1c1-02ac-4cda-b7e8-5dfbd35eb3bd",
+          "evidenceRevision": 0,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "assessmentSnapshotId": "4ebc3deb-7409-409f-89c6-305b5359695a",
+          "goal": "可选探索：先从理解或逻辑了解自己的想法",
+          "items": [
+            {
+              "id": "07674aa1-b9ec-4d94-a300-fcdb402602c8",
+              "knowledgePointId": "meaning",
+              "taskType": "explore",
+              "task": {
+                "taskId": "synthetic-meaning-0",
+                "taskVersion": 1
+              },
+              "estimatedMinutes": 3,
+              "scheduledDate": "2026-10-20",
+              "evidenceIds": [],
+              "goal": "可选探索；无记录不代表能力弱",
+              "status": "proposed"
+            }
+          ],
+          "statements": [
+            {
+              "text": "尚无足够记录，只提供可选探索",
+              "kind": "unknown",
+              "evidenceIds": []
+            }
+          ],
+          "alternatives": [
+            "证据不足，仅提供可选探索"
+          ],
+          "constraints": {
+            "calculationLimit": 10,
+            "requireUnderstandLogicFirst": true,
+            "timeBudgetMinutes": 6
+          },
+          "supersedesProposalId": null
+        },
+        "report": {
+          "schemaVersion": "1.0.0",
+          "id": "321e4632-810e-4dc6-a1ef-537604d8e1ba",
+          "operationId": "92902b22-963e-4464-81cf-5ea69aa668ed",
+          "evidenceRevision": 0,
+          "createdAt": "2026-10-20T04:00:00.000Z",
+          "assessmentSnapshotId": "4ebc3deb-7409-409f-89c6-305b5359695a",
+          "statements": [
+            {
+              "text": "meaning：尚无足够依据，不推断能力弱",
+              "kind": "unknown",
+              "evidenceIds": []
+            },
+            {
+              "text": "证据不足，仅提供可选探索",
+              "kind": "inference",
+              "evidenceIds": []
+            }
+          ],
+          "coverage": [
+            "理解：0 条依据；覆盖仅限记录任务"
+          ],
+          "changes": [
+            "首份观察快照",
+            "meaning：新增观察 unobserved"
+          ],
+          "recommendations": [
+            "证据不足，仅提供可选探索",
+            "仅为待验证产品策略；不代表长期掌握或教学效果",
+            "合成画像，非 B 实现输出"
+          ],
+          "supersedesReportId": null
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+COMMAND: npm run test:agent:a
+UTC: 2026-10-20T16:24:11.845645+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:a
+> node scripts/agent/test.mjs a
+
+✖ HTTP local session, strict origin/host, CSRF, request validation and native tool chain (28.868333ms)
+✔ strict schema and browser public view deny answer, role, learner and invalid versions (10.55875ms)
+✔ native synthetic tool loop really queries SQLite and returns a tool result to model (8.321ms)
+✔ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (5.550834ms)
+✔ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (7.019625ms)
+✔ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (5.697584ms)
+✔ restart preserves attempts, operation receipts and sessions in a real SQLite file (4.005041ms)
+✔ timeout, cancellation, unsupported provider and budget do not fake completion (35.764417ms)
+✔ legacy import preview, transaction rollback, retry and unknown time keep original untouched (3.918125ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 202.633625
+
+✖ failing tests:
+
+test at tests-agent/a/http.test.ts:1:413
+✖ HTTP local session, strict origin/host, CSRF, request validation and native tool chain (28.868333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 403
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/http.test.ts:16:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+exitCode=1

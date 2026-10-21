@@ -1,0 +1,41 @@
+COMMAND: ['npm', 'run', 'test:agent:b']
+UTC: 2026-10-20T16:53:14.964236+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:b
+> node scripts/agent/test.mjs b
+
+✔ opening version 1 yesterday prevents version 2 of the same original from becoming unseen without an earlier attempt (29.588833ms)
+✔ a single active session spanning midnight cannot turn a previously opened original into an unseen new problem (13.700375ms)
+✔ unassisted redo next day records delayed retention but adds neither a new task nor a new independent date (17.536042ms)
+✔ supplemental calc family math is checked at independent values; padded answers retain exact quotes; second-line contradictions fail (2.319959ms)
+✔ registered frozen port is consumed by A tools without changing registry; public selection hides trusted grading key (13.746291ms)
+✔ parallel duplicate grades commit one immutable revision, and catalog output mutations cannot replace the trusted answer (9.393875ms)
+✔ same-timestamp cross-version exposure has no provable ordering and cannot establish unseen independence (9.845833ms)
+✔ six explicit subskills have observation, genuinely different transfer and delayed tasks; strict public views hide keys (2.238875ms)
+✔ reference math is independently derived from integer substitutions or explicit language/cost meanings, all typical errors rejected (1.236875ms)
+✔ spatial answers independently derived by trigonometric rotation and edge lengths, with explicit y-up coordinate convention (0.221333ms)
+✔ existing restricted parser accepts equivalents, rejects contradictory chains, defers unsupported syntax and never executes source (0.31875ms)
+✔ candidate constraints filter dimension, knowledge point, exclusions and limit without promising prerequisite mastery (0.735125ms)
+✔ wrong then correct, helped completion, original redo and unseen independent attempts remain distinct immutable facts (41.450375ms)
+✔ no-hint correction is never first independent; no attempt, whitespace and pause do not mean weak ability (21.795375ms)
+✔ hint after submission does not rewrite success; chat help or answer exposure before submission prevents independence (38.349791ms)
+✔ same-day variants cannot establish across-day status; two trusted dates and unseen tasks can; local date uses Shanghai (19.126583ms)
+✔ original opened on an earlier date, repeated raw problem and version aliases do not count as unseen transfer (6.307958ms)
+✔ unknown legacy time/exposure cannot establish independent status, missing grades stay unknown (8.44425ms)
+✔ cross-session rule is configurable and not a standardized assessment (6.98525ms)
+✔ operation retries append no duplicate evidence, different operations for one grade reuse it, fake attempt rejected (6.105917ms)
+✔ real SQLite reopen retains attempts, evidence, snapshots and operation receipts; frozen-port consumer compiles (8.020375ms)
+✔ choice correct alone does not prove reasoning; validated explanation has exact saved-answer quotes (27.159292ms)
+✔ no quote, foreign quote, malformed JSON, unknown points, wrong offsets, extra keys and program/model conflict all defer (70.847625ms)
+✔ model sees only required task/rubric, persisted answer and exposure snapshot, no optional profile/chat/history (9.919583ms)
+✔ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (14.159459ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 407.597792
+
+exitCode=0

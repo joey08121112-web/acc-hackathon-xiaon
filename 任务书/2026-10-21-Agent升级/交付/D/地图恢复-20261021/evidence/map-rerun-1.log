@@ -1,0 +1,16 @@
+$ npx playwright test -c playwright.map.config.ts
+[WebServer] (node:41282) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:41327) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:41340) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests-agent/d/map-restoration.spec.ts:6:1 › connected exploration restores the original map, five places and list switch at phone widths (816ms)
+  ✓  2 tests-agent/d/map-restoration.spec.ts:12:1 › map enters the original confirmation, respects exploration order and reflects SQLite attempts after refresh (1.6s)
+
+  2 passed (3.5s)
+
+EXIT_CODE=0

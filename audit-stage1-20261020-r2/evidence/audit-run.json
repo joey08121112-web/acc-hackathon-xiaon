@@ -1,0 +1,174 @@
+{
+  "startedAt": "2026-10-20T15:31:32.242Z",
+  "results": {
+    "app-title": {
+      "pass": true,
+      "detail": "学伴小N · 慢慢来，也会到达"
+    },
+    "welcome-text": "学伴小N\n认识彼此 · 1/3\n每一步，都算数\n慢慢来就好\nYOUR LITTLE LEARNING COMPANION\nHELLO, I'M N\n慢慢来，\n也会到达。\n\n我是小N，一个 AI 学伴。\n陪你看懂一道题，也陪你找回自己的节奏。\n\n先从七年级数学开始\n由你选择开始、暂停或休息\nAI 也会出错，可以一起核对\n\n提供日常学习支持，不作智力、人格或心理疾病诊断，也不替代现实中的老师和家人。\n\n认识一下小N\n一个本地演示 · 没有真实模型或消息服务",
+    "welcome-ai-identity": {
+      "pass": true,
+      "detail": "页面含AI字样"
+    },
+    "welcome-mascot-half": {
+      "pass": false,
+      "detail": "形象高度占视口 0.00"
+    },
+    "intro-age-grade": {
+      "pass": true,
+      "detail": "年龄段/年级/教材信息存在"
+    },
+    "intro-info-notice": {
+      "pass": true,
+      "detail": "基本服务信息说明存在"
+    },
+    "intro-continue-disabled-before-confirm": {
+      "pass": true,
+      "detail": "未确认前继续不可用"
+    },
+    "guardian-states-seen": {
+      "pass": true,
+      "detail": "待确认/确认失败/已取消/演示完成 四状态均实际走过"
+    },
+    "optional-default-off": {
+      "pass": true,
+      "detail": "[\"false\",\"false\"]"
+    },
+    "declined-optional-enters-basic": {
+      "pass": true,
+      "detail": "拒绝可选功能后进入主页"
+    },
+    "nav-小N": {
+      "pass": true,
+      "detail": ""
+    },
+    "nav-探索": {
+      "pass": true,
+      "detail": ""
+    },
+    "nav-今日": {
+      "pass": true,
+      "detail": ""
+    },
+    "nav-成长": {
+      "pass": true,
+      "detail": ""
+    },
+    "home-three-choices": {
+      "pass": true,
+      "detail": "聊聊/看题/休息同层呈现"
+    },
+    "home-settings-entry": {
+      "pass": true,
+      "detail": ""
+    },
+    "report-empty-not-observed": {
+      "pass": true,
+      "detail": "未作答时报告明确显示尚未观察"
+    },
+    "chat-ai-marked": {
+      "pass": true,
+      "detail": "聊天界面含AI标识"
+    },
+    "chat-invitation-present": {
+      "pass": true,
+      "detail": ""
+    },
+    "s1-02-invite-gone": {
+      "pass": true,
+      "detail": "拒绝后邀请条消失"
+    },
+    "s1-02-quick-gone": {
+      "pass": true,
+      "detail": "同义快捷项不再出现"
+    },
+    "s1-02-active-entry": {
+      "pass": true,
+      "detail": "保留主动入口：我想开始看题"
+    },
+    "s1-02-reply-no-invite": {
+      "pass": true,
+      "detail": "拒绝后的下一轮回复未再邀请"
+    },
+    "long-chat-input-visible": {
+      "pass": true,
+      "detail": "输入区 y=712 h=40"
+    },
+    "short-viewport-no-hoverflow": {
+      "pass": true,
+      "detail": "390x480 scrollWidth差=0px（真实键盘未测）"
+    },
+    "task-flow": {
+      "pass": false,
+      "detail": "EXCEPTION locator.click: Timeout 30000ms exceeded."
+    },
+    "report-hinted": {
+      "pass": false,
+      "detail": "EXCEPTION locator.click: Timeout 30000ms exceeded."
+    },
+    "map-5-places": {
+      "pass": false,
+      "detail": "五维地点齐备"
+    },
+    "map-status-text": {
+      "pass": true,
+      "detail": "状态有文字非仅颜色"
+    },
+    "map-list-entry": {
+      "pass": true,
+      "detail": ""
+    },
+    "map-confirm-copy": {
+      "pass": true,
+      "detail": "进入前说明含可暂停与范围限定"
+    },
+    "s1-01-map-font": {
+      "pass": false,
+      "detail": "EXCEPTION page.evaluate: TypeError: Failed to execute 'getComputedStyle' on 'Window': parameter 1 is not of type 'Element'."
+    },
+    "long-text-320-no-overflow": {
+      "pass": true,
+      "detail": "320px大字体长文本溢出=0px"
+    },
+    "reduced-motion-runtime": {
+      "pass": true,
+      "detail": ".floaty animationName=none"
+    },
+    "settings-我的学习记忆": {
+      "pass": true,
+      "detail": ""
+    },
+    "settings-监护人演示": {
+      "pass": true,
+      "detail": ""
+    },
+    "settings-帮助与支持": {
+      "pass": true,
+      "detail": ""
+    },
+    "settings-重新体验首次进入": {
+      "pass": true,
+      "detail": ""
+    },
+    "settings-重置整个演示": {
+      "pass": true,
+      "detail": ""
+    },
+    "settings-large-font-switch": {
+      "pass": true,
+      "detail": ""
+    },
+    "settings-offline-switch": {
+      "pass": true,
+      "detail": ""
+    },
+    "growth-plan-entry": {
+      "pass": true,
+      "detail": ""
+    },
+    "growth-review-entry": {
+      "pass": true,
+      "detail": ""
+    }
+  }
+}

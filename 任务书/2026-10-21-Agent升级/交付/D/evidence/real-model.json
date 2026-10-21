@@ -1,0 +1,133 @@
+{
+  "model": "glm-5.3-flash",
+  "baseUrl": "https://open.bigmodel.cn/api/coding/paas/v4",
+  "material": "synthetic only",
+  "startedAt": "2026-10-21T00:34:20.543Z",
+  "basic": {
+    "completed": true,
+    "toolCalls": 0
+  },
+  "assessor": {
+    "verdict": "correct",
+    "method": "model_assisted",
+    "evidenceIds": [
+      "9b2d9bbc-9e5d-43b2-8d51-531161be91e5",
+      "e23c5883-1aab-41ae-889c-22e872e7ffc7"
+    ]
+  },
+  "tutor": {
+    "status": "completed",
+    "tools": 1,
+    "error": null
+  },
+  "plannerReporter": {
+    "status": "completed",
+    "error": null,
+    "reportId": "fb057b17-8773-445b-a0ad-27a76181d192",
+    "proposalId": "9262cac5-ca54-46bf-b06c-de78b9878a08",
+    "automaticallyAccepted": 0
+  },
+  "status": "VERIFIED",
+  "runs": [
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-77595730-c42c-46b2-908b-690e3eb89e0c",
+      "operationId": "efbd62ba-f258-49e2-8a6a-5d29734f04f4",
+      "permissionFingerprint": "9284223d42190d3a4abeeea96b760e0cfeff0195304572f4a6a92ccce9631cfc",
+      "providerKind": "real_http",
+      "role": "assessor",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    },
+    {
+      "callIds": [
+        "7ee00fec-e84c-449f-a7f7-831ed2620609"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "assess-27e44d2d-0207-44c2-9704-6682ff2fba05",
+      "operationId": "7ee00fec-e84c-449f-a7f7-831ed2620609",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "real_http",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "call_-7147931173845463015"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-a750b2a5-ba9e-4e60-a9cb-db88199b93b2",
+      "operationId": "0bbe89ea-835a-41c5-affc-4ebeda5e64ee",
+      "permissionFingerprint": "9284223d42190d3a4abeeea96b760e0cfeff0195304572f4a6a92ccce9631cfc",
+      "providerKind": "real_http",
+      "role": "tutor",
+      "rounds": 2,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-7e7921a3-114b-4b06-a0d8-23916271a98e",
+      "operationId": "dba9edc7-6007-44b4-87b4-9e1381676bfb-agent",
+      "permissionFingerprint": "9284223d42190d3a4abeeea96b760e0cfeff0195304572f4a6a92ccce9631cfc",
+      "providerKind": "real_http",
+      "role": "planner",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    }
+  ],
+  "tools": [
+    {
+      "argumentsHash": "b3407bb8253f0d1b4daf800fc176427576cb1317dab1985f16e969fb2cfdae26",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "7ee00fec-e84c-449f-a7f7-831ed2620609",
+      "dataVersion": 24,
+      "errorCode": null,
+      "evidenceIds": [
+        "9b2d9bbc-9e5d-43b2-8d51-531161be91e5",
+        "e23c5883-1aab-41ae-889c-22e872e7ffc7"
+      ],
+      "id": "call-011e07c6ec6a7cd5aca7889f51f90bfed60507f182ae636d",
+      "name": "grade_attempt",
+      "runId": "assess-27e44d2d-0207-44c2-9704-6682ff2fba05",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "b05c9620d58e3cdbe0e7126cd6929e412951df9cfc733a7b3d582ad17c2b5bb9",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "call_-7147931173845463015",
+      "dataVersion": 27,
+      "errorCode": null,
+      "evidenceIds": [
+        "65266135-695c-4ea1-bc90-6b02e9cd27b4",
+        "9b2d9bbc-9e5d-43b2-8d51-531161be91e5",
+        "e23c5883-1aab-41ae-889c-22e872e7ffc7"
+      ],
+      "id": "call-06fed9b965ab5c6f839990d1b16a29a6caa45fa2a09443cd",
+      "name": "query_learning_evidence",
+      "runId": "d-run-a750b2a5-ba9e-4e60-a9cb-db88199b93b2",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    }
+  ],
+  "finishedAt": "2026-10-21T00:35:44.771Z"
+}

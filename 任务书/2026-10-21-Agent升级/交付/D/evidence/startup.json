@@ -1,0 +1,16 @@
+{
+  "command": "XIAON_DB_PATH=.local/d-preview.sqlite npm run dev:learning",
+  "frontend": "http://127.0.0.1:5194/",
+  "frontendStatus": 200,
+  "api": {
+    "schemaVersion": "1.0.0",
+    "status": "ok",
+    "mode": "model",
+    "providerKind": "real_http",
+    "learning": true,
+    "disclosure": "模型模式会向智谱发送最多最近20条聊天（新版Tutor只发送当前消息）、当前必要学习场次/题目/作答/评分依据；Assessor另接收可信rubric及已获准的有效辅导偏好，用于回复与受控工具调用。本机进度和学生确认计划与可选长期偏好分开保存。仅使用合成材料。"
+  },
+  "database": ".local/d-preview.sqlite",
+  "userDatabaseUsed": false,
+  "finalPreviewRestartedAfterAllCodeChanges": true
+}

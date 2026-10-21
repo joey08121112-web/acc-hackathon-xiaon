@@ -1,0 +1,47 @@
+COMMAND: ['node', '--import', 'tsx', '--test', '--test-name-pattern=report immutability|new evidence or', 'tests-agent/c/edges.test.ts', 'tests-agent/c/planning.test.ts']
+✖ new evidence or an unaccepted draft never prevents the student pausing the current confirmed plan (23.756916ms)
+✖ report immutability, correction annotations and queue replay from authoritative grades (26.815917ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 155.217042
+
+✖ failing tests:
+
+test at tests-agent/c/edges.test.ts:1:8685
+✖ new evidence or an unaccepted draft never prevents the student pausing the current confirmed plan (23.756916ms)
+  Error: 计划或依据已更新，请重新核对
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/plugins/planning/index.ts:146:186)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:57:16)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:51:20)
+      at SqliteRepository.once (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:54:15)
+      at PlanningEngine.confirm (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/plugins/planning/index.ts:143:23)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/c/edges.test.ts:126:24)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'conflict',
+    recoverable: true
+  }
+
+test at tests-agent/c/planning.test.ts:1:8645
+✖ report immutability, correction annotations and queue replay from authoritative grades (26.815917ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /first_independent.*cross_session_independent/. Input:
+  
+  '证据版本 4 → 8'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/c/planning.test.ts:104:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '证据版本 4 → 8',
+    expected: /first_independent.*cross_session_independent/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+exitCode=1

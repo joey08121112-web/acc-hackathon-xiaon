@@ -1,0 +1,50 @@
+$ npm run test:agent:d
+
+> xiaon-learning-companion@1.0.0 test:agent:d
+> node scripts/agent/test.mjs d
+
+✔ profiles really differ through B and C: modeling difficulty versus calculation independence (37.899666ms)
+✔ exploration prerequisite and real session limit persist across refresh, support switch and next date (22.337416ms)
+✔ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (57.749334ms)
+✔ Tutor and PlannerReporter native tools are real; six executions/four rounds, illegal tools and forged arguments are gated (9.873792ms)
+✔ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (5.518ms)
+✔ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (11.563208ms)
+✔ retry analysis after timeout uses saved attempt and appends grading revision; report flags old basis (68.142208ms)
+✖ Tutor may quote an already submitted cost expression that coincides with an unused calculation answer, but cannot reveal a current unseen task (8.357916ms)
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (57.02075ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (10.466208ms)
+✔ protected D HTTP routes reject self-granted roles, bypasses, clock input and malicious import atomically (39.343583ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (20.413208ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 361.280667
+
+✖ failing tests:
+
+test at tests-agent/d/controls.test.ts:1:8969
+✖ Tutor may quote an already submitted cost expression that coincides with an unused calculation answer, but cannot reveal a current unseen task (8.357916ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'failed'
+  - 'completed'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/controls.test.ts:74:223)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processTimers (node:internal/timers:615:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'failed',
+    expected: 'completed',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+EXIT_CODE=1

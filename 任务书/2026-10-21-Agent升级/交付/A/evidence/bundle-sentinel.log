@@ -1,0 +1,9 @@
+COMMAND: node scripts/agent/bundle-sentinel.mjs
+UTC: 2026-10-20T16:27:06.365658+00:00
+
+> xiaon-learning-companion@1.0.0 build
+> tsc -b && vite build
+
+src/domain.ts(220,44): error TS2304: Cannot find name 'withTrail'.
+
+exitCode=1

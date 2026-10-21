@@ -1,0 +1,4 @@
+import { defineConfig } from '@playwright/test';
+const ui=5196,api=18936,evidence='../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence';
+process.env.XIAON_D_EVIDENCE=evidence;
+export default defineConfig({testDir:'tests-agent/d',testMatch:['map-restoration.spec.ts','browser.spec.ts'],workers:1,retries:0,timeout:30000,use:{baseURL:`http://127.0.0.1:${ui}`,viewport:{width:390,height:844},timezoneId:'Asia/Shanghai',trace:'off'},outputDir:evidence+'/browser-artifacts',reporter:[['list'],['json',{outputFile:evidence+'/browser-results.json'}]],webServer:[{command:'node --import tsx scripts/agent/d-browser-server.ts',url:`http://127.0.0.1:${api}/api/health`,reuseExistingServer:false,env:{XIAON_D_API_PORT:String(api),XIAON_D_UI_PORT:String(ui)}},{command:`npm run dev -- --host 127.0.0.1 --port ${ui} --strictPort`,url:`http://127.0.0.1:${ui}`,reuseExistingServer:false,env:{XIAON_API_TARGET:`http://127.0.0.1:${api}`}}]});

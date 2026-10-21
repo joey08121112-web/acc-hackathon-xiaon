@@ -1,0 +1,37 @@
+$ npx playwright test -c playwright.d.config.ts
+[WebServer] (node:39189) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:39216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 23 tests using 1 worker
+
+(node:39224) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests-agent/d/browser.spec.ts:16:1 › student choice → attempts → evidence → report/plan → later reviews → state/history, refresh and screenshots (3.3s)
+  ✓   2 tests-agent/d/browser.spec.ts:29:1 › optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh (2.8s)
+  ✓   3 tests-agent/d/browser.spec.ts:40:1 › browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit (1.9s)
+  ✓   4 tests-agent/d/browser.spec.ts:46:1 › network retry, model timeout, explicit reanalysis and cancelled late response preserve one saved attempt and draft (3.1s)
+  ✓   5 tests-agent/d/browser.spec.ts:57:1 › connected main pages retain automated accessibility and reduced-motion support (1.3s)
+  ✓   6 tests-agent/d/legacy-accessibility.spec.ts:4:1 › 四个主页面的 WCAG A/AA 自动检查 (1.2s)
+  ✓   7 tests-agent/d/legacy-experience.spec.ts:34:1 › 01 首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入 (621ms)
+  ✓   8 tests-agent/d/legacy-experience.spec.ts:76:1 › 02 选择休息、刷新与今日页都停止任务催促 (672ms)
+  ✓   9 tests-agent/d/legacy-experience.spec.ts:91:1 › 03 错误、提示、暂停、刷新、修正、新题独立完成改变报告 (4.0s)
+  ✓  10 tests-agent/d/legacy-experience.spec.ts:140:1 › 04 断网提交保留草稿，失败重试、重复点击与刷新不重复计题 (2.6s)
+  ✓  11 tests-agent/d/legacy-experience.spec.ts:160:1 › 05 五维地图和列表完整任务、空间视觉选择与报告证据 (5.9s)
+  ✓  12 tests-agent/d/legacy-experience.spec.ts:196:1 › 06 周计划接受、减量、改期、暂不开始与今日接续 (14.6s)
+  ✓  13 tests-agent/d/legacy-experience.spec.ts:227:1 › 07 记忆开启、主动保存、更正、停止、删除；关闭不新增长期记忆 (2.5s)
+  ✓  14 tests-agent/d/legacy-experience.spec.ts:271:1 › 08 示例图片真实裁剪、像素遮挡、刷新恢复、手动核对与移除清理 (1.3s)
+  ✓  15 tests-agent/d/legacy-experience.spec.ts:333:1 › 09 求助失败、取消、安全联系人替代、模拟成功并非已读 (3.5s)
+  ✓  16 tests-agent/d/legacy-experience.spec.ts:373:1 › 10 聊天等待、暂停、恢复、断网失败、重试不重复消息 (3.4s)
+  ✓  17 tests-agent/d/legacy-experience.spec.ts:399:1 › 11 监护人信息申请范围、必要核验、处理中、结果 (1.9s)
+  ✓  18 tests-agent/d/legacy-experience.spec.ts:414:1 › 12 常见手机宽度、长文本、大字体与减少动效，无横向溢出 (1.6s)
+  ✓  19 tests-agent/d/legacy-experience.spec.ts:453:1 › 13 错误后的补充题分支与10题上限经刷新仍生效 (9.8s)
+  ✓  20 tests-agent/d/legacy-experience.spec.ts:480:1 › 14 提交等待期间关闭长期记忆，迟到结果不追加长期条目 (1.7s)
+  ✓  21 tests-agent/d/legacy-experience.spec.ts:508:1 › 15 聊天中明确选择休息，后续回应和入口停止学习邀请 (3.7s)
+  ✓  22 tests-agent/d/legacy-experience.spec.ts:526:1 › 16 重新首次介绍保留进度，重置演示清空进度与图片 (2.3s)
+  ✓  23 tests-agent/d/offline.spec.ts:4:1 › new offline candidate is self-contained, never connects agents, and retains local rules without touching the shared ZIP (1.7s)
+
+  23 passed (1.3m)
+
+EXIT_CODE=0

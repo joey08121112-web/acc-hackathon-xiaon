@@ -1,0 +1,4 @@
+COMMAND: ['node', '--import', 'tsx', 'tests-agent/c/examples.ts']
+Synthetic four-profile outputs and 25-day virtual timeline written to C/evidence; no actual waiting.
+
+exitCode=0

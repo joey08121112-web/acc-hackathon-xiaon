@@ -1,0 +1,79 @@
+[
+  {
+    "path": "evidence/browser-rerun-2-artifacts/browser-optional-memory-ch-82e4e-e-and-reset-survive-refresh/trace.zip",
+    "beforeSha256": "a8f6dc75689a1050667b8084f557df48d4eef04653e8906e62895986eb0908b7",
+    "afterSha256": "3d29b8b8136a9762385017e9b3256f97469555f92a083ae63a033a46b22ce286",
+    "redactedEntries": 3,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-rerun-2-artifacts/browser-student-choice-→-a-73d62-ory-refresh-and-screenshots/trace.zip",
+    "beforeSha256": "fea67dbb7c581ec967e02881dfd9c45fdee42359dc31f0bfd772e5849a45b659",
+    "afterSha256": "9a794a22760c66199d06c97f8efb3f0c74012381a10a58f4bea3d1d6a0012043",
+    "redactedEntries": 5,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-first-artifacts/browser-optional-memory-ch-82e4e-e-and-reset-survive-refresh/trace.zip",
+    "beforeSha256": "7fdd8ac1b82fd43a2a16cd755666dd41dde056bba01a46b82851e24d184345ab",
+    "afterSha256": "9c64aa4d6a0fa041d8d19ab4cabd37dfa09db271d5b318676827bf7f230f196b",
+    "redactedEntries": 2,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-first-artifacts/browser-browser-legacy-imp-e24a1-dates-320-390-430-pages-fit/trace.zip",
+    "beforeSha256": "265527d63ed599471ee12fe961ed49e5cec26b7f1de6685d64cec58c7b7e83aa",
+    "afterSha256": "e2c104d40041359d5f135945695e949dd82f3578c52b21625516628938d0f19d",
+    "redactedEntries": 2,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-first-artifacts/browser-student-choice-→-a-73d62-ory-refresh-and-screenshots/trace.zip",
+    "beforeSha256": "85a4640f11cf4c575068d4f1f408e4e4fbad3773ffe93e0cb85ea643887c08a0",
+    "afterSha256": "781a4a471bffebf7d49508ca3d56ecf1280076e032fa7cd73d01950a7823ccfd",
+    "redactedEntries": 2,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-rerun-1-artifacts/browser-optional-memory-ch-82e4e-e-and-reset-survive-refresh/trace.zip",
+    "beforeSha256": "d7be0edde116dd85ec237ec72efa448d5cd03d14117707072034b1db737833ec",
+    "afterSha256": "074d3842073f91f1fed4757f40f7d41c1c1740ffda72dbc9e85a08d41fc43df9",
+    "redactedEntries": 2,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-rerun-1-artifacts/browser-browser-legacy-imp-e24a1-dates-320-390-430-pages-fit/trace.zip",
+    "beforeSha256": "a391afb37fa79c675b7894bbcf3397265e0b1d9092a2f4b589cf2c7dbc488826",
+    "afterSha256": "bd6638a8251056f5f6f1b74bfec49f01b6a60d7ae7be239ea52268f857b16ffd",
+    "redactedEntries": 2,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-rerun-1-artifacts/browser-student-choice-→-a-73d62-ory-refresh-and-screenshots/trace.zip",
+    "beforeSha256": "69b3b047bde3f560f9ee142da7fbaa1dedc9525a1cd438968bf6948962a4e3bb",
+    "afterSha256": "ee984779a0e3dfe702377b7d409c1a9aa315ee171f7b7ff5b7d035c5ba9bda9e",
+    "redactedEntries": 3,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-expanded-first-artifacts/legacy-accessibility-四个主页面的-WCAG-A-AA-自动检查/trace.zip",
+    "beforeSha256": "615dfb9d4f5994e7784e15d168c7a65aaa4f6b748520e019a4200f418cfc7cd9",
+    "afterSha256": "615dfb9d4f5994e7784e15d168c7a65aaa4f6b748520e019a4200f418cfc7cd9",
+    "redactedEntries": 0,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-expanded-first-artifacts/browser-connected-main-pag-0e571--and-reduced-motion-support/trace.zip",
+    "beforeSha256": "ecff71b019e26e8fc7038599c7b3c5f508d744b69cbc6144114699fa1378ce63",
+    "afterSha256": "bfa3cd82bb9f69a14264e08237219a0a65a17f1ecf383b59bb40bbdbdff5be10",
+    "redactedEntries": 2,
+    "eventsAndScreenshotsRetained": true
+  },
+  {
+    "path": "evidence/browser-expanded-first-artifacts/legacy-experience-13-错误后的补充题分支与10题上限经刷新仍生效/trace.zip",
+    "beforeSha256": "a88aa5dd8fdebecb979424e9722c6b81519766aacf35e8cb42842d41b32cad9b",
+    "afterSha256": "a88aa5dd8fdebecb979424e9722c6b81519766aacf35e8cb42842d41b32cad9b",
+    "redactedEntries": 0,
+    "eventsAndScreenshotsRetained": true
+  }
+]

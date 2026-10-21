@@ -1,0 +1,18 @@
+{
+  "checkedAtUtc": "2026-10-20T16:43:31.322179+00:00",
+  "prerequisites": [
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/A/HANDOFF.md",
+      "exists": true
+    },
+    {
+      "path": "outputs/xiaon/shared/learning-contracts.ts",
+      "exists": true
+    },
+    {
+      "path": "outputs/xiaon/shared/learning-contracts.schema.json",
+      "exists": true
+    }
+  ],
+  "cProductPathsCreated": []
+}

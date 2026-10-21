@@ -1,0 +1,16 @@
+COMMAND: ['env', 'TZ=America/Los_Angeles', 'node', '--import', 'tsx', '--test', '--test-name-pattern=Shanghai|absence', 'tests-agent/c/edges.test.ts', 'tests-agent/c/planning.test.ts']
+✔ absence and queries are read-only; UTC strings with omitted milliseconds compare by instant (21.944125ms)
+✔ Shanghai midnight alone cannot advance a review stage; a real day can (15.232958ms)
+✔ 1/3/7/14 days, exact due boundary, absence and same-day repetition never fast-forward (33.008708ms)
+✔ help, incorrect and needs_review schedule differently; no outcome for absence (24.864791ms)
+✔ Shanghai midnight, host TZ independence, legacy unknown never seeds due or stability (6.938583ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 154.807208
+
+exitCode=0

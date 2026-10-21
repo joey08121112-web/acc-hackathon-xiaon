@@ -1,0 +1,19 @@
+ README.md                                          |   2 +-
+ audit-stage2-20261020/REPORT.md                    |  30 +++++++++--
+ outputs/evidence/08-map.png                        | Bin 82884 -> 84028 bytes
+ outputs/evidence/12-memory.png                     | Bin 70288 -> 70256 bytes
+ ...75\277\347\224\250\350\257\264\346\230\216.txt" |   1 +
+ ...200-\345\255\246\344\274\264\345\260\217N.html" |  24 ++++-----
+ outputs/xiaon/.gitignore                           |   3 ++
+ outputs/xiaon/README.md                            |   6 +--
+ outputs/xiaon/index.html                           |   2 +-
+ outputs/xiaon/public/offline.html                  |  24 ++++-----
+ ...17\213\344\275\223\351\252\214\345\214\205.zip" | Bin 115068 -> 116949 bytes
+ outputs/xiaon/scripts/build-offline.mjs            |  12 ++++-
+ outputs/xiaon/src/App.tsx                          |  59 ++++++++++++++++-----
+ outputs/xiaon/src/data.ts                          |   1 -
+ outputs/xiaon/src/domain.test.ts                   |  23 ++++++++
+ ...17\213\344\275\223\351\252\214\345\214\205.zip" | Bin 115068 -> 116949 bytes
+ 16 files changed, 137 insertions(+), 50 deletions(-)
+
+exitCode=0

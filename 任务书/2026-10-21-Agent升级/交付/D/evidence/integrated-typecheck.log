@@ -1,0 +1,7 @@
+$ npm run typecheck:agent
+
+> xiaon-learning-companion@1.0.0 typecheck:agent
+> tsc -p tsconfig.agent.json
+
+
+EXIT_CODE=0

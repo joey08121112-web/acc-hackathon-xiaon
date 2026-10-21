@@ -1,0 +1,66 @@
+$ npx playwright test -c playwright.map.config.ts
+[WebServer] (node:40879) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:40926) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:40940) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests-agent/d/map-restoration.spec.ts:7:1 › connected exploration restores the original map, five places and list switch at phone widths (5.5s)
+(node:40972) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests-agent/d/map-restoration.spec.ts:13:1 › map enters the original confirmation, respects exploration order and reflects SQLite attempts after refresh (30.0s)
+
+
+  1) tests-agent/d/map-restoration.spec.ts:7:1 › connected exploration restores the original map, five places and list switch at phone widths 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.exploration-map .map-art')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.exploration-map .map-art') with timeout 5000ms
+      - waiting for locator('.exploration-map .map-art')
+
+
+       6 | async function start(page:import('@playwright/test').Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N',exact:true}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'探索',exact:true}).click();}
+       7 | test('connected exploration restores the original map, five places and list switch at phone widths',async({page})=>{
+    >  8 |  await start(page);await expect(page.locator('.exploration-map .map-art')).toBeVisible();
+         |                                                                            ^
+       9 |  for(const width of [320,390,430]){await page.setViewportSize({width,height:844});await expect(page.locator('.map-node')).toHaveCount(5);for(const place of ['理解花园','逻辑小桥','计算工坊','生活集市','空间山丘'])await expect(page.locator('.map-node').filter({hasText:place})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`${evidence}/map-${width}.png`,fullPage:true});}
+      10 |  await page.getByRole('button',{name:'列表入口',exact:true}).click();await expect(page.locator('.dimension-list > button')).toHaveCount(5);await expect(page.locator('.exploration-map')).not.toBeVisible();await page.getByRole('button',{name:'地图入口',exact:true}).click();await expect(page.locator('.exploration-map')).toBeVisible();
+      11 |  const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(axe.violations.map(v=>({id:v.id,targets:v.nodes.map(n=>n.target)}))).toEqual([]);
+        at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/map-restoration.spec.ts:8:76
+
+    Error Context: ../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence/browser-artifacts/map-restoration-connected--77298-list-switch-at-phone-widths/error-context.md
+
+  2) tests-agent/d/map-restoration.spec.ts:13:1 › map enters the original confirmation, respects exploration order and reflects SQLite attempts after refresh 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('.map-node').filter({ hasText: '计算工坊' })
+
+
+      12 | });
+      13 | test('map enters the original confirmation, respects exploration order and reflects SQLite attempts after refresh',async({page})=>{
+    > 14 |  await start(page);await page.locator('.map-node').filter({hasText:'计算工坊'}).click();await expect(page.getByRole('heading',{name:'欢迎来到计算工坊',exact:true})).toBeVisible();await expect(page.getByText(/这次探索先从理解与逻辑两站开始/)).toBeVisible();await page.getByRole('button',{name:'先去理解花园'}).click();await page.getByRole('button',{name:'确认开始这道题',exact:true}).click();await page.getByLabel('我的作答与过程',{exact:true}).fill('2x-3\n先求x的2倍，再减去3。');await page.getByRole('button',{name:'保存尝试并核对'}).click();await expect(page.getByText('这次核对正确',{exact:true})).toBeVisible();
+         |                                                                             ^
+      15 |  await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'探索',exact:true}).click();await expect(page.locator('.map-node').filter({hasText:'理解花园'})).toContainText('完成');await page.reload();await expect(page.locator('.map-node').filter({hasText:'理解花园'})).toContainText('完成');await page.locator('.map-node').filter({hasText:'计算工坊'}).click();await expect(page.getByRole('button',{name:'先去逻辑小桥'})).toBeVisible();await page.getByRole('button',{name:'先看看地图',exact:true}).click();await expect(page.getByRole('dialog')).not.toBeVisible();
+      16 |  await page.getByRole('button',{name:'我的与设置',exact:true}).click();await page.getByRole('switch',{name:'大字体'}).click();await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'探索',exact:true}).click();await page.setViewportSize({width:320,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`${evidence}/map-320-large.png`,fullPage:true});
+      17 | });
+        at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/map-restoration.spec.ts:14:77
+
+    Error Context: ../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence/browser-artifacts/map-restoration-map-enters-37c51-Lite-attempts-after-refresh/error-context.md
+
+  2 failed
+    tests-agent/d/map-restoration.spec.ts:7:1 › connected exploration restores the original map, five places and list switch at phone widths 
+    tests-agent/d/map-restoration.spec.ts:13:1 › map enters the original confirmation, respects exploration order and reflects SQLite attempts after refresh 
+
+EXIT_CODE=1

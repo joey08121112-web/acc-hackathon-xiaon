@@ -1,0 +1,207 @@
+[
+  {
+    "path": "outputs/xiaon/.env.example",
+    "sha256": "dc261a167aaafdc3c0a431714f81f1c62edd7c56775f550608e74658472711a9",
+    "bytes": 1692
+  },
+  {
+    "path": "outputs/xiaon/.gitignore",
+    "sha256": "93ff2da16293ee6a04a6bbdc855e361754e132eccf9ea7301746fb066e39fe5a",
+    "bytes": 169
+  },
+  {
+    "path": "outputs/xiaon/package-lock.json",
+    "sha256": "fc3e5aa73ccc37ea9423931bba33ea5623ec2797009f337d90ac2a558c02f096",
+    "bytes": 66446
+  },
+  {
+    "path": "outputs/xiaon/package.json",
+    "sha256": "47c05cc09e81764e37b0d4e9b010b0f49511d35e263e46a9bdf996deee850313",
+    "bytes": 1575
+  },
+  {
+    "path": "outputs/xiaon/playwright.agent.config.ts",
+    "sha256": "6601b862d3c95f47f8fc59c70daa44dec58edd00268078e072bbc893e137dc10",
+    "bytes": 941
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/browser-server.ts",
+    "sha256": "bfec33493ddcb15f90b893820fc393fd4ac09ce7bc561480c5c40fc288aae886",
+    "bytes": 885
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/bundle-sentinel.mjs",
+    "sha256": "23190bbb5f3d52d3ce29480d745bdefd7812e2dcca14762395898521a3e46891",
+    "bytes": 878
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/real-smoke.ts",
+    "sha256": "744698fe46d5f79df5274dc34c617834f330cedf8a1f7a787844cdeac4f2dcf1",
+    "bytes": 1713
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/schema.ts",
+    "sha256": "a282ca7fc51bd6c7f9d2a576c4ff6c40d98f6850d57382719771d296e3280d01",
+    "bytes": 686
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/service-smoke.mjs",
+    "sha256": "98085750dc7860b2237e0c258909f1ff58474a06881c7fb736c754861ea16009",
+    "bytes": 2612
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/test.mjs",
+    "sha256": "ee0ae563ba9969e88bf3e3d2ff76997dcf4fb6e81826257e1aa8e98ba94a36ec",
+    "bytes": 836
+  },
+  {
+    "path": "outputs/xiaon/scripts/agent/trace.ts",
+    "sha256": "29e18e9370149df0f30a02837a482b3608af6728050a544af4965189e3cde175",
+    "bytes": 1436
+  },
+  {
+    "path": "outputs/xiaon/server/bootstrap.ts",
+    "sha256": "bd20bb785eb763246dea2494f56cc04086b59cf7839b6e3b50c202d722723a02",
+    "bytes": 2645
+  },
+  {
+    "path": "outputs/xiaon/server/core/agent.ts",
+    "sha256": "d9f16ff261681a850d9320b8e35db129b460a190a88732a2f83afea0e3c210da",
+    "bytes": 6877
+  },
+  {
+    "path": "outputs/xiaon/server/core/clock.ts",
+    "sha256": "8edc32fe953276ab7f7780187b045f6a6ffc355f0ed2ddcaa0a268d136694485",
+    "bytes": 615
+  },
+  {
+    "path": "outputs/xiaon/server/core/errors.ts",
+    "sha256": "c0c0a0ae2a4de241e517bd3ea258ec50ec9560820c1f3f159f4aa0779e55995a",
+    "bytes": 494
+  },
+  {
+    "path": "outputs/xiaon/server/core/events.ts",
+    "sha256": "4d9d56f788ac9f4feb59a08e08ea8cf1d268bae7116942d1a1ab5eaee6f4c820",
+    "bytes": 7375
+  },
+  {
+    "path": "outputs/xiaon/server/http/server.ts",
+    "sha256": "b80d7f992f81352b619203f5696318920230b1e3827793f1a3f587dfe7a84c25",
+    "bytes": 5835
+  },
+  {
+    "path": "outputs/xiaon/server/index.ts",
+    "sha256": "79ca43a235bad222aae72c96cd055b9b28e1e95454948ce6ac81219598c5cf55",
+    "bytes": 1118
+  },
+  {
+    "path": "outputs/xiaon/server/providers/config.ts",
+    "sha256": "78d6b6db2bacb157cedb2602ac4db4b41fd6a4bde7ad7d349141c191327e96ae",
+    "bytes": 1556
+  },
+  {
+    "path": "outputs/xiaon/server/providers/glm.ts",
+    "sha256": "8ac2750ca4cdcb37d661dee23f359006d892437c95d0e3327952d09179cd2dcb",
+    "bytes": 4021
+  },
+  {
+    "path": "outputs/xiaon/server/providers/synthetic.ts",
+    "sha256": "515262590228bffce149f88cc30f2ae0cd758a43bbdba7900cc96b4b59392f86",
+    "bytes": 1420
+  },
+  {
+    "path": "outputs/xiaon/server/storage/import-legacy.ts",
+    "sha256": "804f321f427fed81bb76c3516e7ce3eabc2a79f9a04f04ed7e0631621062bff3",
+    "bytes": 2720
+  },
+  {
+    "path": "outputs/xiaon/server/storage/repository.ts",
+    "sha256": "6c6901033ed4026e43965ff2213fd18b7f82d8b6a81f69065e999704a141532a",
+    "bytes": 6555
+  },
+  {
+    "path": "outputs/xiaon/server/storage/testing.ts",
+    "sha256": "e16dc6fda58a249d85f873cc69796bcd51fab5daba58800dcf83efc2c3693819",
+    "bytes": 738
+  },
+  {
+    "path": "outputs/xiaon/server/tools/legacy.ts",
+    "sha256": "cce8c8ecde63c2d4daee91edb123e13baad2119c654176ec9f9be5b80cad2bf0",
+    "bytes": 4868
+  },
+  {
+    "path": "outputs/xiaon/server/tools/registry.ts",
+    "sha256": "b8c00e9a00f816498d19912857c665ac297a4e752d7de19504a834f218907cfc",
+    "bytes": 7090
+  },
+  {
+    "path": "outputs/xiaon/shared/learning-contracts.schema.json",
+    "sha256": "3c3f1949420c6a0b8768ebf7de56935d5838fb89ef795deb1a80cd0ef1157d01",
+    "bytes": 153839
+  },
+  {
+    "path": "outputs/xiaon/shared/learning-contracts.ts",
+    "sha256": "8d9f73257ab36ca78a8965c0ffcd879f46b301b5638ee5300092b5b1574509b8",
+    "bytes": 16436
+  },
+  {
+    "path": "outputs/xiaon/src/agent-client/index.ts",
+    "sha256": "09c9b9a54ac7d9005bc3923800899ddf04062cea0a396f1ee7c37d5ba7468ea7",
+    "bytes": 2073
+  },
+  {
+    "path": "outputs/xiaon/src/ai.ts",
+    "sha256": "a75ae6fbfb6d5513933d9987aa23c19861ff6b19dfcbc2690955353b5d54e0ea",
+    "bytes": 1187
+  },
+  {
+    "path": "outputs/xiaon/src/vite-env.d.ts",
+    "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+    "bytes": 38
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/browser.spec.ts",
+    "sha256": "1a9096b1aeb60d6a7e8c4f3c3910822565fd696548f45b0a2e666a84ea129649",
+    "bytes": 3074
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/consumers.ts",
+    "sha256": "d0a52af1a4adcfad88ba78aaa6a4c42e7ff4e1b735f8fa806a70feaf1cff0dfb",
+    "bytes": 1847
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/contracts.test.ts",
+    "sha256": "b2d20169dfe2584eefdaf77b99efc18bc62e60530ee49b09898f5c3a30664dba",
+    "bytes": 2757
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/edges.test.ts",
+    "sha256": "2a72033c3d39c18a816ad8f345a83cd4ef719bfded60d9ec52410accd68a0097",
+    "bytes": 7146
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/glm-config.test.ts",
+    "sha256": "02dece5ee0cc8993f87bfb60bd0659357f650d73f3e88d92b675f27a0baee532",
+    "bytes": 5504
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/http.test.ts",
+    "sha256": "be945a59c4add478c6e86b8a923a4680f1c49198a3e3a2b946a4c2f003aa723d",
+    "bytes": 3487
+  },
+  {
+    "path": "outputs/xiaon/tests-agent/a/runtime.test.ts",
+    "sha256": "8a3041bdfce451b5db91947d338be445a134385190ad41f53af69714318ae710",
+    "bytes": 9502
+  },
+  {
+    "path": "outputs/xiaon/tsconfig.agent.json",
+    "sha256": "9a5192219e09070a2329a13dc2e672581f13ce8a592457849f45635f9a833645",
+    "bytes": 207
+  },
+  {
+    "path": "outputs/xiaon/vite.config.ts",
+    "sha256": "6b4257a6aad41dcd68a259e435b546a4a588027a76d9709e85075732ba9ef199",
+    "bytes": 289
+  }
+]

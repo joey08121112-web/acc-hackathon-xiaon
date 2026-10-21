@@ -1,0 +1,20 @@
+$ npx playwright test -c playwright.d.config.ts browser.spec.ts offline.spec.ts
+[WebServer] (node:36840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:36889) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:36895) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests-agent/d/browser.spec.ts:16:1 › student choice → attempts → evidence → report/plan → later reviews → state/history, refresh and screenshots (3.2s)
+  ✓  2 tests-agent/d/browser.spec.ts:29:1 › optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh (2.7s)
+  ✓  3 tests-agent/d/browser.spec.ts:40:1 › browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit (2.0s)
+  ✓  4 tests-agent/d/browser.spec.ts:46:1 › network retry, model timeout, explicit reanalysis and cancelled late response preserve one saved attempt and draft (3.4s)
+  ✓  5 tests-agent/d/browser.spec.ts:57:1 › connected main pages retain automated accessibility and reduced-motion support (1.3s)
+  ✓  6 tests-agent/d/offline.spec.ts:4:1 › new offline candidate is self-contained, never connects agents, and retains local rules without touching the shared ZIP (1.7s)
+
+  6 passed (15.5s)
+
+EXIT_CODE=0

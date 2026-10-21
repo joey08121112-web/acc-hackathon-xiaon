@@ -1,0 +1,30 @@
+$ npm run test:agent:d
+
+> xiaon-learning-companion@1.0.0 test:agent:d
+> node scripts/agent/test.mjs d
+
+✔ profiles really differ through B and C: modeling difficulty versus calculation independence (37.99175ms)
+✔ exploration prerequisite and real session limit persist across refresh, support switch and next date (20.779667ms)
+✔ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (57.301292ms)
+✔ Tutor and PlannerReporter native tools are real; six executions/four rounds, illegal tools and forged arguments are gated (8.989083ms)
+✔ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (5.271042ms)
+✔ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (11.39425ms)
+✔ retry analysis after timeout uses saved attempt and appends grading revision; report flags old basis (68.548584ms)
+✔ Tutor may quote an already submitted cost expression that coincides with an unused calculation answer, but cannot reveal a current unseen task (10.179625ms)
+✔ student rest takes priority over an in-flight model operation and cancels its late text (5.672125ms)
+✔ new tool handlers return actual C queues/proposals and a non-writing memory candidate (9.800625ms)
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (59.84225ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (8.87325ms)
+✔ an unseen review opened yesterday but submitted today cannot advance C when B classifies the preview as seen (15.140958ms)
+✔ protected D HTTP routes reject self-granted roles, bypasses, clock input and malicious import atomically (37.665ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (21.723708ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 363.554791
+
+EXIT_CODE=0

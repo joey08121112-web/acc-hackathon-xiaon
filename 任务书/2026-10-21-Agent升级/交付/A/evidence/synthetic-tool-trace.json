@@ -1,0 +1,49 @@
+{
+  "evidenceLevel": "synthetic_model_real_sqlite_handlers_self_test",
+  "run": {
+    "schemaVersion": "1.0.0",
+    "id": "run-d171117d4a152ed46c1dcd089e4bb513eb001e3e0ee9287e",
+    "operationId": "trace-chat",
+    "role": "tutor",
+    "providerKind": "synthetic",
+    "status": "completed",
+    "rounds": 2,
+    "toolExecutions": 1,
+    "callIds": [
+      "synthetic-call-3"
+    ],
+    "permissionFingerprint": "9284223d42190d3a4abeeea96b760e0cfeff0195304572f4a6a92ccce9631cfc",
+    "startedAt": "2026-10-21T00:00:00.000Z",
+    "finishedAt": "2026-10-21T00:00:00.000Z",
+    "error": null
+  },
+  "calls": [
+    {
+      "argumentsHash": "c89a148be40e6752261e3038609a4b68de22fa3bfdaf32f884edffb8480b9bbe",
+      "at": "2026-10-21T00:00:00.000Z",
+      "callId": "synthetic-call-3",
+      "dataVersion": 19,
+      "errorCode": null,
+      "evidenceIds": [
+        "8390a234-b497-4744-83a8-3f4e32f5ef37"
+      ],
+      "id": "call-6fd594726766e4bfcd8488450938ca0d3a8b2447d2abff7e",
+      "name": "query_learning_evidence",
+      "runId": "run-d171117d4a152ed46c1dcd089e4bb513eb001e3e0ee9287e",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    }
+  ],
+  "modelReceivedToolResults": [
+    {
+      "ok": true,
+      "callId": "synthetic-call-3",
+      "evidenceIds": [
+        "8390a234-b497-4744-83a8-3f4e32f5ef37"
+      ],
+      "dataVersion": 19
+    }
+  ],
+  "studentRawTextIncluded": false,
+  "credentialsIncluded": false
+}

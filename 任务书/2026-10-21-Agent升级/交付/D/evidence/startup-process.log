@@ -1,0 +1,14 @@
+
+> xiaon-learning-companion@1.0.0 dev:learning
+> node scripts/agent/dev.mjs
+
+学伴小N：http://127.0.0.1:5194（API 18931，仅监听本机）；Ctrl+C 只停止本命令启动的两个进程。
+
+  VITE v7.3.7  ready in 62 ms
+
+  ➜  Local:   http://127.0.0.1:5194/
+学伴小N 本地 API http://127.0.0.1:18931 (model); 合成材料模式，仅本机使用
+8:56:22 AM [vite] (client) hmr update /src/components/learning/LearningPages.tsx
+8:56:22 AM [vite] (client) hmr update /src/App.tsx
+8:57:58 AM [vite] (client) hmr update /src/App.tsx
+8:57:58 AM [vite] (client) hmr update /src/components/learning/ExplorationMap.tsx

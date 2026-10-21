@@ -1,6 +1,21 @@
+# 2026-10-21 Agent升级 · 当前入口
+
+D集成版本在 `outputs/xiaon`，启动：
+
+```sh
+cd '/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon'
+npm run dev:learning
+```
+
+打开 http://127.0.0.1:5194/ 。本机Node/SQLite与受控三角色已接线；模型、迁移、数据用途和离线边界见[应用运行说明](outputs/xiaon/README.md)。[D交付](任务书/2026-10-21-Agent升级/交付/D/HANDOFF.md)与[验收矩阵](任务书/2026-10-21-Agent升级/交付/D/ACCEPTANCE.md)记录独立模块复核、集成自验、模拟及真实模型的证据。
+
+没有commit/push/部署，没有替换原分享ZIP。下方为先前交付与迁移记录，测试数及5173状态是历史时点，不能代替本轮证据。
+
+---
+
 # ACC黑客松 · 学伴小N
 
-本次小N项目和交付材料已迁至这个目录。`audit-stage1-20261020/` 为另外新增的审计资料，迁移时保留未改动。阶段2审查已完成：[audit-stage2-20261020/REPORT.md](audit-stage2-20261020/REPORT.md)（结论：不通过，1项P1待修复）。
+本次小N项目和交付材料已迁至这个目录。`audit-stage1-20261020/` 为另外新增的审计资料，迁移时保留未改动。阶段2审查已完成：[audit-stage2-20261020/REPORT.md](audit-stage2-20261020/REPORT.md)（结论：不通过，1项P1）。审查发现的 3 项问题及打包脚本缺陷已修复：[fixes-stage2-20261020/FIX-REPORT.md](fixes-stage2-20261020/FIX-REPORT.md)（修复者自验 22/22 单元、18/18 浏览器通过，待独立复验后改判）。
 
 - **打开体验**：http://localhost:5173/
 - **打开与分享说明**：http://localhost:5173/share.html

@@ -1,0 +1,4 @@
+$ node scripts/agent/service-smoke.mjs
+{"service":"actual_child_process_restart","bind":"127.0.0.1","port":18933,"attemptCount":1,"idempotencyPreserved":true,"mode":"local_rules","realModel":"NOT_RUN_LOCAL_RULES_RESTART_TEST"}
+
+EXIT_CODE=0

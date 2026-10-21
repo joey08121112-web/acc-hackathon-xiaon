@@ -1,0 +1,1052 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "playwright.d.config.ts"
+    ],
+    "configFile": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/playwright.d.config.ts",
+    "rootDir": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d",
+        "snapshotDir": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5194",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "timezoneId": "Asia/Shanghai",
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../../任务书/2026-10-21-Agent升级/交付/D/evidence/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "browser.spec.ts",
+      "file": "browser.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "student choice → attempts → evidence → report/plan → later reviews → state/history, refresh and screenshots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3099,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:34:51.178Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-0df829cd9393361be1e6",
+          "file": "browser.spec.ts",
+          "line": 16,
+          "column": 1
+        },
+        {
+          "title": "optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2707,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:34:54.463Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-4c4f4f8c83e79602b50c",
+          "file": "browser.spec.ts",
+          "line": 29,
+          "column": 1
+        },
+        {
+          "title": "browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2046,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:34:57.175Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-1862011765bd5174a071",
+          "file": "browser.spec.ts",
+          "line": 40,
+          "column": 1
+        },
+        {
+          "title": "network retry, model timeout, explicit reanalysis and cancelled late response preserve one saved attempt and draft",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2975,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:34:59.225Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-45dd6cfb3877d5d870bd",
+          "file": "browser.spec.ts",
+          "line": 46,
+          "column": 1
+        },
+        {
+          "title": "connected main pages retain automated accessibility and reduced-motion support",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 647,
+                  "error": {
+                    "message": "Error: 小N\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 10\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"targets\": Array [\u001b[39m\n\u001b[31m+       Array [\u001b[39m\n\u001b[31m+         \".text-button\",\u001b[39m\n\u001b[31m+       ],\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: 小N\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 10\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"targets\": Array [\u001b[39m\n\u001b[31m+       Array [\u001b[39m\n\u001b[31m+         \".text-button\",\u001b[39m\n\u001b[31m+       ],\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:58:242",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts",
+                      "column": 242,
+                      "line": 58
+                    },
+                    "snippet": "  56 | test('connected main pages retain automated accessibility and reduced-motion support',async({page})=>{\n  57 |  await page.emulateMedia({reducedMotion:'reduce'});await onboard(page);\n> 58 |  for(const name of ['小N','探索','今日','成长']){await tab(page,name);const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(report.violations.map(v=>({id:v.id,targets:v.nodes.map(n=>n.target)})),name).toEqual([]);}\n     |                                                                                                                                                                                                                                                  ^\n  59 |  await memory(page);const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(report.violations).toEqual([]);\n  60 | });\n  61 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts",
+                        "column": 242,
+                        "line": 58
+                      },
+                      "message": "Error: 小N\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 10\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"targets\": Array [\u001b[39m\n\u001b[31m+       Array [\u001b[39m\n\u001b[31m+         \".text-button\",\u001b[39m\n\u001b[31m+       ],\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  56 | test('connected main pages retain automated accessibility and reduced-motion support',async({page})=>{\n  57 |  await page.emulateMedia({reducedMotion:'reduce'});await onboard(page);\n> 58 |  for(const name of ['小N','探索','今日','成长']){await tab(page,name);const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(report.violations.map(v=>({id:v.id,targets:v.nodes.map(n=>n.target)})),name).toEqual([]);}\n     |                                                                                                                                                                                                                                                  ^\n  59 |  await memory(page);const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(report.violations).toEqual([]);\n  60 | });\n  61 |\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:58:242"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:02.204Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-connected-main-pag-0e571--and-reduced-motion-support/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-connected-main-pag-0e571--and-reduced-motion-support/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts",
+                    "column": 242,
+                    "line": 58
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-d310a4fa991a60f6e872",
+          "file": "browser.spec.ts",
+          "line": 56,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "legacy-accessibility.spec.ts",
+      "file": "legacy-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "四个主页面的 WCAG A/AA 自动检查",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1458,
+                  "error": {
+                    "message": "Error: 小N\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.8 (foreground color: #69815f, background color: #eff3e9, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".text-button\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: 小N\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.8 (foreground color: #69815f, background color: #eff3e9, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".text-button\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts:34:8",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts",
+                      "column": 8,
+                      "line": 34
+                    },
+                    "snippet": "  32 |         tab,\n  33 |       )\n> 34 |       .toEqual([]);\n     |        ^\n  35 |   }\n  36 | });\n  37 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts",
+                        "column": 8,
+                        "line": 34
+                      },
+                      "message": "Error: 小N\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.8 (foreground color: #69815f, background color: #eff3e9, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".text-button\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  32 |         tab,\n  33 |       )\n> 34 |       .toEqual([]);\n     |        ^\n  35 |   }\n  36 | });\n  37 |\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts:34:8"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts",
+                        "column": 8,
+                        "line": 34
+                      },
+                      "message": "Error: 探索\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.8 (foreground color: #69815f, background color: #eff3e9, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".text-button\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  32 |         tab,\n  33 |       )\n> 34 |       .toEqual([]);\n     |        ^\n  35 |   }\n  36 | });\n  37 |\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts:34:8"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts",
+                        "column": 8,
+                        "line": 34
+                      },
+                      "message": "Error: 今日\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.8 (foreground color: #69815f, background color: #eff3e9, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".text-button\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  32 |         tab,\n  33 |       )\n> 34 |       .toEqual([]);\n     |        ^\n  35 |   }\n  36 | });\n  37 |\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts:34:8"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts",
+                        "column": 8,
+                        "line": 34
+                      },
+                      "message": "Error: 成长\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 15\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"summary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.8 (foreground color: #69815f, background color: #eff3e9, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".text-button\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  32 |         tab,\n  33 |       )\n> 34 |       .toEqual([]);\n     |        ^\n  35 |   }\n  36 | });\n  37 |\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts:34:8"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:03.149Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-accessibility-四个主页面的-WCAG-A-AA-自动检查/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-accessibility-四个主页面的-WCAG-A-AA-自动检查/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts",
+                    "column": 8,
+                    "line": 34
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3b7be9d48d53390dc734-94dd8e505bbe5479b7a1",
+          "file": "legacy-accessibility.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "legacy-experience.spec.ts",
+      "file": "legacy-experience.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "01 首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 638,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:05.094Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-ad57fa0278a87032a811",
+          "file": "legacy-experience.spec.ts",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "02 选择休息、刷新与今日页都停止任务催促",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 685,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:05.819Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-3251ebd835a1b60d75d2",
+          "file": "legacy-experience.spec.ts",
+          "line": 76,
+          "column": 1
+        },
+        {
+          "title": "03 错误、提示、暂停、刷新、修正、新题独立完成改变报告",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3907,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:06.507Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-a859251de1ecdb3bb3d7",
+          "file": "legacy-experience.spec.ts",
+          "line": 91,
+          "column": 1
+        },
+        {
+          "title": "04 断网提交保留草稿，失败重试、重复点击与刷新不重复计题",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2907,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:10.419Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-1b78ed7a74dc975d3a7f",
+          "file": "legacy-experience.spec.ts",
+          "line": 140,
+          "column": 1
+        },
+        {
+          "title": "05 五维地图和列表完整任务、空间视觉选择与报告证据",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6153,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:13.329Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-b924d40a121af21d1d25",
+          "file": "legacy-experience.spec.ts",
+          "line": 160,
+          "column": 1
+        },
+        {
+          "title": "06 周计划接受、减量、改期、暂不开始与今日接续",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14611,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:19.486Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-1ab31ccd669b87002abe",
+          "file": "legacy-experience.spec.ts",
+          "line": 196,
+          "column": 1
+        },
+        {
+          "title": "07 记忆开启、主动保存、更正、停止、删除；关闭不新增长期记忆",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2497,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:34.101Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-e7503399b7fa9d673e33",
+          "file": "legacy-experience.spec.ts",
+          "line": 227,
+          "column": 1
+        },
+        {
+          "title": "08 示例图片真实裁剪、像素遮挡、刷新恢复、手动核对与移除清理",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1202,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:36.604Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-0195c04d49744f1a0ada",
+          "file": "legacy-experience.spec.ts",
+          "line": 271,
+          "column": 1
+        },
+        {
+          "title": "09 求助失败、取消、安全联系人替代、模拟成功并非已读",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3473,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:37.809Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-cd9b8f8a3308faa1f122",
+          "file": "legacy-experience.spec.ts",
+          "line": 333,
+          "column": 1
+        },
+        {
+          "title": "10 聊天等待、暂停、恢复、断网失败、重试不重复消息",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3342,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:41.286Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-164669fa313bdae23ae4",
+          "file": "legacy-experience.spec.ts",
+          "line": 373,
+          "column": 1
+        },
+        {
+          "title": "11 监护人信息申请范围、必要核验、处理中、结果",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1842,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:44.633Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-b2bea1caacad0a3f435d",
+          "file": "legacy-experience.spec.ts",
+          "line": 399,
+          "column": 1
+        },
+        {
+          "title": "12 常见手机宽度、长文本、大字体与减少动效，无横向溢出",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1617,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:46.480Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-ad7529ace4347c258309",
+          "file": "legacy-experience.spec.ts",
+          "line": 414,
+          "column": 1
+        },
+        {
+          "title": "13 错误后的补充题分支与10题上限经刷新仍生效",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9920,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status')\nExpected substring: \u001b[32m\"10 题上限\"\u001b[39m\nError: strict mode violation: getByRole('status') resolved to 2 elements:\n    1) <div role=\"status\" class=\"learning-status\">…</div> aka getByText('本地服务未连接 · 原规则离线模式重新连接')\n    2) <div class=\"toast\" role=\"status\">…</div> aka getByText('本次计算探索已达到 10 题上限。可以回看已有记录。')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status')\nExpected substring: \u001b[32m\"10 题上限\"\u001b[39m\nError: strict mode violation: getByRole('status') resolved to 2 elements:\n    1) <div role=\"status\" class=\"learning-status\">…</div> aka getByText('本地服务未连接 · 原规则离线模式重新连接')\n    2) <div class=\"toast\" role=\"status\">…</div> aka getByText('本次计算探索已达到 10 题上限。可以回看已有记录。')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status')\u001b[22m\n\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:472:42",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                      "column": 42,
+                      "line": 472
+                    },
+                    "snippet": "  470 |   }\n  471 |   expect((await state(page)).calcSeen).toHaveLength(10);\n> 472 |   await expect(page.getByRole(\"status\")).toContainText(\"10 题上限\");\n      |                                          ^\n  473 |   await page.reload();\n  474 |   expect((await state(page)).calcSeen).toHaveLength(10);\n  475 |   await page"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 42,
+                        "line": 472
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status')\nExpected substring: \u001b[32m\"10 题上限\"\u001b[39m\nError: strict mode violation: getByRole('status') resolved to 2 elements:\n    1) <div role=\"status\" class=\"learning-status\">…</div> aka getByText('本地服务未连接 · 原规则离线模式重新连接')\n    2) <div class=\"toast\" role=\"status\">…</div> aka getByText('本次计算探索已达到 10 题上限。可以回看已有记录。')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status')\u001b[22m\n\n\n  470 |   }\n  471 |   expect((await state(page)).calcSeen).toHaveLength(10);\n> 472 |   await expect(page.getByRole(\"status\")).toContainText(\"10 题上限\");\n      |                                          ^\n  473 |   await page.reload();\n  474 |   expect((await state(page)).calcSeen).toHaveLength(10);\n  475 |   await page\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:472:42"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:48.102Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-13-错误后的补充题分支与10题上限经刷新仍生效/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-13-错误后的补充题分支与10题上限经刷新仍生效/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                    "column": 42,
+                    "line": 472
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-a20d24019183250de9d4",
+          "file": "legacy-experience.spec.ts",
+          "line": 453,
+          "column": 1
+        },
+        {
+          "title": "14 提交等待期间关闭长期记忆，迟到结果不追加长期条目",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2121,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:35:58.445Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-eaaea011cf39f29ad2a8",
+          "file": "legacy-experience.spec.ts",
+          "line": 480,
+          "column": 1
+        },
+        {
+          "title": "15 聊天中明确选择休息，后续回应和入口停止学习邀请",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3707,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:36:00.667Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-c9c33c2193532f7de7e9",
+          "file": "legacy-experience.spec.ts",
+          "line": 508,
+          "column": 1
+        },
+        {
+          "title": "16 重新首次介绍保留进度，重置演示清空进度与图片",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2394,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:36:04.382Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46ff3f31cadf724ffbc4-c57e9704d2a3d3f01432",
+          "file": "legacy-experience.spec.ts",
+          "line": 526,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "offline.spec.ts",
+      "file": "offline.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "new offline candidate is self-contained, never connects agents, and retains local rules without touching the shared ZIP",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1670,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T00:36:06.788Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-f90997d86d25c4defd4c",
+          "file": "offline.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-21T00:34:50.126Z",
+    "duration": 78374.651,
+    "expected": 20,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

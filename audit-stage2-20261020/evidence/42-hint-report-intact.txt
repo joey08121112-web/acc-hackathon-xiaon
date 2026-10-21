@@ -1,0 +1,84 @@
+- banner:
+  - button "返回":
+    - img
+  - heading "学习观察" [level=2]
+  - button "帮助与支持":
+    - img
+  - button "我的与设置":
+    - img
+- main:
+  - text: OBSERVATIONS, WITH EVIDENCE
+  - heading "这一次，我们发现了什么？" [level=1]
+  - paragraph: 这是 AI 根据本机作答记录整理的学习观察。结果只代表这些任务，不是智力或人格判断。
+  - img
+  - strong: 2 次尝试，有迹可循
+  - paragraph: 提示、修改与独立完成，分别记录。
+  - article:
+    - text: "01"
+    - heading "计算" [level=2]
+    - text: 多次独立完成
+    - heading "本次发现" [level=3]
+    - paragraph: 这次有 2 道不同的题，你在首次尝试时没有使用提示就完成了。
+    - group:
+      - text: 观察依据 2 道题
+      - img
+      - strong: 化简：3x − (2x − 5)
+      - paragraph: 首次：x+5 · 正确 · 未用提示 10/20 23:10
+      - strong: 化简：7a − (3a − 2)
+      - paragraph: 首次：4*a+2 · 正确 · 未用提示 10/20 23:10
+      - paragraph: 提示：先只看减号与括号：−(3a − 2) = −3a + 2。
+    - heading "还需要了解" [level=3]
+    - paragraph: 这些记录来自不同题目；换一种情境或过几天后，表现是否稳定还需要继续了解。
+    - heading "下一步可以试试" [level=3]
+    - paragraph: 在新题中先圈出括号前的符号，再逐项去括号。
+  - article:
+    - text: "02"
+    - heading "理解" [level=2]
+    - text: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - group:
+      - text: 观察依据 0 道题
+      - img
+  - article:
+    - text: "03"
+    - heading "逻辑" [level=2]
+    - text: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - group:
+      - text: 观察依据 0 道题
+      - img
+  - article:
+    - text: "04"
+    - heading "建模" [level=2]
+    - text: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - group:
+      - text: 观察依据 0 道题
+      - img
+  - article:
+    - text: "05"
+    - heading "空间想象" [level=2]
+    - text: 尚未观察
+    - paragraph: 还没有足够的作答依据。未开始或暂停，都不代表能力弱。
+    - group:
+      - text: 观察依据 0 道题
+      - img
+  - button "按这些观察，安排一小周":
+    - text: 按这些观察，安排一小周
+    - img
+  - button "导出这份观察（AI 演示）":
+    - img
+    - text: 导出这份观察（AI 演示）
+- navigation "主导航":
+  - button "小N":
+    - img
+    - text: 小N
+  - button "探索":
+    - img
+    - text: 探索
+  - button "今日":
+    - img
+    - text: 今日
+  - button "成长":
+    - img
+    - text: 成长

@@ -1,0 +1,60 @@
+{
+  "atUTC": "2026-10-20T16:43:03.968444+00:00",
+  "READY_FOR_BC": true,
+  "schemaVersion": "1.0.0",
+  "hashes": [
+    {
+      "path": "outputs/xiaon/shared/learning-contracts.ts",
+      "actual": "8d9f73257ab36ca78a8965c0ffcd879f46b301b5638ee5300092b5b1574509b8",
+      "expected": "8d9f73257ab36ca78a8965c0ffcd879f46b301b5638ee5300092b5b1574509b8"
+    },
+    {
+      "path": "outputs/xiaon/shared/learning-contracts.schema.json",
+      "actual": "3c3f1949420c6a0b8768ebf7de56935d5838fb89ef795deb1a80cd0ef1157d01",
+      "expected": "3c3f1949420c6a0b8768ebf7de56935d5838fb89ef795deb1a80cd0ef1157d01"
+    }
+  ],
+  "schemaDefinitions": [
+    "TaskDefinition",
+    "TaskPublicView",
+    "LearningSession",
+    "SessionEvent",
+    "Attempt",
+    "ExposureEvent",
+    "GradingResult",
+    "Evidence",
+    "SkillState",
+    "AssessmentSnapshot",
+    "ReviewPolicy",
+    "ReviewItem",
+    "ReviewOutcome",
+    "ReportSnapshot",
+    "PlanProposal",
+    "PlanVersion",
+    "MemoryItem",
+    "ConsentState",
+    "ToolCall",
+    "ToolResult",
+    "AgentRun",
+    "RolePolicy",
+    "SourceTime",
+    "Failure",
+    "SubmitAttempt",
+    "StartSession",
+    "SessionState",
+    "Expose",
+    "SetConsent",
+    "Remember",
+    "MemoryState",
+    "ChatRequest",
+    "ImportRequest",
+    "ImportPreviewRequest",
+    "ToolArguments_get_learning_context",
+    "ToolArguments_query_learning_evidence",
+    "ToolArguments_get_skill_state",
+    "ToolArguments_select_task",
+    "ToolArguments_grade_attempt",
+    "ToolArguments_request_hint"
+  ],
+  "BProductFilesBefore": []
+}

@@ -1,0 +1,106 @@
+[
+  {
+    "path": "dist/offline.html",
+    "sha256": "1961008f1dbc0301e467551ca914f08f47b1448cad2ddd16ffc54c690487c513"
+  },
+  {
+    "path": "dist/index.html",
+    "sha256": "562c60faf436c97b32722beb97de9430e1f07ce0366d3f46f687128363e92899"
+  },
+  {
+    "path": "dist/review.html",
+    "sha256": "132d6f6f8c03eae20fbafd95065596eb8bd6d8bcbc7bf5eb2ee47fa095b9daaf"
+  },
+  {
+    "path": "dist/share.html",
+    "sha256": "761e3cf5fd01de574c03c987bba89b46b3231c8486da21f553275a336a830910"
+  },
+  {
+    "path": "dist/team/学伴小N-队友体验包.zip",
+    "sha256": "ad5de861c03b4fcb82d1aef4c4d5645bdaaa0bfab91dcd1f044a0d6db04370b0"
+  },
+  {
+    "path": "dist/review/13-upload-mask.png",
+    "sha256": "c1f9e9078c3562662f1040e754cec23bcdd93a1002e02593aa84a4181ffdff85"
+  },
+  {
+    "path": "dist/review/14-upload-confirmed.png",
+    "sha256": "4d259ac79729ad58c755afc598a0643f6037066f48e8bd11a4abbde673339eec"
+  },
+  {
+    "path": "dist/review/18-guardian.png",
+    "sha256": "a5b963fe65dcf4670cf162f33e585e54176c9ba2dbc1d179caec7eb429593ba9"
+  },
+  {
+    "path": "dist/review/04-rest.png",
+    "sha256": "ea0432c470aa907ae436f27bf8839ebe62d50eea267fee257261f9810f11049b"
+  },
+  {
+    "path": "dist/review/02-consent.png",
+    "sha256": "ddc42add4fd104f13d0f1977f45e17cec6a2da5185206e02bac9d8c4423a4bf8"
+  },
+  {
+    "path": "dist/review/12-memory.png",
+    "sha256": "f876dbefea7a3fdfc918e51e5793743b4ce2a0e2e3d45b9c7bdf8f4b61be7c48"
+  },
+  {
+    "path": "dist/review/05-task-hint.png",
+    "sha256": "d56d5ad802ca7b10bcbae690d2831f028102984281597f0dee8e52dd1b40da14"
+  },
+  {
+    "path": "dist/review/08-map.png",
+    "sha256": "fc5dfb3a48e7a234d15049236fe5dfb57652f9b02481f04e349081600c3592b9"
+  },
+  {
+    "path": "dist/review/06-report-hinted.png",
+    "sha256": "d65c8ec68bff86e156c8c008a1e3482cb4c6909325f567ff86ad3d1e010f8128"
+  },
+  {
+    "path": "dist/review/19-large-reduced-motion.png",
+    "sha256": "39bf62aa4001ed8e0978d608f453c0944f42070657aed936f5d216f1bdc89a70"
+  },
+  {
+    "path": "dist/review/07-report-changed.png",
+    "sha256": "b8e7e0d528c41cdf2dbc5453ccaf666b8e28943c214e52f21cf3f3beb4ea8e04"
+  },
+  {
+    "path": "dist/review/01-onboarding.png",
+    "sha256": "e2f3693d9290bf05abfc23ff5d0644402940441bf7e56fe0cb063aa8f4b02b1f"
+  },
+  {
+    "path": "dist/review/17-chat.png",
+    "sha256": "e41b1c6c016d8e3ebad31932eb437ddd7a8d372960376fae7fc8238d7fb3c400"
+  },
+  {
+    "path": "dist/review/03-home.png",
+    "sha256": "b8e8fe268f4d62ee6c7ebadf11fd0b4775b13e589e3a8fe5be382bd73ff6f397"
+  },
+  {
+    "path": "dist/review/15-help-failed.png",
+    "sha256": "912970468e913513aeebc14eb0be8b673f232e4d9d9ef911596a4df020d01bc6"
+  },
+  {
+    "path": "dist/review/09-spatial.png",
+    "sha256": "853c98fee08948cadd9341dd24b2d85e962f5ddfe88129a8dec49bf0a9cc46fd"
+  },
+  {
+    "path": "dist/review/10-plan.png",
+    "sha256": "a83f572719315e9f376228212db9713335bc3dd039c2443f268d2546fdcc3bbe"
+  },
+  {
+    "path": "dist/review/16-help-alternative.png",
+    "sha256": "df13a7bed74432b79e29e78022292159f553183965436ff6e7834e58515b9e86"
+  },
+  {
+    "path": "dist/review/11-today.png",
+    "sha256": "e5a8d1a629ad9752d5c1d8dc4cb1c9e5b9d2ffaded91e61b0099c1c4e9b00d60"
+  },
+  {
+    "path": "dist/assets/index-7oy-ayH7.js",
+    "sha256": "cdf0055cafb09d67574e6e82e94343b48cc462b09c7835510b890f5a3ae1d7a5"
+  },
+  {
+    "path": "dist/assets/index-BSRWGeMu.css",
+    "sha256": "f3f331c9594fe73b048bab9ac843fcdfdad432021b66dffccab74759e31c8a98"
+  }
+]

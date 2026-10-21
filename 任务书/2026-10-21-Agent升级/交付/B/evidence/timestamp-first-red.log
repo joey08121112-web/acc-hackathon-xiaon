@@ -1,0 +1,63 @@
+COMMAND: ['npm', 'run', 'test:agent:b']
+UTC: 2026-10-20T16:52:47.309271+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:b
+> node scripts/agent/test.mjs b
+
+✔ opening version 1 yesterday prevents version 2 of the same original from becoming unseen without an earlier attempt (18.860625ms)
+✔ a single active session spanning midnight cannot turn a previously opened original into an unseen new problem (6.531167ms)
+✔ unassisted redo next day records delayed retention but adds neither a new task nor a new independent date (11.966542ms)
+✔ supplemental calc family math is checked at independent values; padded answers retain exact quotes; second-line contradictions fail (0.636541ms)
+✔ registered frozen port is consumed by A tools without changing registry; public selection hides trusted grading key (9.036833ms)
+✔ parallel duplicate grades commit one immutable revision, and catalog output mutations cannot replace the trusted answer (7.612625ms)
+✖ same-timestamp cross-version exposure has no provable ordering and cannot establish unseen independence (7.054625ms)
+✔ six explicit subskills have observation, genuinely different transfer and delayed tasks; strict public views hide keys (1.760708ms)
+✔ reference math is independently derived from integer substitutions or explicit language/cost meanings, all typical errors rejected (1.149625ms)
+✔ spatial answers independently derived by trigonometric rotation and edge lengths, with explicit y-up coordinate convention (0.204375ms)
+✔ existing restricted parser accepts equivalents, rejects contradictory chains, defers unsupported syntax and never executes source (0.330209ms)
+✔ candidate constraints filter dimension, knowledge point, exclusions and limit without promising prerequisite mastery (0.322125ms)
+✔ wrong then correct, helped completion, original redo and unseen independent attempts remain distinct immutable facts (29.516625ms)
+✔ no-hint correction is never first independent; no attempt, whitespace and pause do not mean weak ability (8.972958ms)
+✔ hint after submission does not rewrite success; chat help or answer exposure before submission prevents independence (25.675375ms)
+✔ same-day variants cannot establish across-day status; two trusted dates and unseen tasks can; local date uses Shanghai (20.965ms)
+✔ original opened on an earlier date, repeated raw problem and version aliases do not count as unseen transfer (6.170666ms)
+✔ unknown legacy time/exposure cannot establish independent status, missing grades stay unknown (7.3505ms)
+✔ cross-session rule is configurable and not a standardized assessment (5.817167ms)
+✔ operation retries append no duplicate evidence, different operations for one grade reuse it, fake attempt rejected (4.813709ms)
+✔ real SQLite reopen retains attempts, evidence, snapshots and operation receipts; frozen-port consumer compiles (5.911417ms)
+✔ choice correct alone does not prove reasoning; validated explanation has exact saved-answer quotes (19.439916ms)
+✔ no quote, foreign quote, malformed JSON, unknown points, wrong offsets, extra keys and program/model conflict all defer (51.748333ms)
+✔ model sees only required task/rubric, persisted answer and exposure snapshot, no optional profile/chat/history (7.073292ms)
+✔ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (12.040583ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 24
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 218.383417
+
+✖ failing tests:
+
+test at tests-agent/b/boundaries.test.ts:1:4249
+✖ same-timestamp cross-version exposure has no provable ordering and cannot establish unseen independence (7.054625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'unseen'
+  - 'unknown'
+       ^
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/b/boundaries.test.ts:74:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'unseen',
+    expected: 'unknown',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+exitCode=1

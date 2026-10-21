@@ -1,0 +1,20 @@
+[
+  {
+    "path": "outputs/xiaon/src/App.tsx",
+    "baselineSha256": "1c3aba29567a05264cc59d4d32f407e179d6402c7bdc028ebe77eed964a073b6",
+    "finalSha256": "5b44705f505bc24a0d8e53fe69634a57b413b899333c6efa259311d7fa51e40c",
+    "classification": "changed_during_A_by_other_activity_not_modified_by_A"
+  },
+  {
+    "path": "outputs/xiaon/src/domain.test.ts",
+    "baselineSha256": "f3638c1f9cc1d214b30dd126c29cc071d55c874ad177beecf58d4068025184b3",
+    "finalSha256": "17617c2b70162db7b5686012b454ae3c7c26108cbb77db8e231f87af1028e869",
+    "classification": "changed_during_A_by_other_activity_not_modified_by_A"
+  },
+  {
+    "path": "outputs/xiaon/src/domain.ts",
+    "baselineSha256": "dfa9036aba07bfa33aa7af43de9eec94018bbf47dd7dd02492d69d6ae6ad427c",
+    "finalSha256": "8a7886c11fa24c85c6624200fd036f056c4d0f3d5e4c982aab4c5509862a9345",
+    "classification": "changed_during_A_by_other_activity_not_modified_by_A"
+  }
+]

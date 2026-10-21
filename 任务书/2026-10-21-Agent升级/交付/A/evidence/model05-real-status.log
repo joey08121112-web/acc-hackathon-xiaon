@@ -1,0 +1,10 @@
+COMMAND: npm run test:agent:real
+UTC: 2026-10-20T16:36:54.100585+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:real
+> node --env-file-if-exists=.env.server --import tsx scripts/agent/real-smoke.ts
+
+{"evidenceLevel":"real_model_api","status":"NOT_RUN","reason":"No server-side GLM key configured. No chat credentials requested.","model":"glm-5.3-flash","baseUrl":"https://open.bigmodel.cn/api/paas/v4","timeoutMs":120000,"maxTokens":8192}
+.env.server not found. Continuing without it.
+
+exitCode=2

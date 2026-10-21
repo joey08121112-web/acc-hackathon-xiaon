@@ -1,0 +1,33 @@
+{
+  "startedAt": "2026-10-20T15:37:01.375Z",
+  "results": {
+    "ai-capability-boundaries": {
+      "pass": true,
+      "detail": "能力说明含AI身份与不作诊断/不承诺边界"
+    },
+    "ai-capability-local-demo": {
+      "pass": true,
+      "detail": "说明回复为本地演示、不伪装真实模型"
+    },
+    "long-formula-no-overflow": {
+      "pass": true,
+      "detail": "长公式输入横向溢出=0px"
+    },
+    "evidence-first-attempt": {
+      "pass": true,
+      "detail": "首次作答x−5·待继续观察·未用提示"
+    },
+    "evidence-revision": {
+      "pass": true,
+      "detail": "修改x+5·正确·已用提示"
+    },
+    "evidence-hint-record": {
+      "pass": true,
+      "detail": "提示内容有记录"
+    },
+    "evidence-details-toggle": {
+      "pass": true,
+      "detail": "details 展开状态=true"
+    }
+  }
+}

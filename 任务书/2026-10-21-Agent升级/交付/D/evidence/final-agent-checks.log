@@ -1,0 +1,154 @@
+$ npm run test:all
+
+> xiaon-learning-companion@1.0.0 test:all
+> npm test && npm run test:agent && npm run build
+
+
+> xiaon-learning-companion@1.0.0 test
+> tsx --test src/domain.test.ts
+
+✔ 可选授权默认关闭，基本体验与长期记忆解耦 (0.418708ms)
+✔ 所有原创建议答案都被正确接受，错误答案不被接受 (0.379167ms)
+✔ 去括号符号错误与等价步骤被区分；矛盾等式不能靠末尾答案蒙混过关 (0.154667ms)
+✔ 无作答时所有维度尚未观察，暂停不等于能力弱 (0.136208ms)
+✔ 第一次错误、提示、修改记录分别保留；提示后不能算独立掌握 (0.187208ms)
+✔ 没有提示的原题修改不冒充首次独立完成 (0.075958ms)
+✔ 同类新题首次独立完成能改变观察，重复原题不能增加独立题量 (0.076042ms)
+✔ 同一个提交ID重复到达幂等，不重复计题 (0.049458ms)
+✔ 计算最多10道，包含补充；刷新、重试与反复进入不能绕过 (0.234833ms)
+✔ 暂停后草稿和提示持久化，恢复不重开题 (0.085208ms)
+✔ 中断的聊天与发送演示恢复为可重试失败，不假装发送成功 (0.041458ms)
+✔ 聊天重试不重复插入学生消息；暂停时迟到回复被忽略 (0.060792ms)
+✔ 安全支持暂停任务，迟到提交不能写入成绩或记录 (0.038875ms)
+✔ 关闭长期记忆后不追加条目，原有学习进度仍可保存 (0.512667ms)
+✔ 计划减量、改期、暂不开始都持久化 (0.067166ms)
+✔ 损坏数据有明确恢复提示，未来版本不误读 (0.039291ms)
+✔ 其他计算错误不能被编造成漏改负号的证据 (0.08275ms)
+✔ 暂不看题在刷新后保留，主动开始前不再邀请，原有草稿不变 (0.086292ms)
+✔ 明确表示只聊聊后，后续消息与刷新不会重新邀请；重置可重新开始 (0.115083ms)
+✔ 旧进度兼容新增邀请状态，休息与安全暂停仍优先 (0.057084ms)
+✔ 数学等价写法（显式乘号、前置正号）被正确接受，错误答案仍判错 (0.118625ms)
+✔ 等价写法的首次独立完成被如实记录，不退化为需要继续观察 (0.046125ms)
+✔ 周计划按计算观察结果分化，不再对所有人给同一份固定建议 (0.132167ms)
+✔ 结论轨迹如实保留状态变化，不因新证据悄悄丢失 (0.141875ms)
+✔ 旧进度缺少结论轨迹字段时可正常加载并继续使用 (0.055834ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 65.651458
+
+> xiaon-learning-companion@1.0.0 test:agent
+> node scripts/agent/test.mjs all
+
+✔ JSON Schema artifact exactly matches runtime schemas, all object boundaries reject extras (11.758917ms)
+✔ B/C consumers register independently, unimplemented ports fail explicitly (24.047833ms)
+✔ report/plan/evidence storage retains old immutable revisions without claiming B/C recomputation (20.304583ms)
+✔ refresh cannot create fake sessions; persisted exploration prerequisites, pause and 10-task budget enforced (35.786792ms)
+✔ later hints preserve original attempts; consent writes leave evidenceRevision stable (9.809292ms)
+✔ revocation stops the run before replaying prior provider context and invalidates reply replay (12.902333ms)
+✔ deleted memory retry cannot resurrect it; expiry and review deadline suppress future requests (18.085125ms)
+✔ six tool executions are a hard bound even within one parallel-call model response (27.898167ms)
+✔ GLM HTTP adapter serializes native protocol and categorizes auth/rate/malformed responses without leaking credentials (23.944916ms)
+✔ 05 config defaults personal Coding Plan GLM Flash, one server-side variable namespace, and validates budgets (1.226084ms)
+✔ GLM configured endpoint/token budget and native thinking fields roundtrip without leaking private thought (26.971208ms)
+✔ truncation refuses tool execution; configured provider timeout reports timeout (55.222292ms)
+✔ configured whole-run timeout reaches runtime without browser timeout overriding it (53.378875ms)
+✔ default Coding Plan provider sends the complete chat endpoint while an explicit base still overrides it (0.49025ms)
+✔ HTTP local session, strict origin/host, CSRF, request validation and native tool chain (214.076ms)
+✔ strict schema and browser public view deny answer, role, learner and invalid versions (13.920875ms)
+✔ native synthetic tool loop really queries SQLite and returns a tool result to model (9.170959ms)
+✔ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (5.532334ms)
+✔ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (16.306458ms)
+✔ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (19.22725ms)
+✔ restart preserves attempts, operation receipts and sessions in a real SQLite file (26.004208ms)
+✔ timeout, cancellation, unsupported provider and budget do not fake completion (114.370834ms)
+✔ legacy import preview, transaction rollback, retry and unknown time keep original untouched (8.942625ms)
+✔ opening version 1 yesterday prevents version 2 of the same original from becoming unseen without an earlier attempt (27.643541ms)
+✔ a single active session spanning midnight cannot turn a previously opened original into an unseen new problem (24.40075ms)
+✔ unassisted redo next day records delayed retention but adds neither a new task nor a new independent date (25.201375ms)
+✔ supplemental calc family math is checked at independent values; padded answers retain exact quotes; second-line contradictions fail (1.641125ms)
+✔ registered frozen port is consumed by A tools without changing registry; public selection hides trusted grading key (28.808709ms)
+✔ parallel duplicate grades commit one immutable revision, and catalog output mutations cannot replace the trusted answer (10.396375ms)
+✔ same-timestamp cross-version exposure has no provable ordering and cannot establish unseen independence (12.722542ms)
+✔ six explicit subskills have observation, genuinely different transfer and delayed tasks; strict public views hide keys (1.422042ms)
+✔ reference math is independently derived from integer substitutions or explicit language/cost meanings, all typical errors rejected (1.144667ms)
+✔ spatial answers independently derived by trigonometric rotation and edge lengths, with explicit y-up coordinate convention (0.206167ms)
+✔ existing restricted parser accepts equivalents, rejects contradictory chains, defers unsupported syntax and never executes source (0.329334ms)
+✔ candidate constraints filter dimension, knowledge point, exclusions and limit without promising prerequisite mastery (0.326583ms)
+✔ wrong then correct, helped completion, original redo and unseen independent attempts remain distinct immutable facts (102.51825ms)
+✔ no-hint correction is never first independent; no attempt, whitespace and pause do not mean weak ability (37.257ms)
+✔ hint after submission does not rewrite success; chat help or answer exposure before submission prevents independence (39.684375ms)
+✔ same-day variants cannot establish across-day status; two trusted dates and unseen tasks can; local date uses Shanghai (24.720917ms)
+✔ original opened on an earlier date, repeated raw problem and version aliases do not count as unseen transfer (7.221791ms)
+✔ unknown legacy time/exposure cannot establish independent status, missing grades stay unknown (9.647583ms)
+✔ cross-session rule is configurable and not a standardized assessment (17.075208ms)
+✔ operation retries append no duplicate evidence, different operations for one grade reuse it, fake attempt rejected (11.400834ms)
+✔ real SQLite reopen retains attempts, evidence, snapshots and operation receipts; frozen-port consumer compiles (10.86025ms)
+✔ choice correct alone does not prove reasoning; validated explanation has exact saved-answer quotes (22.7575ms)
+✔ no quote, foreign quote, malformed JSON, unknown points, wrong offsets, extra keys and program/model conflict all defer (148.085875ms)
+✔ model sees only required task/rubric, persisted answer and exposure snapshot, no optional profile/chat/history (9.79ms)
+✔ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (28.467375ms)
+✔ absence and queries are read-only; UTC strings with omitted milliseconds compare by instant (30.540208ms)
+✔ initial anchoring attempt cannot be recycled as a later review outcome (13.274834ms)
+✔ a completed review never schedules the same seen task as the next unseen check (14.313958ms)
+✔ future plan date and queued due cannot silently diverge after rescheduling (9.976375ms)
+✔ out-of-order completion cannot roll due backwards (10.307125ms)
+✔ corrected evidence marks old plans as revised without rewriting student confirmation (8.423083ms)
+✔ stale evidence references in a snapshot cannot be relabelled as current facts (6.069167ms)
+✔ task prerequisite shortage is explicit, budget one never claims a three-minute task fits (5.085083ms)
+✔ due support priority and explicit student choice retain alternative evidence (10.155167ms)
+✔ calendar validation rejects impossible dates and configurable clock intervals are persisted (5.658708ms)
+✔ Shanghai midnight alone cannot advance a review stage; a real day can (18.264417ms)
+✔ a new calendar day refreshes a draft without overwriting the accepted plan (12.513209ms)
+✔ fractional minute budgets remain within budget and produce valid integer estimates (10.80175ms)
+✔ new evidence or an unaccepted draft never prevents the student pausing the current confirmed plan (10.237ms)
+✔ 1/3/7/14 days, exact due boundary, absence and same-day repetition never fast-forward (48.777583ms)
+✔ same-day fresh tasks and repeated original cannot advance; attempts stay append-only (18.408459ms)
+✔ help, incorrect and needs_review schedule differently; no outcome for absence (40.912542ms)
+✔ four profiles differ, unknown is optional, stable avoids remedial practice; refresh is idempotent (22.334417ms)
+✔ seen/chat-answer exposure never selected as unseen; catalog exhaustion is explicit (4.581875ms)
+✔ defer/resume/reschedule/lighter keep immutable plans, postponement history and stale guards (8.555709ms)
+✔ Shanghai midnight, host TZ independence, legacy unknown never seeds due or stability (4.067833ms)
+✔ report immutability, correction annotations and queue replay from authoritative grades (8.05325ms)
+✔ restart receipts, queue revisions and immutable snapshots survive real disk reopen (5.647792ms)
+✔ untrusted self-report, stale outcome, reused attempt and stale assessment fail without writes (5.999292ms)
+✔ constraints retain per-session ten calculation tasks and prerequisites; optional memories never read (12.473542ms)
+✔ profiles really differ through B and C: modeling difficulty versus calculation independence (60.94975ms)
+✔ exploration prerequisite and real session limit persist across refresh, support switch and next date (39.45575ms)
+✔ parallel duplicate submission, timeout, cancellation and late model result cannot fabricate independence or double count (59.6175ms)
+✔ Tutor and PlannerReporter native tools are real; six executions/four rounds, illegal tools and forged arguments are gated (10.019792ms)
+✔ memory permission change cancels an in-flight native loop; replay after deletion cannot return old optional context (6.162875ms)
+✔ SQLite reopen keeps reports, plans and operation receipts; reset clears old receipts as well as evidence (12.215459ms)
+✔ retry analysis after timeout uses saved attempt and appends grading revision; report flags old basis (67.278042ms)
+✔ Tutor may quote an already submitted cost expression that coincides with an unused calculation answer, but cannot reveal a current unseen task (11.098917ms)
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (106.771458ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (9.948625ms)
+✔ protected D HTTP routes reject self-granted roles, bypasses, clock input and malicious import atomically (53.755042ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (31.103208ms)
+ℹ tests 85
+ℹ suites 0
+ℹ pass 85
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 839.931667
+
+> xiaon-learning-companion@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 1665 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   2.27 kB │ gzip:   1.41 kB
+dist/assets/index-CXWyTfVB.css   44.09 kB │ gzip:  10.65 kB
+dist/assets/index-OxAJoz9R.js   430.94 kB │ gzip: 133.47 kB
+✓ built in 681ms
+
+EXIT_CODE=0

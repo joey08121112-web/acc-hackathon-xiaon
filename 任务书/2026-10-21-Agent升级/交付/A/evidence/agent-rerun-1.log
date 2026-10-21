@@ -1,0 +1,41 @@
+COMMAND: npx tsx --test tests-agent/a/runtime.test.ts
+UTC: 2026-10-20T16:22:34.638619+00:00
+✔ strict schema and browser public view deny answer, role, learner and invalid versions (11.197916ms)
+✔ native synthetic tool loop really queries SQLite and returns a tool result to model (7.926458ms)
+✖ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (6.251167ms)
+✔ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (5.756417ms)
+✔ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (4.210042ms)
+✔ restart preserves attempts, operation receipts and sessions in a real SQLite file (5.989083ms)
+✔ timeout, cancellation, unsupported provider and budget do not fake completion (34.228791ms)
+✔ legacy import preview, transaction rollback, retry and unknown time keep original untouched (3.494083ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 186.793667
+
+✖ failing tests:
+
+test at tests-agent/a/runtime.test.ts:50:1
+✖ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (6.251167ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'conflict'
+  - 'not_found'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:59:61)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'conflict',
+    expected: 'not_found',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+exitCode=1

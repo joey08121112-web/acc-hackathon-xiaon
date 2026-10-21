@@ -1,0 +1,17 @@
+$ npx playwright test -c playwright.d.config.ts
+[WebServer] (node:32615) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:32648) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:32662) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests-agent/d/browser.spec.ts:15:1 › student choice → attempts → evidence → report/plan → later reviews → state/history, refresh and screenshots (2.9s)
+  ✓  2 tests-agent/d/browser.spec.ts:28:1 › optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh (2.7s)
+  ✓  3 tests-agent/d/browser.spec.ts:39:1 › browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit (2.0s)
+
+  3 passed (8.8s)
+
+EXIT_CODE=0

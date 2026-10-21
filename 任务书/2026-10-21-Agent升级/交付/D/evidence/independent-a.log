@@ -1,0 +1,38 @@
+$ npm run test:agent:a
+
+> xiaon-learning-companion@1.0.0 test:agent:a
+> node scripts/agent/test.mjs a
+
+✔ JSON Schema artifact exactly matches runtime schemas, all object boundaries reject extras (1.747167ms)
+✔ B/C consumers register independently, unimplemented ports fail explicitly (11.583541ms)
+✔ report/plan/evidence storage retains old immutable revisions without claiming B/C recomputation (6.814958ms)
+✔ refresh cannot create fake sessions; persisted exploration prerequisites, pause and 10-task budget enforced (25.925375ms)
+✔ later hints preserve original attempts; consent writes leave evidenceRevision stable (9.917125ms)
+✔ revocation stops the run before replaying prior provider context and invalidates reply replay (8.5275ms)
+✔ deleted memory retry cannot resurrect it; expiry and review deadline suppress future requests (7.008833ms)
+✔ six tool executions are a hard bound even within one parallel-call model response (6.722958ms)
+✔ GLM HTTP adapter serializes native protocol and categorizes auth/rate/malformed responses without leaking credentials (8.595166ms)
+✔ 05 config defaults personal Coding Plan GLM Flash, one server-side variable namespace, and validates budgets (0.738875ms)
+✔ GLM configured endpoint/token budget and native thinking fields roundtrip without leaking private thought (11.807125ms)
+✔ truncation refuses tool execution; configured provider timeout reports timeout (28.109417ms)
+✔ configured whole-run timeout reaches runtime without browser timeout overriding it (17.081417ms)
+✔ default Coding Plan provider sends the complete chat endpoint while an explicit base still overrides it (0.817375ms)
+✔ HTTP local session, strict origin/host, CSRF, request validation and native tool chain (55.738792ms)
+✔ strict schema and browser public view deny answer, role, learner and invalid versions (12.549834ms)
+✔ native synthetic tool loop really queries SQLite and returns a tool result to model (11.796792ms)
+✔ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (8.905125ms)
+✔ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (7.823916ms)
+✔ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (7.660042ms)
+✔ restart preserves attempts, operation receipts and sessions in a real SQLite file (6.057792ms)
+✔ timeout, cancellation, unsupported provider and budget do not fake completion (38.532292ms)
+✔ legacy import preview, transaction rollback, retry and unknown time keep original untouched (3.953583ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 223.197875
+
+EXIT_CODE=0

@@ -1,0 +1,27 @@
+COMMAND: npm run test:agent:a
+UTC: 2026-10-20T16:25:14.142480+00:00
+
+> xiaon-learning-companion@1.0.0 test:agent:a
+> node scripts/agent/test.mjs a
+
+✔ JSON Schema artifact exactly matches runtime schemas, all object boundaries reject extras (1.80875ms)
+✔ B/C consumers register independently, unimplemented ports fail explicitly (9.433125ms)
+✔ HTTP local session, strict origin/host, CSRF, request validation and native tool chain (45.57675ms)
+✔ strict schema and browser public view deny answer, role, learner and invalid versions (11.8155ms)
+✔ native synthetic tool loop really queries SQLite and returns a tool result to model (9.868375ms)
+✔ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (5.254083ms)
+✔ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (7.871792ms)
+✔ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (5.012958ms)
+✔ restart preserves attempts, operation receipts and sessions in a real SQLite file (4.611708ms)
+✔ timeout, cancellation, unsupported provider and budget do not fake completion (37.042875ms)
+✔ legacy import preview, transaction rollback, retry and unknown time keep original untouched (4.179625ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 210.269833
+
+exitCode=0

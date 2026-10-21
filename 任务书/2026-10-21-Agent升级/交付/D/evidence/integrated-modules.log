@@ -1,0 +1,129 @@
+$ npm run test:agent
+
+> xiaon-learning-companion@1.0.0 test:agent
+> node scripts/agent/test.mjs all
+
+✔ JSON Schema artifact exactly matches runtime schemas, all object boundaries reject extras (2.487125ms)
+✔ B/C consumers register independently, unimplemented ports fail explicitly (31.530583ms)
+✔ report/plan/evidence storage retains old immutable revisions without claiming B/C recomputation (6.645708ms)
+✔ refresh cannot create fake sessions; persisted exploration prerequisites, pause and 10-task budget enforced (30.0525ms)
+✔ later hints preserve original attempts; consent writes leave evidenceRevision stable (9.343209ms)
+✔ revocation stops the run before replaying prior provider context and invalidates reply replay (11.169666ms)
+✔ deleted memory retry cannot resurrect it; expiry and review deadline suppress future requests (12.733ms)
+✔ six tool executions are a hard bound even within one parallel-call model response (18.683292ms)
+✔ GLM HTTP adapter serializes native protocol and categorizes auth/rate/malformed responses without leaking credentials (15.837ms)
+✔ 05 config defaults personal Coding Plan GLM Flash, one server-side variable namespace, and validates budgets (0.636666ms)
+✔ GLM configured endpoint/token budget and native thinking fields roundtrip without leaking private thought (20.501167ms)
+✔ truncation refuses tool execution; configured provider timeout reports timeout (31.225916ms)
+✔ configured whole-run timeout reaches runtime without browser timeout overriding it (18.641667ms)
+✔ default Coding Plan provider sends the complete chat endpoint while an explicit base still overrides it (0.455542ms)
+✔ HTTP local session, strict origin/host, CSRF, request validation and native tool chain (104.736542ms)
+✔ strict schema and browser public view deny answer, role, learner and invalid versions (22.381458ms)
+✔ native synthetic tool loop really queries SQLite and returns a tool result to model (18.542583ms)
+✖ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (10.977375ms)
+✖ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (20.11ms)
+✔ optional memory switch, inactive, expiry, unrelated purpose and deletion affect next context (13.337042ms)
+✔ restart preserves attempts, operation receipts and sessions in a real SQLite file (9.591875ms)
+✔ timeout, cancellation, unsupported provider and budget do not fake completion (47.386167ms)
+✔ legacy import preview, transaction rollback, retry and unknown time keep original untouched (7.661458ms)
+✔ opening version 1 yesterday prevents version 2 of the same original from becoming unseen without an earlier attempt (26.422ms)
+✔ a single active session spanning midnight cannot turn a previously opened original into an unseen new problem (11.294417ms)
+✔ unassisted redo next day records delayed retention but adds neither a new task nor a new independent date (22.7155ms)
+✔ supplemental calc family math is checked at independent values; padded answers retain exact quotes; second-line contradictions fail (1.996125ms)
+✔ registered frozen port is consumed by A tools without changing registry; public selection hides trusted grading key (17.743ms)
+✔ parallel duplicate grades commit one immutable revision, and catalog output mutations cannot replace the trusted answer (12.997958ms)
+✔ same-timestamp cross-version exposure has no provable ordering and cannot establish unseen independence (11.231834ms)
+✔ six explicit subskills have observation, genuinely different transfer and delayed tasks; strict public views hide keys (3.447167ms)
+✔ reference math is independently derived from integer substitutions or explicit language/cost meanings, all typical errors rejected (1.224125ms)
+✔ spatial answers independently derived by trigonometric rotation and edge lengths, with explicit y-up coordinate convention (0.265875ms)
+✔ existing restricted parser accepts equivalents, rejects contradictory chains, defers unsupported syntax and never executes source (0.394959ms)
+✔ candidate constraints filter dimension, knowledge point, exclusions and limit without promising prerequisite mastery (0.345208ms)
+✔ wrong then correct, helped completion, original redo and unseen independent attempts remain distinct immutable facts (59.152791ms)
+✔ no-hint correction is never first independent; no attempt, whitespace and pause do not mean weak ability (17.864833ms)
+✔ hint after submission does not rewrite success; chat help or answer exposure before submission prevents independence (32.074958ms)
+✔ same-day variants cannot establish across-day status; two trusted dates and unseen tasks can; local date uses Shanghai (25.087542ms)
+✔ original opened on an earlier date, repeated raw problem and version aliases do not count as unseen transfer (8.524375ms)
+✔ unknown legacy time/exposure cannot establish independent status, missing grades stay unknown (11.428916ms)
+✔ cross-session rule is configurable and not a standardized assessment (8.715583ms)
+✔ operation retries append no duplicate evidence, different operations for one grade reuse it, fake attempt rejected (8.601959ms)
+✔ real SQLite reopen retains attempts, evidence, snapshots and operation receipts; frozen-port consumer compiles (10.585083ms)
+✔ choice correct alone does not prove reasoning; validated explanation has exact saved-answer quotes (41.167959ms)
+✔ no quote, foreign quote, malformed JSON, unknown points, wrong offsets, extra keys and program/model conflict all defer (77.210208ms)
+✔ model sees only required task/rubric, persisted answer and exposure snapshot, no optional profile/chat/history (7.233625ms)
+✔ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (18.853625ms)
+✔ absence and queries are read-only; UTC strings with omitted milliseconds compare by instant (33.898666ms)
+✔ initial anchoring attempt cannot be recycled as a later review outcome (9.207375ms)
+✔ a completed review never schedules the same seen task as the next unseen check (10.564916ms)
+✔ future plan date and queued due cannot silently diverge after rescheduling (13.958333ms)
+✔ out-of-order completion cannot roll due backwards (12.409625ms)
+✔ corrected evidence marks old plans as revised without rewriting student confirmation (9.831292ms)
+✔ stale evidence references in a snapshot cannot be relabelled as current facts (6.187833ms)
+✔ task prerequisite shortage is explicit, budget one never claims a three-minute task fits (7.097084ms)
+✔ due support priority and explicit student choice retain alternative evidence (11.264583ms)
+✔ calendar validation rejects impossible dates and configurable clock intervals are persisted (7.589083ms)
+✔ Shanghai midnight alone cannot advance a review stage; a real day can (9.867667ms)
+✔ a new calendar day refreshes a draft without overwriting the accepted plan (10.422333ms)
+✔ fractional minute budgets remain within budget and produce valid integer estimates (5.2935ms)
+✔ new evidence or an unaccepted draft never prevents the student pausing the current confirmed plan (9.635792ms)
+✔ 1/3/7/14 days, exact due boundary, absence and same-day repetition never fast-forward (47.48725ms)
+✔ same-day fresh tasks and repeated original cannot advance; attempts stay append-only (11.734667ms)
+✔ help, incorrect and needs_review schedule differently; no outcome for absence (29.609625ms)
+✔ four profiles differ, unknown is optional, stable avoids remedial practice; refresh is idempotent (30.451208ms)
+✔ seen/chat-answer exposure never selected as unseen; catalog exhaustion is explicit (8.554667ms)
+✔ defer/resume/reschedule/lighter keep immutable plans, postponement history and stale guards (7.288667ms)
+✔ Shanghai midnight, host TZ independence, legacy unknown never seeds due or stability (4.332833ms)
+✔ report immutability, correction annotations and queue replay from authoritative grades (10.278334ms)
+✔ restart receipts, queue revisions and immutable snapshots survive real disk reopen (5.264833ms)
+✔ untrusted self-report, stale outcome, reused attempt and stale assessment fail without writes (5.592167ms)
+✔ constraints retain per-session ten calculation tasks and prerequisites; optional memories never read (17.019333ms)
+✔ real modules: saved attempts, report, confirmed plan and two later sessions update evidence and history (66.797209ms)
+✔ operation replay does not duplicate attempts; rest blocks opening and memory off blocks proposals (14.15725ms)
+✔ B real catalog and C proposal interoperate without fixture catalog (22.151458ms)
+ℹ tests 76
+ℹ suites 0
+ℹ pass 74
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 584.507583
+
+✖ failing tests:
+
+test at tests-agent/a/runtime.test.ts:1:2464
+✖ unknown tool, invalid args, role escalation, forged task and unsaved attempts rejected (10.977375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'forbidden'
+  - 'not_found'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:59:61)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'forbidden',
+    expected: 'not_found',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/a/runtime.test.ts:1:3504
+✖ append-only attempts, hint snapshot order, trusted grading, idempotency and conflict (20.11ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/a/runtime.test.ts:76:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+EXIT_CODE=1

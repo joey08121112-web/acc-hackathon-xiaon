@@ -1,0 +1,4 @@
+COMMAND: ['node', 'node_modules/typescript/bin/tsc', '-p', 'tsconfig.json', '--noEmit', '--incremental', 'false']
+UTC: 2026-10-20T16:53:15.572247+00:00
+
+exitCode=0
