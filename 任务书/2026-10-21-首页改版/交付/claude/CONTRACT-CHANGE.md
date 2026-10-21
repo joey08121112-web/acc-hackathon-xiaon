@@ -50,3 +50,41 @@
 ## 4. 测试辅助
 
 `server/storage/testing.ts` 新增 `freePort()`：监听 0 端口，由系统分配空闲端口。`tests-agent/d/voice-input.test.ts`（原来写死 18952/18953）和 `voice-stage.test.ts`（原来写死 18950/18951）改用它；仍可用原来的环境变量覆盖。原因：写死的端口和各路开发端口重叠，zCode 的开发服务器正占着 18953。
+
+---
+
+# 契约变更（第二期：面试引擎，2026-10-21）
+
+在 `revamp/g2-interview` 上完成，是实现面试引擎时发现的问题。全部是加法或注释，`learning-contracts.schema.json` 没有变化。路径相对 `outputs/xiaon/`。
+
+## 1. `InterviewTurn.attemptId` 放在追问那一轮（只改注释）
+
+- `CONTRACT-PHASE2.md` 原来写的是「追问为 null」，改为：**作答 ID 放在追问那一轮**，题目轮（question / transfer）为 null。
+- 原因：任务书要求把追问的回答作为理由证据交给现有 Assessor。所以要等追问答完，再合成一次作答去判分：
+  - 题目有理由评分点（理解、逻辑、建模）时，作答 = 第一行答案 + 换行 + 追问回答；
+  - 计算、空间想象只交答案行，追问回答只用来判断「有没有说出理由」。
+- 追问仍然不另算一道题。
+- 对 ChatGPT 的影响：要显示某道题的作答，取同一道题的追问轮上的 `attemptId`。
+
+## 2. 探索顺序：续测带上本测评已完成的理解、逻辑作答（`server/core/events.ts`，加法）
+
+- 现有规则：探索模式的场次里，打开理解、逻辑以外的题之前，必须先在**本场次**答过理解和逻辑。
+- 面试换天续测时会开新场次，旧规则会拦住计算题。这违反任务书「下次从停下的模块接着测，已答的不重问」。
+- 改法：判断时同时算上「当前测评在本场次继续时，它的问答所关联的作答」。规则本身不变。
+- 这个文件不在任何一路的所有权里，按规则记录在这里；ChatGPT、zCode 不受影响。
+
+## 3. 首页对话观察：试探的下一轮可以记下回答（Claude 自己的文件）
+
+- 回应 REPORT-1 第 5 节留下的问题。
+- `StageDecision` 新增 `answerTurn`：试探轮的下一轮，仍在 probe、情绪平稳时为 true。这一轮：
+  - 放行 `observation`；
+  - 提示词换成 `OBSERVE_ANSWER_PROMPT`（版本后缀 `-observe-answer`），不再试探；
+  - 观察只能引用这一句原话。
+- `homeTutorPrompt` 多一个可选参数 `answerTurn`。
+- `ObservationCheck` 的形状不变：协调器在回答轮把 `probeAllowed` 传 true，`studentTexts` 只传这一句。
+
+## 4. 暂停测评时同时暂停学习场次（行为说明）
+
+- `interview/pause` 和休息用语会把测评标为 paused，同时把所在的 `LearningSession` 设为 paused，与其他地方「休息」的含义一致。
+- `interview/resume` 经 `learning/start` 恢复场次，换天时开新场次。
+- 对 ChatGPT 的影响：暂停后回到首页，会显示首页原有的暂停提示。
