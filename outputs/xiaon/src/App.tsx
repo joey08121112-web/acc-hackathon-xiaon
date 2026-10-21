@@ -444,7 +444,7 @@ function App() {
   const headerTitles: Record<string, string> = {
     home: "学伴小N",
     chat: "和小N聊聊",
-    explore: "五维探索",
+    explore: "专业模式",
     task: "一起看题",
     upload: "题目小工坊",
     growth: "我的成长",

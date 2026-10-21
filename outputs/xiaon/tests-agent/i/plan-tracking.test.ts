@@ -189,11 +189,16 @@ test('HTTP 端到端：草案→确认→周计划→提醒→拒绝；记忆关
   assert.equal(trendRes.status,200);
   const trendBody=await trendRes.json() as {latest:TrendPoint[];history:TrendPoint[]};
   assert.equal(trendBody.latest.length,5);assert.equal(trendBody.history.length,5);
-  // 契约缺陷（见 交付/zcode/CONTRACT-REQUEST.md）：revisionProblems 用 JSON.stringify 比较 confirmation，
-  // 仓库按键名排序、zod 按 schema 序，键序不同 → 拒绝复测的写入 revision 必被拒（500）。Claude 修复后这两条断言应翻转为 200 / null。
+  // 集成修复：存库与 schema 的确认字段键序不同，仍应允许拒绝并保持幂等。
   const declined=await post('stage/retest-decline',{operationId:id(),stageId});
-  assert.equal(declined.status,500);assert.equal((declined.body.error as {code:string}).code,'internal_error');
-  view=await d.view();assert.notEqual(view.retestReminder,null,'契约修复前，拒绝复测写不进去，提醒仍在');
+  assert.equal(declined.status,200);
+  assert.equal((declined.body as MonthStage).retestDeclinedAt,clock.now());
+  view=await d.view();assert.equal(view.retestReminder,null,'拒绝后本月不再提醒');
+  const revisions=r.repository.list('monthStages').length;
+  const repeated=await post('stage/retest-decline',{operationId:id(),stageId});
+  assert.equal(repeated.status,200);assert.deepEqual(repeated.body,declined.body);
+  assert.equal(r.repository.list('monthStages').length,revisions,'重复拒绝不追加修订');
+  clock.set('2026-10-31T04:00:00.000Z');assert.equal((await d.view()).retestReminder,null,'月底仍不再提醒');
   await d.reset({operationId:id(),confirmation:'清除本机学习记录与偏好'});
   assert.equal(r.repository.list('monthStages').length,0);assert.equal(r.repository.list('professionalReports').length,0,'重置清除学习记录');
  }finally{await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}

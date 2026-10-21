@@ -29,9 +29,10 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:
  const dev=useDevMode();
  const [message,setMessage]=useState(''),[memoryText,setMemoryText]=useState(''),[editing,setEditing]=useState<string|null>(null),[scheduledDate,setScheduledDate]=useState(''),[reportId,setReportId]=useState(''),[planId,setPlanId]=useState(''),[preview,setPreview]=useState<{hash:string;attemptCount:number;warnings:string[]}|null>(null),[migration,setMigration]=useState(''),[retention,setRetention]=useState<MemoryRetention>('forever');
  const v=l.view;
- if(!l.connected||!v)return <section className="info-paper"><h1>学习记录等待本地服务</h1><p>新版记录保存在本机 SQLite。启动服务后重新连接，草稿仍在本机。</p><button className="primary" onClick={()=>swallow(l.connect())}>重连本地服务</button></section>;
+ if(!l.connected||!v)return <section className="info-paper"><h1>学习记录等待本地服务</h1><p>{dev?'新版记录保存在本机 SQLite。启动服务后重新连接，草稿仍在本机。':'暂时没能连接学习记录，草稿还在。请稍后重试。'}</p><button className="primary" onClick={()=>swallow(l.connect())}>重连本地服务</button></section>;
  const currentPlan=v.plans.at(-1)?.snapshot;
  const active=l.activeTask;
+ const unfinishedInterview=v.interviews.some(i=>i.status!=='completed');
  const allowed=(task:typeof v.tasks[number])=>task.eligible&&(!(v.session?.mode==='exploration')||['理解','逻辑'].includes(task.primaryDimension)||['理解','逻辑'].every(d=>v.attempts.some(a=>a.sessionId===v.session?.id&&v.tasks.find(t=>t.id===a.taskId)?.primaryDimension===d)));
 
  const generate=()=>swallow(l.run('learning/generate',{timeBudgetMinutes:6}));
@@ -40,13 +41,13 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:
  const trace=dev&&<details className="evidence-details"><summary>查看 Agent 与工具轨迹</summary><p className="small">仅显示角色、模式、状态和引用；不显示密钥或内部思考。</p>{v.runs.slice(-12).map(run=><div className="learning-trace" key={run.id}><strong>{run.role==='planner'?'PlannerReporter':run.role==='assessor'?'Assessor':run.role==='generator'?'Generator':'Tutor'}</strong><span>{run.providerKind} · {run.status} · {run.rounds}轮 / {run.toolExecutions}工具</span></div>)}{v.toolCalls.slice(-20).map(t=><p className="small" key={t.id}>{t.name} · {t.status}{t.errorCode?' / '+t.errorCode:''} · {t.evidenceIds.length}个引用</p>)}</details>;
  return <div className="learning-pages">
  {l.busy&&<div className="notice" role="status">正在处理，草稿已保留。<button onClick={l.cancel}>取消等待</button></div>}
- {l.error&&<div className="notice error" role="alert">{l.error}</div>}
+ {l.error&&<div className="notice error" role="alert">{dev?l.error:'这一步暂时没完成，已有记录和草稿还在，请稍后重试。'}</div>}
  {l.cache.pending&&!l.busy&&<div className="notice">保留了上次请求，重试不会重复记录。<button className="secondary" onClick={()=>swallow(l.retry())}>重试上次请求</button><button className="text-button" onClick={()=>l.update({pending:null})}>结束重试，保留已有记录</button></div>}
  {page==='chat'&&<ChatPanel l={l} paused={v.paused} safety={safety} navigate={navigate} trace={trace}/>}
  {(page==='explore'||page==='growth')&&<>
  {headline(page==='explore'?'A SMALL WORLD TO EXPLORE':'GROW AT YOUR OWN PACE',page==='explore'?'每一种思考，都值得发现。':'每一点变化，都有来处。',page==='explore'?'不用证明什么。去几个地方，看看你怎样理解和解决问题。':'结果仅限已观察的子技能；待观察不代表能力弱。可以随时暂停。')}
- {v.paused&&<div className="notice">学习已暂停，由你决定何时继续。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}
- {page==='explore'?<><ProfessionalModeView l={l} navigate={navigate} safety={safety}/><ExplorationMap view={v} onDimension={onExploreDimension} onReport={()=>navigate('report','成长')}/></>:<>
+ {v.paused&&page==='growth'&&!unfinishedInterview&&<div className="notice">学习已暂停，由你决定何时继续。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}
+ {page==='explore'?<><ProfessionalModeView l={l} navigate={navigate} safety={safety}/><details className="info-paper" key={unfinishedInterview?'interview':'free-explore'}><summary>自由探索五维地图{unfinishedInterview?'（测评结束后可选）':''}</summary>{unfinishedInterview?<p>这次测评还没结束，可以在上方继续，或先暂停休息。</p>:<>{v.paused&&<div className="notice">学习已暂停。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}<ExplorationMap view={v} onDimension={onExploreDimension} onReport={()=>navigate('report','成长')}/></>}</details></>:<>
  {['理解','逻辑','计算','建模','空间想象'].map(dim=><section className="info-paper" key={dim}><h2>{dim}</h2>{v.assessment.skills.filter(s=>s.dimension===dim).map(s=><div className="learning-skill" key={s.id}><strong>{names[s.knowledgePointId]}</strong><span className="tag">{skillStatusLabels[s.status]}</span><p>{s.coverage}</p>{s.recentDifficulty&&<p>最近一次仍有困难，此前成功继续保留。</p>}{isGenerationKnowledgePoint(s.knowledgePointId)&&<details><summary>针对这个环节出一道新题</summary><GenerationPanel l={l} knowledgePointId={s.knowledgePointId} purpose="practice" navigate={navigate} safety={safety}/></details>}<details><summary>观察范围与待了解</summary>{s.unknowns.map((u,i)=><p className="small" key={i}>{u}</p>)}</details></div>)}</section>)}
  <ProblemList l={l} navigate={navigate}/>
  <GrowthArchive l={l} navigate={navigate}/>
@@ -83,12 +84,13 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:
  </>:<div className="info-paper"><h1>先选择想尝试的内容</h1><button className="primary" onClick={()=>navigate('explore','探索')}>去探索</button></div>}
  </>}
  {page==='report'&&<>
- {headline('EVIDENCE, BEFORE CONCLUSIONS','每一个发现，都有依据。','事实、推断与未知分别呈现；模型不能添加题量或能力判断。历史快照保留生成时的结论。')}
+ {headline('THIS TIME, AT YOUR PACE','看看这次的发现。','按模块看看本次观察、依据原话和可以尝试的方法。')}
  <ProfessionalReportView l={l} navigate={navigate}/>
+ {dev&&<details className="evidence-details"><summary>详细证据（原学习观察报告）</summary>
  <button className="primary wide" disabled={l.busy} onClick={generate}>根据当前证据生成报告与计划草案</button>
  <label className="field">报告历史<select value={reportId||v.reports.at(-1)?.snapshot.id||''} onChange={e=>setReportId(e.target.value)}><option value="">选择报告</option>{v.reports.map((r,i)=><option key={r.snapshot.id} value={r.snapshot.id}>第{i+1}份 · {date(r.snapshot.createdAt)}{r.basisRevised?' · 依据已修订':''}</option>)}</select></label>
  {(()=>{const r=v.reports.find(r=>r.snapshot.id===reportId)??v.reports.at(-1);return r?<section className="info-paper"><h2>观察快照 · 证据版本 {r.snapshot.evidenceRevision}</h2>{r.basisRevised&&<p className="notice">此报告的部分依据已修订，原快照保留。请查看新版本。</p>}{r.snapshot.statements.map((s,i)=><div className="learning-statement" key={i}><span className="tag">{{fact:'事实',inference:'推断',unknown:'未知'}[s.kind]}</span><p>{pretty(s.text)}</p>{s.evidenceIds.length>0&&<details><summary>展开 {s.evidenceIds.length} 条原始依据</summary>{s.evidenceIds.map(id=>{const e=v.evidence.find(e=>e.id===id),a=v.attempts.find(a=>a.id===e?.attemptId);return <div className="learning-evidence" key={id}><strong>{names[e?.knowledgePointId??'']??id}</strong><p>{v.tasks.find(t=>t.id===a?.taskId)?.question??a?.taskId}</p><pre>{a?.value}</pre><p>定位引用：{e?.quote}（{e?.location.start}–{e?.location.end}）</p><p>{e?.explanation}</p><small>{e?.source} · {a?.classification.reason} · 提交前提示 {a?.hintSnapshot.length??0} 条</small></div>;})}</details>}</div>)}<h3>本版变化</h3>{r.snapshot.changes.map((c,i)=><p key={i}>{pretty(c)}</p>)}{r.snapshot.coverage.map((c,i)=><p className="small" key={i}>{c}</p>)}</section>:<p className="notice">还没有报告。无记录时只会给出待观察项和可选建议。</p>;})()}
- <button className="secondary wide" onClick={()=>navigate('plan','成长')}>看看下一步计划</button>{trace}
+ <button className="secondary wide" onClick={()=>navigate('plan','成长')}>看看下一步计划</button></details>}{trace}
  </>}
  {(page==='plan'||page==='today')&&<>
  {headline(page==='plan'?'ONE SMALL STEP':'TODAY, AT YOUR PACE',page==='plan'?'下一步，由你来决定。':'今天，按自己的节奏。','计划草案来自当前具体证据。接受、减量、改期和暂不开始都会保存真实版本；没有真实通知。')}

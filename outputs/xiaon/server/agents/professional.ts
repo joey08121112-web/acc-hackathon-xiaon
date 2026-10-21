@@ -1,6 +1,7 @@
 /** 所有者：Claude（第二期契约补丁）。专业模式的程序门控：插件（interview、stages、tracking）的输出在写库或出服务端前必须通过这里。
  * 只检查事实与引用（模块顺序、等级与依据一致、引用存在、确认由学生写），不替插件做选题、判级或选模块。 */
 import { INTERVIEW_MODULE_ORDER,INTERVIEW_REQUIRED_MODULES,LEVEL_BY_BASIS,type ChatObservation,type InterviewSession,type MonthStage,type ProfessionalReport,type TrendQuery } from '../../shared/learning-contracts';
+import { hash } from '../storage/repository';
 import { RuntimeError } from '../core/errors';
 import { shanghaiDate } from '../../src/learning/review';
 /** 理解和逻辑都测完才能出报告（decision 15）。 */
@@ -58,7 +59,7 @@ export function revisionProblems(next:MonthStage,prev:MonthStage,expect:{now:str
   if(!c||c.action!==expect.confirm.action||c.confirmedAt!==expect.now)problems.push('确认记录必须来自本次学生点击');
   if(next.status!==(expect.confirm.action==='accept'?'confirmed':'deferred'))problems.push('状态与学生的选择不一致');
   if(next.goal!==expect.confirm.goal)problems.push('目标应为学生确认的文字');
- }else if(JSON.stringify(next.confirmation)!==JSON.stringify(prev.confirmation)||next.status!==prev.status||next.goal!==prev.goal)problems.push('没有学生确认时不能改确认、状态或目标');
+ }else if(hash(next.confirmation)!==hash(prev.confirmation)||next.status!==prev.status||next.goal!==prev.goal)problems.push('没有学生确认时不能改确认、状态或目标');
  if(expect.decline&&next.retestDeclinedAt!==expect.now)problems.push('拒绝复测时间应为本次点击');
  if(!expect.decline&&next.retestDeclinedAt!==prev.retestDeclinedAt)problems.push('不能改拒绝复测记录');
  return problems;

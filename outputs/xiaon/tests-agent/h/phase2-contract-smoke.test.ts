@@ -38,12 +38,19 @@ test('H2 mount points render entry, report and archive without starting an inter
  assert.match(renderToStaticMarkup(createElement(GrowthArchive,{l,navigate})),/成长档案/);
 });
 
-test('GET /api/learning/trend sits behind the local session and answers 501 while tracking is a stub',async()=>{
- const f=temporaryRepository(),r=createRuntime(f);installLearning(r);const port=await freePort(),base=`http://127.0.0.1:${port}`;
+test('GET /api/learning/trend sits behind the local session and derives monthly points from professional reports',async()=>{
+ const f=temporaryRepository(),r=createRuntime(f),d=installLearning(r);const port=await freePort(),base=`http://127.0.0.1:${port}`;
  const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[origin]});await new Promise<void>(resolve=>server.listen(port,'127.0.0.1',resolve));
  try{
   assert.equal((await fetch(base+'/api/learning/trend')).status,403);
   const login=await fetch(base+'/api/local-session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});const cookie=login.headers.get('set-cookie')!.split(';')[0];
-  const res=await fetch(base+'/api/learning/trend',{headers:{Cookie:cookie}});assert.equal(res.status,501);assert.equal((await res.json()).error.code,'not_implemented');
+  const get=()=>fetch(base+'/api/learning/trend',{headers:{Cookie:cookie}});
+  const empty=await get();assert.equal(empty.status,200);assert.deepEqual(await empty.json(),{latest:[],history:[]});
+  let step=await d.interviewStart({operationId:crypto.randomUUID()});
+  for(const text of ['2x-3','先翻倍再减三','A','先检查前提和反例'])step=await d.interviewAnswer({operationId:crypto.randomUUID(),interviewId:step.interview!.id,expectedRevision:step.interview!.revision,text});
+  const report=await d.interviewReport({operationId:crypto.randomUUID(),interviewId:step.interview!.id});
+  const res=await get();assert.equal(res.status,200);
+  const body=schemas.TrendQuery.parse(await res.json());assert.equal(body.history.length,5);assert.deepEqual(body.latest,body.history);
+  for(const [i,point] of body.history.entries())assert.deepEqual(point,{month:'2026-10',module:report.modules[i].module,level:report.modules[i].level,sourceReportId:report.id,reportCreatedAt:report.createdAt});
  }finally{await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}
 });
