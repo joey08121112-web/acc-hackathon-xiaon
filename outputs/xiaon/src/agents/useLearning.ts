@@ -2,6 +2,8 @@ import { useCallback,useEffect,useRef,useState } from 'react';
 import { apiRequest,serviceStatus,newOperationId } from '../agent-client';
 import type { LearningView } from '../../server/agents/learning';
 import type { TaskPublicView } from '../../shared/learning-contracts';
+// G0: typed reply of learning/chat (legacy fields plus the home-flow signals and drafts). Behaviour is unchanged.
+export type { ChatReply,ChatIntent,ChatStage } from '../../shared/learning-contracts';
 export const WORKSPACE_KEY='xiaon-workspace-v2';
 const ACTIVATED='xiaon-sqlite-active';
 export const isOfflineArtifact=()=>!!document.querySelector('meta[name="xiaon-offline"]')||location.protocol==='file:';

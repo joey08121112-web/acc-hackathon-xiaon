@@ -1,13 +1,19 @@
 import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { z } from 'zod';
-import { schemas,SCHEMA_VERSION,type ModelProvider,type TaskPublicView } from '../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,type ChatReply,type ChatStage,type ChatTurn,type LearningEpisode,type ModelProvider,type StageField,type TaskPublicView,type Validation } from '../../shared/learning-contracts';
 import type { LearningRuntime } from '../bootstrap';
 import { RubricAssessment,createModelAnalyzer,classifyAttempt } from '../plugins/assessment';
 import { PlanningEngine } from '../plugins/planning';
 import { attemptFacts } from '../plugins/planning/evidence';
 import { currentReviewItems,planHistory,reportHistory,shanghaiDate } from '../../src/learning/review';
-import { ControlledRoles,tutorOutput,type TutorStage } from './roles';
+import { ControlledRoles,tutorOutput,homeTutorOutput,homeTutorPrompt,type TutorStage } from './roles';
+import { decideStage,filterStageFields,matchesAnswer,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,UNDERSTOOD_PATTERN,type ChatStageState } from './stages';
+import type { RevampContext } from '../plugins/context';
+import { validateProblemDraft,confirmProblem,recognize } from '../plugins/problems';
+import { validateMemoryDraft,confirmMemoryDraft,greeting,shouldOfferMemory } from '../plugins/memory-flow';
+import { draftProgressCard,confirmProgressCard } from '../plugins/progress';
+import { validateObservation,endConversation } from '../plugins/conversation';
 import { hash } from '../storage/repository';
 import { latestFeedback } from '../tools/registry';
 import { RuntimeError } from '../core/errors';
@@ -29,13 +35,16 @@ export const requests={
  // E1: students choose only a whitelisted knowledge point, purpose and budget; never a template, answer or prompt.
  generateTask:z.strictObject({operationId:op,knowledgePointId:z.enum(['negative-brackets','like-terms']),purpose:z.enum(['practice','review']),reviewItemId:op.nullable(),timeBudgetMinutes:z.number().int().min(1).max(30)}),
 };
-const SAFETY_PATTERN=/自杀|不想活|想死|去死|自残|割腕|结束生命|伤害自己|活着(?:没|没有)意思|跳楼/;
 // TODO(product owner): review this wording and add a verified local psychological-support hotline number before wider use.
 export const SAFETY_REPLY='谢谢你愿意告诉我。你的安全最重要。请现在就告诉身边你信任的大人，比如爸爸妈妈或者老师，让他们陪着你。如果你现在有危险，请马上拨打110或120。你也可以联系当地的心理援助热线。我会在这里陪着你。';
 const TUTOR_HISTORY_TURNS=8;
 // Student-selectable shortcuts that answer the question the Tutor just asked (listen: "what happened?", probe: "which kind of stuck?").
 // They are plain student messages once clicked, never model output.
 export const QUICK_REPLIES:Record<TutorStage,string[]>={listen:['考试没考好','有题不会做','就是不想学','不想说'],probe:['概念不太清楚','公式不会用','不知道从哪下手','说不清楚']};
+const REST_TEXT='好，先不安排题目。我们可以继续聊，由你决定何时开始。';
+const chatReply=(r:Partial<ChatReply>&{text:string;stage:ChatStage}):ChatReply=>schemas.ChatReply.parse({sessionId:null,run:null,safety:false,quickReplies:[],suggestions:[],askStudy:false,needsCheck:false,askProblem:false,modeSuggestion:null,problemDraft:null,progressCardDraft:null,memoryDraft:null,summary:null,...r});
+const stateOf=(t:ChatTurn):ChatStageState=>({sessionId:t.sessionId,turn:t.turn,stage:t.stage,listenTurns:t.listenTurns,companionStreak:t.companionStreak,thinkTurns:t.thinkTurns,lastProbeTurn:t.lastProbeTurn,needsCheckAsked:t.needsCheckAsked,askStudyAsked:t.askStudyAsked,studyDeclined:t.studyDeclined,ended:t.ended});
+const notImplementedError=(e:unknown)=>e instanceof RuntimeError&&e.code==='not_implemented';
 const installed=new WeakMap<LearningRuntime,LearningCoordinator>();
 export const learningFor=(runtime:LearningRuntime)=>installed.get(runtime);
 export function installLearning(runtime:LearningRuntime,options:{timeoutMs?:number;generation?:Partial<GenerationConfig>;modelId?:string}={}){
@@ -43,7 +52,7 @@ export function installLearning(runtime:LearningRuntime,options:{timeoutMs?:numb
 }
 export class LearningCoordinator {
  readonly roles:ControlledRoles;readonly generator:TaskGenerator;private readonly rubric:RubricAssessment;
- private flights=new Map<string,{hash:string;promise:Promise<unknown>}>();private active=false;
+ private flights=new Map<string,{hash:string;promise:Promise<unknown>}>();private active=false;private recognizing=false;
  private scope=new AsyncLocalStorage<AbortSignal>();private epoch=0;
  constructor(readonly r:LearningRuntime,timeout=120000,options:{generation?:Partial<GenerationConfig>;modelId?:string}={}){
   this.roles=new ControlledRoles(r,Math.min(timeout,119000));
@@ -115,10 +124,13 @@ export class LearningCoordinator {
   this.r.events.sessionState({operationId:p.operationId+'-state',sessionId:session.id,status:p.rest||p.questionInvitePaused?'paused':'active'});
   const plan=this.r.repository.list('plans').at(-1);if((p.rest||p.questionInvitePaused)&&plan&&plan.confirmation.action!=='defer')await this.r.planning().confirm({operationId:p.operationId+'-plan',proposalId:plan.proposalId,expectedPreviousVersionId:plan.id,action:'defer',scheduledDate:null,reason:'学生暂停或暂不看题'},this.r.engineContext());return {paused:p.rest||p.questionInvitePaused};
  };if(this.active&&(p.rest||p.questionInvitePaused))return work();return this.perform(p.operationId,p,work);}
- async chat(raw:z.infer<typeof schemas.ChatRequest>,signal?:AbortSignal){const p=this.parse(schemas.ChatRequest,raw);const last=p.history.at(-1)?.content??'';
+ async chat(raw:z.infer<typeof schemas.ChatRequest>,signal?:AbortSignal):Promise<ChatReply>{const p=this.parse(schemas.ChatRequest,raw);const last=p.history.at(-1)?.content??'';
+  if(p.flow!=='home'&&(p.intent||p.problemId))throw new RuntimeError('invalid_params','intent 和 problemId 只用于首页综合模式');
   // Program-level safety gate for minors: never delegated to the model or the prompt. Nothing is stored from this message.
-  if(SAFETY_PATTERN.test(last))return {text:SAFETY_REPLY,run:null,suggestions:[],stage:'safety' as const,quickReplies:[] as string[],safety:true};
-  if(/休息|暂不看|不想看|只想聊|不想探索/.test(last)){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});return {text:'好，先不安排题目。我们可以继续聊，由你决定何时开始。',run:null,suggestions:[],stage:'rest' as const,quickReplies:[] as string[],safety:false};}
+  if(SAFETY_PATTERN.test(last))return chatReply({text:SAFETY_REPLY,stage:'safety',safety:true});
+  // G0: the home flow runs the stage machine; the legacy D two-step flow below is unchanged.
+  if(p.flow==='home')return this.homeChat(p,last,signal);
+  if(REST_PATTERN.test(last)){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});return chatReply({text:REST_TEXT,stage:'rest'});}
   // Step 1 (listen) for the first student turn, step 2 (probe) afterwards. The program decides; the client cannot choose a stage.
   const stage:TutorStage=p.history.filter(h=>h.role==='user').length<=1?'listen':'probe';
   return this.perform(p.operationId,{...p,permissions:hash({consents:this.r.repository.list('consents'),sessionEvents:this.r.repository.list('sessionEvents'),memories:this.r.events.context().memories})},async()=>{
@@ -133,16 +145,96 @@ export class LearningCoordinator {
    if(exposed&&session&&result.run.status==='completed')this.r.events.expose({operationId:p.operationId+'-help',sessionId:session.id,taskId:exposed.taskId,taskVersion:exposed.taskVersion,kind:'chat_help',hintId:null});
    const out=tutorOutput.safeParse(result.value);const value=out.success?out.data:{message:result.run.error?.message??'本地规则模式：我在这里，按你的节奏来。',taskIds:[]};
    const suggestions:TaskPublicView[]=session?value.taskIds.flatMap(id=>{const t=this.r.catalog.publicTask(id,2);return t?[t]:[];}):[];
-   return {text:value.message,run:result.run,suggestions,stage,quickReplies:suggestions.length?[]:QUICK_REPLIES[stage],safety:false};
+   return chatReply({text:value.message,run:result.run,suggestions,stage,quickReplies:suggestions.length?[]:QUICK_REPLIES[stage]});
   },signal);
  }
+ private revamp():RevampContext{const r=this.r;return {...r.engineContext(),events:r.events,providerKind:r.provider.kind,memoryEnabled:()=>r.events.memoryEnabled(),model:(call,signal)=>this.roles.compose(call,signal)};}
+ /** G0 home flow. The stage machine decides stage, signals and allowed model fields; plugins validate what is left. */
+ private homeChat(p:z.infer<typeof schemas.ChatRequest>,last:string,signal?:AbortSignal):Promise<ChatReply>{
+  return this.perform(p.operationId,{...p,permissions:hash({consents:this.r.repository.list('consents'),sessionEvents:this.r.repository.list('sessionEvents'),memories:this.r.events.context().memories})},async()=>{
+   const repo=this.r.repository,now=this.r.clock.now(),ctx=this.revamp();
+   const previous=repo.list('chatTurns').at(-1);
+   const fresh=!previous||previous.ended||Date.parse(now)-Date.parse(previous.at)>CHAT_STALE_MS||repo.list('summaries').some(s=>s.sessionId===previous.sessionId)||p.history.filter(h=>h.role==='user').length===1;
+   const sessionId=fresh||!previous?'chat-'+p.operationId:previous.sessionId,prior=fresh?null:previous??null;
+   const problem=p.problemId?repo.get('problems',p.problemId):repo.list('problems').filter(x=>x.sessionId===sessionId).at(-1);
+   if(p.problemId&&!problem)throw new RuntimeError('not_found','没有这条错题记录');
+   const session=this.r.events.sessions().find(s=>s.status==='active');
+   const exposed=repo.list('exposures').filter(e=>e.sessionId===session?.id&&e.kind==='task').at(-1);
+   const task=exposed?this.r.catalog.publicTask(exposed.taskId,exposed.taskVersion)??null:null;
+   const episode=prior?.episodeId?repo.get('episodes',prior.episodeId)??null:null;
+   const answers=episode?.problemId?repo.list('problemSecrets').filter(x=>x.problemId===episode.problemId).at(-1)?.answer??[]:episode?.task?this.r.catalog.definition(episode.task.taskId,episode.task.taskVersion)?.answer??[]:[];
+   const memoryEnabled=this.r.events.memoryEnabled();
+   const decision=decideStage(prior?stateOf(prior):null,{sessionId,text:last,intent:p.intent??null,hasProblem:!!problem,hasActiveTask:!!task,solved:prior?.stage==='think'&&matchesAnswer(last,answers),progressCardDone:!!episode&&repo.list('progressCards').some(c=>c.episodeId===episode.id),memoryEnabled});
+   const stage=decision.stage,s=decision.state,fromStage=prior?.stage??null;
+   // Episode revisions follow the program's stage, never the model.
+   let episodeId=episode&&episode.status!=='closed'?episode.id:null;
+   const revise=(e:LearningEpisode,change:Partial<LearningEpisode>)=>repo.append('episodes',{...e,...change,revision:e.revision+1,updatedAt:now});
+   if(stage==='think'&&fromStage!=='think'){const created:LearningEpisode={schemaVersion:SCHEMA_VERSION,id:'episode-'+p.operationId,revision:1,sessionId,problemId:problem?.id??null,task:problem||!exposed?null:{taskId:exposed.taskId,taskVersion:exposed.taskVersion},stage:'think',helpLevelsUsed:[],studentSolvedAt:null,endReason:null,status:'active',startedAt:now,updatedAt:now};repo.append('episodes',created);episodeId=created.id;}
+   else if(episode&&episode.status!=='closed'){
+    if(stage==='reflect'&&fromStage==='think'){const solved=matchesAnswer(last,answers);revise(episode,{stage:'reflect',status:'reflecting',studentSolvedAt:solved?now:null,endReason:solved?'solved':UNDERSTOOD_PATTERN.test(last)?'understood':'turn_limit'});}
+    else if(stage!=='think'&&stage!=='reflect'&&stage!=='rest'){revise(episode,{status:'closed'});episodeId=null;}
+   }
+   const turn=(dropped:ChatTurn['dropped']):ChatTurn=>({schemaVersion:SCHEMA_VERSION,id:'turn-'+p.operationId,operationId:p.operationId,sessionId,turn:s.turn,stage,intent:p.intent??null,problemId:problem?.id??null,episodeId,listenTurns:s.listenTurns,companionStreak:s.companionStreak,thinkTurns:s.thinkTurns,lastProbeTurn:s.lastProbeTurn,needsCheckAsked:s.needsCheckAsked,askStudyAsked:s.askStudyAsked,studyDeclined:s.studyDeclined,ended:s.ended,signals:{needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem,probeAllowed:decision.probeAllowed,modeSuggestion:decision.modeSuggestion},dropped:dropped.slice(0,8),at:now});
+   if(stage==='rest'){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});repo.append('chatTurns',turn([]));return chatReply({text:REST_TEXT,stage,sessionId});}
+   // memoryDraft: the stage machine already removed it when memory is off; memory-flow may narrow it further.
+   let memoryGate:'memory_off'|'stage_not_allowed'|'not_implemented'|null=memoryEnabled?null:'memory_off';
+   if(decision.allowed.includes('memoryDraft')){try{if(!shouldOfferMemory({sessionId,stage,turn:s.turn},ctx))memoryGate='stage_not_allowed';}catch(e){if(!notImplementedError(e))throw e;memoryGate='not_implemented';}}
+   const allowed=decision.allowed.filter(f=>f!=='memoryDraft'||!memoryGate);
+   const context=this.r.events.context(),ectx=this.r.engineContext();
+   const stuckPoints=repo.list('stuckPoints').slice(-3).map(({knowledgePointId,kind,summary,studentConfirmed,createdAt})=>({knowledgePointId,kind,summary,studentConfirmed,createdAt}));
+   const signals={needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem};
+   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals},signal,{prompt:homeTutorPrompt({stage,allowed})});
+   if(exposed&&session&&result.run.status==='completed')this.r.events.expose({operationId:p.operationId+'-help',sessionId:session.id,taskId:exposed.taskId,taskVersion:exposed.taskVersion,kind:'chat_help',hintId:null});
+   const out=homeTutorOutput.safeParse(result.value);const value=out.success?out.data:{message:result.run.error?.message??'我在这里，按你的节奏来。',taskIds:[]};
+   const proposed:Partial<Record<StageField,unknown>>=out.success?{problemDraft:out.data.problemDraft,observation:out.data.observation,progressCardDraft:out.data.progressCardDraft,memoryDraft:out.data.memoryDraft}:{};
+   const {kept,dropped}=filterStageFields(allowed,proposed);
+   const log:ChatTurn['dropped']=dropped.map(field=>({field,reason:field==='memoryDraft'&&STAGE_FIELDS[stage].includes(field)&&memoryGate?memoryGate:'stage_not_allowed'}));
+   // Plugin validators decide; their output is re-checked against the frozen schema. A stub (not_implemented) drops the field.
+   const studentTexts=p.history.filter(h=>h.role==='user').map(h=>h.content),check={sessionId,stage,studentTexts};
+   const gated=<T>(field:StageField,schema:z.ZodType<T>,work:()=>Validation<unknown>):T|null=>{
+    if(kept[field]===undefined)return null;
+    try{const v=work();const parsed=v.ok?schema.safeParse(v.value):null;if(parsed?.success)return parsed.data;log.push({field,reason:'invalid'});}
+    catch(e){if(!(e instanceof RuntimeError))throw e;log.push({field,reason:e.code==='not_implemented'?'not_implemented':'invalid'});}
+    return null;
+   };
+   const problemDraft=gated('problemDraft',schemas.ProblemDraft,()=>validateProblemDraft(kept.problemDraft,check));
+   let memoryDraft=gated('memoryDraft',schemas.MemoryDraft,()=>validateMemoryDraft(kept.memoryDraft,{...check,memoryEnabled,origin:'chat'}));
+   const observation=gated('observation',schemas.ObservationDraft,()=>validateObservation(kept.observation,{...check,probeAllowed:decision.probeAllowed,existing:repo.list('observations').filter(o=>o.sessionId===sessionId)}));
+   if(observation)repo.append('observations',{schemaVersion:SCHEMA_VERSION,id:'obs-'+p.operationId,...observation,sessionId,status:'unverified',at:now});
+   let progressCardDraft=null;
+   if(stage==='reflect'&&(fromStage!=='reflect'||kept.progressCardDraft!==undefined)){
+    try{const card=await draftProgressCard({sessionId,episode:episodeId?repo.get('episodes',episodeId)??null:null,studentTexts,candidate:kept.progressCardDraft??null},ctx,signal);
+     progressCardDraft=schemas.ProgressCardDraft.parse(card.draft);if(card.memoryDraft&&memoryEnabled&&!memoryGate)memoryDraft=schemas.MemoryDraft.parse(card.memoryDraft);}
+    catch(e){if(!(e instanceof RuntimeError))throw e;if(kept.progressCardDraft!==undefined)log.push({field:'progressCardDraft',reason:e.code==='not_implemented'?'not_implemented':'invalid'});}
+   }
+   let summary=null;
+   if(decision.end){try{summary=schemas.ConversationSummary.parse(await endConversation({operationId:p.operationId+'-end',sessionId,trigger:'farewell',history:p.history},ctx,signal));}catch(e){if(!(e instanceof RuntimeError))throw e;}}
+   repo.append('chatTurns',turn(log));
+   const suggestions:TaskPublicView[]=session?value.taskIds.flatMap(id=>{const t=this.r.catalog.publicTask(id,2);return t?[t]:[];}):[];
+   return chatReply({text:value.message,stage,sessionId,run:result.run,suggestions,quickReplies:suggestions.length?[]:HOME_QUICK_REPLIES[stage],askStudy:decision.askStudy,needsCheck:decision.needsCheck,askProblem:decision.askProblem,
+    modeSuggestion:decision.modeSuggestion?{mode:'professional',reason:'想看清楚自己现在的情况，可以做一次正式测试。'}:null,problemDraft,progressCardDraft,memoryDraft,summary});
+  },signal);
+ }
+ // G0 routes: each delegates to the owning plugin. Plugin output is re-parsed against the frozen schema before it leaves the server.
+ async confirmProblem(raw:z.infer<typeof schemas.ConfirmProblem>){const p=this.parse(schemas.ConfirmProblem,raw);return this.perform(p.operationId,p,async()=>schemas.ProblemRecord.parse(await confirmProblem(p,this.revamp())));}
+ /** Not receipted: the image is forwarded once and nothing derived from it is stored here. One at a time. */
+ async recognize(raw:z.infer<typeof schemas.Recognize>,signal?:AbortSignal){const p=this.parse(schemas.Recognize,raw);
+  if(this.recognizing)throw new RuntimeError('invalid_state','上一张图片还在识别，请稍后');this.recognizing=true;
+  try{this.check(signal);return schemas.RecognizeResult.parse(await recognize(p,this.revamp(),signal));}finally{this.recognizing=false;}}
+ async confirmProgressCard(raw:z.infer<typeof schemas.ConfirmProgressCard>){const p=this.parse(schemas.ConfirmProgressCard,raw);return this.perform(p.operationId,p,async()=>schemas.ProgressCard.parse(await confirmProgressCard(p,this.revamp())));}
+ async confirmMemoryDraft(raw:z.infer<typeof schemas.ConfirmMemoryDraft>){const p=this.parse(schemas.ConfirmMemoryDraft,raw);return this.perform(p.operationId,p,async()=>schemas.MemoryItem.parse(await confirmMemoryDraft(p,this.revamp())));}
+ async greeting(raw:z.infer<typeof schemas.GreetingRequest>,signal?:AbortSignal){const p=this.parse(schemas.GreetingRequest,raw);return this.perform(p.operationId,p,async()=>schemas.Greeting.parse(await greeting(p,this.revamp(),signal)),signal);}
+ async endConversation(raw:z.infer<typeof schemas.EndConversation>,signal?:AbortSignal){const p=this.parse(schemas.EndConversation,raw);return this.perform(p.operationId,p,async()=>schemas.ConversationSummary.parse(await endConversation({...p,trigger:'student_end'},this.revamp(),signal)),signal);}
  async view(){const ctx=this.r.engineContext();await this.r.planning().due({at:this.r.clock.now(),includePaused:true},ctx);const assessment=await this.r.assessment().snapshot({operationId:'view-'+this.r.repository.evidenceRevision()},ctx);
   const session=this.r.events.sessions().find(s=>s.status!=='closed')??null;
   const attempted=new Set(this.r.repository.list('attempts').flatMap(a=>this.r.catalog.definition(a.taskId,a.taskVersion)?.knowledgePoints??[]));
   const tasks=this.r.catalog.candidates({sessionId:session?.id??'preview',excludeTaskIds:[],limit:100}).map(t=>({...t,eligible:t.prerequisites.every(k=>attempted.has(k))&&(!(session?.mode==='exploration')||['理解','逻辑'].includes(t.primaryDimension)||['理解','逻辑'].every(d=>this.r.repository.list('attempts').some(a=>a.sessionId===session.id&&this.r.catalog.definition(a.taskId,a.taskVersion)?.primaryDimension===d)))}));
   return {now:this.r.clock.now(),session,paused:session?.status==='paused',assessment,tasks,attempts:this.r.repository.list('attempts').map(a=>({...a,classification:classifyAttempt(a,ctx)})),exposures:this.r.repository.list('exposures'),gradings:this.r.repository.list('gradings'),evidence:this.r.repository.list('evidence'),reports:reportHistory(ctx),plans:planHistory(ctx),proposal:this.r.repository.list('proposals').at(-1)??null,reviews:currentReviewItems(ctx),consentConfigured:this.r.repository.list('consents').length>0,optionalMemory:this.r.events.memoryEnabled(),memories:this.r.repository.list('memories'),runs:this.r.repository.list('runs'),toolCalls:this.r.repository.list('toolCalls'),stuckPoints:this.r.repository.list('stuckPoints'),
   // Audit only: fingerprints and reason codes, never answers or model text. exposed derives from real task exposures.
-  generations:this.r.repository.list('generations').map(g=>({...g,exposed:!!g.taskId&&this.r.repository.list('exposures').some(e=>e.kind==='task'&&e.taskId===g.taskId&&e.taskVersion===g.taskVersion)})),generationAvailable:this.r.provider.kind!=='offline'};
+  generations:this.r.repository.list('generations').map(g=>({...g,exposed:!!g.taskId&&this.r.repository.list('exposures').some(e=>e.kind==='task'&&e.taskId===g.taskId&&e.taskVersion===g.taskVersion)})),generationAvailable:this.r.provider.kind!=='offline',
+  // G0: learning records for the home revamp. problemSecrets is deliberately absent; chatTurns carry no student text.
+  problems:this.r.repository.list('problems'),episodes:this.r.repository.list('episodes'),progressCards:this.r.repository.list('progressCards'),memoryMentions:this.r.repository.list('memoryMentions'),
+  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20)};
  }
  async memoryCorrect(raw:z.infer<typeof requests.memoryCorrect>){const p=this.parse(requests.memoryCorrect,raw);return this.perform(p.operationId,p,async()=>this.r.repository.transaction(()=>{
   if(!this.r.events.memoryEnabled())throw new RuntimeError('forbidden','可选记忆关闭');

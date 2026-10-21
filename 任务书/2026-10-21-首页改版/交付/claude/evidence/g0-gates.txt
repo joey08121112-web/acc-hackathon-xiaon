@@ -1,0 +1,7 @@
+npm run typecheck:agent → exit 0  
+npm test → exit 0  ℹ tests 25 ℹ pass 25 ℹ fail 0 
+npm run test:agent → exit 0  ℹ tests 142 ℹ pass 142 ℹ fail 0 
+npm run build → exit 0  ✓ built in 806ms 
+npm run test:agent:g → exit 0  ℹ tests 19 ℹ pass 19 ℹ fail 0 
+npm run test:agent:h → exit 0  ℹ tests 2 ℹ pass 2 ℹ fail 0 
+npm run test:agent:i → exit 0  ℹ tests 2 ℹ pass 2 ℹ fail 0 

@@ -7,14 +7,18 @@ import { skillStatusLabels,evidenceKindLabels } from '../../learning/assessment'
 import { ChatPanel } from './ChatPanel';
 import { GenerationPanel } from '../../learning/generation/GenerationPanel';
 import { isGenerationKnowledgePoint } from '../../learning/generation';
+import { useDevMode } from '../../agents/devMode';
+import { ProblemList } from './home/ProblemList';
 const actions:Record<string,string>={accept:'接受',lighter:'减量',reschedule:'改期',defer:'暂不开始',resume:'恢复'};
 const statuses:Record<string,string>={scheduled:'已安排',proposed:'草案',paused:'暂停',completed:'完成',superseded:'已有后续版本'};
 const names:Record<string,string>={'math-language':'数学语句与条件','counterexample':'反例与条件','negative-brackets':'去括号负号','like-terms':'合并同类项','fixed-variable-cost':'一次费用与变化费用','rotation-2d':'二维旋转'};
 const date=(s:string)=>new Date(s).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false});
 const pretty=(s:string)=>Object.entries({...names,...skillStatusLabels}).reduce((text,[key,value])=>text.replaceAll(key,value),s);
 const swallow=(p:Promise<unknown>)=>{void p.catch(()=>{});};
-export function LearningStatus({l}:{l:LearningUI}){return <div className="learning-status" aria-live="polite" aria-label="服务模式"><Leaf size={15}/><span>{l.mode}</span><button className="text-button" onClick={()=>swallow(l.connect())}>重新连接</button></div>;}
+// G0: the service-mode bar and the Agent/tool trace are engineering views, shown only in developer mode.
+export function LearningStatus({l}:{l:LearningUI}){const dev=useDevMode();if(!dev)return null;return <div className="learning-status" aria-live="polite" aria-label="服务模式"><Leaf size={15}/><span>{l.mode}</span><button className="text-button" onClick={()=>swallow(l.connect())}>重新连接</button></div>;}
 export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:{l:LearningUI;page:string;navigate:(page:string,tab?:string)=>void;onExploreDimension:(index:number)=>void;safety?:boolean}){
+ const dev=useDevMode();
  const [message,setMessage]=useState(''),[memoryText,setMemoryText]=useState(''),[editing,setEditing]=useState<string|null>(null),[scheduledDate,setScheduledDate]=useState(''),[reportId,setReportId]=useState(''),[planId,setPlanId]=useState(''),[preview,setPreview]=useState<{hash:string;attemptCount:number;warnings:string[]}|null>(null),[migration,setMigration]=useState('');
  const v=l.view;
  if(!l.connected||!v)return <section className="info-paper"><h1>学习记录等待本地服务</h1><p>新版记录保存在本机 SQLite。启动服务后重新连接，草稿仍在本机。</p><button className="primary" onClick={()=>swallow(l.connect())}>重连本地服务</button></section>;
@@ -25,7 +29,7 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:
  const generate=()=>swallow(l.run('learning/generate',{timeBudgetMinutes:6}));
  const planAction=(action:string)=>{if(!v.proposal)return;swallow(l.run('learning/confirm',{proposalId:action==='defer'&&currentPlan?currentPlan.proposalId:v.proposal.id,expectedPreviousVersionId:currentPlan?.id??null,action,scheduledDate:action==='reschedule'?scheduledDate:null,reason:'学生明确选择'+({accept:'接受',lighter:'减量',reschedule:'改期',defer:'暂不开始',resume:'恢复'}[action]??action)}));};
  const headline=(eyebrow:string,title:string,note:string)=><div className="section-heading"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{note}</p></div>;
- const trace=<details className="evidence-details"><summary>查看 Agent 与工具轨迹</summary><p className="small">仅显示角色、模式、状态和引用；不显示密钥或内部思考。</p>{v.runs.slice(-12).map(run=><div className="learning-trace" key={run.id}><strong>{run.role==='planner'?'PlannerReporter':run.role==='assessor'?'Assessor':run.role==='generator'?'Generator':'Tutor'}</strong><span>{run.providerKind} · {run.status} · {run.rounds}轮 / {run.toolExecutions}工具</span></div>)}{v.toolCalls.slice(-20).map(t=><p className="small" key={t.id}>{t.name} · {t.status}{t.errorCode?' / '+t.errorCode:''} · {t.evidenceIds.length}个引用</p>)}</details>;
+ const trace=dev&&<details className="evidence-details"><summary>查看 Agent 与工具轨迹</summary><p className="small">仅显示角色、模式、状态和引用；不显示密钥或内部思考。</p>{v.runs.slice(-12).map(run=><div className="learning-trace" key={run.id}><strong>{run.role==='planner'?'PlannerReporter':run.role==='assessor'?'Assessor':run.role==='generator'?'Generator':'Tutor'}</strong><span>{run.providerKind} · {run.status} · {run.rounds}轮 / {run.toolExecutions}工具</span></div>)}{v.toolCalls.slice(-20).map(t=><p className="small" key={t.id}>{t.name} · {t.status}{t.errorCode?' / '+t.errorCode:''} · {t.evidenceIds.length}个引用</p>)}</details>;
  return <div className="learning-pages">
  {l.busy&&<div className="notice" role="status">正在处理，草稿已保留。<button onClick={l.cancel}>取消等待</button></div>}
  {l.error&&<div className="notice error" role="alert">{l.error}</div>}
@@ -36,6 +40,7 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:
  {v.paused&&<div className="notice">学习已暂停，由你决定何时继续。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}
  {page==='explore'?<ExplorationMap view={v} onDimension={onExploreDimension} onReport={()=>navigate('report','成长')}/>:<>
  {['理解','逻辑','计算','建模','空间想象'].map(dim=><section className="info-paper" key={dim}><h2>{dim}</h2>{v.assessment.skills.filter(s=>s.dimension===dim).map(s=><div className="learning-skill" key={s.id}><strong>{names[s.knowledgePointId]}</strong><span className="tag">{skillStatusLabels[s.status]}</span><p>{s.coverage}</p>{s.recentDifficulty&&<p>最近一次仍有困难，此前成功继续保留。</p>}{isGenerationKnowledgePoint(s.knowledgePointId)&&<details><summary>针对这个环节出一道新题</summary><GenerationPanel l={l} knowledgePointId={s.knowledgePointId} purpose="practice" navigate={navigate} safety={safety}/></details>}<details><summary>观察范围与待了解</summary>{s.unknowns.map((u,i)=><p className="small" key={i}>{u}</p>)}</details></div>)}</section>)}
+ <ProblemList l={l} navigate={navigate}/>
  <div className="quick-replies"><button onClick={()=>navigate('report','成长')}>学习观察报告</button><button onClick={()=>navigate('plan','成长')}>查看我的计划</button><button onClick={()=>navigate('review','成长')}>阶段回顾</button><button onClick={()=>navigate('memory')}>我的学习记忆</button></div>
  </>}
  </>}
