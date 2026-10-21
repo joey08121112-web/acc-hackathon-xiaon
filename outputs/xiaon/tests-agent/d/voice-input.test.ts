@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createRuntime } from '../../server/bootstrap';
 import { installLearning } from '../../server/agents/learning';
 import { createHttpServer } from '../../server/http/server';
-import { temporaryRepository } from '../../server/storage/testing';
+import { temporaryRepository,freePort } from '../../server/storage/testing';
 import { DoubaoAsr,NoAsr,isWav,readAsrConfig,silentWav,type AsrProvider } from '../../server/voice/asr';
 import { EndpointDetector } from '../../src/voice/vad';
 import { bytesToBase64,encodeWav } from '../../src/voice/wav';
@@ -69,7 +69,8 @@ test('ASR config: shares the TTS key unless a separate one is set, and can be sw
 });
 
 // ---- HTTP route ----
-const port=Number(process.env.XIAON_D_ASR_PORT??18952),origin='http://127.0.0.1:5194',base=`http://127.0.0.1:${port}`;
+// Integration phase 1: the fixed 18952/18953 collided with the lanes' dev ports; the OS now assigns free ports unless overridden.
+const [port,port2]=process.env.XIAON_D_ASR_PORT?[Number(process.env.XIAON_D_ASR_PORT),Number(process.env.XIAON_D_ASR_PORT)+1]:[await freePort(),await freePort()],origin='http://127.0.0.1:5194',base=`http://127.0.0.1:${port}`;
 test('/api/voice/asr needs a session + CSRF, accepts only a base64 WAV, and health reports whether recognition is really available',async()=>{
  const f=temporaryRepository(),r=createRuntime(f);installLearning(r);
  let granted=false;const heard:Buffer[]=[];
@@ -88,9 +89,9 @@ test('/api/voice/asr needs a session + CSRF, accepts only a base64 WAV, and heal
   const good=await post({audio:wav});assert.equal(good.status,200);assert.deepEqual(await good.json(),{text:'我听到了'});assert.equal(heard.length,1);assert.deepEqual(heard[0],Buffer.from(wav,'base64'));
   const huge=await post({audio:Buffer.alloc(1_700_000,1).toString('base64')});assert.equal(huge.status,400);
  }finally{server.closeAllConnections();await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}
- const g=temporaryRepository(),q=createRuntime(g);installLearning(q);const off=createHttpServer(q,{host:`127.0.0.1:${port+1}`,allowedOrigins:[origin],asr:new NoAsr()});await new Promise<void>(resolve=>off.listen(port+1,'127.0.0.1',resolve));
+ const g=temporaryRepository(),q=createRuntime(g);installLearning(q);const off=createHttpServer(q,{host:`127.0.0.1:${port2}`,allowedOrigins:[origin],asr:new NoAsr()});await new Promise<void>(resolve=>off.listen(port2,'127.0.0.1',resolve));
  try{
-  const b2=`http://127.0.0.1:${port+1}`;assert.equal((await(await fetch(b2+'/api/health')).json()).voice.asr,false);
+  const b2=`http://127.0.0.1:${port2}`;assert.equal((await(await fetch(b2+'/api/health')).json()).voice.asr,false);
   const login=await fetch(b2+'/api/local-session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});const token=(await login.json()).csrfToken,cookie=login.headers.get('set-cookie')!.split(';')[0];
   const res=await fetch(b2+'/api/voice/asr',{method:'POST',headers:{Origin:origin,Cookie:cookie,'X-Xiaon-CSRF':token,'Content-Type':'application/json'},body:JSON.stringify({audio:Buffer.from(encodeWav(new Float32Array(16000))).toString('base64')})});assert.equal(res.status,503);
  }finally{off.closeAllConnections();await new Promise<void>(resolve=>off.close(()=>resolve()));g.dispose();}

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createRuntime } from '../../server/bootstrap';
 import { installLearning,SAFETY_REPLY } from '../../server/agents/learning';
 import { createHttpServer } from '../../server/http/server';
-import { temporaryRepository } from '../../server/storage/testing';
+import { temporaryRepository,freePort } from '../../server/storage/testing';
 import { DoubaoTts,NoTts,jsonObjects,readTtsConfig,type TtsProvider } from '../../server/voice/tts';
 import { RuntimeError } from '../../server/core/errors';
 import type { ModelProvider } from '../../shared/learning-contracts';
@@ -83,7 +83,8 @@ test('TTS is off unless provider, key and speaker are all configured',()=>{
  assert.throws(()=>readTtsConfig({XIAON_TTS_PROVIDER:'doubao',XIAON_DOUBAO_TTS_API_KEY:'k',XIAON_DOUBAO_TTS_SPEAKER:'bad speaker!'}),{code:'invalid_params'});
 });
 
-const port=Number(process.env.XIAON_D_VOICE_PORT??18950),origin='http://127.0.0.1:5194',base=`http://127.0.0.1:${port}`,base2=`http://127.0.0.1:${port+1}`;
+// Integration phase 1: the fixed 18950/18951 overlapped the lanes' dev ports; the OS now assigns free ports unless overridden.
+const [port,port2]=process.env.XIAON_D_VOICE_PORT?[Number(process.env.XIAON_D_VOICE_PORT),Number(process.env.XIAON_D_VOICE_PORT)+1]:[await freePort(),await freePort()],origin='http://127.0.0.1:5194',base=`http://127.0.0.1:${port}`,base2=`http://127.0.0.1:${port2}`;
 test('/api/voice/tts needs a local session + CSRF, accepts only {text}, reports availability and returns audio',async()=>{
  const f=temporaryRepository(),r=createRuntime(f);installLearning(r);
  const fake:TtsProvider={enabled:true,async synthesize(text){if(text.length>300)throw new RuntimeError('invalid_params');return Buffer.from('ID3-fake-'+text);}};
@@ -98,7 +99,7 @@ test('/api/voice/tts needs a local session + CSRF, accepts only {text}, reports 
   const good=await post({text:'你好'});assert.equal(good.status,200);assert.equal(good.headers.get('content-type'),'audio/mpeg');assert.match(Buffer.from(await good.arrayBuffer()).toString(),/^ID3-fake-你好/);
   assert.equal((await post({text:'字'.repeat(301)})).status,400);
  }finally{await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}
- const g=temporaryRepository(),q=createRuntime(g);installLearning(q);const off=createHttpServer(q,{host:`127.0.0.1:${port+1}`,allowedOrigins:[origin],tts:new NoTts()});await new Promise<void>(resolve=>off.listen(port+1,'127.0.0.1',resolve));
+ const g=temporaryRepository(),q=createRuntime(g);installLearning(q);const off=createHttpServer(q,{host:`127.0.0.1:${port2}`,allowedOrigins:[origin],tts:new NoTts()});await new Promise<void>(resolve=>off.listen(port2,'127.0.0.1',resolve));
  try{
   assert.equal((await(await fetch(base2+'/api/health')).json()).voice.tts,false);
   const login=await fetch(base2+'/api/local-session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});const token=(await login.json()).csrfToken,cookie=login.headers.get('set-cookie')!.split(';')[0];

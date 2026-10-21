@@ -46,9 +46,9 @@ test('record_stuck_point ignores the model\'s studentConfirmed; only a confirmed
   const draft={source:'spoken' as const,questionText:null,studentWork:null,knowledgePointId:'like-terms' as const,stuckQuote:'不知道x和常数能不能加',stuckPointId:'stuck-missing',catalogTask:null};
   await assert.rejects(f.d.confirmProblem({operationId:id(),sessionId:null,draft,referenceAnswer:null}),{code:'invalid_params'});
   await assert.rejects(f.d.confirmProblem({operationId:id(),sessionId:null,draft:{...draft,stuckPointId:stuck.id,knowledgePointId:'negative-brackets'},referenceAnswer:null}),{code:'invalid_params'});
-  await assert.rejects(f.d.confirmProblem({operationId:id(),sessionId:null,draft:{...draft,stuckPointId:stuck.id},referenceAnswer:null}),{code:'not_implemented'});
-  // What zCode's confirmProblem will append once the student clicks confirm:
-  f.r.repository.append('problems',{schemaVersion:SCHEMA_VERSION,id:'problem-1',operationId:'op-p1',...draft,stuckPointId:stuck.id,sessionId:null,answerStatus:'unknown',confirmedAt:at});
+  // Integration (phase 1): zCode's confirmProblem saves the record on the student's confirm click, keeping the link.
+  const record=await f.d.confirmProblem({operationId:id(),sessionId:null,draft:{...draft,stuckPointId:stuck.id},referenceAnswer:null});
+  assert.equal(record.stuckPointId,stuck.id);assert.equal(f.r.repository.list('problems').length,1);
   assert.equal((await f.d.view()).stuckPoints[0].studentConfirmed,true);
  }finally{f.dispose();}
 });
@@ -63,12 +63,15 @@ test('Tutor memory context: the program keeps only active ids, no repeats, at mo
  assert.equal(capMemorySelection([{id:'m0',text:'被插件改写的文字'} as unknown as MemoryItem],active)[0].text,'喜欢打篮球0','the program uses its own copy of the memory text');
 });
 
-test('while selectMemoriesForContext is a stub, the Tutor still receives all active memories (unchanged behaviour)',async()=>{
+test('the Tutor receives only the active memories selectMemoriesForContext picks, capped by the program (no longer all of them)',async()=>{
  const seen:string[]=[];const p:ModelProvider={kind:'synthetic',supportsTools:true,async complete(input){seen.push(input.messages.find(m=>m.role==='user')!.content);return{content:JSON.stringify({message:'嗯。',taskIds:[]}),toolCalls:[]};}};
  const f=setup(p);try{
   f.r.events.consent({operationId:id(),optionalMemory:true});
   for(let i=0;i<7;i++)f.r.events.remember({operationId:id(),text:'合成偏好'+i,source:'student_explicit',purpose:'tutoring',expiresAt:null,reviewAt:null});
   await f.d.chat({operationId:id(),history:[{role:'user',content:'你好'}]});
-  assert.equal((JSON.parse(seen[0]) as {context:{memories:unknown[]}}).context.memories.length,7);
+  // Integration (phase 1): zCode's selector keeps only memories relevant to the current talk; "你好" matches none of the 7.
+  const sent=(JSON.parse(seen[0]) as {context:{memories:{id:string}[]}}).context.memories;
+  assert.ok(sent.length<=MEMORY_CONTEXT_MAX_ITEMS);assert.notEqual(sent.length,7);
+  const active=new Set(f.r.repository.list('memories').map(m=>m.id));assert.ok(sent.every(m=>active.has(m.id)));
  }finally{f.dispose();}
 });
