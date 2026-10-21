@@ -1,7 +1,7 @@
 /** 所有者：zCode（改造五：记得你说过的小事 + 开场问候）。确认后的记忆仍写成现有 MemoryItem（source:'student_explicit'）。
  * 提议上限用 memoryMentions 里的 memory-offer 标记计数（memoryId 保留字，真实记忆的 id 都带 uuid 后缀，不会冲突）。 */
 import { randomUUID } from 'node:crypto';
-import { schemas,SCHEMA_VERSION,type ConfirmMemoryDraft,type Greeting,type GreetingRequest,type MemoryDraft,type MemoryItem,type MemoryMention,type Validation,MEMORY_CONTEXT_MAX_ITEMS } from '../../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,type ConfirmMemoryDraft,type Greeting,type GreetingRequest,type MemoryDraft,type MemoryItem,type MemoryMention,type Validation,MEMORY_CONTEXT_MAX_ITEMS,retentionWindow } from '../../../shared/learning-contracts';
 import { notImplemented,type MemoryDraftCheck,type MemoryOfferInput,type MemorySelectionInput,type RevampContext } from '../context';
 import { latestSummary } from '../conversation';
 import { RuntimeError } from '../../core/errors';
@@ -40,8 +40,9 @@ export function validateMemoryDraft(candidate:unknown,check:MemoryDraftCheck):Va
 /** 学生点「记住」才调用；text 是学生改后的文字。写成现有 MemoryItem，并记一条 chat 提起（刚确认的事不再马上主动提起）。 */
 export async function confirmMemoryDraft(input:ConfirmMemoryDraft,ctx:RevampContext):Promise<MemoryItem>{
  if(!ctx.memoryEnabled())throw new RuntimeError('forbidden','可选记忆关闭');
- const reviewAt=new Date(Date.parse(ctx.clock.now())+MEMORY_REVIEW_DAYS*86_400_000).toISOString();
- const item=ctx.events.remember({operationId:input.operationId,text:input.text,source:'student_explicit',purpose:'tutoring',expiresAt:null,reviewAt});
+ // Integration phase 1: the student's retention choice (contract change, zCode request 2); omitted keeps the old default (forever + 30-day review).
+ const {expiresAt,reviewAt}=retentionWindow(input.retention,ctx.clock.now());
+ const item=ctx.events.remember({operationId:input.operationId,text:input.text,source:'student_explicit',purpose:'tutoring',expiresAt,reviewAt});
  const row:MemoryMention={schemaVersion:SCHEMA_VERSION,id:'mention-'+randomUUID(),memoryId:item.id,sessionId:input.sessionId,via:'chat',at:ctx.clock.now()};
  ctx.repository.append('memoryMentions',row);return item;
 }

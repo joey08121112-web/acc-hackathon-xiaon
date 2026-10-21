@@ -85,7 +85,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
   if(blocked||l.busy||requestLock.current)return;
   requestLock.current=true;setNotice('');
   try{
-   const session=await l.run<LearningSession>('learning/start',{mode:'exploration'});
+   const session=await l.run<LearningSession>('learning/start',{mode:'exploration',switchMode:true});
    if(session.mode!=='exploration'){setNotice('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。');setModeAttempt(n=>n+1);return;}
    navigate('explore','探索');
   }
@@ -134,8 +134,8 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
    <HomeChat l={l} reply={reply} send={send} navigate={navigate}/>
    <fieldset className="home-mode-actions" disabled={disabled}><ModeSwitchCard key={`${sessionId}-${manualSuggestion?'manual':reply?.modeSuggestion?.reason}-${modeAttempt}`} suggestion={manualSuggestion??reply?.modeSuggestion??null} navigate={startProfessional}/></fieldset>
    <div className="home-slots">
-    <ProblemCapture open={!!reply?.askProblem} sessionId={sessionId} l={l} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
-    <ProblemConfirmCard draft={reply?.problemDraft??null} sessionId={sessionId} l={l} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
+    <ProblemCapture open={!!reply?.askProblem} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
+    <ProblemConfirmCard draft={reply?.problemDraft??null} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
     <ProgressCardView draft={reply?.progressCardDraft??null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l} navigate={navigate}/>
     <MemoryPrompt draft={reply?.memoryDraft??null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l}/>
    </div>

@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { Check, ListChecks, Pencil, X } from 'lucide-react';
 import type { ProblemDraft, ProblemKnowledgePoint, ProblemRecord } from '../../../../shared/learning-contracts';
 import type { LearningUI } from '../../../agents/useLearning';
-export type ProblemConfirmCardProps={draft:ProblemDraft|null;sessionId:string|null;l:LearningUI;onConfirmed:(problem:ProblemRecord)=>void};
+// 集成第一期（契约变更，zCode 申请第 3 条）：补 navigate，与 ProblemCapture 一致；确认后的「一起看」仍由 onConfirmed 交给 ChatPanel 发送。
+export type ProblemConfirmCardProps={draft:ProblemDraft|null;sessionId:string|null;l:LearningUI;onConfirmed:(problem:ProblemRecord)=>void;navigate:(page:string,tab?:string)=>void};
 const POINT_NAMES:Record<ProblemKnowledgePoint,string>={'math-language':'数学语句与条件','counterexample':'反例与条件','negative-brackets':'去括号负号','like-terms':'合并同类项','fixed-variable-cost':'一次费用与变化费用','rotation-2d':'二维旋转','other':'其他'};
 export function ProblemConfirmCard({draft,sessionId,l,onConfirmed}:ProblemConfirmCardProps){
  const [editing,setEditing]=useState(false),[question,setQuestion]=useState(''),[work,setWork]=useState(''),[quote,setQuote]=useState(''),[point,setPoint]=useState<ProblemKnowledgePoint>('other'),[done,setDone]=useState<ProblemRecord|null>(null),[dismissed,setDismissed]=useState(false);

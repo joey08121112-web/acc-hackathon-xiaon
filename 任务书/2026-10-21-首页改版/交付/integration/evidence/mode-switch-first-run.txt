@@ -1,0 +1,50 @@
+✖ an explicit switch turns today's open support session into exploration: same session, recorded as a session event (22.666333ms)
+✖ switching cannot reset the per-session calculation cap or the exposures (8.326792ms)
+✖ a paused session is resumed and switched by the same explicit click; another day still starts fresh (5.77725ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 192.698917
+
+✖ failing tests:
+
+test at tests-agent/g/mode-switch.test.ts:1:519
+✖ an explicit switch turns today's open support session into exploration: same session, recorded as a session event (22.666333ms)
+  Error: 无效的学生事件字段
+      at LearningCoordinator.parse (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/server/agents/learning.ts:73:104)
+      at LearningCoordinator.start (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/server/agents/learning.ts:85:63)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/tests-agent/g/mode-switch.test.ts:17:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/g/mode-switch.test.ts:1:1980
+✖ switching cannot reset the per-session calculation cap or the exposures (8.326792ms)
+  Error: 无效的学生事件字段
+      at LearningCoordinator.parse (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/server/agents/learning.ts:73:104)
+      at LearningCoordinator.start (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/server/agents/learning.ts:85:63)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/tests-agent/g/mode-switch.test.ts:34:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+
+test at tests-agent/g/mode-switch.test.ts:1:2807
+✖ a paused session is resumed and switched by the same explicit click; another day still starts fresh (5.77725ms)
+  Error: 无效的学生事件字段
+      at LearningCoordinator.parse (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/server/agents/learning.ts:73:104)
+      at LearningCoordinator.start (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/server/agents/learning.ts:85:63)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/tests-agent/g/mode-switch.test.ts:44:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'invalid_params',
+    recoverable: true
+  }
+exit 1

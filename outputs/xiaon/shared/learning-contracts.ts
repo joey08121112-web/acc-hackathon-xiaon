@@ -27,7 +27,8 @@ const commonTask = {
 const TaskDefinition = z.strictObject({...commonTask,answer:z.array(text).min(1),rubric:z.array(rubricPoint).min(1),hints:z.array(hint),commonErrors:z.array(z.strictObject({id,description:text,indicator:text,certainty:z.literal('clue_only')}))});
 const TaskPublicView = z.strictObject({...commonTask,hintAvailable:z.boolean()});
 const LearningSession = z.strictObject({...base,...operation,startedAt:utc,endedAt:nullableTime,status:z.enum(['active','paused','closed']),mode:z.enum(['exploration','support','review']),timezone:z.literal('Asia/Shanghai')});
-const SessionEvent = z.strictObject({...base,...operation,sessionId:id,status:LearningSession.shape.status,at:utc});
+// Phase-1 integration (ChatGPT request): an optional mode records an explicit student mode switch on the same session.
+const SessionEvent = z.strictObject({...base,...operation,sessionId:id,status:LearningSession.shape.status,mode:LearningSession.shape.mode.optional(),at:utc});
 const ExposureEvent = z.strictObject({...base,...operation,...ref.shape,sessionId:id,kind:z.enum(['task','hint','answer','chat_help']),hintId:id.nullable(),contentSnapshot:z.string().max(8000).nullable(),sourceTime});
 const Attempt = z.strictObject({...base,...operation,...ref.shape,sessionId:id.nullable(),value:text,sourceTime,exposureIds:ids,hintSnapshot:z.array(hint),answerExposed:z.boolean(),origin:z.enum(['student_api','legacy_import']),exposureHistory:z.enum(['complete','legacy_unknown']),supersedesAttemptId:id.nullable()});
 const Evidence = z.strictObject({...base,...revision,attemptId:id,taskId:id,taskVersion:version,knowledgePointId:id,pointId:id,status:z.enum(['supported','unsupported','uncertain']),quote:z.string().max(8000),location:z.strictObject({start:z.number().int().nonnegative(),end:z.number().int().nonnegative()}),explanation:text,errorClues:z.array(text),uncertainties:z.array(text),source:z.enum(['program','model','human']),createdAt:utc,supersedesEvidenceId:id.nullable()});
@@ -119,6 +120,14 @@ const ChatTurn = z.strictObject({...base,...operation,sessionId:id,turn:version,
 const ChatReply = z.strictObject({text,stage:ChatStage,sessionId:id.nullable(),run:AgentRun.nullable(),safety:z.boolean(),quickReplies:z.array(z.string().min(1).max(40)).max(6),suggestions:z.array(TaskPublicView).max(3),
   askStudy:z.boolean(),needsCheck:z.boolean(),askProblem:z.boolean(),modeSuggestion:ModeSuggestion.nullable(),
   problemDraft:ProblemDraft.nullable(),progressCardDraft:ProgressCardDraft.nullable(),memoryDraft:MemoryDraft.nullable(),summary:ConversationSummary.nullable()});
+// Phase-1 integration (zCode request 2): how long a confirmed memory lasts. forever: never expires, review after 30 days; 7d/30d: expires, no review.
+const memoryRetention = z.enum(['forever','7d','30d']);
+export const MEMORY_REVIEW_DAYS_DEFAULT = 30;
+/** The expiresAt/reviewAt pair for a retention choice (omitted = forever). Shared so the server and the memory page agree. */
+export function retentionWindow(retention:'forever'|'7d'|'30d'|undefined,now:string):{expiresAt:string|null;reviewAt:string|null}{
+  const at=(days:number)=>new Date(Date.parse(now)+days*86_400_000).toISOString();
+  return retention==='7d'?{expiresAt:at(7),reviewAt:null}:retention==='30d'?{expiresAt:at(30),reviewAt:null}:{expiresAt:null,reviewAt:at(MEMORY_REVIEW_DAYS_DEFAULT)};
+}
 /** Tutor reply length gate (characters). The prompt asks for ≤60; the program retries once above this, then cuts at a sentence end. */
 export const TUTOR_REPLY_MAX_CHARS = 80;
 /** Memory selection for the Tutor context: at most this many active memories and this many characters in total. */
@@ -163,7 +172,7 @@ export const schemas = {
   ConfirmProblem:z.strictObject({...operation,sessionId:id.nullable(),draft:ProblemDraft,referenceAnswer:z.string().min(1).max(500).nullable()}),
   Recognize:z.strictObject({...operation,sessionId:id.nullable(),mimeType:z.literal('image/jpeg'),image:z.string().min(4).max(RECOGNIZE_MAX_BASE64).regex(/^[A-Za-z0-9+/]+={0,2}$/),maskConfirmed:z.literal(true)}),
   ConfirmProgressCard:z.strictObject({...operation,sessionId:id,episodeId:id.nullable(),aiDraft:ProgressCardDraft.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable(),confidence:confidence.nullable()}),
-  ConfirmMemoryDraft:z.strictObject({...operation,sessionId:id.nullable(),draft:MemoryDraft,text:shortText}),
+  ConfirmMemoryDraft:z.strictObject({...operation,sessionId:id.nullable(),draft:MemoryDraft,text:shortText,retention:memoryRetention.optional()}),
   GreetingRequest:z.strictObject({...operation}),
   EndConversation:z.strictObject({...operation,sessionId:id,history:z.array(ChatMessage).max(20)}),
 };
@@ -225,6 +234,7 @@ export type ConfirmProblem = z.infer<typeof schemas.ConfirmProblem>;
 export type Recognize = z.infer<typeof schemas.Recognize>;
 export type ConfirmProgressCard = z.infer<typeof schemas.ConfirmProgressCard>;
 export type ConfirmMemoryDraft = z.infer<typeof schemas.ConfirmMemoryDraft>;
+export type MemoryRetention = z.infer<typeof memoryRetention>;
 export type GreetingRequest = z.infer<typeof schemas.GreetingRequest>;
 export type EndConversation = z.infer<typeof schemas.EndConversation>;
 /** Program verdict on a model-proposed field: accepted value or reasons it was discarded. */

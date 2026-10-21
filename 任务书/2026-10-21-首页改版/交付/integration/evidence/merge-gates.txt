@@ -1,0 +1,20 @@
+# 合入 zCode（eb0c901）后
+npm run typecheck:agent → exit 0 
+npm run test:agent → exit 1 ℹ tests 164 ℹ pass 159 ℹ fail 5 
+✖ /api/voice/asr needs a session + CSRF, accepts only a base64 WAV, and health reports whether recognition is really available (84.823958ms)
+✖ failing tests:
+✖ home flow: listen 2 turns, needs-check once, every field outside the stage is dropped and traced (24.969708ms)
+✖ home flow: memory on still drops memory drafts while memory-flow is a stub; farewell ends the session (8.181417ms)
+✖ record_stuck_point ignores the model's studentConfirmed; only a confirmed ProblemRecord linking it confirms it (12.622166ms)
+✖ while selectMemoriesForContext is a stub, the Tutor still receives all active memories (unchanged behaviour) (9.4395ms)
+# 合入 Claude（518fa15）+ 更新 g 里 4 条 zCode 桩断言 + 语音测试改用系统分配端口 后
+npm run typecheck:agent → exit 0 
+npm run test:agent → exit 0 ℹ tests 178 ℹ pass 178 ℹ fail 0 
+# 合入 ChatGPT（d7cfb7a）后
+npm run typecheck:agent → exit 0 
+npm run test:agent → exit 0 ℹ tests 184 ℹ pass 184 ℹ fail 0 
+# 两份契约变更申请（模式切换、记忆时效）与 navigate 接线之后
+npm run typecheck:agent → exit 0 
+npm test → exit 0 ℹ tests 25 ℹ pass 25 ℹ fail 0 
+npm run test:agent → exit 0 ℹ tests 189 ℹ pass 189 ℹ fail 0 
+npm run build → exit 0 ✓ built in 757ms 

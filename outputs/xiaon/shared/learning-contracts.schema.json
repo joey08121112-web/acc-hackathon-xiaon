@@ -621,6 +621,14 @@
             "closed"
           ]
         },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "exploration",
+            "support",
+            "review"
+          ]
+        },
         "at": {
           "type": "string",
           "format": "date-time",
@@ -8700,6 +8708,14 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 200
+        },
+        "retention": {
+          "type": "string",
+          "enum": [
+            "forever",
+            "7d",
+            "30d"
+          ]
         }
       },
       "required": [

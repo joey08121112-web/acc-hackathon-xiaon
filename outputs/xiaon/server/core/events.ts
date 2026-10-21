@@ -6,13 +6,17 @@ import { RuntimeError } from './errors';
 export class StudentEvents {
  constructor(private ctx:()=>EngineContext){}
  private parse<T>(schema:z.ZodType<T>,value:unknown):T{const p=schema.safeParse(value);if(!p.success)throw new RuntimeError('invalid_params','请求字段或版本无效');return p.data;}
- sessions():LearningSession[]{const {repository}=this.ctx();return repository.list('sessions').map(s=>{const e=repository.list('sessionEvents').filter(e=>e.sessionId===s.id).at(-1);return e?{...s,status:e.status,endedAt:e.status==='closed'?e.at:null}:s;});}
+ sessions():LearningSession[]{const {repository}=this.ctx();return repository.list('sessions').map(s=>{const events=repository.list('sessionEvents').filter(e=>e.sessionId===s.id),e=events.at(-1),mode=events.filter(x=>x.mode).at(-1)?.mode??s.mode;return e?{...s,status:e.status,endedAt:e.status==='closed'?e.at:null,mode}:s;});}
  requireSession(id:string){const session=this.sessions().find(s=>s.id===id);if(!session)throw new RuntimeError('not_found','场次不存在');if(session.status!=='active')throw new RuntimeError('invalid_state','场次暂停或已结束');return session;}
  private task(id:string,v:number){const t=this.ctx().catalog.definition(id,v);if(!t)throw new RuntimeError('not_found','可信题目或版本不存在');this.ctx().repository.append('tasks',t);return t;}
  startSession(raw:z.infer<typeof schemas.StartSession>){const input=this.parse(schemas.StartSession,raw);const {repository,clock}=this.ctx();return repository.once(input.operationId,{kind:'start',...input},()=>{
   const existing=this.sessions().find(s=>s.status!=='closed');if(existing){if(existing.mode!==input.mode)throw new RuntimeError('invalid_state','请先结束当前场次');return existing;}
   const session=schemas.LearningSession.parse({schemaVersion:SCHEMA_VERSION,id:randomUUID(),...input,startedAt:clock.now(),endedAt:null,status:'active',timezone:'Asia/Shanghai'});repository.append('sessions',session);return session;
  });}
+ /** Explicit student mode switch on the same open session (also resumes it). Same id: exposures, the per-session calculation cap and evidence carry over. */
+ switchMode(input:{operationId:string;sessionId:string;mode:LearningSession['mode']}){const {repository,clock}=this.ctx();return repository.once(input.operationId,{kind:'switch_mode',...input},()=>{
+  const s=this.sessions().find(x=>x.id===input.sessionId);if(!s||s.status==='closed')throw new RuntimeError('invalid_state','场次已结束');
+  const e=schemas.SessionEvent.parse({schemaVersion:SCHEMA_VERSION,id:randomUUID(),operationId:input.operationId,sessionId:s.id,status:'active',mode:input.mode,at:clock.now()});repository.append('sessionEvents',e);return e;});}
  sessionState(raw:z.infer<typeof schemas.SessionState>){const input=this.parse(schemas.SessionState,raw);const {repository,clock}=this.ctx();return repository.once(input.operationId,{kind:'session_state',...input},()=>{const s=this.sessions().find(s=>s.id===input.sessionId);if(!s||s.status==='closed')throw new RuntimeError('invalid_state');const e=schemas.SessionEvent.parse({schemaVersion:SCHEMA_VERSION,id:randomUUID(),...input,at:clock.now()});repository.append('sessionEvents',e);return e;});}
  expose(raw:z.infer<typeof schemas.Expose>){const input=this.parse(schemas.Expose,raw);const {repository,clock}=this.ctx();return repository.once(input.operationId,{eventType:'expose',...input},()=>{
   const s=this.requireSession(input.sessionId);const t=this.task(input.taskId,input.taskVersion);

@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { z } from 'zod';
-import { schemas,SCHEMA_VERSION,MEMORY_CONTEXT_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,type ChatReply,type MemoryItem,type ChatStage,type ChatTurn,type LearningEpisode,type ModelProvider,type StageField,type TaskPublicView,type Validation } from '../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,retentionWindow,MEMORY_CONTEXT_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,type ChatReply,type MemoryItem,type ChatStage,type ChatTurn,type LearningEpisode,type ModelProvider,type StageField,type TaskPublicView,type Validation } from '../../shared/learning-contracts';
 import type { LearningRuntime } from '../bootstrap';
 import { RubricAssessment,createModelAnalyzer,classifyAttempt } from '../plugins/assessment';
 import { PlanningEngine } from '../plugins/planning';
@@ -21,7 +21,8 @@ import { GeneratedTaskStore,TaskGenerator,GENERATION_DEFAULTS,type GenerationCon
 import { readGlmConfig } from '../providers/config';
 const op=schemas.StartSession.shape.operationId;
 export const requests={
- start:schemas.StartSession,
+ // switchMode: true only from the student's explicit "去专业模式" confirmation; without it an open session keeps its mode (old behaviour).
+ start:schemas.StartSession.extend({switchMode:z.literal(true).optional()}),
  activate:z.strictObject({operationId:op,taskId:op,taskVersion:z.number().int().positive(),mode:schemas.LearningSession.shape.mode}),
  open:z.strictObject({operationId:op,sessionId:op,taskId:op,taskVersion:z.number().int().positive()}),
  hint:z.strictObject({operationId:op,sessionId:op,taskId:op,taskVersion:z.number().int().positive(),level:z.number().int().positive()}),
@@ -30,7 +31,8 @@ export const requests={
  generate:z.strictObject({operationId:op,timeBudgetMinutes:z.number().int().min(1).max(30)}),
  confirm:z.strictObject({operationId:op,proposalId:op,expectedPreviousVersionId:op.nullable(),action:schemas.PlanVersion.shape.confirmation.shape.action,scheduledDate:z.string().nullable(),reason:z.string().min(1).max(1000)}),
  preference:z.strictObject({operationId:op,rest:z.boolean(),questionInvitePaused:z.boolean()}),
- memoryCorrect:z.strictObject({operationId:op,memoryId:op,text:z.string().min(1).max(8000)}),
+ // retention (optional): the student's chosen window for the corrected/renewed memory; omitted keeps the old behaviour (no expiry, no review).
+ memoryCorrect:z.strictObject({operationId:op,memoryId:op,text:z.string().min(1).max(8000),retention:schemas.ConfirmMemoryDraft.shape.retention}),
  reset:z.strictObject({operationId:op,confirmation:z.literal('清除本机学习记录与偏好')}),
  // E1: students choose only a whitelisted knowledge point, purpose and budget; never a template, answer or prompt.
  generateTask:z.strictObject({operationId:op,knowledgePointId:z.enum(['negative-brackets','like-terms']),purpose:z.enum(['practice','review']),reviewItemId:op.nullable(),timeBudgetMinutes:z.number().int().min(1).max(30)}),
@@ -82,11 +84,12 @@ export class LearningCoordinator {
   const promise=(async()=>{this.check(signal);const result=await work();this.check(signal);if(epoch!==this.epoch)throw new RuntimeError('cancelled');return this.r.repository.once(receipt,request,()=>result);})();
   this.flights.set(operationId,{hash:digest,promise});return promise.finally(()=>{this.active=false;this.flights.delete(operationId);});
  }
- async start(raw:z.infer<typeof requests.start>){const p=this.parse(requests.start,raw);return this.perform(p.operationId,p,async()=>{
+ async start(raw:z.infer<typeof requests.start>){const p=this.parse(requests.start,raw);const {switchMode,...input}=p;return this.perform(p.operationId,p,async()=>{
   const old=this.r.events.sessions().find(s=>s.status!=='closed');
   if(old&&shanghaiDate(old.startedAt)!==shanghaiDate(this.r.clock.now()))this.r.events.sessionState({operationId:p.operationId+'-close',sessionId:old.id,status:'closed'});
+  else if(old&&switchMode&&old.mode!==p.mode){this.r.events.switchMode({operationId:p.operationId+'-mode',sessionId:old.id,mode:p.mode});return {...old,mode:p.mode,status:'active' as const};}
   else if(old){if(old.status==='paused')this.r.events.sessionState({operationId:p.operationId+'-resume',sessionId:old.id,status:'active'});return {...old,status:'active' as const};}
-  return this.r.events.startSession(p);
+  return this.r.events.startSession(input);
  });}
  async activate(raw:z.infer<typeof requests.activate>){const p=this.parse(requests.activate,raw);const session=await this.start({operationId:p.operationId+'-s',mode:p.mode});return this.open({operationId:p.operationId+'-o',sessionId:session.id,taskId:p.taskId,taskVersion:p.taskVersion});}
  async open(raw:z.infer<typeof requests.open>){const p=this.parse(requests.open,raw);return this.perform(p.operationId,p,async()=>{
@@ -280,7 +283,8 @@ export class LearningCoordinator {
  async memoryCorrect(raw:z.infer<typeof requests.memoryCorrect>){const p=this.parse(requests.memoryCorrect,raw);return this.perform(p.operationId,p,async()=>this.r.repository.transaction(()=>{
   if(!this.r.events.memoryEnabled())throw new RuntimeError('forbidden','可选记忆关闭');
   this.r.events.memoryState({operationId:p.operationId+'-stop',memoryId:p.memoryId,action:'stop'});
-  return this.r.events.remember({operationId:p.operationId+'-new',text:p.text,source:'student_explicit',purpose:'tutoring',expiresAt:null,reviewAt:null});
+  const window=p.retention?retentionWindow(p.retention,this.r.clock.now()):{expiresAt:null,reviewAt:null};
+  return this.r.events.remember({operationId:p.operationId+'-new',text:p.text,source:'student_explicit',purpose:'tutoring',...window});
  }));}
  async reset(raw:z.infer<typeof requests.reset>){this.parse(requests.reset,raw);if(this.active)throw new RuntimeError('invalid_state','请先取消并等待当前操作结束，再清除');if(!this.r.repository.reset)throw new RuntimeError('unavailable');this.epoch++;this.r.repository.reset();return {cleared:true};}
 }
