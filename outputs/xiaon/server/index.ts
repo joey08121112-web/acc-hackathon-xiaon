@@ -2,7 +2,10 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { installLearning } from './agents/learning';
 import { runtimeFromEnvironment } from './bootstrap';
+import { readGenerationConfig } from './plugins/generation';
 import { createHttpServer } from './http/server';
+import { ttsFromEnvironment } from './voice/tts';
+import { asrFromEnvironment } from './voice/asr';
 // PaaS hosts inject PORT; XIAON_API_PORT stays the local default.
 const port=Number(process.env.PORT??process.env.XIAON_API_PORT??18920);
 if(!Number.isInteger(port)||port<1||port>65535)throw new Error('Invalid XIAON_API_PORT/PORT');
@@ -16,8 +19,8 @@ const publicOrigins=(process.env.XIAON_PUBLIC_ORIGIN??'').split(',').map(s=>s.tr
 for(const s of publicOrigins){const u=new URL(s);if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash||u.origin!==s)throw new Error('XIAON_PUBLIC_ORIGIN entries must be exact HTTPS origins');}
 const staticEnv=process.env.XIAON_STATIC_DIR?.trim();const staticDir=staticEnv?resolve(staticEnv):undefined;
 if(staticDir&&!existsSync(resolve(staticDir,'index.html')))throw new Error(`XIAON_STATIC_DIR has no index.html (run npm run build first): ${staticDir}`);
-const runtime=runtimeFromEnvironment();installLearning(runtime);
-const server=createHttpServer(runtime,{allowedOrigins:origins,host:`127.0.0.1:${port}`,extraHosts:wildcard?[`localhost:${port}`,`0.0.0.0:${port}`]:[],publicOrigins,staticDir});
+const runtime=runtimeFromEnvironment();installLearning(runtime,{generation:readGenerationConfig()});
+const server=createHttpServer(runtime,{allowedOrigins:origins,host:`127.0.0.1:${port}`,extraHosts:wildcard?[`localhost:${port}`,`0.0.0.0:${port}`]:[],publicOrigins,staticDir,tts:ttsFromEnvironment(),asr:asrFromEnvironment()});
 const mode=runtime.provider.kind==='offline'?'local_rules':'model';
 server.listen(port,bindHost,()=>console.log(publicOrigins.length
  ?`学伴小N ${staticDir?'静态站+API':'API'} ${bindHost}:${port} → ${publicOrigins.join(', ')} (${mode})；合成材料、单用户演示`

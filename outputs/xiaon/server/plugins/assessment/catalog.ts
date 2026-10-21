@@ -44,12 +44,17 @@ export function skillIdsForTask(task:TaskDefinition):string[]{
  if(task.version===1){const match=allTasks.find(t=>t.id===task.id);return match?.knowledgePoints??[];}
  return task.knowledgePoints;
 }
+/** E1: static bank plus program-validated generated tasks from one source; every consumer reads this catalog. */
 export class AssessmentCatalog implements TaskCatalog {
  private readonly definitions=freeze([...structuredClone(legacyTasks),...structuredClone(allTasks)]);
- definition(id:string,version:number){const t=this.definitions.find(t=>t.id===id&&t.version===version);return t?structuredClone(t):undefined;}
+ constructor(private readonly generated:()=>readonly TaskDefinition[]=()=>[]){}
+ /** Static tasks always win an ID/version collision; generated IDs are prefixed gen- and never replace them. */
+ private extra(){return this.generated().filter(g=>!this.definitions.some(t=>t.id===g.id&&t.version===g.version));}
+ all():TaskDefinition[]{return [...this.definitions,...this.extra()].map(t=>structuredClone(t));}
+ definition(id:string,version:number){const t=this.definitions.find(t=>t.id===id&&t.version===version)??this.extra().find(t=>t.id===id&&t.version===version);return t?structuredClone(t):undefined;}
  publicTask(id:string,version:number){const t=this.definition(id,version);return t?publicView(t):undefined;}
  candidates(input:TaskSelection){
   if(!Number.isInteger(input.limit)||input.limit<0||input.limit>100)throw new RuntimeError('invalid_params','候选题数范围0–100');
-  return allTasks.filter(t=>(!input.dimension||t.primaryDimension===input.dimension)&&(!input.knowledgePointId||t.knowledgePoints.includes(input.knowledgePointId))&&!input.excludeTaskIds.includes(t.id)).slice(0,input.limit).map(publicView);
+  return [...allTasks,...this.extra()].filter(t=>(!input.dimension||t.primaryDimension===input.dimension)&&(!input.knowledgePointId||t.knowledgePoints.includes(input.knowledgePointId))&&!input.excludeTaskIds.includes(t.id)).slice(0,input.limit).map(publicView);
  }
 }

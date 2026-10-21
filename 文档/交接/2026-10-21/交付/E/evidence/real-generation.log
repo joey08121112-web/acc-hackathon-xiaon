@@ -1,0 +1,6 @@
+
+> xiaon-learning-companion@1.0.0 test:agent:e:real
+> node --env-file-if-exists=.env.server --import tsx scripts/agent/e-real-generation.ts
+
+practice generation: published
+review generation: published

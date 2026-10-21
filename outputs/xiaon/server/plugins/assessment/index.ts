@@ -8,11 +8,12 @@ import { computeAssessment,DEFAULT_INDEPENDENCE_POLICY,type IndependencePolicy }
 export { AssessmentCatalog,assessmentTasks,skillDefinitions,legacyIdMapping } from './catalog';
 export { createModelAnalyzer,ASSESSOR_PROMPT } from './model-analysis';
 export { classifyAttempt,DEFAULT_INDEPENDENCE_POLICY } from './state';
-export type AssessmentOptions={analyzer?:AnswerAnalyzer;policy?:Partial<IndependencePolicy>};
+export type AssessmentOptions={analyzer?:AnswerAnalyzer;policy?:Partial<IndependencePolicy>;generatedTasks?:()=>readonly TaskDefinition[]};
 export class RubricAssessment implements AssessmentEnginePort {
- readonly id='assessment-rubric-v1';readonly catalog=new AssessmentCatalog();
+ readonly id='assessment-rubric-v1';readonly catalog:AssessmentCatalog;
  private readonly policy:IndependencePolicy;
  constructor(private readonly options:AssessmentOptions={}){
+  this.catalog=new AssessmentCatalog(options.generatedTasks);
   this.policy={...DEFAULT_INDEPENDENCE_POLICY,...options.policy};
   if(Object.values(this.policy).some(n=>!Number.isInteger(n)||n<2||n>30))throw new RuntimeError('invalid_params','跨次规则各阈值需为2–30的整数');
  }

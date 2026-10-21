@@ -1,0 +1,15 @@
+✔ synthetic generation → real handler → validation → SQLite → unified catalog → student opens → real grading (39.139458ms)
+✔ repair round: a wrong first candidate is rejected and a valid second one publishes; two failures publish nothing (9.868583ms)
+✔ idempotent operation IDs, conflicting reuse and concurrent requests never double-publish (62.342667ms)
+✔ program gates: prerequisite, pause, exploration order, 10-calculation cap, daily cost cap and offline fallback (36.160541ms)
+✔ cancel, timeout, pause during generation and reset discard late results; nothing is opened automatically (1698.165375ms)
+✔ optional memory reaches the generator only when enabled; reset removes generated tasks and records (17.125875ms)
+✔ review purpose: due item → generated unseen task → next-day review advances the stage through the normal C path (30.184583ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2015.0815

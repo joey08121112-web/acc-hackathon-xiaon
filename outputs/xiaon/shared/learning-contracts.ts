@@ -46,12 +46,24 @@ const MemoryItem = z.strictObject({...base,...operation,text,source:z.literal('s
 const ConsentState = z.strictObject({...base,...operation,optionalMemory:z.boolean(),updatedAt:utc});
 const ErrorCode = z.enum(['invalid_params','unknown_tool','forbidden','not_found','invalid_state','conflict','unavailable','not_implemented','timeout','cancelled','budget_exhausted','provider_auth','provider_rate_limit','provider_error','unsupported_tools','internal_error']);
 const Failure = z.strictObject({code:ErrorCode,message:text,recoverable:z.boolean()});
-const RolePolicy = z.strictObject({role:z.enum(['tutor','assessor','planner','reporter']),allowedTools:ids,maxRounds:z.number().int().min(1).max(4),maxToolExecutions:z.number().int().min(1).max(6)});
+// E1: 'generator' is an additive, tool-less structured-output role; it never grades, confirms or writes data.
+const RolePolicy = z.strictObject({role:z.enum(['tutor','assessor','planner','reporter','generator']),allowedTools:ids,maxRounds:z.number().int().min(1).max(4),maxToolExecutions:z.number().int().min(1).max(6)});
 const ToolCall = z.strictObject({...base,runId:id,callId:id,name:id,argumentsHash:z.string().length(64),status:z.enum(['succeeded','failed']),errorCode:ErrorCode.nullable(),evidenceIds:ids,dataVersion:z.number().int().nonnegative(),at:utc});
 const ToolResult = z.discriminatedUnion('ok',[
   z.strictObject({schemaVersion:z.literal(SCHEMA_VERSION),callId:id,ok:z.literal(true),dataVersion:z.number().int().nonnegative(),evidenceIds:ids,data:z.union([TaskPublicView,GradingResult,AssessmentSnapshot,z.strictObject({sessions:z.array(LearningSession),attemptCount:z.number().int().nonnegative(),memories:z.array(MemoryItem)}),z.strictObject({attempts:z.array(Attempt),gradings:z.array(GradingResult),evidence:z.array(Evidence)}),z.strictObject({skills:z.array(SkillState),limitations:z.array(text)}),z.strictObject({hint:z.string(),level:version,exposureId:id}),z.strictObject({reviews:z.array(ReviewItem)}),PlanProposal,z.strictObject({candidate:z.string(),requiresStudentConfirmation:z.literal(true)})])}),
   z.strictObject({schemaVersion:z.literal(SCHEMA_VERSION),callId:id,ok:z.literal(false),dataVersion:z.number().int().nonnegative(),evidenceIds:ids,error:Failure}),
 ]);
+// E1 attached entity: audit of one program-gated task generation. Never stores keys, headers, reasoning,
+// raw model text or rejected candidate answers; a published task lives separately as an immutable TaskDefinition.
+const generationReason = z.enum(['schema_invalid','tool_call_not_allowed','knowledge_point_mismatch','difficulty_not_allowed','params_invalid','params_out_of_range','degenerate_variable_cancels','degenerate_constant_cancels','not_covering_target','expression_mismatch','answer_mismatch','steps_invalid','steps_final_mismatch','grader_unsupported','duplicate_content','evidence_reference_invalid','focus_not_allowed']);
+const GenerationRecord = z.strictObject({...base,...operation,
+  knowledgePointId:z.enum(['negative-brackets','like-terms']),purpose:z.enum(['practice','review']),basis:z.enum(['no_evidence','difficulty','help_dependence','independent','review_due']),
+  reviewItemId:id.nullable(),status:z.enum(['published','rejected','failed','cancelled']),
+  providerKind:z.enum(['real_http','synthetic','offline']),modelId:id,promptVersion:id,templateVersion:id,validatorVersion:id,
+  requestFingerprint:z.string().length(64),evidenceRevision:z.number().int().nonnegative(),evidenceIds:ids,attemptIds:ids,
+  candidates:z.array(z.strictObject({round:z.number().int().min(1).max(2),status:z.enum(['accepted','rejected']),templateId:id.nullable(),difficulty:z.enum(['introductory','standard','stretch']).nullable(),parameterFingerprint:z.string().length(64).nullable(),contentFingerprint:z.string().length(64).nullable(),reasons:z.array(generationReason).max(17)})).max(2),
+  taskId:id.nullable(),taskVersion:version.nullable(),focus:id.nullable(),familyId:id.nullable(),relation:z.literal('same_family_numeric_variant'),variantOfTaskIds:ids,
+  runId:id.nullable(),failure:Failure.nullable(),createdAt:utc});
 const AgentRun = z.strictObject({...base,...operation,role:RolePolicy.shape.role,providerKind:z.enum(['real_http','synthetic','offline']),status:z.enum(['completed','unavailable','timeout','cancelled','budget_exhausted','failed']),rounds:z.number().int().min(0).max(4),toolExecutions:z.number().int().min(0).max(6),callIds:ids,permissionFingerprint:z.string().length(64),startedAt:utc,finishedAt:utc,error:Failure.nullable()});
 const ChatMessage = z.strictObject({role:z.enum(['user','assistant']),content:text});
 const SubmitAttempt = z.strictObject({...operation,...ref.shape,sessionId:id,value:text});
@@ -69,7 +81,7 @@ const tools = {
 };
 export const schemas = {
   TaskDefinition,TaskPublicView,LearningSession,SessionEvent,Attempt,ExposureEvent,GradingResult,Evidence,SkillState,AssessmentSnapshot,
-  ReviewPolicy,ReviewItem,ReviewOutcome,ReportSnapshot,PlanProposal,PlanVersion,MemoryItem,ConsentState,ToolCall,ToolResult,AgentRun,RolePolicy,
+  ReviewPolicy,ReviewItem,ReviewOutcome,ReportSnapshot,PlanProposal,PlanVersion,MemoryItem,ConsentState,ToolCall,ToolResult,AgentRun,RolePolicy,GenerationRecord,
   SourceTime:sourceTime,Failure,SubmitAttempt,
   StartSession:z.strictObject({...operation,mode:LearningSession.shape.mode}),
   SessionState:z.strictObject({...operation,sessionId:id,status:LearningSession.shape.status}),
@@ -104,6 +116,7 @@ export type ToolCall = z.infer<typeof ToolCall>;
 export type ToolResult = z.infer<typeof ToolResult>;
 export type AgentRun = z.infer<typeof AgentRun>;
 export type RolePolicy = z.infer<typeof RolePolicy>;
+export type GenerationRecord = z.infer<typeof GenerationRecord>;
 export type Failure = z.infer<typeof Failure>;
 export type SourceTime = z.infer<typeof sourceTime>;
 export type SubmitAttempt = z.infer<typeof SubmitAttempt>;
@@ -114,6 +127,8 @@ export interface EntityMap {
   tasks:TaskDefinition; sessions:LearningSession; sessionEvents:SessionEvent; attempts:Attempt; exposures:ExposureEvent; gradings:GradingResult;
   evidence:Evidence; skills:SkillState; assessments:AssessmentSnapshot; reviewPolicies:ReviewPolicy; reviewItems:ReviewItem;
   reviewOutcomes:ReviewOutcome; reports:ReportSnapshot; proposals:PlanProposal; plans:PlanVersion; memories:MemoryItem; consents:ConsentState; toolCalls:ToolCall; runs:AgentRun;
+  /** E1 attached audit records; included in reset like every other collection. */
+  generations:GenerationRecord;
 }
 /** Synchronous single-process SQLite transaction. Do not await inside transaction callbacks. append never replaces. */
 export interface LearningRepository {

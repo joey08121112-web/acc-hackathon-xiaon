@@ -16,6 +16,7 @@
     "test:agent:b": "node scripts/agent/test.mjs b",
     "test:agent:c": "node scripts/agent/test.mjs c",
     "test:agent:d": "node scripts/agent/test.mjs d",
+    "test:agent:e": "node scripts/agent/test.mjs e",
     "test:agent": "node scripts/agent/test.mjs all",
     "test:all": "npm test && npm run test:agent && npm run build",
     "schema:agent": "tsx scripts/agent/schema.ts",
@@ -23,7 +24,9 @@
     "test:agent:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/real-smoke.ts",
     "dev:learning": "node scripts/agent/dev.mjs",
     "test:agent:d:browser": "playwright test -c playwright.d.config.ts",
-    "test:agent:d:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/d-real-smoke.ts"
+    "test:agent:d:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/d-real-smoke.ts",
+    "test:agent:e:browser": "playwright test -c playwright.e.config.ts",
+    "test:agent:e:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/e-real-generation.ts"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

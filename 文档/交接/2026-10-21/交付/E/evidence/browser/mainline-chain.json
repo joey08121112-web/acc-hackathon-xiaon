@@ -1,0 +1,245 @@
+{
+  "generations": [
+    {
+      "attemptIds": [
+        "3e37ca56-0ef3-4e5d-8798-16930636e313"
+      ],
+      "basis": "difficulty",
+      "candidates": [
+        {
+          "contentFingerprint": "0a1c7b15201909b694537516d1086c8d93286536a1ba2f3940ecfe6bc78c47fd",
+          "difficulty": "introductory",
+          "parameterFingerprint": "7128bd2753023ed2320624b0321d70ea4bfa5ee1fbd425041c2cd0aff93d31d5",
+          "reasons": [],
+          "round": 1,
+          "status": "accepted",
+          "templateId": "nb-basic"
+        }
+      ],
+      "createdAt": "2026-10-21T00:00:00.000Z",
+      "evidenceIds": [
+        "c134a560-0855-4098-b619-97501a2eb205"
+      ],
+      "evidenceRevision": 18,
+      "failure": null,
+      "familyId": "family-negative-brackets",
+      "focus": "bracket_sign_constant",
+      "id": "gen-record-dda4fdea-58ba-435c-9023-db7359b97194",
+      "knowledgePointId": "negative-brackets",
+      "modelId": "synthetic",
+      "operationId": "87e02c55-4bfc-420b-9652-7042850cab01",
+      "promptVersion": "generator-e1",
+      "providerKind": "synthetic",
+      "purpose": "practice",
+      "relation": "same_family_numeric_variant",
+      "requestFingerprint": "2613f3248db51e1758a608f609a816a5dfd8345e63bb9acb2115ba6f89d5802e",
+      "reviewItemId": null,
+      "runId": "d-run-3344bca7-15a1-4683-8afa-138d11b90b9b",
+      "schemaVersion": "1.0.0",
+      "status": "published",
+      "taskId": "gen-negative-brackets-0a1c7b15201909b6",
+      "taskVersion": 2,
+      "templateVersion": "e1-templates-1",
+      "validatorVersion": "e1-validator-1",
+      "variantOfTaskIds": [
+        "bracket"
+      ],
+      "exposed": true
+    },
+    {
+      "attemptIds": [
+        "ae2730a5-08f6-4aeb-8326-7664b25a66b7",
+        "3e37ca56-0ef3-4e5d-8798-16930636e313"
+      ],
+      "basis": "review_due",
+      "candidates": [
+        {
+          "contentFingerprint": "20bcf9828f67b025fa541169aaaba69a997b2993e127a6003be8c096d84545fe",
+          "difficulty": "standard",
+          "parameterFingerprint": "0e483c9c4ef87647e820b9830dcabafdcd1edf14c94e6c27e193c6a644e4eb5a",
+          "reasons": [],
+          "round": 1,
+          "status": "accepted",
+          "templateId": "nb-basic"
+        }
+      ],
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "evidenceIds": [
+        "64f52def-d1b6-45b8-8c45-78e9fada8f11",
+        "c134a560-0855-4098-b619-97501a2eb205"
+      ],
+      "evidenceRevision": 23,
+      "failure": null,
+      "familyId": "family-negative-brackets",
+      "focus": "bracket_sign_variable",
+      "id": "gen-record-3bdf91dc-1cc9-4379-b241-0961ea51938f",
+      "knowledgePointId": "negative-brackets",
+      "modelId": "synthetic",
+      "operationId": "a6f4af27-edc2-4f78-89da-45af6a649f87",
+      "promptVersion": "generator-e1",
+      "providerKind": "synthetic",
+      "purpose": "review",
+      "relation": "same_family_numeric_variant",
+      "requestFingerprint": "4d91a74a94541557fdda41488d7b3d24b989916256db76ab8f8ba70630294027",
+      "reviewItemId": "731c3e06-ae18-42da-bbaf-9b208864b722",
+      "runId": "d-run-d63221d5-e180-413f-98cf-b617e39345bc",
+      "schemaVersion": "1.0.0",
+      "status": "published",
+      "taskId": "gen-negative-brackets-20bcf9828f67b025",
+      "taskVersion": 2,
+      "templateVersion": "e1-templates-1",
+      "validatorVersion": "e1-validator-1",
+      "variantOfTaskIds": [
+        "gen-negative-brackets-0a1c7b15201909b6",
+        "bracket"
+      ],
+      "exposed": true
+    }
+  ],
+  "attempts": [
+    {
+      "id": "5399734c-fcd2-45af-a26a-fa6ff16f0b72",
+      "taskId": "b-like-observation",
+      "value": "5x-4",
+      "hints": 0,
+      "classification": {
+        "kind": "new_independent",
+        "novelty": "unseen",
+        "learningDate": "2026-10-21",
+        "independent": true,
+        "delayedRetention": false,
+        "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+      }
+    },
+    {
+      "id": "5a557a41-2a95-4d08-81fc-042657657b4f",
+      "taskId": "understand",
+      "value": "2x-3\n先求x的2倍，再减去3。",
+      "hints": 0,
+      "classification": {
+        "kind": "new_independent",
+        "novelty": "unseen",
+        "learningDate": "2026-10-21",
+        "independent": true,
+        "delayedRetention": false,
+        "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+      }
+    },
+    {
+      "id": "89fff735-42c1-4535-8fb7-39174ce1b715",
+      "taskId": "logic",
+      "value": "A\n两个负数的和为负数，满足前提但结论不成立。",
+      "hints": 0,
+      "classification": {
+        "kind": "new_independent",
+        "novelty": "unseen",
+        "learningDate": "2026-10-21",
+        "independent": true,
+        "delayedRetention": false,
+        "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+      }
+    },
+    {
+      "id": "3e37ca56-0ef3-4e5d-8798-16930636e313",
+      "taskId": "bracket",
+      "value": "x-5",
+      "hints": 0,
+      "classification": {
+        "kind": "incorrect",
+        "novelty": "unseen",
+        "learningDate": "2026-10-21",
+        "independent": false,
+        "delayedRetention": false,
+        "reason": "这次作答的评分点未通过；保留具体证据，不推断人格或智力"
+      }
+    },
+    {
+      "id": "ae2730a5-08f6-4aeb-8326-7664b25a66b7",
+      "taskId": "gen-negative-brackets-0a1c7b15201909b6",
+      "value": "9x-4x+7\n=5x+7",
+      "hints": 1,
+      "classification": {
+        "kind": "completed_with_help",
+        "novelty": "unseen",
+        "learningDate": "2026-10-21",
+        "independent": false,
+        "delayedRetention": false,
+        "reason": "作答之前存在提示、答案或聊天关键帮助"
+      }
+    },
+    {
+      "id": "9a644ce2-acca-4efc-a86c-86afaa5c70a3",
+      "taskId": "gen-negative-brackets-20bcf9828f67b025",
+      "value": "-5x+3",
+      "hints": 0,
+      "classification": {
+        "kind": "new_independent",
+        "novelty": "unseen",
+        "learningDate": "2026-10-22",
+        "independent": true,
+        "delayedRetention": false,
+        "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+      }
+    }
+  ],
+  "reviews": [
+    {
+      "createdAt": "2026-10-21T00:00:00.000Z",
+      "dueAt": "2026-10-25T00:00:00.000Z",
+      "evidenceRevision": 27,
+      "exposureIds": [
+        "acf6315c-ea7b-4621-ad42-341dc97532a6",
+        "4849551e-8248-4fd9-8a6d-75ace6c56ed8",
+        "936531b3-7bd3-4891-b4ba-7909c0efbfb3"
+      ],
+      "id": "731c3e06-ae18-42da-bbaf-9b208864b722",
+      "knowledgePointId": "negative-brackets",
+      "operationId": "0686d160-29da-4016-b478-6d2bd569156c-out",
+      "originalDueAt": "2026-10-21T12:00:00.000Z",
+      "planVersionId": "773a1db3-02f3-4e4e-8055-7e1252bc85f7",
+      "postponements": [],
+      "reason": "延迟未见新题、跨场次独立正确，进入下一阶段",
+      "revision": 2,
+      "schemaVersion": "1.0.0",
+      "sourceSessionIds": [
+        "3d15003d-0326-40b2-9d81-279123b77f1f",
+        "a4959187-a74c-4771-93aa-99e886733b6e"
+      ],
+      "stage": 1,
+      "status": "active",
+      "task": null
+    }
+  ],
+  "generatorRuns": [
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T00:00:00.000Z",
+      "id": "d-run-3344bca7-15a1-4683-8afa-138d11b90b9b",
+      "operationId": "87e02c55-4bfc-420b-9652-7042850cab01-generator",
+      "permissionFingerprint": "d93b8ec1a111c1c5dfbad172378f1e2282048ef1255604da1223a0eac170b4b2",
+      "providerKind": "synthetic",
+      "role": "generator",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    },
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-22T00:00:00.000Z",
+      "id": "d-run-d63221d5-e180-413f-98cf-b617e39345bc",
+      "operationId": "a6f4af27-edc2-4f78-89da-45af6a649f87-generator",
+      "permissionFingerprint": "d93b8ec1a111c1c5dfbad172378f1e2282048ef1255604da1223a0eac170b4b2",
+      "providerKind": "synthetic",
+      "role": "generator",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T00:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    }
+  ]
+}

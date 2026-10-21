@@ -9,6 +9,8 @@ export const ROLE_POLICIES:Record<RolePolicy['role'],RolePolicy>={
  assessor:{role:'assessor',allowedTools:['query_learning_evidence','get_skill_state','grade_attempt'],maxRounds:4,maxToolExecutions:6},
  planner:{role:'planner',allowedTools:['get_learning_context','query_learning_evidence','get_skill_state','select_task','get_due_reviews','propose_plan'],maxRounds:4,maxToolExecutions:6},
  reporter:{role:'reporter',allowedTools:['query_learning_evidence','get_skill_state'],maxRounds:4,maxToolExecutions:6},
+ // E1: the generator calls no tools; its single JSON output is validated and published by the program.
+ generator:{role:'generator',allowedTools:[],maxRounds:2,maxToolExecutions:1},
 };
 const descriptions:Record<string,string>={get_hint:'只读取学生已主动请求的提示；不能暗中揭示提示',get_due_reviews:'读取真实到期队列，不自动开题',propose_plan:'从有效证据生成计划草案；不能确认计划',propose_memory:'仅提出可选偏好候选；必须学生另行确认',get_learning_context:'读取当前本机学习场次、尝试数量与获准使用的有效辅导偏好',query_learning_evidence:'读取已保存学生作答和评分证据；不能创建作答',get_skill_state:'读取有限观察；未注册五维引擎时明确标记 legacy',select_task:'只返回可信题库的公开候选题，不含答案、rubric或提示正文；学生还需通过 API 打开题目',grade_attempt:'仅按已保存 attemptId 从可信题库核对；不能接收答案或伪造学生提交'};
 export type ToolContext={role:RolePolicy['role'];runId:string;signal:AbortSignal};

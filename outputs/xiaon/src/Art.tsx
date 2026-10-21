@@ -1,18 +1,119 @@
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
+export type PetMood =
+  | "idle"
+  | "thinking"
+  | "speaking"
+  | "listening"
+  | "happy"
+  | "concerned"
+  | "giggle"
+  | "dizzy"
+  | "waveL"
+  | "waveR"
+  | "leaf";
+export type PetZone = "body" | "leaf" | "hand-l" | "hand-r" | "belly";
+export type PetTouchKind = "tap" | "press" | "stroke";
+/**
+ * mood is driven by real events only: thinking = a request is in flight, speaking = audio is actually playing,
+ * listening = the microphone is really open. Touch reactions are local and never reach the model.
+ */
 export function Mascot({
   small = false,
   sleeping = false,
+  mood = "idle",
+  onTouch,
+  look = false,
+  svgRef,
 }: {
   small?: boolean;
   sleeping?: boolean;
+  mood?: PetMood;
+  onTouch?: (zone: PetZone, kind: PetTouchKind) => void;
+  /** eyes follow the pointer / last touch */
+  look?: boolean;
+  svgRef?: React.MutableRefObject<SVGSVGElement | null>;
 }) {
   const uid = useId().replace(/:/g, "");
+  const local = useRef<SVGSVGElement | null>(null);
+  const gesture = useRef<{ x: number; y: number; t: number; moved: number; zone: PetZone; timer: number; fired: boolean } | null>(null);
+  const set = (el: SVGSVGElement | null) => {
+    local.current = el;
+    if (svgRef) svgRef.current = el;
+  };
+  // Eyes follow the pointer without re-rendering React: only two CSS variables change.
+  useEffect(() => {
+    if (!look || sleeping) return;
+    let raf = 0;
+    const aim = (cx: number, cy: number) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const el = local.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const dx = cx - (r.left + r.width / 2), dy = cy - (r.top + r.height * 0.45);
+        const d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 160) * 4.5;
+        el.style.setProperty("--lx", `${((dx / d) * k).toFixed(2)}px`);
+        el.style.setProperty("--ly", `${((dy / d) * k).toFixed(2)}px`);
+      });
+    };
+    const move = (e: PointerEvent) => aim(e.clientX, e.clientY);
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerdown", move, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", move);
+    };
+  }, [look, sleeping]);
+  const zoneOf = (target: EventTarget | null): PetZone =>
+    (((target as Element | null)?.closest?.("[data-zone]")?.getAttribute("data-zone") as PetZone | null) ?? "body");
+  const touch = onTouch
+    ? {
+        onPointerDown: (e: React.PointerEvent) => {
+          const g = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0, zone: zoneOf(e.target), timer: 0, fired: false };
+          g.timer = window.setTimeout(() => {
+            if (gesture.current === g && g.moved < 30 && !g.fired) {
+              g.fired = true;
+              onTouch(g.zone, "press");
+            }
+          }, 600);
+          gesture.current = g;
+        },
+        onPointerMove: (e: React.PointerEvent) => {
+          const g = gesture.current;
+          if (!g) return;
+          g.moved += Math.hypot(e.clientX - g.x, e.clientY - g.y);
+          g.x = e.clientX;
+          g.y = e.clientY;
+          if (g.moved > 110 && !g.fired) {
+            g.fired = true;
+            window.clearTimeout(g.timer);
+            onTouch("body", "stroke");
+          }
+        },
+        onPointerUp: () => {
+          const g = gesture.current;
+          if (!g) return;
+          window.clearTimeout(g.timer);
+          gesture.current = null;
+          if (!g.fired && g.moved < 14 && performance.now() - g.t < 600) onTouch(g.zone, "tap");
+        },
+        onPointerCancel: () => {
+          if (gesture.current) window.clearTimeout(gesture.current.timer);
+          gesture.current = null;
+        },
+      }
+    : {};
+  const m = sleeping ? "rest" : mood;
+  const joy = !sleeping && (mood === "happy" || mood === "giggle" || mood === "waveL" || mood === "waveR");
   return (
     <svg
-      className={small ? "mascot mini" : "mascot"}
+      ref={set}
+      className={`${small ? "mascot mini" : "mascot"} mood-${m}${onTouch ? " touchable" : ""}`}
       viewBox="0 0 320 300"
       role="img"
       aria-label={sleeping ? "小N安静地休息" : "原创学伴小N，绿色的小芽伙伴"}
+      {...touch}
     >
       <defs>
         <linearGradient id={uid} x1="0" y1="0" x2="0.8" y2="1">
@@ -28,6 +129,9 @@ export function Mascot({
           <feGaussianBlur stdDeviation="5" />
         </filter>
       </defs>
+      {mood === "listening" && !sleeping && (
+        <circle className="pet-ring" cx="157" cy="160" r="128" fill="none" stroke="#a9c58a" strokeWidth="5" />
+      )}
       <ellipse
         cx="157"
         cy="269"
@@ -37,35 +141,42 @@ export function Mascot({
         opacity=".14"
         filter={`url(#${uid}blur)`}
       />
+      <g className="pet-g">
       <g className={!small ? "floaty" : ""}>
-        <path
-          d="M149 70C124 39 137 19 146 17c4 23 20 22 20 51"
-          fill="#587c4b"
-        />
-        <path
-          d="M157 66C149 33 173 14 198 21c-6 29-20 44-41 45"
-          fill="#88a86f"
-        />
-        <path d="M159 59l27-29" stroke="#b9cc9b" strokeWidth="2" />
-        <path
-          d="M91 117C69 144 67 175 49 182c-17 10-13 26 5 28 18 1 36-19 44-32"
-          fill={`url(#${uid})`}
-          stroke="#83a76e"
-          strokeWidth="1.4"
-        />
-        <path
-          d="M226 119c18 19 27 49 43 54 18 5 22 24 5 29-17 6-43-13-54-29"
-          fill={`url(#${uid})`}
-          stroke="#83a76e"
-          strokeWidth="1.4"
-        />
+        <g className="pet-leaf" data-zone="leaf">
+          <path
+            d="M149 70C124 39 137 19 146 17c4 23 20 22 20 51"
+            fill="#587c4b"
+          />
+          <path
+            d="M157 66C149 33 173 14 198 21c-6 29-20 44-41 45"
+            fill="#88a86f"
+          />
+          <path d="M159 59l27-29" stroke="#b9cc9b" strokeWidth="2" />
+        </g>
+        <g className="pet-arm-l" data-zone="hand-l">
+          <path
+            d="M91 117C69 144 67 175 49 182c-17 10-13 26 5 28 18 1 36-19 44-32"
+            fill={`url(#${uid})`}
+            stroke="#83a76e"
+            strokeWidth="1.4"
+          />
+        </g>
+        <g className="pet-arm-r" data-zone="hand-r">
+          <path
+            d="M226 119c18 19 27 49 43 54 18 5 22 24 5 29-17 6-43-13-54-29"
+            fill={`url(#${uid})`}
+            stroke="#83a76e"
+            strokeWidth="1.4"
+          />
+        </g>
         <path
           d="M80 178C69 122 85 74 135 63c39-9 88 6 102 52 11 37-6 70-5 93 1 22-13 47-32 48-19 1-22-23-39-23-17 0-23 26-43 23-23-2-28-24-29-45Z"
           fill={`url(#${uid})`}
           stroke="#86a76f"
           strokeWidth="1.5"
         />
-        <ellipse cx="137" cy="112" rx="65" ry="49" fill={`url(#${uid}glow)`} />
+        <ellipse cx="137" cy="112" rx="65" ry="49" fill={`url(#${uid}glow)`} pointerEvents="none" />
         <path
           d="M113 84c-17 8-25 22-25 37"
           fill="none"
@@ -73,6 +184,7 @@ export function Mascot({
           strokeWidth="5"
           strokeLinecap="round"
           opacity=".8"
+          pointerEvents="none"
         />
         {sleeping ? (
           <>
@@ -87,15 +199,41 @@ export function Mascot({
               z
             </text>
           </>
+        ) : joy ? (
+          <path
+            d="M116 144q11-14 22 0M172 144q11-14 22 0"
+            stroke="#304932"
+            strokeWidth="4.5"
+            fill="none"
+            strokeLinecap="round"
+          />
+        ) : mood === "dizzy" ? (
+          <path
+            d="M119 132l16 16M135 132l-16 16M175 132l16 16M191 132l-16 16"
+            stroke="#304932"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
         ) : (
-          <>
-            <ellipse cx="127" cy="139" rx="5" ry="8" fill="#304932" />
-            <ellipse cx="183" cy="139" rx="5" ry="8" fill="#304932" />
-            <circle cx="129" cy="136" r="1.7" fill="white" />
-            <circle cx="185" cy="136" r="1.7" fill="white" />
-          </>
+          <g className="pet-look">
+            <g className="pet-eyes">
+              <ellipse cx="127" cy="139" rx="5" ry="8" fill="#304932" />
+              <ellipse cx="183" cy="139" rx="5" ry="8" fill="#304932" />
+              <circle cx="129" cy="136" r="1.7" fill="white" />
+              <circle cx="185" cy="136" r="1.7" fill="white" />
+            </g>
+          </g>
+        )}
+        {mood === "concerned" && !sleeping && (
+          <path
+            d="M114 127l22-8M176 119l22 8"
+            stroke="#587c4b"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+          />
         )}
         <ellipse
+          className="pet-cheek"
           cx="109"
           cy="155"
           rx="12"
@@ -104,6 +242,7 @@ export function Mascot({
           opacity=".58"
         />
         <ellipse
+          className="pet-cheek"
           cx="199"
           cy="155"
           rx="12"
@@ -111,34 +250,107 @@ export function Mascot({
           fill="#d9a88c"
           opacity=".58"
         />
-        <path
-          d="M147 157q9 10 18 0"
-          fill="none"
-          stroke="#446043"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-        <path
-          d="M141 197v-17l28 22v-18"
-          stroke="#f4f8e5"
-          fill="none"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          opacity=".8"
-        />
+        {mood === "speaking" && !sleeping ? (
+          <ellipse
+            className="pet-mouth-talk"
+            cx="156"
+            cy="162"
+            rx="8"
+            ry="6.5"
+            fill="#446043"
+          />
+        ) : joy ? (
+          <path
+            d="M141 154q15 19 30 0z"
+            fill="#446043"
+            stroke="#446043"
+            strokeWidth="2"
+            strokeLinejoin="round"
+          />
+        ) : mood === "dizzy" ? (
+          <path
+            d="M144 162q6-6 11 0t11 0"
+            fill="none"
+            stroke="#446043"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        ) : mood === "concerned" && !sleeping ? (
+          <path
+            d="M148 165q8-7 16 0"
+            fill="none"
+            stroke="#446043"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        ) : mood === "listening" && !sleeping ? (
+          <ellipse cx="156" cy="161" rx="4.5" ry="5" fill="#446043" />
+        ) : (
+          <path
+            d="M147 157q9 10 18 0"
+            fill="none"
+            stroke="#446043"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        )}
+        <g data-zone="belly">
+          <ellipse cx="155" cy="192" rx="38" ry="32" fill="transparent" />
+          <path
+            d="M141 197v-17l28 22v-18"
+            stroke="#f4f8e5"
+            fill="none"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity=".8"
+          />
+        </g>
         <path
           d="M97 219c7 13 14 17 23 15M201 234c10-3 17-9 20-19"
           stroke="#74965e"
           strokeWidth="2"
           fill="none"
           opacity=".6"
+          pointerEvents="none"
         />
+        {(mood === "happy" || mood === "giggle") && !sleeping && (
+          <g className="pet-hearts" fill="#e59a9a" pointerEvents="none">
+            <text x="228" y="86" fontSize="20">♥</text>
+            <text x="62" y="96" fontSize="15">♥</text>
+            <text x="246" y="52" fontSize="13">♥</text>
+          </g>
+        )}
+        {mood === "dizzy" && !sleeping && (
+          <g className="pet-stars" fill="#d9b86a" pointerEvents="none">
+            <text x="108" y="50" fontSize="22">★</text>
+            <text x="168" y="36" fontSize="17">★</text>
+            <text x="222" y="56" fontSize="20">★</text>
+          </g>
+        )}
       </g>
+      </g>
+      {mood === "thinking" && !sleeping && (
+        <g className="pet-dots" fill="#7e946b" pointerEvents="none">
+          <circle cx="238" cy="62" r="5" />
+          <circle cx="256" cy="46" r="6.5" />
+          <circle cx="278" cy="28" r="8" />
+        </g>
+      )}
     </svg>
   );
 }
-export function HeroArt({ sleeping = false }: { sleeping?: boolean }) {
+export function HeroArt({
+  sleeping = false,
+  mood = "idle",
+  onTouch,
+  line = "",
+}: {
+  sleeping?: boolean;
+  mood?: PetMood;
+  onTouch?: (zone: PetZone, kind: PetTouchKind) => void;
+  line?: string;
+}) {
   return (
     <div className="hero-art">
       <svg className="landscape" viewBox="0 0 440 310" aria-hidden="true">
@@ -198,7 +410,12 @@ export function HeroArt({ sleeping = false }: { sleeping?: boolean }) {
       </svg>
       <span className="art-note note-left">每一步，都算数</span>
       <span className="art-note note-right">慢慢来就好</span>
-      <Mascot sleeping={sleeping} />
+      <Mascot sleeping={sleeping} mood={mood} onTouch={onTouch} look />
+      {line && (
+        <span className="pet-line" role="status" aria-live="polite">
+          {line}
+        </span>
+      )}
       <span className="ground-label">YOUR LITTLE LEARNING COMPANION</span>
     </div>
   );

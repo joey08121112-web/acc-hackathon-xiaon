@@ -3042,3 +3042,94 @@ input[type="range"] {
 .learning-composer { margin:18px 0; }
 
 .learning-status .text-button { color:#3e6956; }
+
+/* ---- 小N 的状态动画：只由真实事件驱动（请求进行中=思考，音频真的在播=说话） ---- */
+.pet-g { transform-origin: 157px 268px; }
+.mood-thinking .pet-g { animation: pet-tilt 2.8s ease-in-out infinite; }
+.mood-speaking .pet-g { animation: pet-bounce .5s ease-in-out infinite alternate; }
+@keyframes pet-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-4.5deg); } }
+@keyframes pet-bounce { from { transform: scale(1, 1); } to { transform: scale(1.012, 1.03); } }
+.pet-eyes { transform-box: fill-box; transform-origin: center; animation: pet-blink 5.2s infinite; }
+@keyframes pet-blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+.pet-mouth-talk { transform-box: fill-box; transform-origin: center; animation: pet-talk .3s ease-in-out infinite alternate; }
+@keyframes pet-talk { from { transform: scaleY(.3); } to { transform: scaleY(1); } }
+.pet-dots circle { animation: pet-dot 1.2s ease-in-out infinite; opacity: .25; }
+.pet-dots circle:nth-child(2) { animation-delay: .2s; }
+.pet-dots circle:nth-child(3) { animation-delay: .4s; }
+@keyframes pet-dot { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+
+.pet-stage { display: flex; align-items: center; gap: 8px; margin: 0 -2px 10px; padding: 4px 2px 6px; position: sticky; top: 82px; z-index: 9; background: #f8f7ef; border-bottom: 1px solid transparent; }
+.large-text .pet-stage { top: 110px; }
+.pet-stage .mascot { width: 88px; height: 82px; flex: none; }
+.pet-bubble { position: relative; flex: 1; min-height: 44px; display: flex; align-items: center; padding: 10px 14px; background: #fffdf4; border: 1px solid #dce6c9; border-radius: 17px 17px 17px 4px; color: #4d5f45; font-size: .86rem; line-height: 1.5; }
+.pet-bubble:before { content: ""; position: absolute; left: -6px; bottom: 11px; width: 10px; height: 10px; background: #fffdf4; border-left: 1px solid #dce6c9; border-bottom: 1px solid #dce6c9; transform: rotate(45deg); }
+.pet-bubble.thinking { color: #6c7f5d; }
+.voice-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 2px 0 10px; }
+.voice-row .small { margin: 0; }
+.voice-toggle { display: inline-flex; align-items: center; gap: 6px; }
+.voice-toggle[aria-pressed="true"] { background: #e3eacd; border-color: #b9cc9b; }
+.say-button { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; font-size: .74rem; }
+.hero-art.tappable { cursor: pointer; }
+
+/* ---- 小N 的触摸与情绪动画 ---- */
+.pet-look { transform: translate(var(--lx, 0px), var(--ly, 0px)); transition: transform .12s ease-out; }
+.mascot.touchable { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.pet-leaf { transform-origin: 152px 68px; }
+.pet-arm-l { transform-origin: 92px 118px; }
+.pet-arm-r { transform-origin: 226px 119px; }
+.mood-giggle .pet-g { animation: pet-giggle .7s ease-in-out; }
+.mood-happy .pet-g { animation: pet-happy 1.6s ease-in-out; }
+.mood-dizzy .pet-g { animation: pet-dizzy 1.2s ease-in-out; }
+.mood-concerned .pet-g { transform: translateY(4px) rotate(-1.5deg); }
+.mood-listening .pet-g { transform: translateY(3px) rotate(2.5deg); }
+.mood-listening .pet-leaf { transform: rotate(-8deg) scale(1.06); }
+.mood-leaf .pet-leaf { animation: pet-leaf .9s ease-in-out; }
+.mood-waveR .pet-arm-r { animation: pet-wave-r .9s ease-in-out; }
+.mood-waveL .pet-arm-l { animation: pet-wave-l .9s ease-in-out; }
+@keyframes pet-giggle { 0% { transform: scale(1); } 18% { transform: scale(1.08, .92); } 38% { transform: scale(.95, 1.07) translateY(-9px); } 58% { transform: scale(1.04, .96); } 78% { transform: scale(.99, 1.02) translateY(-3px); } 100% { transform: scale(1); } }
+@keyframes pet-happy { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(2.5deg); } 75% { transform: rotate(-2.5deg); } }
+@keyframes pet-dizzy { 0%, 100% { transform: rotate(0); } 15% { transform: rotate(-7deg); } 35% { transform: rotate(6deg); } 55% { transform: rotate(-5deg); } 75% { transform: rotate(4deg); } }
+@keyframes pet-leaf { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-16deg); } 45% { transform: rotate(13deg); } 70% { transform: rotate(-8deg); } }
+@keyframes pet-wave-r { 0%, 100% { transform: rotate(0); } 20%, 60% { transform: rotate(-38deg); } 40%, 80% { transform: rotate(-8deg); } }
+@keyframes pet-wave-l { 0%, 100% { transform: rotate(0); } 20%, 60% { transform: rotate(38deg); } 40%, 80% { transform: rotate(8deg); } }
+.pet-ring { transform-origin: 157px 160px; transform: scale(calc(1 + var(--mic, .25) * .1)); opacity: calc(.3 + var(--mic, .25) * .6); transition: transform .08s, opacity .08s; }
+.mood-happy .pet-cheek, .mood-giggle .pet-cheek { opacity: .9; }
+.pet-hearts text { animation: pet-float 1.6s ease-out forwards; }
+.pet-hearts text:nth-child(2) { animation-delay: .2s; }
+.pet-hearts text:nth-child(3) { animation-delay: .4s; }
+@keyframes pet-float { 0% { opacity: 0; transform: translateY(8px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-22px); } }
+.pet-stars text { transform-box: fill-box; transform-origin: center; animation: pet-spin 1.2s linear infinite; }
+@keyframes pet-spin { to { transform: rotate(360deg); } }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.pet-line { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3; max-width: 78%; text-align: center; padding: 7px 14px; font-size: .8rem; line-height: 1.4; color: #4d5f45; background: #fffdf4; border: 1px solid #dce6c9; border-radius: 15px; box-shadow: 0 4px 14px rgba(94, 120, 78, .12); pointer-events: none; animation: pet-line-in .25s ease-out; }
+@keyframes pet-line-in { from { opacity: 0; transform: translate(-50%, 6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ---- 对话页：大小N + 话筒 ---- */
+.pet-hero { display: flex; flex-direction: column; align-items: center; margin: 4px 0 2px; }
+.pet-hero .mascot { width: min(310px, 82%); height: auto; aspect-ratio: 320 / 300; margin-top: 2px; }
+.pet-hero-bubble { position: relative; width: 100%; box-sizing: border-box; min-height: 56px; max-height: 148px; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 12px 18px; margin-bottom: 9px; text-align: center; font-size: .96rem; line-height: 1.6; color: #42533c; background: #fffdf4; border: 1px solid #dce6c9; border-radius: 20px; box-shadow: 0 6px 18px rgba(94, 120, 78, .1); }
+.pet-hero-bubble:after { content: ""; position: absolute; bottom: -7px; left: 50%; width: 12px; height: 12px; background: #fffdf4; border-right: 1px solid #dce6c9; border-bottom: 1px solid #dce6c9; transform: translateX(-50%) rotate(45deg); }
+.pet-hero-bubble.thinking { color: #6c7f5d; }
+.pet-hint { text-align: center; margin: 0 0 4px; }
+.talk-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 6px 0 2px; }
+.talk-side { display: flex; flex-direction: column; gap: 8px; }
+.talk-side button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: .8rem; padding: 8px 14px; min-height: 40px; }
+.talk-side button[aria-pressed="true"] { background: #e3eacd; border-color: #b9cc9b; }
+.mic-button { width: 78px; height: 78px; border-radius: 50%; border: none; display: grid; place-items: center; color: #fffdf3; background: var(--green); box-shadow: 0 8px 20px rgba(62, 98, 76, .3); cursor: pointer; flex: none; }
+.mic-button:disabled { opacity: .5; cursor: default; }
+.mic-button[data-phase="listening"] { background: #c4694f; animation: mic-pulse 1.2s ease-out infinite; }
+.mic-button[data-phase="requesting"], .mic-button[data-phase="transcribing"] { background: #7e946b; }
+@keyframes mic-pulse { 0% { box-shadow: 0 0 0 0 rgba(196, 105, 79, .5); } 100% { box-shadow: 0 0 0 20px rgba(196, 105, 79, 0); } }
+.spin { animation: spin 1s linear infinite; }
+.mic-label { text-align: center; margin: 4px 0 8px; font-size: .82rem; color: #5d6f55; }
+.mic-note { font-size: .7rem; margin: 0 0 8px; }
+.chat-log { margin: 12px 0; }
+.chat-log > summary { cursor: pointer; font-size: .82rem; color: #6a7a62; padding: 6px 0; }
+.center { text-align: center; }
+
+/* 小字链接/按钮在奶油纸色上达到 4.5:1 */
+.learning-pages .text-button, .center .text-button, .say-button, .chat-log > summary { color: #46603f; }
+/* 全局 button:hover 会把按钮变浅，话筒按钮的底色（白色图标）不能被它盖掉 */
+button.mic-button, button.mic-button:hover:not(:disabled) { background-color: var(--green); }
+button.mic-button[data-phase="requesting"], button.mic-button[data-phase="requesting"]:hover:not(:disabled), button.mic-button[data-phase="transcribing"], button.mic-button[data-phase="transcribing"]:hover:not(:disabled) { background-color: #7e946b; }
+button.mic-button[data-phase="listening"], button.mic-button[data-phase="listening"]:hover:not(:disabled) { background-color: #c4694f; }

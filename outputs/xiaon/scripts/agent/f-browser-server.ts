@@ -1,0 +1,20 @@
+/** Test-only service for the pet/voice UI: synthetic model, fake TTS/ASR (no vendor calls). Never loaded by server/index.ts. */
+import { readFileSync } from 'node:fs';
+import { temporaryRepository,TestClock } from '../../server/storage/testing';
+import { createRuntime } from '../../server/bootstrap';
+import { installLearning } from '../../server/agents/learning';
+import { createHttpServer } from '../../server/http/server';
+import { ScenarioProvider } from '../../tests-agent/d/provider';
+import type { TtsProvider } from '../../server/voice/tts';
+import { isWav,type AsrProvider } from '../../server/voice/asr';
+const port=Number(process.env.XIAON_F_API_PORT??18963),ui=Number(process.env.XIAON_F_UI_PORT??5199);
+const f=temporaryRepository(new TestClock()),r=createRuntime({...f,provider:new ScenarioProvider()});installLearning(r,{timeoutMs:800});
+const clip=readFileSync('public/voice/greet-1.mp3');
+const spoken:string[]=[],heard:{bytes:number;wav:boolean}[]=[];
+const tts:TtsProvider={enabled:true,async synthesize(text){spoken.push(text);return clip;}};
+const asr:AsrProvider={configured:true,async available(){return true;},async transcribe(wav){heard.push({bytes:wav.length,wav:isWav(wav)});return '我今天有点烦';}};
+const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[`http://127.0.0.1:${ui}`],tts,asr});
+const listener=server.listeners('request')[0];server.removeAllListeners('request');
+server.on('request',(req,res)=>{if(req.url==='/__test/voice-log'&&req.headers['x-xiaon-test']==='synthetic-f-only'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({spoken,heard}));return;}listener.call(server,req,res);});
+server.listen(port,'127.0.0.1',()=>console.log(`F synthetic pet/voice API ${port}`));
+process.once('SIGTERM',()=>{server.close(()=>{f.dispose();process.exit(0);});server.closeAllConnections();});

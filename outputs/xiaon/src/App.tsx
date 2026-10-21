@@ -39,6 +39,7 @@ import {
   X,
 } from "lucide-react";
 import { HeroArt, MapArt, Mascot, SpaceShape } from "./Art";
+import { HomeHero } from "./voice/HomeHero";
 import { explorationStatus } from "./components/learning/ExplorationMap";
 import { useLearning } from "./agents/useLearning";
 import { LearningPages, LearningStatus } from "./components/learning/LearningPages";
@@ -791,7 +792,7 @@ function App() {
                       AI 学伴 <CircleHelp size={12} />
                     </button>
                   </div>
-                  <HeroArt sleeping={s.rest} />
+                  <HomeHero sleeping={s.rest} />
                   <div className="home-dialogue">
                     <div className="little-label">
                       <span className="green-dot" /> 小N 轻轻说

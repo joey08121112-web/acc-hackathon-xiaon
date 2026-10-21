@@ -1,0 +1,188 @@
+{
+  "model": "glm-5.3-flash",
+  "baseUrl": "https://open.bigmodel.cn/api/coding/paas/v4",
+  "material": "synthetic only",
+  "startedAt": "2026-10-21T02:24:10.459Z",
+  "practice": {
+    "status": "published",
+    "candidates": [
+      {
+        "round": 1,
+        "status": "accepted",
+        "templateId": "nb-basic",
+        "difficulty": "introductory",
+        "parameterFingerprint": "4d20af358ce5c384cd70732095f77ca618fcf93bcb2f233bf1f609bff8e7a9dd",
+        "contentFingerprint": "88e299c55ba696c22fb2b4eff822402cec4aa6ee91ebf28e979320e03ef1db9e",
+        "reasons": []
+      }
+    ],
+    "taskId": "gen-negative-brackets-88e299c55ba696c2",
+    "focus": "bracket_sign_constant",
+    "basis": "help_dependence",
+    "runId": "d-run-4efbdde2-78e4-464f-87a8-69d0053402d7"
+  },
+  "practiceGrading": {
+    "question": "化简：4x − (2x − 3)。可写一次式或以等号相连的完整等价步骤。",
+    "verdict": "correct",
+    "method": "rubric_program",
+    "kind": "new_independent"
+  },
+  "review": {
+    "status": "published",
+    "candidates": [
+      {
+        "round": 1,
+        "status": "accepted",
+        "templateId": "nb-basic",
+        "difficulty": "introductory",
+        "parameterFingerprint": "2da040cfb5ff680c14f33fde15922dfafb3c5a586844bcae3e22bc9b9a7774af",
+        "contentFingerprint": "186df693752cd7e387be790cc6fc6dbeaf1271014a0a3000cd7516ae6b7d3ec7",
+        "reasons": []
+      }
+    ],
+    "taskId": "gen-negative-brackets-186df693752cd7e3",
+    "focus": "bracket_sign_constant",
+    "basis": "review_due",
+    "runId": "d-run-74aec859-f73d-4c50-a7b8-8e19cb74a206"
+  },
+  "reviewOutcome": {
+    "question": "化简：5x − (3x − 4)。可写一次式或以等号相连的完整等价步骤。",
+    "verdict": "correct",
+    "kind": "new_independent",
+    "stageBefore": 0,
+    "stageAfter": 1
+  },
+  "status": "VERIFIED",
+  "generatorRuns": [
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T02:24:10.450Z",
+      "id": "d-run-4efbdde2-78e4-464f-87a8-69d0053402d7",
+      "operationId": "8c36b2f2-3950-4e43-a0f8-54cb56078b90-generator",
+      "permissionFingerprint": "89600f0543ac6a2dcc54901ebe279958736643697ca0e87b26ab3bbeaee3bc22",
+      "providerKind": "real_http",
+      "role": "generator",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T02:24:10.450Z",
+      "status": "completed",
+      "toolExecutions": 0
+    },
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-22T03:24:10.450Z",
+      "id": "d-run-74aec859-f73d-4c50-a7b8-8e19cb74a206",
+      "operationId": "acee8966-b3a7-4a62-bf3f-b8ac732c4e07-generator",
+      "permissionFingerprint": "3f33f49f851b7feb6f6dc2f9f8161fa0173afe7930d0c64e100339c6967d51fa",
+      "providerKind": "real_http",
+      "role": "generator",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T03:24:10.450Z",
+      "status": "completed",
+      "toolExecutions": 0
+    }
+  ],
+  "generations": [
+    {
+      "attemptIds": [
+        "0da3f088-228c-4a37-a443-167ed8b925e7",
+        "4c234b76-7217-4e37-969e-20489fbff089"
+      ],
+      "basis": "help_dependence",
+      "candidates": [
+        {
+          "contentFingerprint": "88e299c55ba696c22fb2b4eff822402cec4aa6ee91ebf28e979320e03ef1db9e",
+          "difficulty": "introductory",
+          "parameterFingerprint": "4d20af358ce5c384cd70732095f77ca618fcf93bcb2f233bf1f609bff8e7a9dd",
+          "reasons": [],
+          "round": 1,
+          "status": "accepted",
+          "templateId": "nb-basic"
+        }
+      ],
+      "createdAt": "2026-10-21T02:24:10.450Z",
+      "evidenceIds": [
+        "843b80f1-8b70-46e2-ba5e-aaff98c8d39c",
+        "29038f96-da69-4015-9b2e-5741f4e0b849"
+      ],
+      "evidenceRevision": 12,
+      "failure": null,
+      "familyId": "family-negative-brackets",
+      "focus": "bracket_sign_constant",
+      "id": "gen-record-49f346b6-9b43-4dde-bfbd-44c66ae3b691",
+      "knowledgePointId": "negative-brackets",
+      "modelId": "glm-5.3-flash",
+      "operationId": "8c36b2f2-3950-4e43-a0f8-54cb56078b90",
+      "promptVersion": "generator-e1",
+      "providerKind": "real_http",
+      "purpose": "practice",
+      "relation": "same_family_numeric_variant",
+      "requestFingerprint": "2613f3248db51e1758a608f609a816a5dfd8345e63bb9acb2115ba6f89d5802e",
+      "reviewItemId": null,
+      "runId": "d-run-4efbdde2-78e4-464f-87a8-69d0053402d7",
+      "schemaVersion": "1.0.0",
+      "status": "published",
+      "taskId": "gen-negative-brackets-88e299c55ba696c2",
+      "taskVersion": 2,
+      "templateVersion": "e1-templates-1",
+      "validatorVersion": "e1-validator-1",
+      "variantOfTaskIds": [
+        "bracket"
+      ]
+    },
+    {
+      "attemptIds": [
+        "c200e0a7-6907-4c7a-9edd-a0abd3f68937",
+        "0da3f088-228c-4a37-a443-167ed8b925e7",
+        "4c234b76-7217-4e37-969e-20489fbff089"
+      ],
+      "basis": "review_due",
+      "candidates": [
+        {
+          "contentFingerprint": "186df693752cd7e387be790cc6fc6dbeaf1271014a0a3000cd7516ae6b7d3ec7",
+          "difficulty": "introductory",
+          "parameterFingerprint": "2da040cfb5ff680c14f33fde15922dfafb3c5a586844bcae3e22bc9b9a7774af",
+          "reasons": [],
+          "round": 1,
+          "status": "accepted",
+          "templateId": "nb-basic"
+        }
+      ],
+      "createdAt": "2026-10-22T03:24:10.450Z",
+      "evidenceIds": [
+        "a4be8b88-8ee7-40c6-93fb-353a663a4be6",
+        "843b80f1-8b70-46e2-ba5e-aaff98c8d39c",
+        "29038f96-da69-4015-9b2e-5741f4e0b849"
+      ],
+      "evidenceRevision": 16,
+      "failure": null,
+      "familyId": "family-negative-brackets",
+      "focus": "bracket_sign_constant",
+      "id": "gen-record-50ff1bdd-eadf-4902-916c-8dcf8e9f73b5",
+      "knowledgePointId": "negative-brackets",
+      "modelId": "glm-5.3-flash",
+      "operationId": "acee8966-b3a7-4a62-bf3f-b8ac732c4e07",
+      "promptVersion": "generator-e1",
+      "providerKind": "real_http",
+      "purpose": "review",
+      "relation": "same_family_numeric_variant",
+      "requestFingerprint": "0c9afff9e593c8a70edd94b601a03f52d4ee8e98b16f266239f3ff870e6fc958",
+      "reviewItemId": "c02faa28-d175-4640-8306-5b86d1ef45f2",
+      "runId": "d-run-74aec859-f73d-4c50-a7b8-8e19cb74a206",
+      "schemaVersion": "1.0.0",
+      "status": "published",
+      "taskId": "gen-negative-brackets-186df693752cd7e3",
+      "taskVersion": 2,
+      "templateVersion": "e1-templates-1",
+      "validatorVersion": "e1-validator-1",
+      "variantOfTaskIds": [
+        "gen-negative-brackets-88e299c55ba696c2",
+        "bracket"
+      ]
+    }
+  ],
+  "finishedAt": "2026-10-21T02:26:22.189Z"
+}

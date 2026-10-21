@@ -1,0 +1,81 @@
+{
+  "baseHead": "41dca8121ba820da3c44dabc88d7a10a81a2095c",
+  "modified": {
+    "outputs/xiaon/README.md": {
+      "before": "dfe3a39e2d3d7c4867329148f9d1b21de8eb97f4f1d1f1aed2837cef7c6f596a",
+      "after": "359fde016efc7ad72b74e1f64347a9723216a0f151e4ba5718cc99256e7ace25"
+    },
+    "outputs/xiaon/package.json": {
+      "before": "e9990768f19f991e218c150ecab73e1cde7d0697108df1ddc39f142253234be8",
+      "after": "0b472030f85f8bf5f0afe7061a89e67099a2048e76bfb77a5ba4c2c39bc0d0d8"
+    },
+    "outputs/xiaon/scripts/agent/test.mjs": {
+      "before": "ee0ae563ba9969e88bf3e3d2ff76997dcf4fb6e81826257e1aa8e98ba94a36ec",
+      "after": "2f4294f086aeb2fa6c38c40a9fd56853c146a3757c6693ffc46e8d6846585d5b"
+    },
+    "outputs/xiaon/server/agents/learning.ts": {
+      "before": "61dc6545e3acdb9bfa7779bbf5f46360c08ecebd17d40465d57c14df17cf727f",
+      "after": "d884b5757a7a00f2117eb901a8ecda15134af5848247d1da588172804826463d"
+    },
+    "outputs/xiaon/server/agents/roles.ts": {
+      "before": "3f79ea08cc3b0f8af496ccd60fc8b585ae6910c07c7d35f4d19b53cd0b9851e4",
+      "after": "2dfb32438c47ac804ad772deee08e233807e22a68c45f825dcaf7226cd29025c"
+    },
+    "outputs/xiaon/server/http/server.ts": {
+      "before": "3bc528a1421bbb6312a7e8c58e06eb082e3862af3503d8a2c4876222c475860a",
+      "after": "4b3bcf7e0c2d5d9ed2e9377d985f243a7f14009699459e0ee49a3baf6bc5a649"
+    },
+    "outputs/xiaon/server/index.ts": {
+      "before": "858b16d2427ede5dae0a9a75439553b06405a1b52559a3fae368d3fc2c869881",
+      "after": "ed307e1ea66f045fe558f1b568d179f3bc2874950f049d0e4648806c5af7a4ae"
+    },
+    "outputs/xiaon/server/plugins/assessment/catalog.ts": {
+      "before": "ced733640671ca5a5dad6d1c956c1e26c6c558084c02bfc8cb20fca2fb9cff40",
+      "after": "79d657cddc9d286defdfa2e7e98f7f3a7631006c84f35f400c9852b18ef1ae81"
+    },
+    "outputs/xiaon/server/plugins/assessment/index.ts": {
+      "before": "897e0f2ff8c4eaf1af6f0b97266d3c3b7bc0cd7672f3da1fc6f55f59f2ed674c",
+      "after": "8b19971e91ef9d534bc17192a1f72917d863bfeb8fd46b2ea18651ca3403a9c6"
+    },
+    "outputs/xiaon/server/storage/repository.ts": {
+      "before": "b467e346866c1df208056e1d16a8b84b79d664bbf3c2d2fdea1ae76ec2f46651",
+      "after": "f4d3f2c1c21f91045decc5991b863e2f36fbb0adda92d60256abbe41b630eb5b"
+    },
+    "outputs/xiaon/server/tools/registry.ts": {
+      "before": "2e67003b1601b43035f9375a1dbebaf0b94b9306050f411d7f2b063ddda13acd",
+      "after": "89ea3dbe84e84e11cdf457bbc9cda3bfadc5bcc939f5f6c7ac8c211c22a4a902"
+    },
+    "outputs/xiaon/shared/learning-contracts.schema.json": {
+      "before": "75be61b83e32af116b9fb67c7af045cd80d6334df8140ae879f34250bcb340c4",
+      "after": "859bb96ff4905511ca0caf77c7fc93a9d4634e0769bd88d2501fb72bceaf2092"
+    },
+    "outputs/xiaon/shared/learning-contracts.ts": {
+      "before": "6a8b015561877209aa222cf4235d00bc922f46c1a01f155700f694b17545198e",
+      "after": "452def8dafa91813e11a8e1536f626bc30c517fc0f89a7e26c5d65943ff1b745"
+    },
+    "outputs/xiaon/src/components/learning/LearningPages.tsx": {
+      "before": "fa1cb31b1af1b749ab80ee8a877b1f46739219c0bcec4ccca81ec6f4388f0fb5",
+      "after": "8ade7d2b02c56f90b1281f7a6e69fe80dd9fc4ffb615ea57054bc0ec55e85daa"
+    }
+  },
+  "added": {
+    "outputs/xiaon/playwright.e-regression.config.ts": "2990f62cfbddf0af677e30b366c6014da6ee06c107c9eb5f5fdcc3d9642a747a",
+    "outputs/xiaon/playwright.e.config.ts": "a92aceb3054d22687c204b4dd63906e065740705b7e6b0bd8567992950bbdc0b",
+    "outputs/xiaon/scripts/agent/e-browser-server.ts": "69dbd59810d04a7e9e78d74584ec1f389bad84087360c9d80ef862b9c07bd99c",
+    "outputs/xiaon/scripts/agent/e-real-generation.ts": "11be64a2edd9695d498071c79766b65db7888aad26baba5ee73960d2d2651231",
+    "outputs/xiaon/server/plugins/generation/config.ts": "dec12814dcd06ca3a1b2befdfcae504a3bece8e23510168ec6ec8c37b8e1d6ea",
+    "outputs/xiaon/server/plugins/generation/expression.ts": "9a34d168fa95278185a18ac4c71f9a2453e915139eb7507ea34ef72989092c75",
+    "outputs/xiaon/server/plugins/generation/index.ts": "8e5d0198367b38299403552fc55b3ea7f2d61a1e884dd7849bea44613cb7f557",
+    "outputs/xiaon/server/plugins/generation/prompt.ts": "60c923d78db0179362a3468cc4e41b7df8be28c266ecea624c605438855b2c2a",
+    "outputs/xiaon/server/plugins/generation/store.ts": "2e344c77c8f8093a985d76f345bcffa99dbf13b0c9df7140bd08efff20c1d271",
+    "outputs/xiaon/server/plugins/generation/templates.ts": "f485dd808636941a687069cf37d39638499c2dafcfca731d1dce88bca58fe136",
+    "outputs/xiaon/server/plugins/generation/validator.ts": "9d2c6a7526554e0d619e3d6d7661a23fcd09f186e0e445c3f1901ba34324de38",
+    "outputs/xiaon/src/learning/generation/GenerationPanel.tsx": "2236a2c0f6e794aafe44c0c3e80411fee85d310c062c806506ebd8ae5bd06b3f",
+    "outputs/xiaon/src/learning/generation/index.ts": "4e8108ad5790f2078fcfbe0c2eaed0692bd081762ee34180726b91570d052d71",
+    "outputs/xiaon/tests-agent/e/browser.spec.ts": "43bfa36371509f33d7b904603bcfb857a6779c64f86e8e14774eff2b18c1bf08",
+    "outputs/xiaon/tests-agent/e/flow.test.ts": "9f3109fdee2c769af1c4d6fc525559cf8977d934d3d8bcc2dd601d2fdbba3c09",
+    "outputs/xiaon/tests-agent/e/http.test.ts": "61b232ad3b71158dc718ec11f74bc544d17f0fb324244de75e7a9b9d3b9fa7de",
+    "outputs/xiaon/tests-agent/e/provider.ts": "740807d92f3ee4226872fb370b8ea5a6a7233a6c1e4c309681be309cdab5d5c1",
+    "outputs/xiaon/tests-agent/e/templates.test.ts": "4487120166dfd46d03d76dc95e53aae1416bf8f636c3d44b473953faf5d0f6b0"
+  }
+}

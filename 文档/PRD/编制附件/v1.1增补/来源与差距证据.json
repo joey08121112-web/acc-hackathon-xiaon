@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-21",
+  "head": "41dca8121ba820da3c44dabc88d7a10a81a2095c",
+  "product_tests_rerun": false,
+  "product_code_changed": false,
+  "sources": [
+    {
+      "path": "/Users/ami/Library/Application Support/AutoClaw-official/accounts/07630e65a6ec93f90e1043fff949f0d955b1f066f0c221b4cc057307e4811a6d/projects/Default/学伴小N-产品需求文档.md",
+      "sha256": "196081cdf2f65cd934a62e855b914118085708f1991f6b081a2853ef9a273af3"
+    },
+    {
+      "path": "文档/PRD/学伴小N-产品需求文档-v1.0.md",
+      "sha256": "35fee4c17059ef4e449cea72a90daeebef06430d9bda4e4b7d49e55df4edc84d"
+    },
+    {
+      "path": "outputs/xiaon/shared/learning-contracts.ts",
+      "sha256": "452def8dafa91813e11a8e1536f626bc30c517fc0f89a7e26c5d65943ff1b745"
+    },
+    {
+      "path": "outputs/xiaon/server/agents/roles.ts",
+      "sha256": "3f79ea08cc3b0f8af496ccd60fc8b585ae6910c07c7d35f4d19b53cd0b9851e4"
+    },
+    {
+      "path": "outputs/xiaon/server/agents/learning.ts",
+      "sha256": "61dc6545e3acdb9bfa7779bbf5f46360c08ecebd17d40465d57c14df17cf727f"
+    },
+    {
+      "path": "outputs/xiaon/server/core/events.ts",
+      "sha256": "4d9d56f788ac9f4feb59a08e08ea8cf1d268bae7116942d1a1ab5eaee6f4c820"
+    },
+    {
+      "path": "outputs/xiaon/server/plugins/assessment/catalog.ts",
+      "sha256": "ced733640671ca5a5dad6d1c956c1e26c6c558084c02bfc8cb20fca2fb9cff40"
+    },
+    {
+      "path": "outputs/xiaon/src/components/learning/LearningPages.tsx",
+      "sha256": "fa1cb31b1af1b749ab80ee8a877b1f46739219c0bcec4ccca81ec6f4388f0fb5"
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/HANDOFF.md",
+      "sha256": "d85a141ef813f60170fc8882964a8e84d644c23c62e5411c5c3942758d2a61cd"
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/ACCEPTANCE.md",
+      "sha256": "9c14e4903426fbe75c896be607d41710e177f14ea8ea6e79b29f10ca1eb68642"
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/final-upstream-and-build.log",
+      "sha256": "6d7008fbcea0a7fd97a03e7fe79f167cf91aafbb3855585680a8458d0fd7f25d"
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/evidence/browser-complete-delivery.log",
+      "sha256": "3ae8812c14f3a998f973afe22cc538af6edd0fcc2385b78cd307ad461ef9a9a9"
+    },
+    {
+      "path": "任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/FIX-REPORT.md",
+      "sha256": "3fc0257973fdf1376954b65cb81688453f93922a71854d9a9b364fea8e55d9ce"
+    }
+  ],
+  "concurrent_e_work_observed": {
+    "status": "in_progress_not_accepted",
+    "files": [
+      {
+        "path": "outputs/xiaon/shared/learning-contracts.ts",
+        "sha256": "452def8dafa91813e11a8e1536f626bc30c517fc0f89a7e26c5d65943ff1b745"
+      },
+      {
+        "path": "outputs/xiaon/server/storage/repository.ts",
+        "sha256": "9b392cfde04165d413b9ce1fd7d8e97ee4aa1e0be6b6429dbc18b146ab479527"
+      },
+      {
+        "path": "outputs/xiaon/server/plugins/generation/expression.ts",
+        "sha256": "9a34d168fa95278185a18ac4c71f9a2453e915139eb7507ea34ef72989092c75"
+      },
+      {
+        "path": "outputs/xiaon/server/plugins/generation/templates.ts",
+        "sha256": "f485dd808636941a687069cf37d39638499c2dafcfca731d1dce88bca58fe136"
+      }
+    ],
+    "note": "Other window changes observed; this document task did not edit product code. Baseline and newer source hashes belong to separate instants."
+  }
+}

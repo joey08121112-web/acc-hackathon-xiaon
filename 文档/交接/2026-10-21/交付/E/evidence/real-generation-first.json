@@ -1,0 +1,101 @@
+{
+  "model": "glm-5.3-flash",
+  "baseUrl": "https://open.bigmodel.cn/api/coding/paas/v4",
+  "material": "synthetic only",
+  "startedAt": "2026-10-21T02:22:43.657Z",
+  "practice": {
+    "status": "published",
+    "candidates": [
+      {
+        "round": 1,
+        "status": "accepted",
+        "templateId": "nb-basic",
+        "difficulty": "introductory",
+        "parameterFingerprint": "c127ddbaffcc9fc3ca500f130b5dbcd26b2174b46514f96fe0679a135e792c50",
+        "contentFingerprint": "c2875337aef4cd9a67830fa5b8c354af650a9bf2c5c8d2b82b5dc2cb419463b1",
+        "reasons": []
+      }
+    ],
+    "taskId": "gen-negative-brackets-c2875337aef4cd9a",
+    "focus": "bracket_sign_constant",
+    "basis": "help_dependence",
+    "runId": "d-run-2ebc7258-9d1c-4958-bace-3e3440825492"
+  },
+  "practiceGrading": {
+    "question": "化简：4x − (2x − 7)。可写一次式或以等号相连的完整等价步骤。",
+    "verdict": "correct",
+    "method": "rubric_program",
+    "kind": "new_independent"
+  },
+  "review": {
+    "status": "NO_DUE_ITEM"
+  },
+  "status": "FAILED",
+  "generatorRuns": [
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-21T02:22:43.648Z",
+      "id": "d-run-2ebc7258-9d1c-4958-bace-3e3440825492",
+      "operationId": "4ad76072-084e-4852-9d73-59bd43c0ff3a-generator",
+      "permissionFingerprint": "89600f0543ac6a2dcc54901ebe279958736643697ca0e87b26ab3bbeaee3bc22",
+      "providerKind": "real_http",
+      "role": "generator",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-21T02:22:43.648Z",
+      "status": "completed",
+      "toolExecutions": 0
+    }
+  ],
+  "generations": [
+    {
+      "attemptIds": [
+        "e6251117-5a59-430e-b35f-34c51d618db2",
+        "399cb9ca-a292-46b6-b6cf-9457dd553712"
+      ],
+      "basis": "help_dependence",
+      "candidates": [
+        {
+          "contentFingerprint": "c2875337aef4cd9a67830fa5b8c354af650a9bf2c5c8d2b82b5dc2cb419463b1",
+          "difficulty": "introductory",
+          "parameterFingerprint": "c127ddbaffcc9fc3ca500f130b5dbcd26b2174b46514f96fe0679a135e792c50",
+          "reasons": [],
+          "round": 1,
+          "status": "accepted",
+          "templateId": "nb-basic"
+        }
+      ],
+      "createdAt": "2026-10-21T02:22:43.648Z",
+      "evidenceIds": [
+        "0c576bb5-a6d1-4eba-98f7-502d37fcaea5",
+        "c7a5505b-6f32-44b3-a002-0fb8ff4c7a75"
+      ],
+      "evidenceRevision": 12,
+      "failure": null,
+      "familyId": "family-negative-brackets",
+      "focus": "bracket_sign_constant",
+      "id": "gen-record-d6ec44c2-f302-4307-a921-7fd3cd39e2a9",
+      "knowledgePointId": "negative-brackets",
+      "modelId": "glm-5.3-flash",
+      "operationId": "4ad76072-084e-4852-9d73-59bd43c0ff3a",
+      "promptVersion": "generator-e1",
+      "providerKind": "real_http",
+      "purpose": "practice",
+      "relation": "same_family_numeric_variant",
+      "requestFingerprint": "2613f3248db51e1758a608f609a816a5dfd8345e63bb9acb2115ba6f89d5802e",
+      "reviewItemId": null,
+      "runId": "d-run-2ebc7258-9d1c-4958-bace-3e3440825492",
+      "schemaVersion": "1.0.0",
+      "status": "published",
+      "taskId": "gen-negative-brackets-c2875337aef4cd9a",
+      "taskVersion": 2,
+      "templateVersion": "e1-templates-1",
+      "validatorVersion": "e1-validator-1",
+      "variantOfTaskIds": [
+        "bracket"
+      ]
+    }
+  ],
+  "finishedAt": "2026-10-21T02:23:58.774Z"
+}

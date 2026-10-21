@@ -1,0 +1,88 @@
+✖ synthetic generation → real handler → validation → SQLite → unified catalog → student opens → real grading (36.4685ms)
+✖ repair round: a wrong first candidate is rejected and a valid second one publishes; two failures publish nothing (10.749708ms)
+✔ idempotent operation IDs, conflicting reuse and concurrent requests never double-publish (61.5635ms)
+✖ program gates: prerequisite, pause, exploration order, 10-calculation cap, daily cost cap and offline fallback (19.73325ms)
+✔ cancel, timeout, pause during generation and reset discard late results; nothing is opened automatically (1703.094417ms)
+✔ optional memory reaches the generator only when enabled; reset removes generated tasks and records (28.492791ms)
+✖ review purpose: due item → generated unseen task → next-day review advances the stage through the normal C path (21.627417ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 3
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1996.824459
+
+✖ failing tests:
+
+test at tests-agent/e/flow.test.ts:1:1414
+✖ synthetic generation → real handler → validation → SQLite → unified catalog → student opens → real grading (36.4685ms)
+  Error: database is not open
+      at SqliteRepository.close (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:73:18)
+      at Object.dispose (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/testing.ts:10:70)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/e/flow.test.ts:55:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'ERR_INVALID_STATE'
+  }
+
+test at tests-agent/e/flow.test.ts:1:4349
+✖ repair round: a wrong first candidate is rejected and a valid second one publishes; two failures publish nothing (10.749708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      [
+  -     'expression_mismatch',
+  -     'answer_mismatch',
+        'steps_invalid',
+        'steps_final_mismatch'
+      ],
+      [
+        'tool_call_not_allowed'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/e/flow.test.ts:67:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'steps_invalid', 'steps_final_mismatch' ], [ 'tool_call_not_allowed' ] ],
+    expected: [ [ 'expression_mismatch', 'answer_mismatch', 'steps_invalid', 'steps_final_mismatch' ], [ 'tool_call_not_allowed' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/e/flow.test.ts:1:6829
+✖ program gates: prerequisite, pause, exploration order, 10-calculation cap, daily cost cap and offline fallback (19.73325ms)
+  Error: 本场次最多 10 道不同计算题
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/core/events.ts:22:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:59:16)
+      at SqliteRepository.transaction (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:53:20)
+      at SqliteRepository.once (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/storage/repository.ts:56:15)
+      at StudentEvents.expose (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/core/events.ts:17:142)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/agents/learning.ts:72:17)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/agents/learning.ts:58:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/agents/learning.ts:58:208)
+      at LearningCoordinator.open (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/server/agents/learning.ts:68:98)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/e/flow.test.ts:105:31) {
+    code: 'invalid_state',
+    recoverable: true
+  }
+
+test at tests-agent/e/flow.test.ts:1:12066
+✖ review purpose: due item → generated unseen task → next-day review advances the stage through the normal C path (21.627417ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(item)
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/e/flow.test.ts:165:74)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

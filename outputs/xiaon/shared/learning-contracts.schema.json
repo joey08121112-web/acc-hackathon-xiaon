@@ -4553,7 +4553,8 @@
             "tutor",
             "assessor",
             "planner",
-            "reporter"
+            "reporter",
+            "generator"
           ]
         },
         "providerKind": {
@@ -4683,7 +4684,8 @@
             "tutor",
             "assessor",
             "planner",
-            "reporter"
+            "reporter",
+            "generator"
           ]
         },
         "allowedTools": {
@@ -4710,6 +4712,375 @@
         "allowedTools",
         "maxRounds",
         "maxToolExecutions"
+      ],
+      "additionalProperties": false
+    },
+    "GenerationRecord": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "knowledgePointId": {
+          "type": "string",
+          "enum": [
+            "negative-brackets",
+            "like-terms"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "enum": [
+            "practice",
+            "review"
+          ]
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "no_evidence",
+            "difficulty",
+            "help_dependence",
+            "independent",
+            "review_due"
+          ]
+        },
+        "reviewItemId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "published",
+            "rejected",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "providerKind": {
+          "type": "string",
+          "enum": [
+            "real_http",
+            "synthetic",
+            "offline"
+          ]
+        },
+        "modelId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "promptVersion": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "templateVersion": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "validatorVersion": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "requestFingerprint": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "evidenceRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "evidenceIds": {
+          "maxItems": 500,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+          }
+        },
+        "attemptIds": {
+          "maxItems": 500,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+          }
+        },
+        "candidates": {
+          "maxItems": 2,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "round": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "accepted",
+                  "rejected"
+                ]
+              },
+              "templateId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "difficulty": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "introductory",
+                      "standard",
+                      "stretch"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "parameterFingerprint": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 64,
+                    "maxLength": 64
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "contentFingerprint": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 64,
+                    "maxLength": 64
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reasons": {
+                "maxItems": 17,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "schema_invalid",
+                    "tool_call_not_allowed",
+                    "knowledge_point_mismatch",
+                    "difficulty_not_allowed",
+                    "params_invalid",
+                    "params_out_of_range",
+                    "degenerate_variable_cancels",
+                    "degenerate_constant_cancels",
+                    "not_covering_target",
+                    "expression_mismatch",
+                    "answer_mismatch",
+                    "steps_invalid",
+                    "steps_final_mismatch",
+                    "grader_unsupported",
+                    "duplicate_content",
+                    "evidence_reference_invalid",
+                    "focus_not_allowed"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "round",
+              "status",
+              "templateId",
+              "difficulty",
+              "parameterFingerprint",
+              "contentFingerprint",
+              "reasons"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "taskId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "taskVersion": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "focus": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "familyId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "type": "string",
+          "const": "same_family_numeric_variant"
+        },
+        "variantOfTaskIds": {
+          "maxItems": 500,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+          }
+        },
+        "runId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failure": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "enum": [
+                    "invalid_params",
+                    "unknown_tool",
+                    "forbidden",
+                    "not_found",
+                    "invalid_state",
+                    "conflict",
+                    "unavailable",
+                    "not_implemented",
+                    "timeout",
+                    "cancelled",
+                    "budget_exhausted",
+                    "provider_auth",
+                    "provider_rate_limit",
+                    "provider_error",
+                    "unsupported_tools",
+                    "internal_error"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000
+                },
+                "recoverable": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "code",
+                "message",
+                "recoverable"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "operationId",
+        "knowledgePointId",
+        "purpose",
+        "basis",
+        "reviewItemId",
+        "status",
+        "providerKind",
+        "modelId",
+        "promptVersion",
+        "templateVersion",
+        "validatorVersion",
+        "requestFingerprint",
+        "evidenceRevision",
+        "evidenceIds",
+        "attemptIds",
+        "candidates",
+        "taskId",
+        "taskVersion",
+        "focus",
+        "familyId",
+        "relation",
+        "variantOfTaskIds",
+        "runId",
+        "failure",
+        "createdAt"
       ],
       "additionalProperties": false
     },

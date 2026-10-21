@@ -6,7 +6,7 @@ const contentTypes:Record<string,string>={
  '.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8',
  '.json':'application/json; charset=utf-8','.map':'application/json; charset=utf-8','.txt':'text/plain; charset=utf-8','.md':'text/markdown; charset=utf-8',
  '.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.gif':'image/gif','.ico':'image/x-icon',
- '.zip':'application/zip','.woff':'font/woff','.woff2':'font/woff2','.webmanifest':'application/manifest+json',
+ '.zip':'application/zip','.mp3':'audio/mpeg','.woff':'font/woff','.woff2':'font/woff2','.webmanifest':'application/manifest+json',
 };
 export function createStaticHandler(root:string){
  const base=resolve(root);const index=resolve(base,'index.html');

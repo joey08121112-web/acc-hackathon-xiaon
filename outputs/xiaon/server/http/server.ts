@@ -6,6 +6,8 @@ import { failure,RuntimeError } from '../core/errors';
 import { learningFor } from '../agents/learning';
 import { MODEL_DISCLOSURE } from '../core/agent';
 import { createStaticHandler } from './static';
+import { NoTts,TTS_MAX_CHARS,type TtsProvider } from '../voice/tts';
+import { NoAsr,ASR_MAX_WAV_BYTES,isWav,type AsrProvider } from '../voice/asr';
 const statusCodes:Record<string,number>={invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,not_implemented:501,unavailable:503};
 export interface HttpServerConfig {
  allowedOrigins:string[];host:string;
@@ -15,12 +17,17 @@ export interface HttpServerConfig {
  extraHosts?:string[];
  /** Built SPA directory served on the same origin; without it non-/api paths are not served. */
  staticDir?:string;
+ /** Server-side speech synthesis; absent or unconfigured means the voice feature is reported unavailable. */
+ tts?:TtsProvider;
+ /** Server-side speech recognition; the client falls back to the browser's own when this is unavailable. */
+ asr?:AsrProvider;
 }
 export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig){
  const publicOrigins=config.publicOrigins??[];const publicMode=publicOrigins.length>0;
  const allowed=new Set([...config.allowedOrigins,...publicOrigins]);const hosts=new Set([config.host,...(config.extraHosts??[]),...[...allowed].map(s=>new URL(s).host)]);
  const serveStatic=config.staticDir?createStaticHandler(config.staticDir):undefined;
  const localSessions=new Map<string,{csrf:string;expires:number}>();let activeChat=false;
+ const tts=config.tts??new NoTts();let ttsInFlight=0;const ttsStarts:number[]=[];const asr=config.asr??new NoAsr();let asrInFlight=false;const asrStarts:number[]=[];
  const server=createServer(async(req,res)=>{
   res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Content-Type','application/json; charset=utf-8');
   const send=(body:unknown,status=200)=>{res.writeHead(status);res.end(JSON.stringify(body));};
@@ -32,7 +39,7 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
    const hostOk=hosts.has(rawHost)||(publicMode&&rawHost.endsWith(':443')&&hosts.has(rawHost.slice(0,-4)));
    if(!hostOk&&!(publicMode&&req.method==='GET'&&path==='/api/health'))throw new RuntimeError('forbidden','不接受此 Host');
    if(serveStatic&&path!=='/api'&&!path.startsWith('/api/')){if(!serveStatic(req,res,path))throw new RuntimeError('not_found');return;}
-   if(req.method==='GET'&&path==='/api/health'){send({schemaVersion:SCHEMA_VERSION,status:'ok',mode:runtime.provider.kind==='offline'?'local_rules':'model',providerKind:runtime.provider.kind,learning:!!learningFor(runtime),disclosure:MODEL_DISCLOSURE});return;}
+   if(req.method==='GET'&&path==='/api/health'){send({schemaVersion:SCHEMA_VERSION,status:'ok',voice:{tts:tts.enabled,asr:await asr.available()},mode:runtime.provider.kind==='offline'?'local_rules':'model',providerKind:runtime.provider.kind,learning:!!learningFor(runtime),disclosure:MODEL_DISCLOSURE});return;}
    if(req.method==='POST'){
     if(!allowed.has(req.headers.origin??'')||req.headers['sec-fetch-site']==='cross-site')throw new RuntimeError('forbidden','写操作需要允许的 Origin');
     if(!req.headers['content-type']?.startsWith('application/json'))throw new RuntimeError('invalid_params','需要 application/json');
@@ -55,7 +62,31 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
     if(match){const task=runtime.catalog.publicTask(match[1],Number(match[2]));if(!task)throw new RuntimeError('not_found');send(task);return;}
     throw new RuntimeError('not_found');
    }
-   const raw=await readBody(req);
+   const raw=await readBody(req,path==='/api/voice/asr'?Math.ceil(ASR_MAX_WAV_BYTES*4/3)+2000:550000);
+   if(path==='/api/voice/asr'){
+    // Audio arrives as base64 WAV in JSON, is forwarded once, and is never stored or logged.
+    const body=raw as {audio?:unknown};if(!body||typeof body!=='object'||Object.keys(body).some(k=>k!=='audio')||typeof body.audio!=='string'||!/^[A-Za-z0-9+/]+={0,2}$/.test(body.audio))throw new RuntimeError('invalid_params','需要 {audio: base64 WAV}');
+    const wav=Buffer.from(body.audio,'base64');if(!isWav(wav)||wav.length>ASR_MAX_WAV_BYTES)throw new RuntimeError('invalid_params','需要不超过约50秒的 WAV 音频');
+    if(!asr.configured)throw new RuntimeError('unavailable','尚未配置语音识别');
+    const now=Date.now();while(asrStarts.length&&now-asrStarts[0]>60000)asrStarts.shift();
+    if(asrInFlight||asrStarts.length>=20)throw new RuntimeError('invalid_state','语音识别请求太频繁，请稍后再试');
+    asrStarts.push(now);asrInFlight=true;
+    const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
+    try{send({text:await asr.transcribe(wav,c.signal)});}finally{asrInFlight=false;res.off('close',cancel);}
+    return;
+   }
+   if(path==='/api/voice/tts'){
+    // Browser sends text only. Speaker/resource/key are server configuration; at most 2 concurrent and 30 per minute.
+    const body=raw as {text?:unknown};if(!body||typeof body!=='object'||Object.keys(body).some(k=>k!=='text')||typeof body.text!=='string')throw new RuntimeError('invalid_params','需要 {text}');
+    if(!tts.enabled)throw new RuntimeError('unavailable','尚未配置语音合成');
+    const now=Date.now();while(ttsStarts.length&&now-ttsStarts[0]>60000)ttsStarts.shift();
+    if(ttsInFlight>=2||ttsStarts.length>=30)throw new RuntimeError('invalid_state','朗读请求太频繁，请稍后再试');
+    ttsStarts.push(now);ttsInFlight++;
+    const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
+    try{const audio=await tts.synthesize(body.text.slice(0,TTS_MAX_CHARS+1),c.signal);res.setHeader('Content-Type','audio/mpeg');res.setHeader('Content-Length',String(audio.length));res.writeHead(200);res.end(audio);}
+    finally{ttsInFlight--;res.off('close',cancel);}
+    return;
+   }
    const d=learningFor(runtime);
    if(path.startsWith('/api/learning/')){
     if(!d)throw new RuntimeError('not_implemented');
@@ -68,6 +99,7 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
      case '/api/learning/submit':send(await d.submit(raw as never,c.signal));break;
      case '/api/learning/grade':send(await d.grade(raw as never,c.signal));break;
      case '/api/learning/generate':send(await d.generate(raw as never,c.signal));break;
+     case '/api/learning/generate-task':send(await d.generateTask(raw as never,c.signal));break;
      case '/api/learning/confirm':send(await d.confirm(raw as never));break;
      case '/api/learning/preference':send(await d.preference(raw as never));break;
      case '/api/learning/chat':send(await d.chat(raw as never,c.signal));break;
@@ -102,4 +134,4 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
  return server;
 }
 function equalToken(actual:string,expected:string){const a=Buffer.from(actual),b=Buffer.from(expected);return a.length===b.length&&timingSafeEqual(a,b);}
-async function readBody(req:IncomingMessage):Promise<unknown>{let size=0;const chunks:Buffer[]=[];for await(const chunk of req){size+=Buffer.byteLength(chunk);if(size>550000)throw new RuntimeError('invalid_params','请求超出大小限制');chunks.push(Buffer.from(chunk));}try{return JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw new RuntimeError('invalid_params','无效JSON');}}
+async function readBody(req:IncomingMessage,limit=550000):Promise<unknown>{let size=0;const chunks:Buffer[]=[];for await(const chunk of req){size+=Buffer.byteLength(chunk);if(size>limit)throw new RuntimeError('invalid_params','请求超出大小限制');chunks.push(Buffer.from(chunk));}try{return JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw new RuntimeError('invalid_params','无效JSON');}}

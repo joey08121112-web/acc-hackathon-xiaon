@@ -5,8 +5,8 @@ import type { TaskPublicView } from '../../shared/learning-contracts';
 export const WORKSPACE_KEY='xiaon-workspace-v2';
 const ACTIVATED='xiaon-sqlite-active';
 export const isOfflineArtifact=()=>!!document.querySelector('meta[name="xiaon-offline"]')||location.protocol==='file:';
-type Cache={reviewLink:{id:string;revision:number}|null;activeTaskId:string|null;drafts:Record<string,string>;chat:{role:'user'|'assistant';content:string}[];pending:{path:string;body:Record<string,unknown>}|null};
-const fresh=():Cache=>({reviewLink:null,activeTaskId:null,drafts:{},chat:[],pending:null});
+type Cache={reviewLink:{id:string;revision:number}|null;activeTaskId:string|null;drafts:Record<string,string>;chat:{role:'user'|'assistant';content:string}[];chatAt:number;pending:{path:string;body:Record<string,unknown>}|null};
+const fresh=():Cache=>({reviewLink:null,activeTaskId:null,drafts:{},chat:[],chatAt:0,pending:null});
 export function useLearning(){
  const [cache,setCache]=useState<Cache>(()=>{try{return {...fresh(),...JSON.parse(localStorage.getItem(WORKSPACE_KEY)||'{}')};}catch{return fresh();}});
  const cacheRef=useRef(cache);cacheRef.current=cache;
