@@ -137,6 +137,56 @@ export const MEMORY_CONTEXT_MAX_CHARS = 300;
 export const RECOGNIZE_MAX_IMAGE_BYTES = 1_500_000;
 const RECOGNIZE_MAX_BASE64 = Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES/3)*4;
 const RecognizeResult = z.strictObject({draft:ProblemDraft.nullable(),notice:shortText.nullable()});
+// ---- G2 第二期：专业模式（2026-10-21）：只做加法。报告、月阶段、趋势都是学习记录，不受记忆开关影响，重置演示时清除。 ----
+/** Fixed interview order (decision 15): 理解 and 逻辑 are required and come first; the rest follow in this order. */
+export const INTERVIEW_MODULE_ORDER = ['理解','逻辑','计算','建模','空间想象'] as const;
+export const INTERVIEW_REQUIRED_MODULES = ['理解','逻辑'] as const;
+const moduleLevel = z.enum(['good','partial','needs_work','not_tested']);
+/** Student-facing level names (decision 16). No total score, no ranking. */
+export const MODULE_LEVEL_LABELS = {good:'掌握得不错',partial:'部分掌握',needs_work:'需要加强',not_tested:'还没测到'} as const;
+// Why the program gave a level, one code per rule in 01-Claude 第二期 §2「等级判定」. The model words the level, never picks it.
+const levelBasis = z.enum(['correct_with_reason','correct_reason_incomplete','completed_with_hint','correct_on_transfer','incorrect_on_both','not_tested']);
+export const LEVEL_BY_BASIS = {correct_with_reason:'good',correct_reason_incomplete:'partial',completed_with_hint:'partial',correct_on_transfer:'partial',incorrect_on_both:'needs_work',not_tested:'not_tested'} as const;
+/** RetestReminder shows from this many days before MonthStage.retestSuggestedAt (decision 17, in-app only). */
+export const RETEST_REMIND_DAYS_BEFORE = 3;
+const day = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const month = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
+// question = the module's catalog question; follow_up = "你是怎么想的" (not a new task, no attempt); transfer = same-family task asked after a wrong answer.
+const interviewTurnKind = z.enum(['question','follow_up','transfer']);
+const InterviewPending = z.strictObject({module:dimension,task:ref,kind:interviewTurnKind,prompt:z.string().min(1).max(300),mode:z.enum(['model','local_rules']),askedAt:utc});
+// One professional-mode interview. Append-only revisions (key id:r<revision>), like LearningEpisode.
+// learningSessionId = the exploration LearningSession it runs in, entered through learning/start's explicit switchMode; a resume on a new day records the new session.
+// pending = the question 小N asked and the student has not answered yet; answered questions are InterviewTurns and are never asked again.
+const InterviewSession = z.strictObject({...base,...operation,revision:version,learningSessionId:id,
+  moduleOrder:z.tuple([z.literal('理解'),z.literal('逻辑'),z.literal('计算'),z.literal('建模'),z.literal('空间想象')]),
+  currentModule:dimension.nullable(),completedModules:z.array(dimension).max(5),status:z.enum(['in_progress','paused','completed']),
+  pending:InterviewPending.nullable(),startedAt:utc,pausedAt:nullableTime,completedAt:nullableTime,updatedAt:utc});
+// One answered question. attemptId links the Attempt graded through the normal submit path (null for a follow-up, which is reasoning evidence only).
+const InterviewTurn = z.strictObject({...base,...operation,interviewId:id,seq:version,module:dimension,task:ref,kind:interviewTurnKind,
+  prompt:z.string().min(1).max(300),answer:z.string().min(1).max(2000),attemptId:id.nullable(),mode:z.enum(['model','local_rules']),askedAt:utc,answeredAt:utc});
+// scope marks every level as 「本次观察」 of this interview. quotes are the student's own words (依据原话); suggestions only for partial/needs_work.
+const ModuleLevel = z.strictObject({module:dimension,level:moduleLevel,basis:levelBasis,evidenceIds:ids,attemptIds:ids,turnIds:ids,
+  quotes:z.array(shortText).max(5),wording:shortText.nullable(),suggestions:z.array(shortText).max(2),scope:z.literal('this_interview')});
+// Versioned snapshot: a later report for the same interview supersedes, never edits. No total score or rank field exists.
+const ProfessionalReport = z.strictObject({...base,...operation,...revision,interviewId:id,version,supersedesReportId:id.nullable(),comparedWithReportId:id.nullable(),
+  modules:z.array(ModuleLevel).length(5),
+  // Home-mode 「待核实」 observations of the same dimension: confirmed by this interview, or not seen.
+  observationChecks:z.array(z.strictObject({observationId:id,dimension:z.enum(['理解','逻辑']),result:z.enum(['confirmed','not_seen'])})).max(50),
+  changes:z.array(z.strictObject({module:dimension,from:moduleLevel,to:moduleLevel,note:shortText})).max(5),
+  mode:z.enum(['model','local_rules']),createdAt:utc});
+// Month stage goal. Append-only revisions. weeks link the weekly plan drafts/versions made through the existing planning engine.
+// confirmation is written by the program from the student's click only.
+const MonthStage = z.strictObject({...base,...operation,revision:version,month,module:dimension,goal:shortText,sourceReportId:id,
+  weeks:z.array(z.strictObject({weekStart:day,proposalId:id.nullable(),planVersionId:id.nullable()})).max(6),
+  retestSuggestedAt:day,status:z.enum(['draft','confirmed','deferred','superseded']),
+  confirmation:z.strictObject({action:z.enum(['accept','defer']),confirmedAt:utc,actor:z.literal('student')}).nullable(),
+  retestDeclinedAt:nullableTime,mode:z.enum(['model','local_rules']),createdAt:utc,updatedAt:utc});
+// Derived from ProfessionalReport (not stored): one module level per month; the level always equals the source report's.
+const TrendPoint = z.strictObject({month,module:dimension,level:moduleLevel,sourceReportId:id,reportCreatedAt:utc});
+const TrendQuery = z.strictObject({latest:z.array(TrendPoint).max(600),history:z.array(TrendPoint).max(5000)});
+const RetestReminder = z.strictObject({stageId:id,month,retestSuggestedAt:day,remindFrom:day});
+// What one interview call returns. text is what 小N says now; task is the pending question's public view (choices/visual), never the answer.
+const InterviewStep = z.strictObject({text,safety:z.boolean(),interview:InterviewSession.nullable(),task:TaskPublicView.nullable(),turn:InterviewTurn.nullable(),reportReady:z.boolean(),run:AgentRun.nullable()});
 const tools = {
   get_learning_context:z.strictObject({}),
   query_learning_evidence:z.strictObject({taskId:id.optional()}),
@@ -175,6 +225,16 @@ export const schemas = {
   ConfirmMemoryDraft:z.strictObject({...operation,sessionId:id.nullable(),draft:MemoryDraft,text:shortText,retention:memoryRetention.optional()}),
   GreetingRequest:z.strictObject({...operation}),
   EndConversation:z.strictObject({...operation,sessionId:id,history:z.array(ChatMessage).max(20)}),
+  // G2 第二期：专业模式
+  InterviewSession,InterviewPending,InterviewTurn,ModuleLevel,ProfessionalReport,MonthStage,TrendPoint,TrendQuery,RetestReminder,InterviewStep,
+  InterviewStart:z.strictObject({...operation}),
+  InterviewAnswer:z.strictObject({...operation,interviewId:id,expectedRevision:version,text:z.string().min(1).max(2000)}),
+  InterviewPause:z.strictObject({...operation,interviewId:id}),
+  InterviewResume:z.strictObject({...operation,interviewId:id}),
+  InterviewReportRequest:z.strictObject({...operation,interviewId:id}),
+  DraftMonthStage:z.strictObject({...operation,reportId:id}),
+  ConfirmMonthStage:z.strictObject({...operation,stageId:id,expectedRevision:version,action:z.enum(['accept','defer']),goal:shortText}),
+  DeclineRetest:z.strictObject({...operation,stageId:id}),
 };
 export type TaskDefinition = z.infer<typeof TaskDefinition>;
 export type TaskPublicView = z.infer<typeof TaskPublicView>;
@@ -237,6 +297,29 @@ export type ConfirmMemoryDraft = z.infer<typeof schemas.ConfirmMemoryDraft>;
 export type MemoryRetention = z.infer<typeof memoryRetention>;
 export type GreetingRequest = z.infer<typeof schemas.GreetingRequest>;
 export type EndConversation = z.infer<typeof schemas.EndConversation>;
+// G2 第二期：专业模式
+export type InterviewModule = Dimension;
+export type ModuleLevelValue = z.infer<typeof moduleLevel>;
+export type ModuleLevelBasis = z.infer<typeof levelBasis>;
+export type InterviewTurnKind = z.infer<typeof interviewTurnKind>;
+export type InterviewPending = z.infer<typeof InterviewPending>;
+export type InterviewSession = z.infer<typeof InterviewSession>;
+export type InterviewTurn = z.infer<typeof InterviewTurn>;
+export type ModuleLevel = z.infer<typeof ModuleLevel>;
+export type ProfessionalReport = z.infer<typeof ProfessionalReport>;
+export type MonthStage = z.infer<typeof MonthStage>;
+export type TrendPoint = z.infer<typeof TrendPoint>;
+export type TrendQuery = z.infer<typeof TrendQuery>;
+export type RetestReminder = z.infer<typeof RetestReminder>;
+export type InterviewStep = z.infer<typeof InterviewStep>;
+export type InterviewStart = z.infer<typeof schemas.InterviewStart>;
+export type InterviewAnswer = z.infer<typeof schemas.InterviewAnswer>;
+export type InterviewPause = z.infer<typeof schemas.InterviewPause>;
+export type InterviewResume = z.infer<typeof schemas.InterviewResume>;
+export type InterviewReportRequest = z.infer<typeof schemas.InterviewReportRequest>;
+export type DraftMonthStage = z.infer<typeof schemas.DraftMonthStage>;
+export type ConfirmMonthStage = z.infer<typeof schemas.ConfirmMonthStage>;
+export type DeclineRetest = z.infer<typeof schemas.DeclineRetest>;
 /** Program verdict on a model-proposed field: accepted value or reasons it was discarded. */
 export type Validation<T> = {ok:true;value:T}|{ok:false;reasons:string[]};
 export interface Clock { now(): string }
@@ -251,6 +334,9 @@ export interface EntityMap {
   /** G0 首页改版. problemSecrets never leaves the server; observations/summaries are learning records independent of the memory switch. All cleared by reset. */
   problems:ProblemRecord; problemSecrets:ProblemSecret; episodes:LearningEpisode; progressCards:ProgressCard; memoryMentions:MemoryMention;
   observations:ChatObservation; summaries:ConversationSummary; chatTurns:ChatTurn;
+  /** G2 第二期. Necessary learning records independent of the memory switch; cleared by reset. interviews/monthStages are revisioned (key id:r<revision>).
+   * TrendPoint is derived from professionalReports and has no collection. */
+  interviews:InterviewSession; interviewTurns:InterviewTurn; professionalReports:ProfessionalReport; monthStages:MonthStage;
 }
 /** Synchronous single-process SQLite transaction. Do not await inside transaction callbacks. append never replaces. */
 export interface LearningRepository {

@@ -60,6 +60,8 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
    if(req.method==='GET'){
     if(path==='/api/learning'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.view());return;}
     if(path==='/api/context'){send(runtime.context());return;}
+    // G2: long-term trend (tracking plugin, zCode), derived from stored professional reports.
+    if(path==='/api/learning/trend'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.trend());return;}
     const match=path.match(/^\/api\/tasks\/([A-Za-z0-9_.:-]+)\/([1-9]\d*)$/);
     if(match){const task=runtime.catalog.publicTask(match[1],Number(match[2]));if(!task)throw new RuntimeError('not_found');send(task);return;}
     throw new RuntimeError('not_found');
@@ -114,6 +116,15 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
      case '/api/learning/memory/confirm-draft':send(await d.confirmMemoryDraft(raw as never));break;
      case '/api/learning/greeting':send(await d.greeting(raw as never,c.signal));break;
      case '/api/learning/conversation/end':send(await d.endConversation(raw as never,c.signal));break;
+     // G2 第二期：专业模式（interview 归 Claude；stage 归 zCode）。
+     case '/api/learning/interview/start':send(await d.interviewStart(raw as never,c.signal));break;
+     case '/api/learning/interview/answer':send(await d.interviewAnswer(raw as never,c.signal));break;
+     case '/api/learning/interview/pause':send(await d.interviewPause(raw as never));break;
+     case '/api/learning/interview/resume':send(await d.interviewResume(raw as never,c.signal));break;
+     case '/api/learning/interview/report':send(await d.interviewReport(raw as never,c.signal));break;
+     case '/api/learning/stage/draft':send(await d.stageDraft(raw as never,c.signal));break;
+     case '/api/learning/stage/confirm':send(await d.stageConfirm(raw as never));break;
+     case '/api/learning/stage/retest-decline':send(await d.retestDecline(raw as never));break;
      default:throw new RuntimeError('not_found');
     }}finally{res.off('close',cancel);}return;
    }

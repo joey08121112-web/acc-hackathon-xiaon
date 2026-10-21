@@ -19,6 +19,7 @@ import { MemoryOffNotice } from './home/MemoryOffNotice';
 import { ProblemCapture } from './home/ProblemCapture';
 import { ProblemConfirmCard } from './home/ProblemConfirmCard';
 import { ProgressCardView } from './home/ProgressCardView';
+import { RetestReminder } from '../plan/RetestReminder';
 const HOME_FLOW = true;
 const OPENER = '嗨，我是小N。今天过得怎么样？想跟我说说吗？';
 const CHIPS: {text:string;intent?:ChatIntent}[] = [
@@ -114,6 +115,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
   <span className="eyebrow">先听你说</span>
   <PetHero mood={pet.mood} bubble={bubble} thinking={awaiting&&!pet.line} onTouch={pet.onTouch}/>
   <p className="small muted pet-hint">摸摸小N，也可以直接说说今天的事。</p>
+  {!blocked&&<RetestReminder reminder={l.view?.retestReminder??null} where="home" l={l} navigate={navigate}/>}
   {!l.connected&&<p className="notice">暂时连不上，之前的话还在。<button onClick={()=>swallow(l.connect())}>重新连接</button></p>}
   {paused&&<p className="notice">今天先歇一歇，不急着看题。想说话时，小N还在。</p>}
   {blocked&&<p className="notice" role="alert">学习先暂停。<button onClick={()=>navigate('help')}>查看求助与安全支持</button></p>}

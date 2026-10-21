@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { z } from 'zod';
-import { schemas,SCHEMA_VERSION,retentionWindow,MEMORY_CONTEXT_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,type ChatReply,type MemoryItem,type ChatStage,type ChatTurn,type LearningEpisode,type ModelProvider,type StageField,type TaskPublicView,type Validation } from '../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,retentionWindow,MEMORY_CONTEXT_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,type ChatReply,type MemoryItem,type ChatStage,type ChatTurn,type LearningEpisode,type ModelProvider,type StageField,type TaskPublicView,type Validation,type InterviewSession,type InterviewStep,type MonthStage,type ProfessionalReport,type RetestReminder } from '../../shared/learning-contracts';
 import type { LearningRuntime } from '../bootstrap';
 import { RubricAssessment,createModelAnalyzer,classifyAttempt } from '../plugins/assessment';
 import { PlanningEngine } from '../plugins/planning';
@@ -9,7 +9,11 @@ import { attemptFacts } from '../plugins/planning/evidence';
 import { currentReviewItems,planHistory,reportHistory,shanghaiDate } from '../../src/learning/review';
 import { ControlledRoles,tutorOutput,homeTutorOutput,homeTutorPrompt,type TutorStage } from './roles';
 import { decideStage,filterStageFields,matchesAnswer,HELP_PATTERN,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,UNDERSTOOD_PATTERN,type ChatStageState } from './stages';
-import type { RevampContext } from '../plugins/context';
+import type { ProfessionalContext,RevampContext } from '../plugins/context';
+import { startInterview,answerInterview,pauseInterview,resumeInterview,buildReport } from '../plugins/interview';
+import { draftMonthStage,confirmMonthStage,declineRetest,retestReminder } from '../plugins/stages';
+import { trend } from '../plugins/tracking';
+import { latestRevisions,reportProblems,reportReady,draftProblems,revisionProblems,trendProblems,refuse } from './professional';
 import { validateProblemDraft,confirmProblem,recognize } from '../plugins/problems';
 import { validateMemoryDraft,confirmMemoryDraft,greeting,shouldOfferMemory,selectMemoriesForContext } from '../plugins/memory-flow';
 import { draftProgressCard,confirmProgressCard } from '../plugins/progress';
@@ -45,6 +49,9 @@ const TUTOR_HISTORY_TURNS=8;
 export const QUICK_REPLIES:Record<TutorStage,string[]>={listen:['考试没考好','有题不会做','就是不想学','不想说'],probe:['概念不太清楚','公式不会用','不知道从哪下手','说不清楚']};
 const ANSWER_HELD_TEXT='这一步我先不直接说答案，我们再往前想一小步，好吗？';
 const REST_TEXT='好，先不安排题目。我们可以继续聊，由你决定何时开始。';
+const INTERVIEW_REST_TEXT='好，先停在这里。下次从这道题接着来，不着急。';
+// reportReady is always the program's verdict (理解 and 逻辑 both finished), whatever the plugin said.
+const interviewStep=(s:Partial<InterviewStep>&{text:string}):InterviewStep=>{const step={safety:false,interview:null,task:null,turn:null,run:null,...s};return schemas.InterviewStep.parse({...step,reportReady:reportReady(step.interview)});};
 const chatReply=(r:Partial<ChatReply>&{text:string;stage:ChatStage}):ChatReply=>schemas.ChatReply.parse({sessionId:null,run:null,safety:false,quickReplies:[],suggestions:[],askStudy:false,needsCheck:false,askProblem:false,modeSuggestion:null,problemDraft:null,progressCardDraft:null,memoryDraft:null,summary:null,...r});
 const stateOf=(t:ChatTurn):ChatStageState=>({sessionId:t.sessionId,turn:t.turn,stage:t.stage,listenTurns:t.listenTurns,companionStreak:t.companionStreak,thinkTurns:t.thinkTurns,lastProbeTurn:t.lastProbeTurn,needsCheckAsked:t.needsCheckAsked,askStudyAsked:t.askStudyAsked,studyDeclined:t.studyDeclined,ended:t.ended});
 /** Program cap on memory-flow's pick: only ids from the active list (our own copy, never the plugin's text), no repeats, ≤ N items, ≤ M chars. */
@@ -170,6 +177,10 @@ export class LearningCoordinator {
   catch(e){if(!notImplementedError(e))throw e;return context;}
   return {...context,memories:capMemorySelection(picked,context.memories)};
  }
+ /** G2: professional-mode plugins also get the graded submit path and the registered planning/assessment engines. */
+ private professional():ProfessionalContext{const r=this.r;return {...this.revamp(),
+  submitAttempt:async(input,signal)=>{const attempt=r.events.submit(input);return {attempt,grading:await this.assess(attempt.id,input.operationId,signal)};},
+  planning:()=>r.planning(),assessment:operationId=>r.assessment().snapshot({operationId},r.engineContext())};}
  private revamp():RevampContext{const r=this.r;return {...r.engineContext(),events:r.events,providerKind:r.provider.kind,memoryEnabled:()=>r.events.memoryEnabled(),model:(call,signal)=>this.roles.compose(call,signal)};}
  /** G0 home flow. The stage machine decides stage, signals and allowed model fields; plugins validate what is left. */
  private homeChat(p:z.infer<typeof schemas.ChatRequest>,last:string,signal?:AbortSignal):Promise<ChatReply>{
@@ -269,6 +280,78 @@ export class LearningCoordinator {
  async confirmMemoryDraft(raw:z.infer<typeof schemas.ConfirmMemoryDraft>){const p=this.parse(schemas.ConfirmMemoryDraft,raw);return this.perform(p.operationId,p,async()=>schemas.MemoryItem.parse(await confirmMemoryDraft(p,this.revamp())));}
  async greeting(raw:z.infer<typeof schemas.GreetingRequest>,signal?:AbortSignal){const p=this.parse(schemas.GreetingRequest,raw);return this.perform(p.operationId,p,async()=>schemas.Greeting.parse(await greeting(p,this.revamp(),signal)),signal);}
  async endConversation(raw:z.infer<typeof schemas.EndConversation>,signal?:AbortSignal){const p=this.parse(schemas.EndConversation,raw);return this.perform(p.operationId,p,async()=>schemas.ConversationSummary.parse(await endConversation({...p,trigger:'student_end'},this.revamp(),signal)),signal);}
+ // ---- G2 第二期：专业模式。协调器先过程序门控（安全、休息、存在、状态、版本），再委托插件；插件结果按 schema 和 ./professional 的门控复查后才写库或返回。 ----
+ private interview(id:string){const i=this.r.repository.get('interviews',id);if(!i)throw new RuntimeError('not_found','没有这次测评');return i;}
+ private stage(id:string){const s=this.r.repository.get('monthStages',id);if(!s)throw new RuntimeError('not_found','没有这个月阶段');return s;}
+ private latestReport(filter:(r:ProfessionalReport)=>boolean){return this.r.repository.list('professionalReports').filter(filter).at(-1)??null;}
+ /** The plugin's step must be about this interview, already persisted as its latest revision. */
+ private checkedStep(step:InterviewStep,expect:{id?:string;learningSessionId?:string}):InterviewStep{
+  const out=interviewStep(step),i=out.interview,saved=i?this.r.repository.get('interviews',i.id):undefined;
+  refuse([...(!i?['缺少测评状态']:[]),...(i&&expect.id&&i.id!==expect.id?['返回了别的测评']:[]),...(i&&expect.learningSessionId&&i.learningSessionId!==expect.learningSessionId?['测评没有关联本次探索场次']:[]),
+   ...(i&&(!saved||saved.revision!==i.revision)?['测评状态没有保存']:[]),...(out.turn&&out.turn.interviewId!==i?.id?['问答不属于这次测评']:[])]);
+  return out;
+ }
+ /** Starts a new interview inside the exploration session, entered with learning/start's explicit switchMode (phase-1 integration). One unfinished interview at a time. */
+ async interviewStart(raw:z.infer<typeof schemas.InterviewStart>,signal?:AbortSignal){const p=this.parse(schemas.InterviewStart,raw);
+  if(latestRevisions(this.r.repository.list('interviews')).some(i=>i.status!=='completed'))throw new RuntimeError('invalid_state','上次的测评还没做完，可以接着测');
+  const session=await this.start({operationId:p.operationId+'-s',mode:'exploration',switchMode:true});
+  return this.perform(p.operationId,p,async()=>this.checkedStep(await startInterview({operationId:p.operationId,learningSession:session,previousReport:this.latestReport(()=>true)},this.professional(),signal),{learningSessionId:session.id}),signal);}
+ /** Safety first (nothing stored), then rest (pause), then the state checks; only then the engine. */
+ async interviewAnswer(raw:z.infer<typeof schemas.InterviewAnswer>,signal?:AbortSignal){const p=this.parse(schemas.InterviewAnswer,raw);
+  const current=this.r.repository.get('interviews',p.interviewId)??null;
+  if(SAFETY_PATTERN.test(p.text))return interviewStep({text:SAFETY_REPLY,safety:true,interview:current});
+  if(!current)throw new RuntimeError('not_found','没有这次测评');
+  if(current.status!=='in_progress'||!current.pending)throw new RuntimeError('invalid_state','这次测评已暂停或已完成');
+  if(current.revision!==p.expectedRevision)throw new RuntimeError('conflict','测评已更新，请刷新后再答');
+  if(REST_PATTERN.test(p.text)){const paused=await this.interviewPauseFor(p.operationId,current,'rest');return interviewStep({text:INTERVIEW_REST_TEXT,interview:paused});}
+  return this.perform(p.operationId,p,async()=>this.checkedStep(await answerInterview({...p,interview:current},this.professional(),signal),{id:current.id}),signal);}
+ async interviewPause(raw:z.infer<typeof schemas.InterviewPause>){const p=this.parse(schemas.InterviewPause,raw);const current=this.interview(p.interviewId);
+  if(current.status==='paused')return current;if(current.status==='completed')throw new RuntimeError('invalid_state','这次测评已完成');
+  return this.interviewPauseFor(p.operationId,current,'student');}
+ private interviewPauseFor(operationId:string,current:InterviewSession,reason:'student'|'rest'){return this.perform(operationId,{kind:'interview-pause',operationId,interviewId:current.id,reason},async()=>{
+  const next=schemas.InterviewSession.parse(await pauseInterview({operationId,interview:current,reason},this.professional())),saved=this.r.repository.get('interviews',current.id);
+  refuse([...(next.id!==current.id||next.revision!==current.revision+1?['应为同一测评的下一版']:[]),...(next.status!=='paused'?['暂停后状态应为 paused']:[]),...(saved?.revision!==next.revision?['暂停没有保存']:[])]);return next;});}
+ async interviewResume(raw:z.infer<typeof schemas.InterviewResume>,signal?:AbortSignal){const p=this.parse(schemas.InterviewResume,raw);const current=this.interview(p.interviewId);
+  if(current.status==='completed')throw new RuntimeError('invalid_state','这次测评已完成');
+  const session=await this.start({operationId:p.operationId+'-s',mode:'exploration',switchMode:true});
+  return this.perform(p.operationId,p,async()=>this.checkedStep(await resumeInterview({operationId:p.operationId,interview:current,learningSession:session},this.professional(),signal),{id:current.id,learningSessionId:session.id}),signal);}
+ /** 理解 and 逻辑 finished → a versioned report snapshot. The plugin returns it; the program checks it, then stores it. */
+ async interviewReport(raw:z.infer<typeof schemas.InterviewReportRequest>,signal?:AbortSignal){const p=this.parse(schemas.InterviewReportRequest,raw);const current=this.interview(p.interviewId);
+  if(!reportReady(current))throw new RuntimeError('invalid_state','理解和逻辑测完才能出报告');
+  return this.perform(p.operationId,p,async()=>{const repo=this.r.repository;
+   const observations=repo.list('observations'),supersedes=this.latestReport(r=>r.interviewId===current.id);
+   const report=schemas.ProfessionalReport.parse(await buildReport({operationId:p.operationId,interview:current,observations,previousReport:this.latestReport(r=>r.interviewId!==current.id),supersedes},this.professional(),signal));
+   refuse(reportProblems(report,{interview:current,observations,supersedes,reportIds:new Set(repo.list('professionalReports').map(r=>r.id)),attemptIds:new Set(repo.list('attempts').map(a=>a.id)),evidenceIds:new Set(repo.list('evidence').map(e=>e.id)),turnIds:new Set(repo.list('interviewTurns').filter(t=>t.interviewId===current.id).map(t=>t.id))}));
+   repo.append('professionalReports',report);return report;},signal);}
+ /** One open draft per month: a new draft supersedes this month's unconfirmed draft; a confirmed month is not redrafted here. */
+ async stageDraft(raw:z.infer<typeof schemas.DraftMonthStage>,signal?:AbortSignal){const p=this.parse(schemas.DraftMonthStage,raw);const repo=this.r.repository;
+  const report=repo.get('professionalReports',p.reportId);if(!report)throw new RuntimeError('not_found','没有这份报告');
+  const now=this.r.clock.now(),month=shanghaiDate(now).slice(0,7),stages=latestRevisions(repo.list('monthStages'));
+  if(stages.some(s=>s.month===month&&(s.status==='confirmed'||s.status==='deferred')))throw new RuntimeError('invalid_state','这个月的阶段目标已经确认过');
+  return this.perform(p.operationId,p,async()=>{
+   const draft=schemas.MonthStage.parse(await draftMonthStage({operationId:p.operationId,report,month,previous:stages.filter(s=>s.month<month&&s.status!=='superseded').at(-1)??null},this.professional(),signal));
+   refuse([...draftProblems(draft,{reportId:report.id,month}),...(repo.get('monthStages',draft.id)?['月阶段 id 已存在']:[])]);
+   repo.transaction(()=>{for(const old of stages.filter(s=>s.month===month&&s.status==='draft'))repo.append('monthStages',{...old,revision:old.revision+1,status:'superseded',updatedAt:now});repo.append('monthStages',draft);});
+   return draft;},signal);}
+ private stageRevision(operationId:string,request:unknown,prev:MonthStage,work:()=>Promise<MonthStage>,expect:Parameters<typeof revisionProblems>[2]){return this.perform(operationId,request,async()=>{
+  const next=schemas.MonthStage.parse(await work());refuse(revisionProblems(next,prev,expect));this.r.repository.append('monthStages',next);return next;});}
+ /** Only the student's click confirms: the program checks the plugin wrote exactly this action, this goal text and the program clock. */
+ async stageConfirm(raw:z.infer<typeof schemas.ConfirmMonthStage>){const p=this.parse(schemas.ConfirmMonthStage,raw);const prev=this.stage(p.stageId);
+  if(prev.revision!==p.expectedRevision)throw new RuntimeError('conflict','月阶段已更新，请刷新后再确认');
+  if(prev.status!=='draft'&&prev.status!=='deferred')throw new RuntimeError('invalid_state','这个月阶段不能再确认');
+  return this.stageRevision(p.operationId,p,prev,()=>confirmMonthStage({...p,stage:prev},this.professional()),{now:this.r.clock.now(),confirm:{action:p.action,goal:p.goal}});}
+ async retestDecline(raw:z.infer<typeof schemas.DeclineRetest>){const p=this.parse(schemas.DeclineRetest,raw);const prev=this.stage(p.stageId);
+  if(prev.status!=='confirmed')throw new RuntimeError('invalid_state','只有已确认的月阶段有复测提醒');if(prev.retestDeclinedAt)return prev;
+  return this.stageRevision(p.operationId,p,prev,()=>declineRetest({operationId:p.operationId,stage:prev},this.professional()),{now:this.r.clock.now(),decline:true});}
+ /** Read-only: derived from the stored reports; every point is checked against its source report. */
+ async trend(){const reports=this.r.repository.list('professionalReports');const out=schemas.TrendQuery.parse(trend({at:this.r.clock.now(),reports},this.professional()));refuse(trendProblems(out,reports));return out;}
+ /** The reminder only ever points at a confirmed, not-declined stage. A stub or any program error simply shows nothing. */
+ private currentRetestReminder():RetestReminder|null{
+  const stages=latestRevisions(this.r.repository.list('monthStages'));
+  try{const out=retestReminder({at:this.r.clock.now(),stages},this.professional());if(!out)return null;const r=schemas.RetestReminder.parse(out),s=stages.find(x=>x.id===r.stageId);
+   return s&&s.status==='confirmed'&&!s.retestDeclinedAt&&s.retestSuggestedAt===r.retestSuggestedAt&&s.month===r.month?r:null;}
+  catch(e){if(!(e instanceof RuntimeError)&&!(e instanceof z.ZodError))throw e;return null;}
+ }
  async view(){const ctx=this.r.engineContext();await this.r.planning().due({at:this.r.clock.now(),includePaused:true},ctx);const assessment=await this.r.assessment().snapshot({operationId:'view-'+this.r.repository.evidenceRevision()},ctx);
   const session=this.r.events.sessions().find(s=>s.status!=='closed')??null;
   const attempted=new Set(this.r.repository.list('attempts').flatMap(a=>this.r.catalog.definition(a.taskId,a.taskVersion)?.knowledgePoints??[]));
@@ -278,7 +361,10 @@ export class LearningCoordinator {
   generations:this.r.repository.list('generations').map(g=>({...g,exposed:!!g.taskId&&this.r.repository.list('exposures').some(e=>e.kind==='task'&&e.taskId===g.taskId&&e.taskVersion===g.taskVersion)})),generationAvailable:this.r.provider.kind!=='offline',
   // G0: learning records for the home revamp. problemSecrets is deliberately absent; chatTurns carry no student text.
   problems:this.r.repository.list('problems'),episodes:this.r.repository.list('episodes'),progressCards:this.r.repository.list('progressCards'),memoryMentions:this.r.repository.list('memoryMentions'),
-  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20)};
+  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),
+  // G2: professional-mode learning records, shown whatever the memory switch says. interviews/monthStages are the latest revision of each.
+  interviews:latestRevisions(this.r.repository.list('interviews')),interviewTurns:this.r.repository.list('interviewTurns'),professionalReports:this.r.repository.list('professionalReports'),
+  monthStages:latestRevisions(this.r.repository.list('monthStages')),retestReminder:this.currentRetestReminder()};
  }
  async memoryCorrect(raw:z.infer<typeof requests.memoryCorrect>){const p=this.parse(requests.memoryCorrect,raw);return this.perform(p.operationId,p,async()=>this.r.repository.transaction(()=>{
   if(!this.r.events.memoryEnabled())throw new RuntimeError('forbidden','可选记忆关闭');

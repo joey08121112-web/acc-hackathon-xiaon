@@ -8785,6 +8785,2076 @@
         "history"
       ],
       "additionalProperties": false
+    },
+    "InterviewSession": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "learningSessionId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "moduleOrder": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string",
+              "const": "理解"
+            },
+            {
+              "type": "string",
+              "const": "逻辑"
+            },
+            {
+              "type": "string",
+              "const": "计算"
+            },
+            {
+              "type": "string",
+              "const": "建模"
+            },
+            {
+              "type": "string",
+              "const": "空间想象"
+            }
+          ]
+        },
+        "currentModule": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "理解",
+                "逻辑",
+                "计算",
+                "建模",
+                "空间想象"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completedModules": {
+          "maxItems": 5,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "理解",
+              "逻辑",
+              "计算",
+              "建模",
+              "空间想象"
+            ]
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "in_progress",
+            "paused",
+            "completed"
+          ]
+        },
+        "pending": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "module": {
+                  "type": "string",
+                  "enum": [
+                    "理解",
+                    "逻辑",
+                    "计算",
+                    "建模",
+                    "空间想象"
+                  ]
+                },
+                "task": {
+                  "type": "object",
+                  "properties": {
+                    "taskId": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                    },
+                    "taskVersion": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "taskId",
+                    "taskVersion"
+                  ],
+                  "additionalProperties": false
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "question",
+                    "follow_up",
+                    "transfer"
+                  ]
+                },
+                "prompt": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "model",
+                    "local_rules"
+                  ]
+                },
+                "askedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                }
+              },
+              "required": [
+                "module",
+                "task",
+                "kind",
+                "prompt",
+                "mode",
+                "askedAt"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "pausedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "operationId",
+        "revision",
+        "learningSessionId",
+        "moduleOrder",
+        "currentModule",
+        "completedModules",
+        "status",
+        "pending",
+        "startedAt",
+        "pausedAt",
+        "completedAt",
+        "updatedAt"
+      ],
+      "additionalProperties": false
+    },
+    "InterviewPending": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "module": {
+          "type": "string",
+          "enum": [
+            "理解",
+            "逻辑",
+            "计算",
+            "建模",
+            "空间想象"
+          ]
+        },
+        "task": {
+          "type": "object",
+          "properties": {
+            "taskId": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            "taskVersion": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "taskId",
+            "taskVersion"
+          ],
+          "additionalProperties": false
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "question",
+            "follow_up",
+            "transfer"
+          ]
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "model",
+            "local_rules"
+          ]
+        },
+        "askedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        }
+      },
+      "required": [
+        "module",
+        "task",
+        "kind",
+        "prompt",
+        "mode",
+        "askedAt"
+      ],
+      "additionalProperties": false
+    },
+    "InterviewTurn": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "interviewId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "seq": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "module": {
+          "type": "string",
+          "enum": [
+            "理解",
+            "逻辑",
+            "计算",
+            "建模",
+            "空间想象"
+          ]
+        },
+        "task": {
+          "type": "object",
+          "properties": {
+            "taskId": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            "taskVersion": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "taskId",
+            "taskVersion"
+          ],
+          "additionalProperties": false
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "question",
+            "follow_up",
+            "transfer"
+          ]
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "answer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "attemptId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "model",
+            "local_rules"
+          ]
+        },
+        "askedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "answeredAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "operationId",
+        "interviewId",
+        "seq",
+        "module",
+        "task",
+        "kind",
+        "prompt",
+        "answer",
+        "attemptId",
+        "mode",
+        "askedAt",
+        "answeredAt"
+      ],
+      "additionalProperties": false
+    },
+    "ModuleLevel": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "module": {
+          "type": "string",
+          "enum": [
+            "理解",
+            "逻辑",
+            "计算",
+            "建模",
+            "空间想象"
+          ]
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "good",
+            "partial",
+            "needs_work",
+            "not_tested"
+          ]
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "correct_with_reason",
+            "correct_reason_incomplete",
+            "completed_with_hint",
+            "correct_on_transfer",
+            "incorrect_on_both",
+            "not_tested"
+          ]
+        },
+        "evidenceIds": {
+          "maxItems": 500,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+          }
+        },
+        "attemptIds": {
+          "maxItems": 500,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+          }
+        },
+        "turnIds": {
+          "maxItems": 500,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+          }
+        },
+        "quotes": {
+          "maxItems": 5,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "wording": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "suggestions": {
+          "maxItems": 2,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "scope": {
+          "type": "string",
+          "const": "this_interview"
+        }
+      },
+      "required": [
+        "module",
+        "level",
+        "basis",
+        "evidenceIds",
+        "attemptIds",
+        "turnIds",
+        "quotes",
+        "wording",
+        "suggestions",
+        "scope"
+      ],
+      "additionalProperties": false
+    },
+    "ProfessionalReport": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "evidenceRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "interviewId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "version": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "supersedesReportId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "comparedWithReportId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "modules": {
+          "minItems": 5,
+          "maxItems": 5,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "module": {
+                "type": "string",
+                "enum": [
+                  "理解",
+                  "逻辑",
+                  "计算",
+                  "建模",
+                  "空间想象"
+                ]
+              },
+              "level": {
+                "type": "string",
+                "enum": [
+                  "good",
+                  "partial",
+                  "needs_work",
+                  "not_tested"
+                ]
+              },
+              "basis": {
+                "type": "string",
+                "enum": [
+                  "correct_with_reason",
+                  "correct_reason_incomplete",
+                  "completed_with_hint",
+                  "correct_on_transfer",
+                  "incorrect_on_both",
+                  "not_tested"
+                ]
+              },
+              "evidenceIds": {
+                "maxItems": 500,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                }
+              },
+              "attemptIds": {
+                "maxItems": 500,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                }
+              },
+              "turnIds": {
+                "maxItems": 500,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                }
+              },
+              "quotes": {
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                }
+              },
+              "wording": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "suggestions": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                }
+              },
+              "scope": {
+                "type": "string",
+                "const": "this_interview"
+              }
+            },
+            "required": [
+              "module",
+              "level",
+              "basis",
+              "evidenceIds",
+              "attemptIds",
+              "turnIds",
+              "quotes",
+              "wording",
+              "suggestions",
+              "scope"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "observationChecks": {
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "observationId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "dimension": {
+                "type": "string",
+                "enum": [
+                  "理解",
+                  "逻辑"
+                ]
+              },
+              "result": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "not_seen"
+                ]
+              }
+            },
+            "required": [
+              "observationId",
+              "dimension",
+              "result"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "changes": {
+          "maxItems": 5,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "module": {
+                "type": "string",
+                "enum": [
+                  "理解",
+                  "逻辑",
+                  "计算",
+                  "建模",
+                  "空间想象"
+                ]
+              },
+              "from": {
+                "type": "string",
+                "enum": [
+                  "good",
+                  "partial",
+                  "needs_work",
+                  "not_tested"
+                ]
+              },
+              "to": {
+                "type": "string",
+                "enum": [
+                  "good",
+                  "partial",
+                  "needs_work",
+                  "not_tested"
+                ]
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            },
+            "required": [
+              "module",
+              "from",
+              "to",
+              "note"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "model",
+            "local_rules"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "operationId",
+        "evidenceRevision",
+        "interviewId",
+        "version",
+        "supersedesReportId",
+        "comparedWithReportId",
+        "modules",
+        "observationChecks",
+        "changes",
+        "mode",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    },
+    "MonthStage": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "month": {
+          "type": "string",
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+        },
+        "module": {
+          "type": "string",
+          "enum": [
+            "理解",
+            "逻辑",
+            "计算",
+            "建模",
+            "空间想象"
+          ]
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "sourceReportId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "weeks": {
+          "maxItems": 6,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "weekStart": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "proposalId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "planVersionId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "weekStart",
+              "proposalId",
+              "planVersionId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "retestSuggestedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "confirmed",
+            "deferred",
+            "superseded"
+          ]
+        },
+        "confirmation": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "accept",
+                    "defer"
+                  ]
+                },
+                "confirmedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                "actor": {
+                  "type": "string",
+                  "const": "student"
+                }
+              },
+              "required": [
+                "action",
+                "confirmedAt",
+                "actor"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retestDeclinedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "model",
+            "local_rules"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "operationId",
+        "revision",
+        "month",
+        "module",
+        "goal",
+        "sourceReportId",
+        "weeks",
+        "retestSuggestedAt",
+        "status",
+        "confirmation",
+        "retestDeclinedAt",
+        "mode",
+        "createdAt",
+        "updatedAt"
+      ],
+      "additionalProperties": false
+    },
+    "TrendPoint": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "string",
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+        },
+        "module": {
+          "type": "string",
+          "enum": [
+            "理解",
+            "逻辑",
+            "计算",
+            "建模",
+            "空间想象"
+          ]
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "good",
+            "partial",
+            "needs_work",
+            "not_tested"
+          ]
+        },
+        "sourceReportId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "reportCreatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        }
+      },
+      "required": [
+        "month",
+        "module",
+        "level",
+        "sourceReportId",
+        "reportCreatedAt"
+      ],
+      "additionalProperties": false
+    },
+    "TrendQuery": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "latest": {
+          "maxItems": 600,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "month": {
+                "type": "string",
+                "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+              },
+              "module": {
+                "type": "string",
+                "enum": [
+                  "理解",
+                  "逻辑",
+                  "计算",
+                  "建模",
+                  "空间想象"
+                ]
+              },
+              "level": {
+                "type": "string",
+                "enum": [
+                  "good",
+                  "partial",
+                  "needs_work",
+                  "not_tested"
+                ]
+              },
+              "sourceReportId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "reportCreatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              }
+            },
+            "required": [
+              "month",
+              "module",
+              "level",
+              "sourceReportId",
+              "reportCreatedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "history": {
+          "maxItems": 5000,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "month": {
+                "type": "string",
+                "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+              },
+              "module": {
+                "type": "string",
+                "enum": [
+                  "理解",
+                  "逻辑",
+                  "计算",
+                  "建模",
+                  "空间想象"
+                ]
+              },
+              "level": {
+                "type": "string",
+                "enum": [
+                  "good",
+                  "partial",
+                  "needs_work",
+                  "not_tested"
+                ]
+              },
+              "sourceReportId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "reportCreatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              }
+            },
+            "required": [
+              "month",
+              "module",
+              "level",
+              "sourceReportId",
+              "reportCreatedAt"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "latest",
+        "history"
+      ],
+      "additionalProperties": false
+    },
+    "RetestReminder": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "stageId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "month": {
+          "type": "string",
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+        },
+        "retestSuggestedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "remindFrom": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      },
+      "required": [
+        "stageId",
+        "month",
+        "retestSuggestedAt",
+        "remindFrom"
+      ],
+      "additionalProperties": false
+    },
+    "InterviewStep": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000
+        },
+        "safety": {
+          "type": "boolean"
+        },
+        "interview": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "schemaVersion": {
+                  "type": "string",
+                  "const": "1.0.0"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "operationId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "revision": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "learningSessionId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "moduleOrder": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "string",
+                      "const": "理解"
+                    },
+                    {
+                      "type": "string",
+                      "const": "逻辑"
+                    },
+                    {
+                      "type": "string",
+                      "const": "计算"
+                    },
+                    {
+                      "type": "string",
+                      "const": "建模"
+                    },
+                    {
+                      "type": "string",
+                      "const": "空间想象"
+                    }
+                  ]
+                },
+                "currentModule": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "理解",
+                        "逻辑",
+                        "计算",
+                        "建模",
+                        "空间想象"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "completedModules": {
+                  "maxItems": 5,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "理解",
+                      "逻辑",
+                      "计算",
+                      "建模",
+                      "空间想象"
+                    ]
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "in_progress",
+                    "paused",
+                    "completed"
+                  ]
+                },
+                "pending": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "module": {
+                          "type": "string",
+                          "enum": [
+                            "理解",
+                            "逻辑",
+                            "计算",
+                            "建模",
+                            "空间想象"
+                          ]
+                        },
+                        "task": {
+                          "type": "object",
+                          "properties": {
+                            "taskId": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                            },
+                            "taskVersion": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991
+                            }
+                          },
+                          "required": [
+                            "taskId",
+                            "taskVersion"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "question",
+                            "follow_up",
+                            "transfer"
+                          ]
+                        },
+                        "prompt": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 300
+                        },
+                        "mode": {
+                          "type": "string",
+                          "enum": [
+                            "model",
+                            "local_rules"
+                          ]
+                        },
+                        "askedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                        }
+                      },
+                      "required": [
+                        "module",
+                        "task",
+                        "kind",
+                        "prompt",
+                        "mode",
+                        "askedAt"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "startedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                "pausedAt": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "completedAt": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                }
+              },
+              "required": [
+                "schemaVersion",
+                "id",
+                "operationId",
+                "revision",
+                "learningSessionId",
+                "moduleOrder",
+                "currentModule",
+                "completedModules",
+                "status",
+                "pending",
+                "startedAt",
+                "pausedAt",
+                "completedAt",
+                "updatedAt"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "task": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "schemaVersion": {
+                  "type": "string",
+                  "const": "1.0.0"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "version": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000
+                },
+                "question": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000
+                },
+                "choices": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 8000
+                  }
+                },
+                "knowledgePoints": {
+                  "maxItems": 500,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                  }
+                },
+                "primaryDimension": {
+                  "type": "string",
+                  "enum": [
+                    "理解",
+                    "逻辑",
+                    "计算",
+                    "建模",
+                    "空间想象"
+                  ]
+                },
+                "auxiliaryDimensions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "理解",
+                      "逻辑",
+                      "计算",
+                      "建模",
+                      "空间想象"
+                    ]
+                  }
+                },
+                "familyId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "variantKind": {
+                  "type": "string",
+                  "enum": [
+                    "observation",
+                    "transfer",
+                    "delayed",
+                    "legacy"
+                  ]
+                },
+                "difficulty": {
+                  "type": "string",
+                  "enum": [
+                    "introductory",
+                    "standard",
+                    "stretch"
+                  ]
+                },
+                "prerequisites": {
+                  "maxItems": 500,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                  }
+                },
+                "estimatedMinutes": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 120
+                },
+                "visual": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "rotation2d"
+                        },
+                        "points": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "prefixItems": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ]
+                          }
+                        },
+                        "center": {
+                          "type": "array",
+                          "prefixItems": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ]
+                        },
+                        "clockwiseDegrees": {
+                          "type": "number"
+                        },
+                        "options": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "label": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 8000
+                              },
+                              "points": {
+                                "type": "array",
+                                "items": {
+                                  "type": "array",
+                                  "prefixItems": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "number"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "label",
+                              "points"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "points",
+                        "center",
+                        "clockwiseDegrees",
+                        "options"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "hintAvailable": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "schemaVersion",
+                "id",
+                "version",
+                "title",
+                "question",
+                "choices",
+                "knowledgePoints",
+                "primaryDimension",
+                "auxiliaryDimensions",
+                "familyId",
+                "variantKind",
+                "difficulty",
+                "prerequisites",
+                "estimatedMinutes",
+                "visual",
+                "hintAvailable"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "turn": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "schemaVersion": {
+                  "type": "string",
+                  "const": "1.0.0"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "operationId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "interviewId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "seq": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "module": {
+                  "type": "string",
+                  "enum": [
+                    "理解",
+                    "逻辑",
+                    "计算",
+                    "建模",
+                    "空间想象"
+                  ]
+                },
+                "task": {
+                  "type": "object",
+                  "properties": {
+                    "taskId": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                    },
+                    "taskVersion": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "taskId",
+                    "taskVersion"
+                  ],
+                  "additionalProperties": false
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "question",
+                    "follow_up",
+                    "transfer"
+                  ]
+                },
+                "prompt": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "answer": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "attemptId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "model",
+                    "local_rules"
+                  ]
+                },
+                "askedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                "answeredAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                }
+              },
+              "required": [
+                "schemaVersion",
+                "id",
+                "operationId",
+                "interviewId",
+                "seq",
+                "module",
+                "task",
+                "kind",
+                "prompt",
+                "answer",
+                "attemptId",
+                "mode",
+                "askedAt",
+                "answeredAt"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reportReady": {
+          "type": "boolean"
+        },
+        "run": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "schemaVersion": {
+                  "type": "string",
+                  "const": "1.0.0"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "operationId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "tutor",
+                    "assessor",
+                    "planner",
+                    "reporter",
+                    "generator"
+                  ]
+                },
+                "providerKind": {
+                  "type": "string",
+                  "enum": [
+                    "real_http",
+                    "synthetic",
+                    "offline"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "completed",
+                    "unavailable",
+                    "timeout",
+                    "cancelled",
+                    "budget_exhausted",
+                    "failed"
+                  ]
+                },
+                "rounds": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 4
+                },
+                "toolExecutions": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "callIds": {
+                  "maxItems": 500,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+                  }
+                },
+                "permissionFingerprint": {
+                  "type": "string",
+                  "minLength": 64,
+                  "maxLength": 64
+                },
+                "startedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                "finishedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                "error": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "invalid_params",
+                            "unknown_tool",
+                            "forbidden",
+                            "not_found",
+                            "invalid_state",
+                            "conflict",
+                            "unavailable",
+                            "not_implemented",
+                            "timeout",
+                            "cancelled",
+                            "budget_exhausted",
+                            "provider_auth",
+                            "provider_rate_limit",
+                            "provider_error",
+                            "unsupported_tools",
+                            "internal_error"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 8000
+                        },
+                        "recoverable": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "recoverable"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "schemaVersion",
+                "id",
+                "operationId",
+                "role",
+                "providerKind",
+                "status",
+                "rounds",
+                "toolExecutions",
+                "callIds",
+                "permissionFingerprint",
+                "startedAt",
+                "finishedAt",
+                "error"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "text",
+        "safety",
+        "interview",
+        "task",
+        "turn",
+        "reportReady",
+        "run"
+      ],
+      "additionalProperties": false
+    },
+    "InterviewStart": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        }
+      },
+      "required": [
+        "operationId"
+      ],
+      "additionalProperties": false
+    },
+    "InterviewAnswer": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "interviewId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "expectedRevision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "operationId",
+        "interviewId",
+        "expectedRevision",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "InterviewPause": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "interviewId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        }
+      },
+      "required": [
+        "operationId",
+        "interviewId"
+      ],
+      "additionalProperties": false
+    },
+    "InterviewResume": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "interviewId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        }
+      },
+      "required": [
+        "operationId",
+        "interviewId"
+      ],
+      "additionalProperties": false
+    },
+    "InterviewReportRequest": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "interviewId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        }
+      },
+      "required": [
+        "operationId",
+        "interviewId"
+      ],
+      "additionalProperties": false
+    },
+    "DraftMonthStage": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "reportId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        }
+      },
+      "required": [
+        "operationId",
+        "reportId"
+      ],
+      "additionalProperties": false
+    },
+    "ConfirmMonthStage": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "stageId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "expectedRevision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "defer"
+          ]
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "operationId",
+        "stageId",
+        "expectedRevision",
+        "action",
+        "goal"
+      ],
+      "additionalProperties": false
+    },
+    "DeclineRetest": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "stageId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
+        }
+      },
+      "required": [
+        "operationId",
+        "stageId"
+      ],
+      "additionalProperties": false
     }
   }
 }
