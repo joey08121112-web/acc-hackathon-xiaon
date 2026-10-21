@@ -1,1 +1,76 @@
 /* 所有者：zCode（改造二：错题记录、三个入口、拍照遮挡）。在 main.tsx 中于 style.css 之后引入。 */
+/* 三个入口卡（ChatPanel 内挂载，390 宽手机优先） */
+.problem-capture {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 10px;
+}
+.problem-capture h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.problem-capture-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.problem-entry-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+/* 确认卡（错题记录 / 记忆提议共用 problem-field 展示行） */
+.problem-card,
+.memory-prompt {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 10px;
+}
+.problem-card h3,
+.memory-prompt h3 {
+  margin: 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.problem-field {
+  margin: 4px 0 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px dashed var(--line);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.problem-suggest {
+  display: grid;
+  gap: 8px;
+}
+/* 成长页「我的错题」 */
+.problem-list-section .problem-item {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: 10px;
+  display: grid;
+  gap: 4px;
+}
+.problem-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+/* 键盘弹起时输入区不被遮挡：挂载这些卡片的页面底部留出安全空隙 */
+.problem-capture,
+.problem-card,
+.memory-prompt {
+  scroll-margin-bottom: 24px;
+}
