@@ -14,8 +14,9 @@ export function ProblemConfirmCard({draft,sessionId,l,onConfirmed}:ProblemConfir
   setQuestion(draft.questionText??'');setWork(draft.studentWork??'');setQuote(draft.stuckQuote);setPoint(draft.knowledgePointId);
   setEditing(false);setDone(null);setDismissed(false);
  },[draft]);
- if(!draft||dismissed)return null;
+ if((!draft&&!done)||dismissed)return null;
  const confirm=async()=>{
+  if(!draft)return;
   const record=await l.run<ProblemRecord>('learning/problem/confirm',{sessionId,draft:{...draft,questionText:question.trim()||null,studentWork:work.trim()||null,knowledgePointId:point,stuckQuote:quote.trim()||draft.stuckQuote},referenceAnswer:null});
   setDone(record);onConfirmed(record);
  };
@@ -26,6 +27,7 @@ export function ProblemConfirmCard({draft,sessionId,l,onConfirmed}:ProblemConfir
    <div className="quick-replies">{(l.view?.tasks??[]).filter(t=>t.knowledgePoints.includes(done.knowledgePointId)&&t.eligible).slice(0,3).map(t=><button key={t.id} disabled={l.busy} onClick={()=>{l.choose(t,'support');}}>{t.title}</button>)}</div>
   </div>}
  </section>;
+ if(!draft)return null;
  return <section className="problem-card" aria-label="错题记录确认">
   <h3>我记下的是这些，对吗？</h3>
   <label className="field">题目{editing

@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRuntime, type LearningRuntime } from '../../server/bootstrap';
 import { installLearning } from '../../server/agents/learning';
-import { validateMemoryDraft,confirmMemoryDraft,greeting,shouldOfferMemory,selectMemoriesForContext,MEMORY_DRAFT_MAX_CHARS,MEMORY_MENTION_COOLDOWN_DAYS } from '../../server/plugins/memory-flow';
+import { validateMemoryDraft,confirmMemoryDraft,greeting,shouldOfferMemory,recordMemoryOffer,selectMemoriesForContext,MEMORY_DRAFT_MAX_CHARS,MEMORY_MENTION_COOLDOWN_DAYS } from '../../server/plugins/memory-flow';
 import type { RevampContext } from '../../server/plugins/context';
 import { temporaryRepository,TestClock } from '../../server/storage/testing';
 import { SCHEMA_VERSION,type MemoryItem,type ModelProvider } from '../../shared/learning-contracts';
@@ -39,11 +39,13 @@ test('validateMemoryDraft: 关闭即拒、情绪与评价丢弃、40 字上限�
  assert.equal(validateMemoryDraft({text:'先抄题再化简，一步一步来',kind:'method'},on).ok,true,'有用的方法可以记');
 });
 
-test('shouldOfferMemory: 同一场次最多两次提议机会；新场次重新计',()=>{
+test('shouldOfferMemory: 同一场次最多两次实际提议；新场次重新计',()=>{
  const f=setup();try{
-  const ctx=offlineContext(f.r);
+  const ctx=offlineContext(f.r);f.r.events.consent({operationId:id(),optionalMemory:true});
   assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'companion',turn:1},ctx),true);
+  recordMemoryOffer({operationId:id(),sessionId:'chat-a',stage:'companion',turn:1},ctx);
   assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'companion',turn:4},ctx),true);
+  recordMemoryOffer({operationId:id(),sessionId:'chat-a',stage:'companion',turn:4},ctx);
   assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'reflect',turn:7},ctx),false,'第三次不再提议');
   assert.equal(shouldOfferMemory({sessionId:'chat-b',stage:'companion',turn:1},ctx),true,'新场次重新计');
  }finally{f.dispose();}

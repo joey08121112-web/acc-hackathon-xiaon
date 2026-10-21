@@ -1,0 +1,51 @@
+H browser output: /tmp/xiaon-integration2-fix-BcLfPe/h-red
+[WebServer] (node:14900) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:14930) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:14932) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /tmp/xiaon-integration2-fix-BcLfPe/h-red
+  ✘  1 tests-agent/h/browser.spec.ts:102:1 › 长聊天结束仍有小结，气泡与小结一致，不停留在上一句 (6.3s)
+
+
+  1) tests-agent/h/browser.spec.ts:102:1 › 长聊天结束仍有小结，气泡与小结一致，不停留在上一句 ───────────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.pet-hero-bubble')
+    Expected substring: "应用题的条件"
+    Received string:    "听起来这次让你有点累，我在这里听你说。"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.pet-hero-bubble') with timeout 5000ms
+      - waiting for locator('.pet-hero-bubble')
+        14 × locator resolved to <div role="status" aria-live="polite" class="pet-hero-bubble">听起来这次让你有点累，我在这里听你说。</div>
+           - unexpected value "听起来这次让你有点累，我在这里听你说。"
+
+
+      106 |  const history=(await req).postDataJSON().history;expect(history).toHaveLength(20);expect(history.at(-1).role).toBe('assistant');
+      107 |  await expect(page.getByRole('region',{name:'这次的对话小结'})).toBeVisible();
+    > 108 |  await expect(page.locator('.pet-hero-bubble')).toContainText('应用题的条件');
+          |                                                 ^
+      109 |  await expect(page.locator('.pet-hero-bubble')).toContainText('小结');
+      110 | });
+      111 |
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/h/browser.spec.ts:108:49
+
+    Error Context: ../../../../../../../../tmp/xiaon-integration2-fix-BcLfPe/h-red/artifacts/browser-长聊天结束仍有小结，气泡与小结一致，不停留在上一句/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../tmp/xiaon-integration2-fix-BcLfPe/h-red/artifacts/browser-长聊天结束仍有小结，气泡与小结一致，不停留在上一句/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../tmp/xiaon-integration2-fix-BcLfPe/h-red/artifacts/browser-长聊天结束仍有小结，气泡与小结一致，不停留在上一句/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests-agent/h/browser.spec.ts:102:1 › 长聊天结束仍有小结，气泡与小结一致，不停留在上一句 ────────────────────────────────

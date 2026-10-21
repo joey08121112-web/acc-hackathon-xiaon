@@ -1,0 +1,25 @@
+✖ 修复：月目标限定逻辑子技能，不能复用同日全局草案，旧调用行为不变 (22.9115ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 196.178708
+
+✖ failing tests:
+
+test at tests-agent/i/fix-round.test.ts:1:1731
+✖ 修复：月目标限定逻辑子技能，不能复用同日全局草案，旧调用行为不变 (22.9115ms)
+  AssertionError [ERR_ASSERTION]: 逻辑月目标的周任务不能选合并同类项
+      at TestContext.<anonymous> (/private/tmp/xiaon-integration2-fix-BcLfPe/baseline/outputs/xiaon/tests-agent/i/fix-round.test.ts:26:36)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -2,7 +2,7 @@
  * 月阶段、复测提醒都是学习记录，不受记忆开关影响。四个函数都只返回值，由协调器过程序门控（server/agents/professional.ts）后写 monthStages。
  * 模块选择（需要加强优先、其次部分掌握）是这里的程序规则，模型只负责目标措辞；周计划一律通过 ctx.planning() 的现有计划引擎生成，不另建版本历史。 */
 import { randomUUID } from 'node:crypto';
-import { schemas,SCHEMA_VERSION,INTERVIEW_MODULE_ORDER,MODULE_LEVEL_LABELS,RETEST_REMIND_DAYS_BEFORE,type MonthStage,type ModuleLevel,type RetestReminder } from '../../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,INTERVIEW_MODULE_ORDER,MODULE_LEVEL_LABELS,RETEST_REMIND_DAYS_BEFORE,type MonthStage,type ModuleLevel,type RetestReminder,type PlanVersion,type EngineContext } from '../../../shared/learning-contracts';
 import { shiftDate,mondayOf,monthEnd,monthWeeks } from '../../../src/components/plan/calendar';
 import { shanghaiDate } from '../../../src/learning/review';
 import type { MonthStageConfirmInput,MonthStageDraftInput,ProfessionalContext,RetestDeclineInput,RetestReminderInput } from '../context';
@@ -60,7 +60,7 @@ async function weekPlan(input:MonthStageConfirmInput,ctx:ProfessionalContext,wee
  const weekStart=mondayOf(shanghaiDate(ctx.clock.now()));
  if(weeks.some(w=>w.weekStart===weekStart&&w.proposalId))return weeks;
  const assessment=await ctx.assessment(input.operationId+'-snap');
- const proposal=await ctx.planning().propose({operationId:input.operationId+'-week',assessment,timeBudgetMinutes:WEEK_TIME_BUDGET_MINUTES},ctx);
+ const proposal=await ctx.planning().propose({operationId:input.operationId+'-week',assessment,timeBudgetMinutes:WEEK_TIME_BUDGET_MINUTES,focus:{module:input.stage.module,goal:input.goal}},ctx);
  const entry={weekStart,proposalId:proposal.id,planVersionId:null};
  return (weeks.some(w=>w.weekStart===weekStart)?weeks.map(w=>w.weekStart===weekStart?entry:w):[...weeks,entry].sort((a,b)=>a.weekStart.localeCompare(b.weekStart))).slice(0,6);
 }
@@ -88,4 +88,20 @@ export function retestReminder(input:RetestReminderInput,ctx:ProfessionalContext
   if(!pick||stage.month>pick.month||(stage.month===pick.month&&stage.retestSuggestedAt>pick.retestSuggestedAt))pick=stage;
  }
  return pick?{stageId:pick.id,month:pick.month,retestSuggestedAt:pick.retestSuggestedAt,remindFrom:shiftDate(pick.retestSuggestedAt,-RETEST_REMIND_DAYS_BEFORE)}:null;
+}
+
+/** Explicit student click only. A later week gets a draft, never a confirmed plan. */
+export async function draftStageWeek(input:{operationId:string;stage:MonthStage},ctx:ProfessionalContext):Promise<MonthStage>{
+ const stage=input.stage,today=shanghaiDate(ctx.clock.now()),weekStart=mondayOf(today);
+ if(stage.status!=='confirmed'||stage.retestDeclinedAt||stage.month!==today.slice(0,7)||!stage.weeks.some(w=>w.weekStart===weekStart))throw new RuntimeError('invalid_state','这个月阶段现在不能安排周任务');
+ const weeks=await weekPlan({...input,stageId:stage.id,expectedRevision:stage.revision,action:'accept',goal:stage.goal},ctx,stage.weeks);
+ if(weeks===stage.weeks)return stage;
+ return schemas.MonthStage.parse({...stage,weeks,operationId:input.operationId,revision:stage.revision+1,updatedAt:ctx.clock.now()});
+}
+/** Return a revision for the coordinator to validate/save after the existing student confirmation. */
+export function linkWeekPlan(plan:PlanVersion,ctx:EngineContext):MonthStage|null{
+ const latest=new Map<string,MonthStage>();for(const s of ctx.repository.list('monthStages'))latest.set(s.id,s);
+ const stage=[...latest.values()].find(s=>s.status==='confirmed'&&s.weeks.some(w=>w.proposalId===plan.proposalId));
+ if(!stage||stage.weeks.some(w=>w.proposalId===plan.proposalId&&w.planVersionId===plan.id))return null;
+ return schemas.MonthStage.parse({...stage,operationId:plan.operationId,revision:stage.revision+1,updatedAt:ctx.clock.now(),weeks:stage.weeks.map(w=>w.proposalId===plan.proposalId?{...w,planVersionId:plan.id}:w)});
 }

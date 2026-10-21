@@ -1,0 +1,67 @@
+✖ 修复：月目标限定逻辑子技能，不能复用同日全局草案，旧调用行为不变 (10.73525ms)
+✖ 修复：后续第二周、第三周均可生成草案并由学生确认，记录 weeks，拒绝与暂缓不生成 (15.046791ms)
+✖ 修复：shouldOfferMemory 是纯判断，不写假 memoryId 或消耗提议次数 (4.566542ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.254959
+
+✖ failing tests:
+
+test at tests-agent/i/fix-round.test.ts:1:1731
+✖ 修复：月目标限定逻辑子技能，不能复用同日全局草案，旧调用行为不变 (10.73525ms)
+  Error: B assessment snapshot 尚未注册
+      at LegacyAssessment.snapshot (/Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/server/tools/legacy.ts:36:90)
+      at Object.assessment (/Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/i/fix-round.test.ts:12:317)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/i/fix-round.test.ts:16:30)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/i/fix-round.test.ts:1:3554
+✖ 修复：后续第二周、第三周均可生成草案并由学生确认，记录 weeks，拒绝与暂缓不生成 (15.046791ms)
+  AssertionError [ERR_ASSERTION]: 实际确认版本回记到 weeks
+  + actual - expected
+  
+  + null
+  - '781cbe05-4879-4d15-9a90-578d512b2a2e'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/i/fix-round.test.ts:49:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: '781cbe05-4879-4d15-9a90-578d512b2a2e',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/i/fix-round.test.ts:1:6185
+✖ 修复：shouldOfferMemory 是纯判断，不写假 memoryId 或消耗提议次数 (4.566542ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/integration2/outputs/xiaon/tests-agent/i/fix-round.test.ts:63:30)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

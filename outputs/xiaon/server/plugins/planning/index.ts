@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { SCHEMA_VERSION as V, schemas, type EngineContext, type PlanningEnginePort, type ReviewItem, type ReviewOutcome, type ReviewPolicy, type PlanProposal, type PlanVersion } from '../../../shared/learning-contracts';
 import { currentReviewItems, dateStart, reportHistory, selectReviewTarget, shanghaiDate } from '../../../src/learning/review';
 import { RuntimeError } from '../../core/errors';
+import { hash } from '../../storage/repository';
 import { assertAssessment, attemptFacts } from './evidence';
 
 type PolicyOptions=Partial<Pick<ReviewPolicy,'id'|'version'|'intervalDays'|'minimumAdvanceHours'|'helpRetryHours'|'errorRetryHours'>>;
@@ -115,25 +116,30 @@ export class PlanningEngine implements PlanningEnginePort {
   return c.repository.once(input.operationId,{kind:'c-propose',...input},()=>{
    assertAssessment(input.assessment,c);
    const existing=c.repository.list('proposals').at(-1);
-   if(existing?.evidenceRevision===input.assessment.evidenceRevision&&existing.constraints.timeBudgetMinutes===input.timeBudgetMinutes&&shanghaiDate(existing.createdAt)===shanghaiDate(c.clock.now()))return existing;
-   const choice=selectReviewTarget(input.assessment,input.timeBudgetMinutes,c),skill=choice.skill;
+   if(existing?.evidenceRevision===input.assessment.evidenceRevision&&existing.constraints.timeBudgetMinutes===input.timeBudgetMinutes&&hash(existing.focus)===hash(input.focus)&&shanghaiDate(existing.createdAt)===shanghaiDate(c.clock.now()))return existing;
+   // Filter only the selection projection; assertAssessment above still validates the complete saved snapshot.
+   const selection=input.focus?{...input.assessment,skills:input.assessment.skills.filter(s=>s.dimension===input.focus!.module)}:input.assessment;
+   if(input.focus&&!selection.skills.length)throw new RuntimeError('invalid_state','题库不足：这个模块还没有可安排的子技能');
+   const choice=selectReviewTarget(selection,input.timeBudgetMinutes,c),skill=choice.skill;
    const optional=!skill||skill.status==='unobserved';
    const stable=skill?.status==='cross_session_independent'||skill?.status==='first_independent';
-   const goal=optional?'可选探索：先从理解或逻辑了解自己的想法':stable?`${choice.knowledgePointId}：延迟新题检查，观察跨次独立表现`:skill.status==='completed_with_help'?`${choice.knowledgePointId}：从提示帮助过渡到独立处理`:`${choice.knowledgePointId}：厘清具体关系与步骤，再复测`;
+   const baseGoal=optional?'可选探索：先从理解或逻辑了解自己的想法':stable?`${choice.knowledgePointId}：延迟新题检查，观察跨次独立表现`:skill.status==='completed_with_help'?`${choice.knowledgePointId}：从提示帮助过渡到独立处理`:`${choice.knowledgePointId}：厘清具体关系与步骤，再复测`;
+   const shortage=input.focus&&choice.candidates.length===0?(choice.reason.startsWith('未见题库')?'题库不足或前置练习、时间条件未满足：暂无可用的未见同类题，不以其他模块的题替代。':choice.reason+'。'):'';
+   const goal=input.focus?`${input.focus.goal}（本周聚焦${input.focus.module}）${shortage}`:baseGoal;
    const basis=optional?[]:choice.evidenceIds;
    let scheduledDate=shanghaiDate(c.clock.now());
    const trusted=skill?.attemptIds.map(id=>{try{return this.initialDue(id,choice.knowledgePointId,c);}catch{return null;}}).filter(x=>x!==null).at(-1);
    if(trusted)scheduledDate=[scheduledDate,shanghaiDate(trusted.dueAt)].sort().at(-1)!;
    const task=choice.candidates[0];
    const items:PlanProposal['items']=[];
-   const makeItem=(type:PlanProposal['items'][number]['taskType'],minutes:number,selected:typeof task|undefined,detail:string)=>({id:randomUUID(),knowledgePointId:choice.knowledgePointId,taskType:type,task:selected?{taskId:selected.id,taskVersion:selected.version}:null,estimatedMinutes:minutes,scheduledDate,evidenceIds:basis,goal:detail,status:'proposed' as const});
+   const makeItem=(type:PlanProposal['items'][number]['taskType'],minutes:number,selected:typeof task|undefined,detail:string)=>({id:randomUUID(),knowledgePointId:choice.knowledgePointId,taskType:type,task:selected?{taskId:selected.id,taskVersion:selected.version}:null,estimatedMinutes:minutes,scheduledDate,evidenceIds:basis,goal:input.focus?`${input.focus.goal}：${detail}${shortage}`:detail,status:'proposed' as const});
    if(optional)items.push(makeItem('explore',Math.min(task?.estimatedMinutes??2,Math.floor(input.timeBudgetMinutes)),task,'可选探索；无记录不代表能力弱'));
    else if(stable)items.push(makeItem('delayed_check',Math.min(task?.estimatedMinutes??3,Math.floor(input.timeBudgetMinutes)),task,'延迟未见同类题检查；题库不足时等待补充可信题目'));
    else {
     items.push(makeItem('supported_practice',Math.min(3,Math.floor(input.timeBudgetMinutes)),undefined,'只看当前知识点的一个具体步骤，先提供支持'));
     if(task&&input.timeBudgetMinutes>=3+task.estimatedMinutes)items.push(makeItem('independent_transfer',task.estimatedMinutes,task,'支持后自选未见新题；完成支持前须再次核对题目暴露'));
    }
-   const p=schemas.PlanProposal.parse({schemaVersion:V,id:randomUUID(),operationId:input.operationId,evidenceRevision:input.assessment.evidenceRevision,createdAt:c.clock.now(),assessmentSnapshotId:input.assessment.id,goal,items,statements:[{text:optional?'尚无足够记录，只提供可选探索':choice.reason,kind:optional?'unknown':'inference',evidenceIds:basis}],alternatives:[choice.reason,...choice.alternatives.map(a=>`${a.knowledgePointId}：${a.reason}`),...choice.originalReviewOptions.map(t=>`原题回顾：${t.id}（已见，不作为未见检验）`)],constraints:choice.constraints,supersedesProposalId:existing?.id??null});
+   const p=schemas.PlanProposal.parse({schemaVersion:V,id:randomUUID(),operationId:input.operationId,evidenceRevision:input.assessment.evidenceRevision,createdAt:c.clock.now(),assessmentSnapshotId:input.assessment.id,goal,items,statements:[{text:optional?'尚无足够记录，只提供可选探索':choice.reason,kind:optional?'unknown':'inference',evidenceIds:basis}],alternatives:[choice.reason,...choice.alternatives.map(a=>`${a.knowledgePointId}：${a.reason}`),...choice.originalReviewOptions.map(t=>`原题回顾：${t.id}（已见，不作为未见检验）`)],constraints:choice.constraints,supersedesProposalId:existing?.id??null,...(input.focus?{focus:input.focus}:{})});
    c.repository.append('proposals',p);return p;
   });
  }

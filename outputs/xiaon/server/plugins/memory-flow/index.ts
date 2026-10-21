@@ -1,5 +1,5 @@
 /** 所有者：zCode（改造五：记得你说过的小事 + 开场问候）。确认后的记忆仍写成现有 MemoryItem（source:'student_explicit'）。
- * 提议上限用 memoryMentions 里的 memory-offer 标记计数（memoryId 保留字，真实记忆的 id 都带 uuid 后缀，不会冲突）。 */
+ * 提议上限只读专门的 memoryOffers；实际提议由协调器在通过校验后记录。 */
 import { randomUUID } from 'node:crypto';
 import { schemas,SCHEMA_VERSION,type ConfirmMemoryDraft,type Greeting,type GreetingRequest,type MemoryDraft,type MemoryItem,type MemoryMention,type Validation,MEMORY_CONTEXT_MAX_ITEMS,retentionWindow } from '../../../shared/learning-contracts';
 import { notImplemented,type MemoryDraftCheck,type MemoryOfferInput,type MemorySelectionInput,type RevampContext } from '../context';
@@ -12,7 +12,7 @@ export const MEMORY_DRAFT_MAX_CHARS=40;
 export const MEMORY_MENTION_COOLDOWN_DAYS=3;
 /** 长期记忆（一直记得）默认 30 天后到期待复核：reviewAt 到期后不再进入上下文，需学生确认还适用。 */
 export const MEMORY_REVIEW_DAYS=30;
-const OFFER_MARKER='memory-offer';
+const LEGACY_OFFER_MARKER='memory-offer'; // Read compatibility only; never write fake mentions.
 // 只记事件、兴趣、有用的方法；情绪状态和对人的评价一律丢弃。
 // “差/弱”这类单字必须带语境才算评价，避免误伤“差不多每天练琴”这类事件。
 const EMOTION_OR_JUDGEMENT=/焦虑|紧张|害怕|恐惧|难过|伤心|哭|崩溃|绝望|烦|生气|愤怒|郁闷|压力大|开心|高兴|兴奋|讨厌|(?:数学|语文|英语|物理|成绩|考试|考得|学得|很|太|比较|相当)差|差劲|(?:很|太|身体)弱|笨|聪明|不努力|懒|不认真|学不会|没天赋|粗心/;
@@ -61,7 +61,7 @@ export async function greeting(input:GreetingRequest,ctx:RevampContext,signal?:A
   return {text,memoryId:null,summaryId:summary.id,memoryOff};
  }
  if(memoryOff)return {text:'嗨，又见面啦。今天想聊点什么？',memoryId:null,summaryId:null,memoryOff:true};
- const mentioned=new Map(ctx.repository.list('memoryMentions').filter(m=>m.memoryId!==OFFER_MARKER).map(m=>[m.memoryId,m.at]));
+ const mentioned=new Map(ctx.repository.list('memoryMentions').filter(m=>m.memoryId!==LEGACY_OFFER_MARKER).map(m=>[m.memoryId,m.at]));
  const cooldown=MEMORY_MENTION_COOLDOWN_DAYS*86_400_000,now=Date.parse(ctx.clock.now());
  const candidates=ctx.events.context().memories
   .map(m=>({m,last:mentioned.has(m.id)?Date.parse(mentioned.get(m.id)!):null}))
@@ -87,12 +87,15 @@ async function phrase(ctx:RevampContext,operationId:string,kind:'summary'|'memor
  }catch{/* 模型失败用默认文字 */}
  return fallback;
 }
-/** 本轮是否允许模型提议记忆：同一场次最多给 2 次提议机会（memory-offer 标记计数，宁可少问不多问）。 */
+/** Pure gate: only actual, validated chat offers consume the two chances. */
 export function shouldOfferMemory(input:MemoryOfferInput,ctx:RevampContext):boolean{
- const offers=ctx.repository.list('memoryMentions').filter(m=>m.memoryId===OFFER_MARKER&&m.sessionId===input.sessionId).length;
- if(offers>=2)return false;
- ctx.repository.append('memoryMentions',{schemaVersion:SCHEMA_VERSION,id:'mention-'+randomUUID(),memoryId:OFFER_MARKER,sessionId:input.sessionId,via:'chat',at:ctx.clock.now()});
- return true;
+ return ctx.memoryEnabled()&&ctx.repository.list('memoryOffers').filter(o=>o.sessionId===input.sessionId).length<2;
+}
+/** Called only by the program after a valid chat-origin draft; retries have the same event id. */
+export function recordMemoryOffer(input:MemoryOfferInput&{operationId:string},ctx:RevampContext):void{
+ const id='memory-offer-'+input.operationId;
+ if(ctx.repository.get('memoryOffers',id)||!shouldOfferMemory(input,ctx))return;
+ ctx.repository.append('memoryOffers',{schemaVersion:SCHEMA_VERSION,id,...input,at:ctx.clock.now()});
 }
 /** Tutor 上下文只带与当前话题相关的记忆：与近期学生原话有公共子串（≥2字）才算相关，按相关度与新旧排序，最多 MEMORY_CONTEXT_MAX_ITEMS 条。
  * 没有相关记忆时返回空（问候会另行提起）。协调器随后仍会用服务端自己的记忆文本复查并截断。 */

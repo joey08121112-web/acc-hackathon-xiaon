@@ -88,3 +88,16 @@
 - `interview/pause` 和休息用语会把测评标为 paused，同时把所在的 `LearningSession` 设为 paused，与其他地方「休息」的含义一致。
 - `interview/resume` 经 `learning/start` 恢复场次，换天时开新场次。
 - 对 ChatGPT 的影响：暂停后回到首页，会显示首页原有的暂停提示。
+
+---
+
+# 契约变更（第二期集成修复轮，2026-10-21）
+
+用户在本轮明确授权最小扩展 `server/agents/learning.ts`、`server/http/server.ts`、`server/storage/repository.ts` 及共享契约/schema。全部做加法；旧字段、旧请求、旧记录无需迁移改写。运行 `npm run schema:agent` 同步 schema。
+
+1. **限定月目标的周计划**：`PlanningEnginePort.propose` 新增可选 `focus: {module, goal}`，`PlanProposal` 新增同形可选 `focus`，用于持久化限定与草案缓存区分。完整 AssessmentSnapshot 仍按原规则验证，只在选题投影中限定模块的子技能；目标与任务文案带学生确认的月目标。省略 focus 保持旧选择、文案和同日预算缓存行为；新增回归同时检查旧调用方。没有满足条件的未见题时说明题库/前置练习/时间条件不足，不拿其他模块的题补位；未开始或暂停场次时说明实际原因。
+2. **后续周草案入口**：新增严格请求 `schemas.DraftStageWeek {operationId, stageId, expectedRevision}`，对应 `POST learning/stage/week-draft`，返回 MonthStage。沿用本机会话、Origin、CSRF。仅当前月份已确认且未拒绝复测的阶段可用；仅生成当前周，不预先确认未来周。修订过期返回 409，客户端不能指定模块或确认结果。同一 operationId 重试幂等，本周已有草案不重复创建。月阶段的原始 confirmation 保留，结果仍过 `revisionProblems`。
+3. **回记周确认版本**：原 `learning/confirm` 的接受、减量、改期、暂不开始、恢复行为不变。若 proposalId 属于月阶段的一周，协调器在真实确认后追加月阶段修订，将 planVersionId 记进对应的 weeks[]；其他计划不受影响。没有自动确认；暂不开始周计划保留 paused 状态。
+4. **提议计数专用集合**：新增 `MemoryOffer` / `memoryOffers`，字段为 schemaVersion、id、operationId、sessionId、turn、stage、at，不存记忆文字、不用 memoryId。SQLite 加法创建集合并登记 v6；演示重置清除它。`shouldOfferMemory` 只读取开关与该集合；协调器仅在聊天草稿通过程序校验后调用 `recordMemoryOffer`，同场次最多两次实际提议，同操作不重复。未产生草稿的轮次不计数；进步卡的记忆草稿仍遵守原规则。memoryMentions 只新增真实记忆确认/提起记录；历史 memory-offer 标记保留只读兼容，不复制或重写旧数据。
+
+对应回归：`tests-agent/i/fix-round.test.ts`（模块限定、旧调用、题库不足、第二/第三周、学生确认回记、纯判断、实际计数/幂等/重置、HTTP 门控和提示状态）与 I 路独立浏览器；G/H 旧契约回归随全批次重跑。真实模型未运行。

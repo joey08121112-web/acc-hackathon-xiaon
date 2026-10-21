@@ -1,7 +1,6 @@
 /** 所有者：Claude。g 路浏览器用例与第一期集成走查的 API：真 HTTP / SQLite / 阶段机 / 三路真实插件，只有模型是按阶段写好台词的合成模型。
- * 不读 .env.server，不碰用户的 learning.sqlite；数据库在 .local/g-walkthrough-<端口>.sqlite，可经 /__g/reset 清空。 */
-import { mkdirSync } from 'node:fs';
-import { resolve } from 'node:path';
+ * 不读 .env.server，不碰用户的 learning.sqlite；数据库在系统临时目录，可经 /__g/reset 清空。 */
+import { temporaryRepository } from '../../server/storage/testing';
 import { createRuntime } from '../../server/bootstrap';
 import { installLearning } from '../../server/agents/learning';
 import { createHttpServer } from '../../server/http/server';
@@ -21,15 +20,15 @@ class Walkthrough implements ModelProvider {
   if(version.startsWith('progress-card-'))return out({});
   if(version.startsWith('problem-solve-'))return out({answer:''});
   const students=(data.history??[]).filter(h=>h.role==='user').map(h=>h.content),last=students.at(-1)??'';
-  const stage=version.replace(/^tutor-(?:g0|d3)-/,'').replace('-observe','');
+  const stage=version.replace(/^tutor-(?:g0|d3)-/,'').replace(/-observe(?:-answer)?$/,'');
   const say=(message:string,extra:Record<string,unknown>={})=>out({message,taskIds:[],...extra});
   if(stage==='listen')return say('听起来这次真的挺难受的。愿意说说发生了什么吗？');
   if(stage==='companion')return say('嗯，我在听，你慢慢说。');
   if(stage==='probe'){
-   if(version.endsWith('-observe')){
-    const said=[...students].reverse().find(t=>t.includes('每本'));
+   if(version.endsWith('-observe')||version.endsWith('-observe-answer')){
+    const said=version.endsWith('-observe-answer')?(last.includes('每本')?last:undefined):[...students].reverse().find(t=>t.includes('每本'));
     if(said)return say('你说的“每本”，你觉得在这道题里指的是什么？',{observation:{dimension:'理解',signal:/不知道|搞不清|不懂|不明白/.test(said)?'confused':'clear',quote:said,note:/不知道|搞不清|不懂|不明白/.test(said)?'对“每本”这个条件的意思还不确定':'能说出“每本”指一本的价钱'}});
-    return say('哪一类题让你最难受？');
+    if(!version.endsWith('-observe-answer'))return say('哪一类题让你最难受？');
    }
    if(/负号括号总错/.test(last))return say('我帮你把这道题记下来了，你看看对不对？',{problemDraft:{source:'spoken',questionText:BRACKET,studentWork:'x − 5',knowledgePointId:'negative-brackets',stuckQuote:'负号括号总错',stuckPointId:null,catalogTask:{taskId:'bracket',taskVersion:2}}});
    return say('嗯，能说说是哪一步让你卡住了吗？');
@@ -43,8 +42,7 @@ class Walkthrough implements ModelProvider {
   return say('我在这里，按你的节奏来。');
  }
 }
-mkdirSync('.local',{recursive:true});
-const r=createRuntime({databasePath:resolve(`.local/g-walkthrough-${port}.sqlite`),provider:new Walkthrough()});installLearning(r);
+const f=temporaryRepository(),r=createRuntime({...f,provider:new Walkthrough()});installLearning(r);
 const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[`http://127.0.0.1:${ui}`]});
 const listener=server.listeners('request')[0];server.removeAllListeners('request');
 server.on('request',(req,res)=>{
@@ -52,4 +50,4 @@ server.on('request',(req,res)=>{
  listener.call(server,req,res);
 });
 server.listen(port,'127.0.0.1',()=>console.log(`G walkthrough synthetic API ${port}; UI origin ${ui}; real plugins, scripted model`));
-process.once('SIGTERM',()=>{server.close(()=>{r.repository.close();process.exit(0);});server.closeAllConnections();});
+process.once('SIGTERM',()=>{server.close(()=>{f.dispose();process.exit(0);});server.closeAllConnections();});

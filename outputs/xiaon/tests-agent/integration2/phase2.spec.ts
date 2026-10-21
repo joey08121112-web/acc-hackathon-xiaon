@@ -48,8 +48,18 @@ test('390宽完整路线：小结→说明→追问与加问→计算暂停换�
  await report(page).getByText('展开依据原话',{exact:false}).first().click();expect(await report(page).innerText()).not.toMatch(/\d+\s*(分|名)|总分[:：]|排名[:：]|百分位/);await expect(page.getByText('根据当前证据生成报告与计划草案',{exact:true})).toHaveCount(0);await shot(page,'08-report');
  v=await view(page);const first=v.professionalReports.at(-1);expect(first.modules[0].level).toBe('good');expect(v.optionalMemory).toBe(false);
  await report(page).getByRole('button',{name:'进入月阶段规划'}).click();await page.getByRole('button',{name:'根据最近的评测定一个本月目标'}).click();await expect(page.getByRole('textbox',{name:'本月目标',exact:true})).toBeVisible();v=await view(page);expect(v.monthStages.at(-1).sourceReportId).toBe(first.id);await shot(page,'09-month-draft');
- await page.getByRole('button',{name:'定下这个目标'}).click();await expect(page.getByRole('button',{name:'接受这份计划',exact:true})).toBeVisible();await page.getByRole('button',{name:'接受这份计划',exact:true}).click();await expect(page.getByText('已确认版本 1',{exact:true})).toBeVisible();await shot(page,'10-month-week-confirmed');
+ await page.getByRole('button',{name:'定下这个目标'}).click();await expect(page.getByRole('button',{name:'接受这份计划',exact:true})).toBeVisible();await page.getByRole('button',{name:'接受这份计划',exact:true}).click();await expect(page.getByText('已确认版本 1',{exact:true})).toBeVisible();
+ v=await view(page);const monthStage=v.monthStages.at(-1);expect(monthStage.module).toBe('逻辑');
+ expect(v.plans.at(-1).snapshot.items.every((i:{knowledgePointId:string;goal:string})=>i.knowledgePointId==='counterexample'&&i.goal.includes(monthStage.goal))).toBe(true);
+ expect(monthStage.weeks.find((w:{weekStart:string})=>w.weekStart==='2026-10-19').planVersionId).toBe(v.plans.at(-1).snapshot.id);
+ await shot(page,'10-month-week-confirmed');
  await nav(page,'今日');const weekly=page.getByRole('region',{name:'本月目标与本周任务'});await expect(weekly).toContainText('本周任务');await expect(weekly).toContainText('等待自主开始');await shot(page,'11-today');await nav(page,'成长');await expect(page.getByRole('region',{name:'成长档案'})).toHaveAttribute('aria-busy','false');await shot(page,'12-archive-october');
+ await clock(page,'2026-10-26T01:00:00.000Z');await nav(page,'今日');
+ await page.getByRole('button',{name:'生成这一周的任务',exact:true}).click();
+ await expect(page.getByRole('button',{name:'接受这份计划',exact:true})).toBeVisible();v=await view(page);expect(v.plans).toHaveLength(1);
+ expect(v.monthStages.at(-1).weeks.find((w:{weekStart:string})=>w.weekStart==='2026-10-26').planVersionId).toBeNull();
+ await page.getByRole('button',{name:'接受这份计划',exact:true}).click();await expect(page.getByText('已确认版本 2',{exact:true})).toBeVisible();
+ await nav(page,'今日');await expect(weekly).toContainText('反例');await shot(page,'20-week-two-confirmed');
  await clock(page,'2026-10-31T01:00:00.000Z');await nav(page,'今日');await expect(page.getByRole('status',{name:'复测提醒'})).toBeVisible();await shot(page,'13-month-end-reminder');const decline=page.waitForResponse(r=>r.url().endsWith('/stage/retest-decline'));await page.getByRole('button',{name:'本月先不做'}).click();expect((await decline).status()).toBe(200);await expect(page.getByRole('status',{name:'复测提醒'})).toHaveCount(0);await page.reload();await expect(page.getByRole('status',{name:'复测提醒'})).toHaveCount(0);await shot(page,'14-declined');
  await clock(page,'2026-11-01T01:00:00.000Z');await nav(page,'专业模式');await mode(page).getByRole('button',{name:'开始',exact:true}).click();await expect(mode(page).getByRole('textbox')).toBeVisible();
  for(let i=0;i<15;i++){v=await view(page);if(v.interviews.every((iv:{status:string})=>iv.status==='completed'))break;await pass(page);}

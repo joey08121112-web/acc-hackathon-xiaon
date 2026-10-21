@@ -13,7 +13,7 @@ import { usePetReactions, type PetBusy } from '../../voice/pet';
 import { HomeChat } from './home/HomeChat';
 import { NeedsCheckCard } from './home/NeedsCheckCard';
 import { ModeSwitchCard } from './home/ModeSwitchCard';
-import { ConversationSummaryView } from './home/ConversationSummaryView';
+import { ConversationSummaryView, summaryBubbleText } from './home/ConversationSummaryView';
 import { MemoryPrompt } from './home/MemoryPrompt';
 import { MemoryOffNotice } from './home/MemoryOffNotice';
 import { ProblemCapture } from './home/ProblemCapture';
@@ -61,7 +61,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
   viewport?.addEventListener('resize',resize);window.addEventListener('focusout',resize);
   return()=>{viewport?.removeEventListener('resize',resize);window.removeEventListener('focusout',resize);};
  },[]);
- const bubble=pet.line||(mic.phase==='listening'?mic.interim||'我在听，你慢慢说…':mic.phase==='transcribing'?'我听一听你说了什么…':mic.phase==='requesting'?'请允许使用麦克风…':awaiting?thinkingText:reply?.text??greeting);
+ const bubble=pet.line||(mic.phase==='listening'?mic.interim||'我在听，你慢慢说…':mic.phase==='transcribing'?'我听一听你说了什么…':mic.phase==='requesting'?'请允许使用麦克风…':awaiting?thinkingText:(summary??reply?.summary)?summaryBubbleText((summary??reply?.summary)!):reply?.text??greeting);
  const send=(raw:string,extra:{intent?:ChatIntent;problemId?:string}={})=>{
   const text=raw.trim();if(!text||l.busy||requestLock.current||!l.connected)return;
   requestLock.current=true;sent.current=true;greetingAbort.current?.abort();v.actions.unlock();v.actions.stop();
@@ -89,7 +89,9 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
  const end=()=>{
   if(!sessionId||blocked||l.busy||requestLock.current||shownSummary)return;
   requestLock.current=true;setAwaiting(true);setNotice('');v.actions.stop();mic.actions.cancel();
-  l.run<ConversationSummary>('learning/conversation/end',{sessionId,history:chat.slice(-20)}).then(setSummary).catch(()=>setNotice('这次的小结还没整理好，对话已保留，可以再试一次。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
+  // chatTurns stores metadata, not dialogue text. Keep the schema-bounded recent history;
+  // the server also includes all saved observations, problems and progress from this session.
+  l.run<ConversationSummary>('learning/conversation/end',{sessionId,history:chat.slice(-20)}).then(next=>{setSummary(next);if(v.enabled)void v.actions.speak(summaryBubbleText(next));}).catch(()=>setNotice('这次的小结还没整理好，对话已保留，可以再试一次。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
  };
  const pause=async()=>{
   if(l.busy||requestLock.current)return;

@@ -8,7 +8,7 @@ import { RuntimeError } from '../core/errors';
 export const entitySchemas = {
  tasks:schemas.TaskDefinition,generations:schemas.GenerationRecord,sessions:schemas.LearningSession,sessionEvents:schemas.SessionEvent,attempts:schemas.Attempt,exposures:schemas.ExposureEvent,gradings:schemas.GradingResult,evidence:schemas.Evidence,skills:schemas.SkillState,assessments:schemas.AssessmentSnapshot,reviewPolicies:schemas.ReviewPolicy,reviewItems:schemas.ReviewItem,reviewOutcomes:schemas.ReviewOutcome,reports:schemas.ReportSnapshot,proposals:schemas.PlanProposal,plans:schemas.PlanVersion,memories:schemas.MemoryItem,consents:schemas.ConsentState,toolCalls:schemas.ToolCall,runs:schemas.AgentRun,stuckPoints:schemas.StuckPoint,
  // G0 首页改版. problemSecrets is server-only: never listed by the coordinator view().
- problems:schemas.ProblemRecord,problemSecrets:schemas.ProblemSecret,episodes:schemas.LearningEpisode,progressCards:schemas.ProgressCard,memoryMentions:schemas.MemoryMention,observations:schemas.ChatObservation,summaries:schemas.ConversationSummary,chatTurns:schemas.ChatTurn,
+ problems:schemas.ProblemRecord,problemSecrets:schemas.ProblemSecret,episodes:schemas.LearningEpisode,progressCards:schemas.ProgressCard,memoryMentions:schemas.MemoryMention,memoryOffers:schemas.MemoryOffer,observations:schemas.ChatObservation,summaries:schemas.ConversationSummary,chatTurns:schemas.ChatTurn,
  // G2 第二期：专业模式. Learning records (not subject to the memory switch); interviews and monthStages are revisioned like episodes.
  interviews:schemas.InterviewSession,interviewTurns:schemas.InterviewTurn,professionalReports:schemas.ProfessionalReport,monthStages:schemas.MonthStage,
 } satisfies {[K in keyof EntityMap]:z.ZodType<EntityMap[K]>};
@@ -42,6 +42,8 @@ export class SqliteRepository implements LearningRepository {
    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(4);');
    // v5 (G2): additive professional-mode tables (interviews … monthStages), created by the same loop; existing rows are untouched.
    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(5);');
+   // v6: program-only memory offer events, created by the same additive loop.
+   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(6);');
    for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans','problems','episodes','progressCards','observations','summaries','chatTurns'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
   });
  }

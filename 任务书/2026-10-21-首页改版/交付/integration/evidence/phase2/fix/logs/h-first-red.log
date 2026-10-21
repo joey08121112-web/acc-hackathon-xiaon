@@ -1,0 +1,4 @@
+H home port adapter: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-h-home-48sCuY
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-h-home-48sCuY
+Error: http://127.0.0.1:18954/api/health is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer.
+

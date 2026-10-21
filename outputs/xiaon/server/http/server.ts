@@ -123,6 +123,7 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
      case '/api/learning/interview/resume':send(await d.interviewResume(raw as never,c.signal));break;
      case '/api/learning/interview/report':send(await d.interviewReport(raw as never,c.signal));break;
      case '/api/learning/stage/draft':send(await d.stageDraft(raw as never,c.signal));break;
+     case '/api/learning/stage/week-draft':send(await d.stageWeekDraft(raw as never));break;
      case '/api/learning/stage/confirm':send(await d.stageConfirm(raw as never));break;
      case '/api/learning/stage/retest-decline':send(await d.retestDecline(raw as never));break;
      default:throw new RuntimeError('not_found');

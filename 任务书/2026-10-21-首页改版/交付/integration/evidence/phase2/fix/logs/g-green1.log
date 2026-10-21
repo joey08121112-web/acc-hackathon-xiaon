@@ -1,0 +1,16 @@
+G browser output: /tmp/xiaon-integration2-fix-BcLfPe/g-green1
+[WebServer] (node:15638) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:15668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:15670) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+G browser output: /tmp/xiaon-integration2-fix-BcLfPe/g-green1
+  ✓  1 tests-agent/g/walkthrough.spec.ts:43:1 › 第一期演示路线：倾诉 → 确定需求 → 观察 → 错题 → 一起想 → 进步卡 → 记住方法 → 小结 → 专业模式 → 刷新接话；第二次对话和上次比 (3.3s)
+  ✓  2 tests-agent/g/walkthrough.spec.ts:74:1 › 记忆关闭再走一遍：不提议、不提起，首页和进步卡处都有提示 (1.6s)
+  ✓  3 tests-agent/g/walkthrough.spec.ts:88:1 › 安全拦截、休息与暂停照旧优先 (629ms)
+
+  3 passed (6.6s)

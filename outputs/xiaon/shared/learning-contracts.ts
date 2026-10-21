@@ -41,7 +41,8 @@ const ReviewOutcome = z.strictObject({...base,...operation,...revision,reviewIte
 const statement = z.strictObject({text,kind:z.enum(['fact','inference','unknown']),evidenceIds:ids});
 const ReportSnapshot = z.strictObject({...base,...operation,...revision,createdAt:utc,assessmentSnapshotId:id,statements:z.array(statement),coverage:z.array(text),changes:z.array(text),recommendations:z.array(text),supersedesReportId:id.nullable()});
 const planItem = z.strictObject({id,knowledgePointId:id,taskType:z.enum(['explore','supported_practice','independent_transfer','delayed_check','original_review']),task:ref.nullable(),estimatedMinutes:z.number().int().positive(),scheduledDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),evidenceIds:ids,goal:text,status:z.enum(['proposed','scheduled','paused','completed','superseded'])});
-const PlanProposal = z.strictObject({...base,...operation,...revision,createdAt:utc,assessmentSnapshotId:id,goal:text,items:z.array(planItem),statements:z.array(statement),alternatives:z.array(text),constraints:z.strictObject({calculationLimit:z.literal(10),requireUnderstandLogicFirst:z.boolean(),timeBudgetMinutes:z.number().positive()}),supersedesProposalId:id.nullable()});
+const PlanFocus = z.strictObject({module:dimension,goal:z.string().min(1).max(200)});
+const PlanProposal = z.strictObject({focus:PlanFocus.optional(),...base,...operation,...revision,createdAt:utc,assessmentSnapshotId:id,goal:text,items:z.array(planItem),statements:z.array(statement),alternatives:z.array(text),constraints:z.strictObject({calculationLimit:z.literal(10),requireUnderstandLogicFirst:z.boolean(),timeBudgetMinutes:z.number().positive()}),supersedesProposalId:id.nullable()});
 const PlanVersion = z.strictObject({...base,...operation,...revision,version,proposalId:id,previousVersionId:id.nullable(),goal:text,items:z.array(planItem),changes:z.array(text),confirmation:z.strictObject({action:z.enum(['accept','lighter','reschedule','defer','resume']),confirmedAt:utc,actor:z.literal('student'),expectedPreviousVersionId:id.nullable(),reason:text}),createdAt:utc});
 const MemoryItem = z.strictObject({...base,...operation,text,source:z.literal('student_explicit'),purpose:z.enum(['tutoring','planning']),createdAt:utc,expiresAt:nullableTime,reviewAt:nullableTime,active:z.boolean()});
 const ConsentState = z.strictObject({...base,...operation,optionalMemory:z.boolean(),updatedAt:utc});
@@ -104,6 +105,8 @@ const confidence = z.enum(['more_sure','about_same','still_unsure','prefer_not']
 const ProgressCard = z.strictObject({...base,...operation,sessionId:id,episodeId:id.nullable(),aiDraft:ProgressCardDraft.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable(),skipped:z.array(cardField).max(3),confidence:confidence.nullable(),confirmedAt:utc});
 const MemoryDraft = z.strictObject({text:shortText,kind:z.enum(['event','interest','method']),origin:z.enum(['chat','progress_card'])});
 const MemoryMention = z.strictObject({...base,memoryId:id,sessionId:id.nullable(),via:z.enum(['greeting','chat']),at:utc});
+// Program-recorded actual chat offers; no optional memory text or fake memory references.
+const MemoryOffer = z.strictObject({...base,...operation,sessionId:id,turn:version,stage:ChatStage,at:utc});
 const Greeting = z.strictObject({text:z.string().min(1).max(300),memoryId:id.nullable(),summaryId:id.nullable(),memoryOff:z.boolean()});
 // What the model may output in an allowed probe turn; the program adds id/session/status/time.
 const ObservationDraft = z.strictObject({dimension:z.enum(['理解','逻辑']),signal:z.enum(['clear','partial','confused']),quote:shortText,note:shortText});
@@ -218,7 +221,7 @@ export const schemas = {
   ImportPreviewRequest:z.strictObject({source:z.string().max(500000)}),
   ToolArguments:tools,
   // G0 首页改版
-  ModeSuggestion,ProblemDraft,ProblemRecord,ProblemSecret,LearningEpisode,ProgressCardDraft,ProgressCard,MemoryDraft,MemoryMention,Greeting,
+  ModeSuggestion,ProblemDraft,ProblemRecord,ProblemSecret,LearningEpisode,ProgressCardDraft,ProgressCard,MemoryDraft,MemoryMention,MemoryOffer,Greeting,
   ObservationDraft,ChatObservation,ConversationSummary,ChatTurn,ChatReply,RecognizeResult,
   ConfirmProblem:z.strictObject({...operation,sessionId:id.nullable(),draft:ProblemDraft,referenceAnswer:z.string().min(1).max(500).nullable()}),
   Recognize:z.strictObject({...operation,sessionId:id.nullable(),mimeType:z.literal('image/jpeg'),image:z.string().min(4).max(RECOGNIZE_MAX_BASE64).regex(/^[A-Za-z0-9+/]+={0,2}$/),maskConfirmed:z.literal(true)}),
@@ -234,6 +237,7 @@ export const schemas = {
   InterviewResume:z.strictObject({...operation,interviewId:id}),
   InterviewReportRequest:z.strictObject({...operation,interviewId:id}),
   DraftMonthStage:z.strictObject({...operation,reportId:id}),
+  DraftStageWeek:z.strictObject({...operation,stageId:id,expectedRevision:version}),
   ConfirmMonthStage:z.strictObject({...operation,stageId:id,expectedRevision:version,action:z.enum(['accept','defer']),goal:shortText}),
   DeclineRetest:z.strictObject({...operation,stageId:id}),
 };
@@ -284,6 +288,7 @@ export type ProgressCard = z.infer<typeof ProgressCard>;
 export type ProgressConfidence = z.infer<typeof confidence>;
 export type MemoryDraft = z.infer<typeof MemoryDraft>;
 export type MemoryMention = z.infer<typeof MemoryMention>;
+export type MemoryOffer = z.infer<typeof MemoryOffer>;
 export type Greeting = z.infer<typeof Greeting>;
 export type ObservationDraft = z.infer<typeof ObservationDraft>;
 export type ChatObservation = z.infer<typeof ChatObservation>;
@@ -333,7 +338,7 @@ export interface EntityMap {
   /** P0 Tutor stuck-point hypotheses; necessary learning records, cleared by reset. */
   stuckPoints:StuckPoint;
   /** G0 首页改版. problemSecrets never leaves the server; observations/summaries are learning records independent of the memory switch. All cleared by reset. */
-  problems:ProblemRecord; problemSecrets:ProblemSecret; episodes:LearningEpisode; progressCards:ProgressCard; memoryMentions:MemoryMention;
+  problems:ProblemRecord; problemSecrets:ProblemSecret; episodes:LearningEpisode; progressCards:ProgressCard; memoryMentions:MemoryMention; memoryOffers:MemoryOffer;
   observations:ChatObservation; summaries:ConversationSummary; chatTurns:ChatTurn;
   /** G2 第二期. Necessary learning records independent of the memory switch; cleared by reset. interviews/monthStages are revisioned (key id:r<revision>).
    * TrendPoint is derived from professionalReports and has no collection. */
@@ -373,7 +378,7 @@ export interface PlanningEnginePort {
   readonly id:string;
   due(input:{at:string;includePaused:boolean},context:EngineContext):Promise<ReviewItem[]>;
   recordOutcome(input:ReviewOutcome,context:EngineContext):Promise<ReviewItem[]>;
-  propose(input:{operationId:string;assessment:AssessmentSnapshot;timeBudgetMinutes:number},context:EngineContext):Promise<PlanProposal>;
+  propose(input:{operationId:string;assessment:AssessmentSnapshot;timeBudgetMinutes:number;focus?:z.infer<typeof PlanFocus>},context:EngineContext):Promise<PlanProposal>;
   confirm(input:{operationId:string;proposalId:string;expectedPreviousVersionId:string|null;action:PlanVersion['confirmation']['action'];scheduledDate:string|null;reason:string},context:EngineContext):Promise<PlanVersion>;
   report(input:{operationId:string;assessment:AssessmentSnapshot;previousReportId:string|null},context:EngineContext):Promise<ReportSnapshot>;
 }

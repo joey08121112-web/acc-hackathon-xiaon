@@ -53,12 +53,15 @@ test('第一期演示路线：倾诉 → 确定需求 → 观察 → 错题 → 
  await expect(summary.getByText('在第1级提示后算出了结果')).toBeVisible();
  await expect(summary.getByRole('button',{name:'去专业模式'})).toBeVisible();await shot(page,'p1-07-summary');
  await summary.getByRole('button',{name:'去专业模式'}).click();await expect(page).toHaveURL(/#explore$/);await shot(page,'p1-08-explore');
+ const before=await page.evaluate(async()=>await(await fetch('/api/learning')).json());expect(before.session?.mode).not.toBe('exploration');expect(before.interviews).toHaveLength(0);
+ await page.getByRole('region',{name:'专业模式测评'}).getByRole('button',{name:'开始',exact:true}).click();
+ await expect(page.getByRole('region',{name:'专业模式测评'}).getByRole('textbox',{name:'我的回答'})).toBeVisible();
  const state=await page.evaluate(async()=>await(await fetch('/api/learning')).json());expect(state.session.mode).toBe('exploration');
  await nav(page,'小N');await page.reload();await expect(page.locator('.pet-hero-bubble')).toContainText('上次我们聊到应用题的条件');await shot(page,'p1-09-refresh-greeting');
  // 第二次对话：和上次比只写两边都有原话的同维变化。
  await say(page,'我又来了');await say(page,'还好');
  await chatAfter(page,()=>page.getByRole('button',{name:'看看哪里没考好',exact:true}).click());
- await say(page,'那道应用题我好像想明白了');await say(page,'嗯');await say(page,'每本就是一本练习本的价钱');
+ await say(page,'那道应用题我好像想明白了');await say(page,'嗯');await say(page,'每本就是一本练习本的价钱');await say(page,'每本就是一本练习本的价钱');
  const ended2=page.waitForResponse(r=>r.url().endsWith('/learning/conversation/end'));await page.getByRole('button',{name:'今天先聊到这'}).click();expect((await ended2).ok()).toBeTruthy();
  const second=page.getByRole('region',{name:'这次的对话小结'});
  await expect(second).toContainText('上次说「就是不知道题目里的每本指什么」，这次说「每本就是一本练习本的价钱」');await shot(page,'p1-10-second-compare');

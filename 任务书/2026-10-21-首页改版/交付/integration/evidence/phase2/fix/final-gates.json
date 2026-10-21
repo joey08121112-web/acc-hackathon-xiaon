@@ -1,0 +1,108 @@
+[
+  {
+    "command": "npm run typecheck:agent",
+    "exitCode": 0,
+    "seconds": 1.73,
+    "log": "/tmp/xiaon-integration2-fix-BcLfPe/final-typecheck.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "seconds": 0.21,
+    "log": "/tmp/xiaon-integration2-fix-BcLfPe/final-domain.log"
+  },
+  {
+    "command": "npm run test:agent",
+    "exitCode": 0,
+    "seconds": 56.2,
+    "log": "/tmp/xiaon-integration2-fix-BcLfPe/final-agent.log"
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 0,
+    "seconds": 3.52,
+    "log": "/tmp/xiaon-integration2-fix-BcLfPe/final-build.log"
+  },
+  {
+    "command": "npm run schema:agent",
+    "exitCode": 0,
+    "result": "schema regenerated",
+    "log": "logs/schema.log"
+  },
+  {
+    "command": "npm run test:agent:g",
+    "exitCode": 0,
+    "result": "59/59",
+    "log": "logs/final-unit-g.log"
+  },
+  {
+    "command": "npm run test:agent:h",
+    "exitCode": 0,
+    "result": "15/15",
+    "log": "logs/final-unit-h.log"
+  },
+  {
+    "command": "npm run test:agent:i",
+    "exitCode": 0,
+    "result": "36/36",
+    "log": "logs/final-unit-i.log"
+  },
+  {
+    "command": "node --import tsx --test tests-agent/i/fix-round.test.ts",
+    "exitCode": 0,
+    "result": "8/8",
+    "log": "logs/rules-final.log"
+  },
+  {
+    "command": "npm run test:agent (last source)",
+    "exitCode": 0,
+    "result": "229/229",
+    "log": "logs/agent-last.log"
+  },
+  {
+    "command": "npm run typecheck:agent (last source)",
+    "exitCode": 0,
+    "result": "passed",
+    "log": "logs/typecheck-last.log"
+  },
+  {
+    "command": "G Playwright, 5214/18954",
+    "exitCode": 0,
+    "result": "3/3",
+    "log": "logs/g-final.log"
+  },
+  {
+    "command": "H home adapter, 5214/18954",
+    "exitCode": 0,
+    "result": "9/9",
+    "log": "logs/h-home-final.log"
+  },
+  {
+    "command": "H professional Playwright, 5214/18954",
+    "exitCode": 0,
+    "result": "5/5",
+    "log": "logs/h2-final.log"
+  },
+  {
+    "command": "I Playwright, 5214/18954",
+    "exitCode": 0,
+    "result": "4/4",
+    "log": "logs/i-final.log"
+  },
+  {
+    "command": "integration2 Playwright, 5214/18954",
+    "exitCode": 0,
+    "result": "2/2",
+    "log": "logs/integration-final.log"
+  },
+  {
+    "command": "git diff --cached --check (source and docs only)",
+    "exitCode": 0
+  },
+  {
+    "command": "git diff --cached --check (including raw logs)",
+    "exitCode": 2,
+    "reason": "Preserved raw diagnostic whitespace, no product whitespace errors",
+    "log": "logs/staged-check.log"
+  }
+]

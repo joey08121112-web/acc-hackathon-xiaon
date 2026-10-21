@@ -2,6 +2,7 @@
  * 数据：l.view.monthStages（最新修订）、l.view.professionalReports；路由 learning/stage/{draft,confirm,retest-decline}。
  * 不确认不生效；模块由服务端程序按等级选（需要加强优先），前端不替程序选模块。 */
 import { useState } from 'react';
+import { WeekDraftButton } from './WeekDraftButton';
 import type { LearningUI } from '../../agents/useLearning';
 import { MODULE_LEVEL_LABELS,type MonthStage } from '../../../shared/learning-contracts';
 import { shanghaiDate } from '../../learning/review';
@@ -41,6 +42,7 @@ export function MonthStageView({l,navigate,safety}:MonthStageViewProps){
    const planned=w.proposalId&&(v.plans.some(p=>p.snapshot.proposalId===w.proposalId)||v.proposal?.id===w.proposalId);
    return <p className="small" key={w.weekStart}>{weekLabel(w.weekStart)}：{planned?'已安排周任务':'还没安排任务'}</p>;
   })}</div>}
+  <WeekDraftButton stage={stage} l={l} navigate={navigate} safety={safety}/>
   {stage.status!=='confirmed'&&<div className="quick-replies">
    <button className="primary" disabled={busy||!text.trim()} onClick={()=>confirm('accept')}>定下这个目标</button>
    {stage.status==='draft'&&<button disabled={busy} onClick={()=>confirm('defer')}>暂不开始</button>}

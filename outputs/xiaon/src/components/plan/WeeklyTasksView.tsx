@@ -1,6 +1,7 @@
 /** 所有者：zCode（第二期：今日页的本月目标与本周任务）。挂在 LearningPages page==='today'，复测提醒之下、原有当前目标之上。
  * 数据：l.view.monthStages（本月已确认的阶段）、weeks 里的 proposalId 对应 l.view.plans / l.view.proposal；周计划草案与确认都走现有计划流程。
  * 只显示本周：错过的任务不扣分、不堆积，沿用现有规则。 */
+import { WeekDraftButton } from './WeekDraftButton';
 import type { LearningUI } from '../../agents/useLearning';
 import { shanghaiDate } from '../../learning/review';
 import { mondayOf,weekLabel } from './calendar';
@@ -23,7 +24,8 @@ export function WeeklyTasksView({l,navigate,safety}:WeeklyTasksViewProps){
   <span className="tag">本月目标 · {stage.module}</span>
   <h2>{stage.goal}</h2>
   <h3>本周任务（{weekLabel(weekStart)}）</h3>
-  {!week?.proposalId&&<p className="small">这一周还没有安排任务。<button className="text-button" disabled={l.busy||safety} onClick={()=>navigate('plan','成长')}>去计划页看看</button></p>}
+  {!week?.proposalId&&<p className="small">这一周还没有安排任务。</p>}
+  <WeekDraftButton stage={stage} l={l} navigate={navigate} safety={safety}/>
   {proposal&&<p className="notice">本周任务的草案还没确认，确认后才算数。<button disabled={l.busy||safety} onClick={()=>navigate('plan','成长')}>去确认（接受 / 减量 / 改期 / 暂不开始）</button></p>}
   {items.map(i=><div className="learning-statement" key={i.id}>
    <h3>{i.goal}</h3>

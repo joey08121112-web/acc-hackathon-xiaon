@@ -4,6 +4,8 @@ import type { LearningUI } from '../../../agents/useLearning';
 import { ModeSwitchCard } from './ModeSwitchCard';
 /** summary = ChatReply.summary（道别时）或 /api/learning/conversation/end 的返回。 */
 export type ConversationSummaryViewProps={summary:ConversationSummary|null;l:LearningUI;navigate:(page:string,tab?:string)=>void};
+/** Current summary bubble; persisted summaries still use the next-visit greeting after reload. */
+export const summaryBubbleText=(summary:ConversationSummary)=>`今天先聊到这里。我整理了这次的小结：${summary.topics[0]??'今天聊过的事'}。建议放在下面，什么时候开始由你决定。`;
 export function ConversationSummaryView({summary,l,navigate}:ConversationSummaryViewProps){
  if(!summary)return null;
  const observations=l.view?.observations.filter(o=>o.sessionId===summary.sessionId&&summary.observationIds.includes(o.id))??[];

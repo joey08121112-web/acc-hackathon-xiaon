@@ -1,4 +1,4 @@
-/** H 首页原配置与用例的临时端口适配；只重定位源码 import 和 18952/5212，不改断言。 */
+/** H 首页原配置与用例的临时端口适配；只重定位源码 import、端口和临时数据库，不改断言。 */
 import { mkdtempSync,readFileSync,writeFileSync,symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve,join } from 'node:path';
@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 const app=fileURLToPath(new URL('../..',import.meta.url)),out=mkdtempSync(join(tmpdir(),'xiaon-integration2-h-home-'));
 const relocate=s=>s.replace(/from '(\.\.\/\.\.\/[^']+)'/g,(_,p)=>`from '${resolve(app,'tests-agent/h',p)}'`);
-const server=relocate(readFileSync(join(app,'tests-agent/h/browser-server.ts'),'utf8')).replace('const port=18952,ui=5212;','const port=18954,ui=5214;');
+const server=relocate(readFileSync(join(app,'tests-agent/h/browser-server.ts'),'utf8')).replace('const port=18952,ui=5212;','const port=18954,ui=5214;').replace("resolve('.local/h.sqlite')",JSON.stringify(join(out,'h.sqlite'))).replace("mkdirSync('.local',{recursive:true});",'');
 const spec=relocate(readFileSync(join(app,'tests-agent/h/browser.spec.ts'),'utf8')).replaceAll('127.0.0.1:18952','127.0.0.1:18954');
 writeFileSync(join(out,'server.ts'),server);writeFileSync(join(out,'home.spec.ts'),spec);symlinkSync(join(app,'node_modules'),join(out,'node_modules'),'dir');
 const config=`import base from ${JSON.stringify(join(app,'tests-agent/h/playwright.config.ts'))};

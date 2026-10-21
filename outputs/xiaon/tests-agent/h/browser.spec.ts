@@ -98,3 +98,13 @@ test('已暂停的 support 场次，进入专业模式说明后仍未开始测�
  await expect(page).toHaveURL(/#explore$/);await expect(page.getByRole('button',{name:'开始',exact:true})).toBeVisible();
  const view=await page.evaluate(async()=>await(await fetch('/api/learning')).json());expect(view.session.mode).toBe('support');expect(view.interviews).toHaveLength(0);
 });
+
+test('长聊天结束仍有小结，气泡与小结一致，不停留在上一句',async({page})=>{
+ await ready(page);for(let n=0;n<12;n++)await say(page,'合成聊天第'+n+'轮');
+ const req=page.waitForRequest(r=>r.url().endsWith('/conversation/end'));
+ await page.getByRole('button',{name:'今天先聊到这',exact:true}).click();
+ const history=(await req).postDataJSON().history;expect(history).toHaveLength(20);expect(history.at(-1).role).toBe('assistant');
+ await expect(page.getByRole('region',{name:'这次的对话小结'})).toBeVisible();
+ await expect(page.locator('.pet-hero-bubble')).toContainText('应用题的条件');
+ await expect(page.locator('.pet-hero-bubble')).toContainText('小结');
+});

@@ -11,11 +11,11 @@ import { ControlledRoles,tutorOutput,homeTutorOutput,homeTutorPrompt,type TutorS
 import { decideStage,filterStageFields,matchesAnswer,HELP_PATTERN,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,UNDERSTOOD_PATTERN,type ChatStageState } from './stages';
 import type { ProfessionalContext,RevampContext } from '../plugins/context';
 import { startInterview,answerInterview,pauseInterview,resumeInterview,buildReport } from '../plugins/interview';
-import { draftMonthStage,confirmMonthStage,declineRetest,retestReminder } from '../plugins/stages';
+import { draftMonthStage,confirmMonthStage,declineRetest,retestReminder,draftStageWeek,linkWeekPlan } from '../plugins/stages';
 import { trend } from '../plugins/tracking';
 import { latestRevisions,reportProblems,reportReady,draftProblems,revisionProblems,trendProblems,refuse } from './professional';
 import { validateProblemDraft,confirmProblem,recognize } from '../plugins/problems';
-import { validateMemoryDraft,confirmMemoryDraft,greeting,shouldOfferMemory,selectMemoriesForContext } from '../plugins/memory-flow';
+import { validateMemoryDraft,confirmMemoryDraft,greeting,shouldOfferMemory,recordMemoryOffer,selectMemoriesForContext } from '../plugins/memory-flow';
 import { draftProgressCard,confirmProgressCard } from '../plugins/progress';
 import { validateObservation,endConversation } from '../plugins/conversation';
 import { hash } from '../storage/repository';
@@ -135,7 +135,10 @@ export class LearningCoordinator {
  /** E1 student event: generate one validated task. Publishing never opens or exposes it. */
  async generateTask(raw:z.infer<typeof requests.generateTask>,signal?:AbortSignal){const p=this.parse(requests.generateTask,raw);const epoch=this.epoch;
   return this.perform(p.operationId,{kind:'e-generate-task',...p},()=>this.generator.generate(p,signal,()=>epoch===this.epoch),signal);}
- async confirm(raw:z.infer<typeof requests.confirm>){const p=this.parse(requests.confirm,raw);return this.perform(p.operationId,p,()=>this.r.planning().confirm(p,this.r.engineContext()));}
+ async confirm(raw:z.infer<typeof requests.confirm>){const p=this.parse(requests.confirm,raw);return this.perform(p.operationId,p,async()=>{
+  const ctx=this.r.engineContext(),plan=await this.r.planning().confirm(p,ctx),next=linkWeekPlan(plan,ctx);
+  if(next){const prev=this.stage(next.id);refuse(revisionProblems(next,prev,{now:this.r.clock.now()}));ctx.repository.append('monthStages',next);}
+  return plan;});}
  async preference(raw:z.infer<typeof requests.preference>){const p=this.parse(requests.preference,raw);const work=async()=>{
   let session=this.r.events.sessions().find(s=>s.status!=='closed');if(!session)session=this.r.events.startSession({operationId:p.operationId+'-s',mode:'support'});
   this.r.events.sessionState({operationId:p.operationId+'-state',sessionId:session.id,status:p.rest||p.questionInvitePaused?'paused':'active'});
@@ -247,6 +250,7 @@ export class LearningCoordinator {
    };
    const problemDraft=gated('problemDraft',schemas.ProblemDraft,()=>validateProblemDraft(kept.problemDraft,check));
    let memoryDraft=gated('memoryDraft',schemas.MemoryDraft,()=>validateMemoryDraft(kept.memoryDraft,{...check,memoryEnabled,origin:'chat'}));
+   if(memoryDraft)recordMemoryOffer({operationId:p.operationId,sessionId,stage,turn:s.turn},ctx);
    const observation=gated('observation',schemas.ObservationDraft,()=>validateObservation(kept.observation,{...check,
     // G2 (REPORT-1): on the turn after a probe only this message is the answer, so only it may be quoted.
     ...(decision.answerTurn?{studentTexts:[last]}:{}),probeAllowed:decision.probeAllowed||decision.answerTurn,existing:repo.list('observations').filter(o=>o.sessionId===sessionId)}));
@@ -342,6 +346,13 @@ export class LearningCoordinator {
   if(prev.revision!==p.expectedRevision)throw new RuntimeError('conflict','月阶段已更新，请刷新后再确认');
   if(prev.status!=='draft'&&prev.status!=='deferred')throw new RuntimeError('invalid_state','这个月阶段不能再确认');
   return this.stageRevision(p.operationId,p,prev,()=>confirmMonthStage({...p,stage:prev},this.professional()),{now:this.r.clock.now(),confirm:{action:p.action,goal:p.goal}});}
+ /** New week draft preserves the original monthly confirmation and requires an explicit student request. */
+ async stageWeekDraft(raw:z.infer<typeof schemas.DraftStageWeek>){const p=this.parse(schemas.DraftStageWeek,raw);
+  return this.perform(p.operationId,p,async()=>{
+   const prev=this.stage(p.stageId);if(prev.revision!==p.expectedRevision)throw new RuntimeError('conflict','月阶段已更新，请刷新后重试');
+   const next=schemas.MonthStage.parse(await draftStageWeek({operationId:p.operationId,stage:prev},this.professional()));
+   if(next.revision===prev.revision)return prev;
+   refuse(revisionProblems(next,prev,{now:this.r.clock.now()}));this.r.repository.append('monthStages',next);return next;});}
  async retestDecline(raw:z.infer<typeof schemas.DeclineRetest>){const p=this.parse(schemas.DeclineRetest,raw);const prev=this.stage(p.stageId);
   if(prev.status!=='confirmed')throw new RuntimeError('invalid_state','只有已确认的月阶段有复测提醒');if(prev.retestDeclinedAt)return prev;
   return this.stageRevision(p.operationId,p,prev,()=>declineRetest({operationId:p.operationId,stage:prev},this.professional()),{now:this.r.clock.now(),decline:true});}

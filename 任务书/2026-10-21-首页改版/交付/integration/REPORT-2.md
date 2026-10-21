@@ -175,3 +175,82 @@
 所有测试服务由本次启动并由 Playwright 关闭；没有用宽匹配终止进程，没有碰用户其他服务。交付检查 5214/18954 均没有遗留监听进程。
 
 **停在 `revamp/integration2`。请用户决定是否先退回 zCode 修复规划对齐、Claude 更新旧浏览器夹具，或明确确认将当前结果合入 main 并打 `revamp-phase2`。当前不建议按“第二期全部验收通过”合入。没有推送、合 main 或打该 tag。**
+
+## 8. 修复轮
+
+日期：2026-10-21。分支仍为 `revamp/integration2`，worktree 仍为 `/Users/ami/Documents/个人/ACC黑客松-wt/integration2`；本轮起点为原集成交付 HEAD。**本节更新第 5、6 节退回项的状态：下述授权事项已修复并通过开发者自验；尚未合入 main、未推送、未打标签，停下等待用户决定。** 此结论不升级为独立审查、真实模型或真机验收。
+
+### 8.1 逐项修复与文件
+
+路径除交付文档外均相对 `outputs/xiaon/`。
+
+| 项目 | 现象与原因 | 本轮修改 | 对应验证与结果 |
+| --- | --- | --- | --- |
+| P1 月目标与周任务不符 | 阶段选逻辑，周计划仍按全局 assessment 排序，且同日预算相同会复用未限定模块的旧草案 | `server/plugins/stages/index.ts` 向公开 `planning().propose` 传可选 focus；`server/plugins/planning/index.ts` 在完整可信快照校验后，仅对选题投影限定模块子技能，并将学生月目标写入计划/任务文案。缓存同时比较 focus；共享契约新增可选 focus，旧记录/旧调用不变。没有符合条件的未见题时说明题库、前置练习或时间条件，未开始/暂停场次则说明对应原因，均不跨模块补题 | `tests-agent/i/fix-round.test.ts`：真实提交合并同类项错答后，全局草案确为 like-terms；逻辑阶段产出的所有任务均为 counterexample，题目维度为逻辑，文案对应目标；省略 focus 仍遵守原选择、文案、同日缓存。另测题库不足。生产集成走查也核对真实测评报告后的逻辑阶段与周任务 |
+| 后续周没有安排 | 原 weeks[] 只有脚手架，stage/confirm 又拒绝已确认的月阶段，没有后续周草案入口；周确认未回记 planVersionId | `stages/index.ts` 新增 `draftStageWeek`、返回周确认关联修订的 `linkWeekPlan`；`server/agents/learning.ts` / `server/http/server.ts` 最小接线新增 `learning/stage/week-draft`，沿用认证、CSRF、版本与原 revisionProblems 门控；原 `learning/confirm` 成功后回记对应 weeks[]，保留月阶段原 confirmation。新增 `src/components/plan/WeekDraftButton.tsx`，在 `MonthStageView.tsx` / `WeeklyTasksView.tsx` 给出「生成这一周的任务」，生成后去原计划页接受 / 减量 / 改期 / 暂不开始；不自动确认 | TestClock 验证 10-05 第一周、10-12 第二周、10-19 第三周，生成草案时正式计划数量不变，学生确认后 versions 与 weeks[] 对得上；覆盖 lighter、确认时间保留、已拒绝/暂不开始不生成。HTTP 覆盖无认证 403、额外字段 400、错误状态/过期修订 409、重复请求幂等。两页提示的只读渲染也覆盖拒绝/暂缓隐藏。I 浏览器实际走第二周今日入口、第三周计划入口；生产集成走查实际走 10-26 第二周 |
+| G 旧浏览器回归 2 条 | 旧后缀替换把 observe-answer 变成 probe-answer；旧断言把进入说明页当成已切换模式 | **G 路只改** `tests-agent/g/walkthrough-server.ts` / `walkthrough.spec.ts`：同时识别 observe 与 observe-answer；回答轮仅引用本轮学生话语，仍能返回错题草稿；进入专业说明时断言尚无测评，点「开始」后才核对 exploration。测试数据库改用系统临时库 | 原用例先跑 1/3（exit 1），更新后 3/3（exit 0）。未改 G 对应产品代码 |
+| 长聊天结束的小结 | 原请求上限为 20 条；已保留的 slice(-20) 会截掉较早聊天正文。检查发现 chatTurns 只存阶段、信号等元数据，不存正文，不能替代这 20 条文本 | `ChatPanel.tsx` 保留 `chat.slice(-20)`，加注释说明原因；没有把空 history 当作完整聊天，也没有扩大正文持久化。服务端小结另汇总整场已保存的 observations、problems、progressCards，不随前端窗口截断 | H 新浏览器用例连续 12 轮，确认结束请求恰为 20 条，能得到小结；G/集成的小结继续含已保存的观察与进步卡。**限制仍如实保留：更早、没有形成结构化记录的聊天正文不参与本次小结，不能宣称完整长聊天语义回顾** |
+| 小结后气泡停留上一句 | end 只更新 summary，PetHero 的 bubble 仍读 reply.text | `home/ConversationSummaryView.tsx` 导出小结对应文案，`ChatPanel.tsx` 在按钮结束或道别返回本次小结时使用它；手动结束且已开朗读时同步朗读。刷新后的已存小结仍按原问候流程接话 | H 长聊天浏览器先失败于气泡仍为旧回复，修复后气泡包含本次主题与「小结」；首页 9/9、G 刷新接话通过 |
+| 错题确认看不到「记下了」 | 下一条回复不含 problemDraft，组件在展示 done 前就因 draft=null 返回 null | `home/ProblemConfirmCard.tsx` 允许已确认 done 在 draft=null 时保留展示，新的非空草稿仍重置确认状态；继续自动接入原一起想流程，不重复保存 | I 浏览器先失败于确认状态消失，修复后等待下一条不含草稿的聊天响应完成，仍能看见「记下了」，且 problems 只有一条；截图 03 |
+| 记忆判断写假 memoryId | shouldOfferMemory 既判断又把提议机会写进 memoryMentions，模型没有给草稿的轮次也会消耗额度 | `server/plugins/memory-flow/index.ts` 将 shouldOfferMemory 改为只读；新增 recordMemoryOffer，由协调器在聊天草稿通过校验后记录。共享契约增加不含正文的 MemoryOffer / memoryOffers；`server/storage/repository.ts` 加法建表并登记 v6，重置自动清空。真实确认/提起仍写 memoryMentions；不再新增假 memoryId。历史标记只读兼容，不清洗旧数据 | 先失败于反复判断耗尽次数；修复后重复判断不改变 repository.revision、无假 mention；前两轮无草稿不消耗额度，随后只允许两次有效聊天提议，重试不重复、关闭不提议、未确认不写 memories、重置清空。I 浏览器覆盖确认、7 天时效、关闭单次提示与记忆关闭提示 |
+| I 路浏览器缺失 | 没有自己的配置与走查 | 新增 `tests-agent/i/playwright.config.ts`、`browser-server.ts`、`fix-round.spec.ts`，配置参照 F，仅发现本路 spec。真实协调器与生产插件，合成模型/报告与独立 TestClock，数据库、trace、截图、JSON 均输出系统临时目录；不导入或执行 D 浏览器 spec | 4/4 通过，覆盖口述错题确认、记忆确认与关闭、记忆关闭、月阶段和三周任务。I 的月报告是显式合成夹具，不冒充真实测评；集成 2/2 另外验证真实面试引擎生成的报告与阶段 |
+
+本轮最小扩展由用户在会话中明确授权：`learning.ts`、`http/server.ts`、`storage/repository.ts` 与共享契约/schema。加法变更已追加在 `交付/claude/CONTRACT-CHANGE.md` 末尾，`npm run schema:agent` exit 0。
+
+测试维护还涉及：`tests-agent/i/memory.test.ts` 把“调用判断就消耗次数”的旧断言改成显式记录后计数；`tests-agent/integration2/phase2.spec.ts` 增加生产流程的模块、weeks[] 版本关联和第二周断言；`run-home-browser.mjs` 将 H 原夹具的数据库也重定位到临时目录，仅适配 imports、端口、数据库路径，不改 H 断言。未新增依赖，未改 package/lockfile、离线单文件、D 浏览器配置或 D/legacy/map/offline spec。
+
+### 8.2 首次失败、夹具错误与重跑
+
+证据在 `evidence/phase2/fix/logs/`，失败原文没有覆盖或删改：
+
+1. **先于产品修复的业务红灯**：`node --import tsx --test tests-agent/i/fix-round.test.ts`，`rules-business-first-red.log`，exit 1、0/6，分别揭露草案没有限定、确认版本没有回记、纯判断耗尽次数、没有后续周方法、无草稿也消耗提议额度、题库不足仍未限定。修复后 6/6；再补 HTTP 与提示状态门控，最终 `rules-final.log` 8/8、exit 0。
+2. P1 后续把夹具加强为真实提交合并同类项错答；在系统临时目录解出**修复前 HEAD 的 server/shared/src 快照**，仅把新用例放进去回放该条，`p1-exact-baseline-red.log` exit 1，显示「逻辑月目标的周任务不能选合并同类项」；修复工作区同条通过，旧调用仍选择 like-terms，限定调用只选 counterexample。没有重置、覆盖当前工作区，没有复制 .env.server。
+3. `g-first-red.log`：原 G 走查 exit 1，1/3；修正测试夹具/旧断言后 `g-green1.log` 与 `g-final.log` 均 exit 0、3/3。
+4. `h-bubble-first-red.log`：只跑新增长聊天用例，exit 1；20 条请求和小结已通过，但小N气泡仍为上句话，缺少主题/小结。修复后 `h-home-final.log` exit 0、9/9，保留失败重试与刷新接话回归。
+5. `i-first-red.log`：exit 1，1/4。错题用例确实失败于下一条回复之后没有「记下了」；记忆用例因旧判断提前消耗机会而等不到提议；月阶段用例第一次写错按钮名称「计划」，未到业务断言。`i-week-ui-first-red.log` 仍 exit 1，是注入报告后没刷新 view 的夹具错误，**不当作产品红灯**。更正为「查看我的计划」、注入后刷新，`i-green1.log`、`i-final.log` 均 exit 0、4/4。
+6. 另保留测试准备错误：`rules-first-red.log` / `rules-all-first-red.log` 中 P1/题库不足用例起初未 installLearning，遇到 B snapshot 未注册；补注册后才得到第 1 项的有效业务红灯。`h-first-red.log` 是 G 尚占用 18954 时误启动 H 适配器，exit 1；没有关闭占用进程，等 G 自行结束后重跑成功。上述错误未被计为功能复现或通过证据。
+
+### 8.3 最终命令与退出码
+
+除 Git/归档外，cwd 为本 worktree 的 `outputs/xiaon`。全部浏览器按顺序使用集成 **5214 / 18954**；最初只跑新增 H 红灯用例时使用其原 **5212 / 18952**。执行时输出在系统临时目录，选定文本日志和三张截图另归档到 fix/，trace 与完整浏览器结果仍在临时目录。
+
+| 命令 | exit | 结果 / 日志 |
+| --- | --- | --- |
+| `npm run schema:agent` | 0 | `schema.log`，加法 schema 已同步 |
+| `npm run typecheck:agent` | 0 | `final-typecheck.log`；最后调整浏览器截图与加强用例后再跑 `typecheck-last.log` 也为 0 |
+| `npm test` | 0 | 25/25，`final-domain.log` |
+| `npm run test:agent` | 0 | 229/229，`final-agent.log`；加强真实错答夹具后再跑见 `agent-last.log` |
+| `npm run build` | 0 | `final-build.log`；仍有既有 >500 kB chunk 提示，未扩展拆包范围 |
+| `npm run test:agent:g` | 0 | 59/59，`final-unit-g.log` |
+| `npm run test:agent:h` | 0 | 15/15，`final-unit-h.log` |
+| `npm run test:agent:i` | 0 | 36/36，`final-unit-i.log` |
+| `node --import tsx --test tests-agent/i/fix-round.test.ts` | 0 | 最终 8/8，`rules-final.log` |
+| `XIAON_G_UI_PORT=5214 XIAON_G_API_PORT=18954 XIAON_G_BROWSER_OUT=<tmp>/g-final npx playwright test -c tests-agent/g/playwright.config.ts` | 0 | 3/3，`g-final.log` |
+| `node tests-agent/integration2/run-home-browser.mjs` | 0 | H 首页 9/9，`h-home-final.log`；自建临时适配目录 |
+| `XIAON_H2_UI_PORT=5214 XIAON_H2_API_PORT=18954 XIAON_H2_BROWSER_OUT=<tmp>/h2-final npx playwright test -c tests-agent/h/playwright.professional.config.ts` | 0 | H 专业模式 5/5，`h2-final.log`；预期的过期修订 409 是测试的一部分 |
+| `XIAON_I_BROWSER_OUT=<tmp>/i-final npx playwright test -c tests-agent/i/playwright.config.ts` | 0 | 4/4，`i-final.log` |
+| `XIAON_INTEGRATION2_OUT=<tmp>/integration-final XIAON_INTEGRATION2_SHOTS=<tmp>/integration-final/shots npx playwright test -c tests-agent/integration2/playwright.config.ts` | 0 | 生产插件集成 2/2，`integration-final.log` |
+| `git diff --cached --check -- outputs/xiaon <契约变更文档> <本报告>` | 0 | 产品、测试脚本、契约与文档无新增空白错误 |
+| `git diff --cached --check`（包括原始日志） | 2 | 仅原始命令输出的尾空格/EOF 空行，见 staged-check.log；为保留首次失败原文，不清洗日志 |
+
+`<tmp>` = `/tmp/xiaon-integration2-fix-BcLfPe`。H 首页适配目录 = `/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-integration2-h-home-XkVmpI`。临时目录不保证永久存在，所需原始文字证据已归档。`final-gates.json` 与 `manifest.json` 记录命令结果及归档文件 SHA-256。
+
+### 8.4 三张 390 宽截图、限制与停线
+
+- `evidence/phase2/fix/01-month-and-week.png`：生产面试/规划插件、合成模型，逻辑月目标与反例/条件周任务同屏，已确认第 1 版。
+- `evidence/phase2/fix/02-week-two-confirmed.png`：同一集成流程 TestClock 到 10-26，学生手动生成并确认第二周，显示第 2 版；第三周另外由规则测试和 I 浏览器的 10-19 流程验证。
+- `evidence/phase2/fix/03-problem-recorded.png`：I 路真实错题确认接口返回、下一条聊天响应完成后，「记下了」仍可见；截图为 390×844。前两张为 390 宽整页图，固定导航在整页截图中的一个视口位置属于截图表现。三张均已实际查看并核对，页面无横向溢出。
+
+本轮点名的 P1、后续周、G 回归及第一期退回项均已处理；没有剩余已知阻塞项。保留的能力/证据边界：长对话只向小结提供最近 20 条正文及全场结构化记录，未扩充题库；题目不足或条件不满足时如实显示；现有大 chunk 构建提示未处理。以上自验不能替代下列未运行项：
+
+| 证据层级 | 本轮状态 |
+| --- | --- |
+| 静态检查、构建、规则/HTTP | 通过 |
+| 生产引擎 + 合成模型集成浏览器 | 通过；TestClock，不改系统时间 |
+| H 首页问候/小结与 H 专业 UI 替换协调器夹具 | 通过；仅相应 UI 证据，与生产引擎分开 |
+| I 月报告夹具 | 显式合成；月/周插件真实执行，另由集成走查补真实面试报告链路 |
+| 真实模型 | **未运行**；未读取、复制或打印 .env.server |
+| 真实设备、真实麦克风识别、软键盘、辅助技术、人工学生验收、第三方独立审查 | **未运行** |
+| D 阶段浏览器及 legacy/map/offline spec | **未运行** |
+
+只启动并结束本轮自己的测试进程，无宽匹配终止。提交前再次核对集成端口没有本轮遗留服务。具体提交号以本轮 `git log -1` 为准（报告在该提交内，不自引用提交号）。**提交完成后停在 revamp/integration2，请用户明确决定是否合入 main；未推送、未合并、未打标签。**
