@@ -1,1 +1,36 @@
-/* 所有者：ChatGPT（改造一：首页综合模式、模式切换、小结界面）。在 main.tsx 中于 style.css 之后引入；原 style.css 尽量不动。 */
+/* 所有者：ChatGPT。首页、首次记忆选择与小结；不改旧离线首页。 */
+.home-chat { min-width: 0; }
+.home-chat .pet-hero .mascot { width: min(220px, 65%); }
+.home-chat .pet-hero-bubble { font-size: 16px; max-height: none; }
+.home-card { margin: 16px 0; padding: 18px; border: 1px solid #d9dfcd; border-radius: 20px; background: #fffdf5; overflow-wrap: anywhere; }
+.home-card h2 { font-size: 1.15rem; line-height: 1.5; margin: 5px 0 10px; }
+.home-card h3 { font-size: 1rem; margin: 20px 0 8px; }
+.home-card p { line-height: 1.7; }
+.home-card-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.home-card-actions button { min-height: 44px; flex: 1 1 130px; white-space: normal; }
+.home-quick { gap: 8px; }
+.home-quick button { text-align: left; line-height: 1.5; min-height: 44px; max-width: 100%; }
+.home-slots { display: grid; gap: 12px; min-width: 0; }
+.home-slots > * { min-width: 0; max-width: 100%; }
+.home-mode-actions { border: 0; padding: 0; margin: 0; min-width: 0; }
+.home-chat .messages { max-height: 38dvh; overflow-y: auto; overscroll-behavior: contain; }
+.home-composer-wrap { position: relative; z-index: 11; padding: 10px 0; background: var(--paper, #f8f7ef); border-top: 1px solid #d9dfcd; }
+.home-chat .learning-composer { margin: 0 0 8px; display: flex; gap: 10px; align-items: end; }
+.home-chat .learning-composer .field { flex: 1; margin: 0; min-width: 0; }
+.home-chat textarea { min-height: 80px; max-height: 160px; font-size: 16px; scroll-margin-bottom: 130px; }
+.home-chat .learning-composer .primary { min-width: 70px; min-height: 44px; }
+/* Focus keeps the composer in the visible viewport; the phone keyboard needs device acceptance. */
+.home-composer-wrap:focus-within, .keyboard-open .home-composer-wrap { padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+.app-shell:has(.home-composer-wrap:focus-within) .bottom-nav { visibility: hidden; pointer-events: none; }
+.home-memory-choice { margin: 16px 0; padding: 14px; border: 1px solid #d9dfcd; border-radius: 18px; }
+.home-memory-choice label { display: flex; gap: 12px; align-items: center; padding: 14px 8px; min-height: 56px; line-height: 1.6; }
+.home-memory-choice input { width: 20px; height: 20px; flex-shrink: 0; accent-color: #486744; }
+.home-memory-choice label:has(:checked) { background: #e8eedf; border-radius: 10px; }
+.summary-observation, .summary-progress { border-left: 3px solid #99af82; padding-left: 12px; margin: 12px 0; }
+.summary-observation blockquote { margin: 8px 0; color: #4c5e44; }
+.summary-plan { padding: 10px 0 16px; border-bottom: 1px solid #e3e6d8; }
+.home-chat button, .home-memory-choice label { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.home-chat button { user-select: none; -webkit-user-select: none; }
+.home-chat button:active:not(:disabled) { filter: brightness(.94); }
+.home-chat button:focus-visible, .home-memory-choice input:focus-visible { outline: 3px solid #667d4f; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .home-chat *, .home-chat *::after { scroll-behavior: auto !important; } }

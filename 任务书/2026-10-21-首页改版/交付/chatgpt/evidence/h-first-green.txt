@@ -1,0 +1,39 @@
+
+> xiaon-learning-companion@1.0.0 test:agent:h
+> node scripts/agent/test.mjs h
+
+✔ 运行中 WAL 库一致性备份；清空后恢复，恢复前另存当前库 (28.905667ms)
+✖ 备份保留数只作用于本库命名空间，不删除无关文件；缺失库不创建 (46318.707333ms)
+✔ 容器数据路径没有独立挂载时给出警告；有实际挂载才通过 (1.702292ms)
+✔ ChatRequest stays backward compatible; intent/flow are optional and closed enums (0.919625ms)
+✔ home flow over HTTP returns the full ChatReply; needs-check after 2 listen turns; conversation/end is a stub (36.690333ms)
+✔ 需求卡只在程序发信号时展示三项选择 (2.932042ms)
+✔ 专业模式说明包含五维和暂停；没有建议时不展示 (0.300958ms)
+✔ 小结引用当前场次观察和已确认进步卡，不混入其他场次 (13.440209ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46510.944875
+
+✖ failing tests:
+
+test at tests-agent/h/backup.test.ts:1:1761
+✖ 备份保留数只作用于本库命名空间，不删除无关文件；缺失库不创建 (46318.707333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  10 !== 2
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松-wt/chatgpt/outputs/xiaon/tests-agent/h/backup.test.ts:31:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 10,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

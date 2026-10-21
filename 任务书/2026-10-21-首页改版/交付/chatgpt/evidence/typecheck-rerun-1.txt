@@ -1,0 +1,5 @@
+
+> xiaon-learning-companion@1.0.0 typecheck:agent
+> tsc -p tsconfig.agent.json
+
+tests-agent/h/browser-server.ts(20,100): error TS2722: Cannot invoke an object which is possibly 'undefined'.
