@@ -7,6 +7,8 @@ import { schemas,type EntityMap,type LearningRepository } from '../../shared/lea
 import { RuntimeError } from '../core/errors';
 export const entitySchemas = {
  tasks:schemas.TaskDefinition,generations:schemas.GenerationRecord,sessions:schemas.LearningSession,sessionEvents:schemas.SessionEvent,attempts:schemas.Attempt,exposures:schemas.ExposureEvent,gradings:schemas.GradingResult,evidence:schemas.Evidence,skills:schemas.SkillState,assessments:schemas.AssessmentSnapshot,reviewPolicies:schemas.ReviewPolicy,reviewItems:schemas.ReviewItem,reviewOutcomes:schemas.ReviewOutcome,reports:schemas.ReportSnapshot,proposals:schemas.PlanProposal,plans:schemas.PlanVersion,memories:schemas.MemoryItem,consents:schemas.ConsentState,toolCalls:schemas.ToolCall,runs:schemas.AgentRun,stuckPoints:schemas.StuckPoint,
+ // G0 首页改版. problemSecrets is server-only: never listed by the coordinator view().
+ problems:schemas.ProblemRecord,problemSecrets:schemas.ProblemSecret,episodes:schemas.LearningEpisode,progressCards:schemas.ProgressCard,memoryMentions:schemas.MemoryMention,observations:schemas.ChatObservation,summaries:schemas.ConversationSummary,chatTurns:schemas.ChatTurn,
 } satisfies {[K in keyof EntityMap]:z.ZodType<EntityMap[K]>};
 function canonical(value:unknown):string {
  if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';
@@ -32,7 +34,9 @@ export class SqliteRepository implements LearningRepository {
    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(2);');
    // v3 (P0): additive stuckPoints table, created by the same loop.
    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(3);');
-   for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
+   // v4 (G0): additive revamp tables (problems … chatTurns), created by the same loop; existing rows are untouched.
+   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(4);');
+   for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans','problems','episodes','progressCards','observations','summaries','chatTurns'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
   });
  }
  private table<K extends keyof EntityMap>(name:K){if(!Object.hasOwn(entitySchemas,name))throw new RuntimeError('invalid_params');return name;}
@@ -44,7 +48,7 @@ export class SqliteRepository implements LearningRepository {
  append<K extends keyof EntityMap>(collection:K,value:EntityMap[K]):void {
   if(this.depth===0)return this.transaction(()=>this.append(collection,value));
   const parsed=entitySchemas[collection].safeParse(value);if(!parsed.success)throw new RuntimeError('invalid_params','无效的持久化契约对象');
-  const key=collection==='tasks'?`${value.id}:v${(value as EntityMap['tasks']).version}`:collection==='reviewItems'?`${value.id}:r${(value as EntityMap['reviewItems']).revision}`:value.id;
+  const key=collection==='tasks'?`${value.id}:v${(value as EntityMap['tasks']).version}`:collection==='reviewItems'||collection==='episodes'?`${value.id}:r${(value as EntityMap['reviewItems']|EntityMap['episodes']).revision}`:value.id;
   const data=canonical(parsed.data);const previous=this.db.prepare(`SELECT data FROM ${this.table(collection)} WHERE key=?`).get(key) as {data:string}|undefined;
   if(previous){if(previous.data!==data)throw new RuntimeError('conflict','不可覆盖已有记录: conflict');return;}
   this.db.prepare(`INSERT INTO ${this.table(collection)}(key,id,data) VALUES(?,?,?)`).run(key,value.id,data);this.db.exec('UPDATE meta SET revision=revision+1 WHERE id=1');

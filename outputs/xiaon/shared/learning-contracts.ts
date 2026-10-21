@@ -52,6 +52,8 @@ const ToolCall = z.strictObject({...base,runId:id,callId:id,name:id,argumentsHas
 // P0: a Tutor-recorded stuck point for the two open calculation points. A hypothesis from conversation, never a skill state;
 // studentQuote is program-checked to be verbatim student text from the same Tutor turn.
 const stuckKnowledgePoint = z.enum(['negative-brackets','like-terms']);
+// G0: studentConfirmed is written false by the program at record time (the model's value is ignored). A stuck point counts as
+// student-confirmed only when the student confirms a ProblemRecord whose stuckPointId points to it (a click, not model output).
 const StuckPoint = z.strictObject({...base,runId:id,sessionId:id.nullable(),knowledgePointId:stuckKnowledgePoint,kind:z.enum(['concept','method','start']),studentQuote:z.string().min(1).max(200),summary:z.string().min(1).max(200),studentConfirmed:z.boolean(),createdAt:utc});
 // Latest graded attempt as the Tutor may see it: verdict and clue descriptions only, never the trusted answer, rubric or hint text.
 const LatestFeedback = z.strictObject({attemptId:id,...ref.shape,title:text,knowledgePointIds:ids,studentValue:text,verdict,points:z.array(z.strictObject({pointId:id,status:z.enum(['supported','unsupported','uncertain'])})),errorClues:z.array(text),hintLevelsUsed:z.array(version),answerExposed:z.boolean(),attemptedAt:nullableTime});
@@ -73,6 +75,59 @@ const GenerationRecord = z.strictObject({...base,...operation,
 const AgentRun = z.strictObject({...base,...operation,role:RolePolicy.shape.role,providerKind:z.enum(['real_http','synthetic','offline']),status:z.enum(['completed','unavailable','timeout','cancelled','budget_exhausted','failed']),rounds:z.number().int().min(0).max(4),toolExecutions:z.number().int().min(0).max(6),callIds:ids,permissionFingerprint:z.string().length(64),startedAt:utc,finishedAt:utc,error:Failure.nullable()});
 const ChatMessage = z.strictObject({role:z.enum(['user','assistant']),content:text});
 const SubmitAttempt = z.strictObject({...operation,...ref.shape,sessionId:id,value:text});
+// ---- G0 首页改版（2026-10-21）：只做加法。旧记录、旧路由、旧 ChatRequest 照常可用。 ----
+// 「对话场次」sessionId 由程序在 chatTurns 里分配（chat-…），不是 LearningSession.id。
+const ChatStage = z.enum(['companion','listen','probe','think','reflect','safety','rest']);
+// Student-clicked option intents. formal_test = "做个正式测试" on the needs-check card.
+const chatIntent = z.enum(['study','life','decline_study','start_together','formal_test']);
+// legacy = D two-step Tutor (unchanged); home = G0 stage machine in server/agents/stages.ts.
+const chatFlow = z.enum(['legacy','home']);
+const stageField = z.enum(['problemDraft','observation','progressCardDraft','memoryDraft']);
+const shortText = z.string().min(1).max(200);
+const problemKnowledgePoint = z.enum(['math-language','counterexample','negative-brackets','like-terms','fixed-variable-cost','rotation-2d','other']);
+const ModeSuggestion = z.strictObject({mode:z.literal('professional'),reason:shortText});
+// What the model may propose in probe; answerStatus is program-decided and only exists on ProblemRecord.
+// One stuck-point concept: the P0 StuckPoint entity. stuckQuote is the student's verbatim words about this problem;
+// stuckPointId optionally links the StuckPoint the Tutor recorded (same knowledge point, program-checked).
+const ProblemDraft = z.strictObject({source:z.enum(['photo','spoken','catalog']),questionText:z.string().min(1).max(2000).nullable(),studentWork:z.string().min(1).max(2000).nullable(),knowledgePointId:problemKnowledgePoint,stuckQuote:shortText,stuckPointId:id.nullable(),catalogTask:ref.nullable()});
+const ProblemRecord = z.strictObject({...base,...operation,...ProblemDraft.shape,sessionId:id.nullable(),answerStatus:z.enum(['verified','unknown']),confirmedAt:utc});
+// Server-only reference answer. Never in view(), logs, traces, prompts or any response.
+const ProblemSecret = z.strictObject({...base,problemId:id,answer:z.array(z.string().min(1).max(500)).min(1).max(5),origin:z.enum(['catalog','student_provided','program_computed']),createdAt:utc});
+// One think→reflect episode. Append-only revisions (key id:r<revision>), like ReviewItem.
+const LearningEpisode = z.strictObject({...base,revision:version,sessionId:id,problemId:id.nullable(),task:ref.nullable(),stage:z.enum(['think','reflect']),helpLevelsUsed:z.array(z.number().int().min(1).max(3)).max(30),studentSolvedAt:nullableTime,endReason:z.enum(['solved','understood','turn_limit']).nullable(),status:z.enum(['active','reflecting','closed']),startedAt:utc,updatedAt:utc});
+const cardText = z.string().min(1).max(300);
+const ProgressCardDraft = z.strictObject({episodeId:id.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable()});
+const cardField = z.enum(['breakthrough','method','nextTry']);
+const confidence = z.enum(['more_sure','about_same','still_unsure','prefer_not']);
+// aiDraft and the student's confirmed text are stored separately; a null student field is a skipped column.
+const ProgressCard = z.strictObject({...base,...operation,sessionId:id,episodeId:id.nullable(),aiDraft:ProgressCardDraft.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable(),skipped:z.array(cardField).max(3),confidence:confidence.nullable(),confirmedAt:utc});
+const MemoryDraft = z.strictObject({text:shortText,kind:z.enum(['event','interest','method']),origin:z.enum(['chat','progress_card'])});
+const MemoryMention = z.strictObject({...base,memoryId:id,sessionId:id.nullable(),via:z.enum(['greeting','chat']),at:utc});
+const Greeting = z.strictObject({text:z.string().min(1).max(300),memoryId:id.nullable(),summaryId:id.nullable(),memoryOff:z.boolean()});
+// What the model may output in an allowed probe turn; the program adds id/session/status/time.
+const ObservationDraft = z.strictObject({dimension:z.enum(['理解','逻辑']),signal:z.enum(['clear','partial','confused']),quote:shortText,note:shortText});
+const ChatObservation = z.strictObject({...base,...ObservationDraft.shape,sessionId:id,status:z.literal('unverified'),at:utc});
+const ConversationSummary = z.strictObject({...base,...operation,sessionId:id,trigger:z.enum(['student_end','farewell']),topics:z.array(z.string().min(1).max(100)).max(5),observationIds:ids,comparedWithSummaryId:id.nullable(),changes:z.array(shortText).max(5),planSuggestions:z.array(z.string().min(1).max(100)).min(1).max(3),suggestProfessionalMode:z.boolean(),progressCardId:id.nullable(),mode:z.enum(['model','local_rules']),createdAt:utc});
+// One home-flow turn as decided by the stage machine. No student text is stored. dropped = fields the program discarded.
+const ChatTurn = z.strictObject({...base,...operation,sessionId:id,turn:version,stage:ChatStage,intent:chatIntent.nullable(),problemId:id.nullable(),episodeId:id.nullable(),
+  listenTurns:z.number().int().nonnegative(),companionStreak:z.number().int().nonnegative(),thinkTurns:z.number().int().nonnegative(),lastProbeTurn:z.number().int().positive().nullable(),
+  needsCheckAsked:z.boolean(),askStudyAsked:z.boolean(),studyDeclined:z.boolean(),ended:z.boolean(),
+  signals:z.strictObject({needsCheck:z.boolean(),askStudy:z.boolean(),askProblem:z.boolean(),probeAllowed:z.boolean(),modeSuggestion:z.boolean()}),
+  dropped:z.array(z.strictObject({field:stageField,reason:z.enum(['stage_not_allowed','memory_off','invalid','not_implemented'])})).max(8),
+  // Program length gate on the Tutor reply (≤ TUTOR_REPLY_MAX_CHARS): ok, rewritten once by the model, or cut at a sentence end.
+  replyFit:z.enum(['ok','retried','truncated']),at:utc});
+const ChatReply = z.strictObject({text,stage:ChatStage,sessionId:id.nullable(),run:AgentRun.nullable(),safety:z.boolean(),quickReplies:z.array(z.string().min(1).max(40)).max(6),suggestions:z.array(TaskPublicView).max(3),
+  askStudy:z.boolean(),needsCheck:z.boolean(),askProblem:z.boolean(),modeSuggestion:ModeSuggestion.nullable(),
+  problemDraft:ProblemDraft.nullable(),progressCardDraft:ProgressCardDraft.nullable(),memoryDraft:MemoryDraft.nullable(),summary:ConversationSummary.nullable()});
+/** Tutor reply length gate (characters). The prompt asks for ≤60; the program retries once above this, then cuts at a sentence end. */
+export const TUTOR_REPLY_MAX_CHARS = 80;
+/** Memory selection for the Tutor context: at most this many active memories and this many characters in total. */
+export const MEMORY_CONTEXT_MAX_ITEMS = 5;
+export const MEMORY_CONTEXT_MAX_CHARS = 300;
+/** Recognize: cropped, masked JPEG only, ≤1.5MB decoded. Forwarded once, never stored or logged. */
+export const RECOGNIZE_MAX_IMAGE_BYTES = 1_500_000;
+const RECOGNIZE_MAX_BASE64 = Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES/3)*4;
+const RecognizeResult = z.strictObject({draft:ProblemDraft.nullable(),notice:shortText.nullable()});
 const tools = {
   get_learning_context:z.strictObject({}),
   query_learning_evidence:z.strictObject({taskId:id.optional()}),
@@ -97,10 +152,20 @@ export const schemas = {
   SetConsent:z.strictObject({...operation,optionalMemory:z.boolean()}),
   Remember:z.strictObject({...operation,text,source:MemoryItem.shape.source,purpose:MemoryItem.shape.purpose,expiresAt:nullableTime,reviewAt:nullableTime}),
   MemoryState:z.strictObject({...operation,memoryId:id,action:z.enum(['stop','delete'])}),
-  ChatRequest:z.strictObject({...operation,history:z.array(ChatMessage).min(1).max(20)}),
+  // G0: flow/intent/problemId are optional; intent and problemId are only accepted with flow 'home'.
+  ChatRequest:z.strictObject({...operation,history:z.array(ChatMessage).min(1).max(20),flow:chatFlow.optional(),intent:chatIntent.optional(),problemId:id.optional()}),
   ImportRequest:z.strictObject({...operation,source:z.string().max(500000),previewHash:z.string().length(64),scope:z.literal('attempts_only')}),
   ImportPreviewRequest:z.strictObject({source:z.string().max(500000)}),
   ToolArguments:tools,
+  // G0 首页改版
+  ModeSuggestion,ProblemDraft,ProblemRecord,ProblemSecret,LearningEpisode,ProgressCardDraft,ProgressCard,MemoryDraft,MemoryMention,Greeting,
+  ObservationDraft,ChatObservation,ConversationSummary,ChatTurn,ChatReply,RecognizeResult,
+  ConfirmProblem:z.strictObject({...operation,sessionId:id.nullable(),draft:ProblemDraft,referenceAnswer:z.string().min(1).max(500).nullable()}),
+  Recognize:z.strictObject({...operation,sessionId:id.nullable(),mimeType:z.literal('image/jpeg'),image:z.string().min(4).max(RECOGNIZE_MAX_BASE64).regex(/^[A-Za-z0-9+/]+={0,2}$/),maskConfirmed:z.literal(true)}),
+  ConfirmProgressCard:z.strictObject({...operation,sessionId:id,episodeId:id.nullable(),aiDraft:ProgressCardDraft.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable(),confidence:confidence.nullable()}),
+  ConfirmMemoryDraft:z.strictObject({...operation,sessionId:id.nullable(),draft:MemoryDraft,text:shortText}),
+  GreetingRequest:z.strictObject({...operation}),
+  EndConversation:z.strictObject({...operation,sessionId:id,history:z.array(ChatMessage).max(20)}),
 };
 export type TaskDefinition = z.infer<typeof TaskDefinition>;
 export type TaskPublicView = z.infer<typeof TaskPublicView>;
@@ -132,6 +197,38 @@ export type SourceTime = z.infer<typeof sourceTime>;
 export type SubmitAttempt = z.infer<typeof SubmitAttempt>;
 export type ChatRequest = z.infer<typeof schemas.ChatRequest>;
 export type Dimension = z.infer<typeof dimension>;
+// G0 首页改版
+export type ChatMessage = z.infer<typeof ChatMessage>;
+export type ChatStage = z.infer<typeof ChatStage>;
+export type ChatIntent = z.infer<typeof chatIntent>;
+export type ChatFlow = z.infer<typeof chatFlow>;
+export type StageField = z.infer<typeof stageField>;
+export type ProblemKnowledgePoint = z.infer<typeof problemKnowledgePoint>;
+export type ModeSuggestion = z.infer<typeof ModeSuggestion>;
+export type ProblemDraft = z.infer<typeof ProblemDraft>;
+export type ProblemRecord = z.infer<typeof ProblemRecord>;
+export type ProblemSecret = z.infer<typeof ProblemSecret>;
+export type LearningEpisode = z.infer<typeof LearningEpisode>;
+export type ProgressCardDraft = z.infer<typeof ProgressCardDraft>;
+export type ProgressCard = z.infer<typeof ProgressCard>;
+export type ProgressConfidence = z.infer<typeof confidence>;
+export type MemoryDraft = z.infer<typeof MemoryDraft>;
+export type MemoryMention = z.infer<typeof MemoryMention>;
+export type Greeting = z.infer<typeof Greeting>;
+export type ObservationDraft = z.infer<typeof ObservationDraft>;
+export type ChatObservation = z.infer<typeof ChatObservation>;
+export type ConversationSummary = z.infer<typeof ConversationSummary>;
+export type ChatTurn = z.infer<typeof ChatTurn>;
+export type ChatReply = z.infer<typeof ChatReply>;
+export type RecognizeResult = z.infer<typeof RecognizeResult>;
+export type ConfirmProblem = z.infer<typeof schemas.ConfirmProblem>;
+export type Recognize = z.infer<typeof schemas.Recognize>;
+export type ConfirmProgressCard = z.infer<typeof schemas.ConfirmProgressCard>;
+export type ConfirmMemoryDraft = z.infer<typeof schemas.ConfirmMemoryDraft>;
+export type GreetingRequest = z.infer<typeof schemas.GreetingRequest>;
+export type EndConversation = z.infer<typeof schemas.EndConversation>;
+/** Program verdict on a model-proposed field: accepted value or reasons it was discarded. */
+export type Validation<T> = {ok:true;value:T}|{ok:false;reasons:string[]};
 export interface Clock { now(): string }
 export interface EntityMap {
   tasks:TaskDefinition; sessions:LearningSession; sessionEvents:SessionEvent; attempts:Attempt; exposures:ExposureEvent; gradings:GradingResult;
@@ -141,6 +238,9 @@ export interface EntityMap {
   generations:GenerationRecord;
   /** P0 Tutor stuck-point hypotheses; necessary learning records, cleared by reset. */
   stuckPoints:StuckPoint;
+  /** G0 首页改版. problemSecrets never leaves the server; observations/summaries are learning records independent of the memory switch. All cleared by reset. */
+  problems:ProblemRecord; problemSecrets:ProblemSecret; episodes:LearningEpisode; progressCards:ProgressCard; memoryMentions:MemoryMention;
+  observations:ChatObservation; summaries:ConversationSummary; chatTurns:ChatTurn;
 }
 /** Synchronous single-process SQLite transaction. Do not await inside transaction callbacks. append never replaces. */
 export interface LearningRepository {
@@ -182,7 +282,11 @@ export interface PlanningEnginePort {
 }
 export interface EngineRegistration { assessment?:AssessmentEnginePort; planning?:PlanningEnginePort }
 export type NativeToolCall = {id:string;name:string;arguments:string};
-export type ModelMessage = {role:'system'|'user'|'assistant'|'tool';content:string;toolCallId?:string;toolCalls?:NativeToolCall[]};
+/** G0: image/text segments for vision calls. content stays the plain-text form, so text-only callers are unchanged. */
+export type ModelContentPart = {type:'text';text:string}|{type:'image_url';image_url:{url:string}};
+export type ModelMessage = {role:'system'|'user'|'assistant'|'tool';content:string;toolCallId?:string;toolCalls?:NativeToolCall[];
+  /** When present the provider sends these segments instead of content (only providers that declare vision support). */
+  parts?:ModelContentPart[]};
 export type ToolDefinition = {name:string;description:string;parameters:Record<string,unknown>};
 export interface ModelProvider {
   readonly kind:'real_http'|'synthetic'|'offline';

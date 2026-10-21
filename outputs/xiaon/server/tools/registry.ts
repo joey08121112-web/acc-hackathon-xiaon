@@ -89,7 +89,9 @@ export class ToolRegistry {
      const stuckId='stuck-'+hash({runId:access.runId,callId:call.id}).slice(0,48),saved=ctx.repository.get('stuckPoints',stuckId);
      if(!saved&&ctx.repository.list('stuckPoints').some(p=>p.runId===access.runId))throw new RuntimeError('invalid_state','本轮对话已记录过卡点');
      const session=this.events.sessions().find(s=>s.status==='active');
-     const point=saved??schemas.StuckPoint.parse({schemaVersion:SCHEMA_VERSION,id:stuckId,runId:access.runId,sessionId:session?.id??null,knowledgePointId:args.knowledgePointId,kind:args.kind,studentQuote:quote,summary:args.summary,studentConfirmed:args.studentConfirmed,createdAt:ctx.clock.now()});
+     const point=saved??schemas.StuckPoint.parse({schemaVersion:SCHEMA_VERSION,id:stuckId,runId:access.runId,sessionId:session?.id??null,knowledgePointId:args.knowledgePointId,kind:args.kind,studentQuote:quote,summary:args.summary,
+      // G0: confirmation is a student event (confirming a ProblemRecord that links this id), never a model argument.
+      studentConfirmed:false,createdAt:ctx.clock.now()});
      if(!saved)ctx.repository.append('stuckPoints',point);data=point;break;
     }
     case 'get_latest_feedback':{

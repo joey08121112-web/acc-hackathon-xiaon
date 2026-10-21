@@ -1,6 +1,6 @@
 import { createServer,type IncomingMessage } from 'node:http';
 import { randomBytes,timingSafeEqual } from 'node:crypto';
-import { schemas,SCHEMA_VERSION } from '../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,RECOGNIZE_MAX_IMAGE_BYTES } from '../../shared/learning-contracts';
 import type { LearningRuntime } from '../bootstrap';
 import { failure,RuntimeError } from '../core/errors';
 import { learningFor } from '../agents/learning';
@@ -8,6 +8,8 @@ import { MODEL_DISCLOSURE } from '../core/agent';
 import { createStaticHandler } from './static';
 import { NoTts,TTS_MAX_CHARS,type TtsProvider } from '../voice/tts';
 import { NoAsr,ASR_MAX_WAV_BYTES,isWav,type AsrProvider } from '../voice/asr';
+// G0: masked JPEG as base64 inside JSON; only this route gets a larger body, like /api/voice/asr.
+const RECOGNIZE_BODY_LIMIT=Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES*4/3)+2000;
 const statusCodes:Record<string,number>={invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,not_implemented:501,unavailable:503};
 export interface HttpServerConfig {
  allowedOrigins:string[];host:string;
@@ -62,7 +64,7 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
     if(match){const task=runtime.catalog.publicTask(match[1],Number(match[2]));if(!task)throw new RuntimeError('not_found');send(task);return;}
     throw new RuntimeError('not_found');
    }
-   const raw=await readBody(req,path==='/api/voice/asr'?Math.ceil(ASR_MAX_WAV_BYTES*4/3)+2000:550000);
+   const raw=await readBody(req,path==='/api/voice/asr'?Math.ceil(ASR_MAX_WAV_BYTES*4/3)+2000:path==='/api/learning/recognize'?RECOGNIZE_BODY_LIMIT:550000);
    if(path==='/api/voice/asr'){
     // Audio arrives as base64 WAV in JSON, is forwarded once, and is never stored or logged.
     const body=raw as {audio?:unknown};if(!body||typeof body!=='object'||Object.keys(body).some(k=>k!=='audio')||typeof body.audio!=='string'||!/^[A-Za-z0-9+/]+={0,2}$/.test(body.audio))throw new RuntimeError('invalid_params','需要 {audio: base64 WAV}');
@@ -105,6 +107,13 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
      case '/api/learning/chat':send(await d.chat(raw as never,c.signal));break;
      case '/api/learning/memory-correct':send(await d.memoryCorrect(raw as never));break;
      case '/api/learning/reset':send(await d.reset(raw as never));break;
+     // G0 首页改版: thin delegations; the coordinator validates and calls the owning plugin. The image is never logged.
+     case '/api/learning/problem/confirm':send(await d.confirmProblem(raw as never));break;
+     case '/api/learning/recognize':send(await d.recognize(raw as never,c.signal));break;
+     case '/api/learning/progress-card/confirm':send(await d.confirmProgressCard(raw as never));break;
+     case '/api/learning/memory/confirm-draft':send(await d.confirmMemoryDraft(raw as never));break;
+     case '/api/learning/greeting':send(await d.greeting(raw as never,c.signal));break;
+     case '/api/learning/conversation/end':send(await d.endConversation(raw as never,c.signal));break;
      default:throw new RuntimeError('not_found');
     }}finally{res.off('close',cancel);}return;
    }

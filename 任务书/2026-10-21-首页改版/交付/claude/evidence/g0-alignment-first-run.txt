@@ -1,0 +1,52 @@
+✖ fitReply keeps short replies and cuts long ones at a sentence end, else a comma, else the limit (1.209333ms)
+✖ Tutor reply above the limit: one rewrite, then a sentence-end cut; recorded on the home turn (19.814541ms)
+✔ record_stuck_point ignores the model's studentConfirmed; only a confirmed ProblemRecord linking it confirms it (9.463334ms)
+✔ Tutor memory context: the program keeps only active ids, no repeats, at most N items and M characters (0.290375ms)
+✔ while selectMemoriesForContext is a stub, the Tutor still receives all active memories (unchanged behaviour) (6.911375ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 213.678041
+
+✖ failing tests:
+
+test at tests-agent/g/alignment.test.ts:1:1712
+✖ fitReply keeps short replies and cuts long ones at a sentence end, else a comma, else the limit (1.209333ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /。$/. Input:
+  
+  '听起来你今天在数学课上遇到了不少麻烦，尤其是去括号的时候总是把负号弄丢，这种情况其实很多同学都会遇到。我们可以先从最简单的一步开始看，你愿意把那道题读给我听吗？'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/alignment.test.ts:21:107)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '听起来你今天在数学课上遇到了不少麻烦，尤其是去括号的时候总是把负号弄丢，这种情况其实很多同学都会遇到。我们可以先从最简单的一步开始看，你愿意把那道题读给我听吗？',
+    expected: /。$/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/alignment.test.ts:1:2393
+✖ Tutor reply above the limit: one rewrite, then a sentence-end cut; recorded on the home turn (19.814541ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /。$/. Input:
+  
+  '听起来你今天在数学课上遇到了不少麻烦，尤其是去括号的时候总是把负号弄丢，这种情况其实很多同学都会遇到。我们可以先从最简单的一步开始看，你愿意把那道题读给我听吗？'
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/alignment.test.ts:33:125)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '听起来你今天在数学课上遇到了不少麻烦，尤其是去括号的时候总是把负号弄丢，这种情况其实很多同学都会遇到。我们可以先从最简单的一步开始看，你愿意把那道题读给我听吗？',
+    expected: /。$/,
+    operator: 'match',
+    diff: 'simple'
+  }
+exit 1

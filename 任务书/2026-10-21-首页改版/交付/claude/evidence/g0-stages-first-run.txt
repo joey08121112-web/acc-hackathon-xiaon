@@ -1,0 +1,196 @@
+✖ listen lasts at least 2 turns even when the student already talks about exams or clicks study (0.424334ms)
+✖ needs-check is offered exactly once, after 2 listen turns, and waits while the latest message is intense (0.071791ms)
+✖ companion stays companion until a study intent appears; study intent moves to probe and resets the streak (0.0445ms)
+✖ after 6 consecutive companion turns the reply asks about study once, never again (0.040417ms)
+✖ a decline (button or words) means study is never asked again in this session (0.050166ms)
+✖ understanding/logic probing only in probe, at least every 3 turns, never while intense or listening (0.047208ms)
+✖ safety and rest outrank every stage; a safety message does not advance the conversation (0.050084ms)
+✖ probe asks for the concrete problem only when a specific wrong problem is mentioned and none is recorded yet (0.0355ms)
+✖ probe → think needs a confirmed problem or active task plus start_together; think → reflect → companion (0.356584ms)
+✖ each stage allows only its own model fields; memory drafts disappear when memory is off (0.449708ms)
+✖ formal test choice suggests professional mode (not while intense); farewell ends the session (0.103583ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 0
+ℹ fail 11
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 220.087625
+
+✖ failing tests:
+
+test at tests-agent/g/stages.test.ts:1:835
+✖ listen lasts at least 2 turns even when the student already talks about exams or clicks study (0.424334ms)
+  Error: null数学考试没考好
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:16:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:1304
+✖ needs-check is offered exactly once, after 2 listen turns, and waits while the latest message is intense (0.071791ms)
+  Error: null今天还行
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:23:13)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:1958
+✖ companion stays companion until a study intent appears; study intent moves to probe and resets the streak (0.0445ms)
+  Error: null你好
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:32:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:2526
+✖ after 6 consecutive companion turns the reply asks about study once, never again (0.040417ms)
+  Error: null你好
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:40:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:2900
+✖ a decline (button or words) means study is never asked again in this session (0.050166ms)
+  Error: null你好
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:48:11)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:3483
+✖ understanding/logic probing only in probe, at least every 3 turns, never while intense or listening (0.047208ms)
+  Error: null数学考砸了
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:56:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:4278
+✖ safety and rest outrank every stage; a safety message does not advance the conversation (0.050084ms)
+  Error: null考砸了
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:66:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:5202
+✖ probe asks for the concrete problem only when a specific wrong problem is mentioned and none is recorded yet (0.0355ms)
+  Error: null考砸了
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:78:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:5918
+✖ probe → think needs a confirmed problem or active task plus start_together; think → reflect → companion (0.356584ms)
+  Error: null考砸了
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:86:15)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:7088
+✖ each stage allows only its own model fields; memory drafts disappear when memory is off (0.449708ms)
+  Error: null你好
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:99:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/stages.test.ts:1:7793
+✖ formal test choice suggests professional mode (not while intense); farewell ends the session (0.103583ms)
+  Error: null考砸了
+      at decideStage (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/server/agents/stages.ts:14:96)
+      at play (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:10:32)
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb/outputs/xiaon/tests-agent/g/stages.test.ts:108:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+exit 1
