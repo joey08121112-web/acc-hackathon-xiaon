@@ -95,7 +95,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
  const end=()=>{
   if(!sessionId||blocked||l.busy||requestLock.current||shownSummary)return;
   requestLock.current=true;setAwaiting(true);setNotice('');v.actions.stop();mic.actions.cancel();
-  l.run<ConversationSummary>('learning/conversation/end',{sessionId,history:chat}).then(setSummary).catch(()=>setNotice('这次的小结还没整理好，对话已保留，可以再试一次。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
+  l.run<ConversationSummary>('learning/conversation/end',{sessionId,history:chat.slice(-20)}).then(setSummary).catch(()=>setNotice('这次的小结还没整理好，对话已保留，可以再试一次。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
  };
  const pause=async()=>{
   if(l.busy||requestLock.current)return;

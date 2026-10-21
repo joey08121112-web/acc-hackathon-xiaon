@@ -1,0 +1,11 @@
+npm run typecheck:agent → exit 0 
+npm test → exit 0 ℹ tests 25 ℹ pass 25 ℹ fail 0 
+npm run test:agent → exit 0 ℹ tests 189 ℹ pass 189 ℹ fail 0 
+npm run build → exit 0 ✓ built in 795ms 
+npm run test:agent:g → exit 0 ℹ tests 43 ℹ pass 43 ℹ fail 0 
+npm run test:agent:h → exit 0 ℹ tests 8 ℹ pass 8 ℹ fail 0 
+npm run test:agent:i → exit 0 ℹ tests 19 ℹ pass 19 ℹ fail 0 
+npx playwright test -c tests-agent/h/playwright.config.ts →
+  8 passed (7.3s)
+exit 0
+npx playwright test -c tests-agent/g/playwright.config.ts（XIAON_G_UI_PORT=5214 XIAON_G_API_PORT=18954）→ 3 passed，exit 0

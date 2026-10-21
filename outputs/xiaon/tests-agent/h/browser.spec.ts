@@ -90,10 +90,11 @@ test('没有本地服务时保留旧首页按钮',async({page})=>{
 });
 
 
-test('旧 support 场次未切换成功时，不假装进入专业模式',async({page})=>{
+// 集成第一期：Claude 已按 H 的契约变更申请实现显式模式切换（switchMode），原「未切换成功、留在首页」的已知限制不再出现。
+test('已暂停的 support 场次，学生确认后切到专业模式并进入探索页',async({page})=>{
  await ready(page);await say(page,'你好');await say(page,'还行');
  await page.getByRole('button',{name:'做个正式测试',exact:true}).click();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
  await page.getByRole('button',{name:'今天先休息',exact:true}).click();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
  await page.getByRole('button',{name:'去专业模式',exact:true}).click();
- await expect(page.getByText('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。')).toBeVisible();await expect(page).not.toHaveURL(/#explore$/);
+ await expect(page).toHaveURL(/#explore$/);await expect(page.getByText('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。')).toHaveCount(0);
 });

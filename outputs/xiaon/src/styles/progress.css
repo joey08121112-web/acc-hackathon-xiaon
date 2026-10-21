@@ -13,3 +13,5 @@
 .progress-actions .primary{min-height:44px;flex:1 1 160px}
 .progress-cards .progress-card-record{padding:10px 0;border-top:1px solid rgba(0,0,0,.08)}
 .progress-cards .progress-card-record p{margin:4px 0}
+/* 集成第一期：记忆时效三选一（MemoryPrompt 与记忆页，都带 aria-label="记多久"）的已选状态，沿用 style.css 里按下按钮的配色。 */
+[aria-label="记多久"] button[aria-pressed="true"]{background:#e3eacd;border-color:#b9cc9b;font-weight:600}

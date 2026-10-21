@@ -1,0 +1,69 @@
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-NKyKTs
+
+Running 8 tests using 1 worker
+
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-NKyKTs
+  ✓  1 tests-agent/h/browser.spec.ts:16:1 › 首次记忆选择无预选，告知清楚；开与关均能保存 (1.0s)
+  ✓  2 tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 (821ms)
+  ✓  3 tests-agent/h/browser.spec.ts:48:1 › 正式测试需二次确认，启动失败留在首页并可重试 (572ms)
+  ✓  4 tests-agent/h/browser.spec.ts:57:1 › 陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结 (1.2s)
+  ✓  5 tests-agent/h/browser.spec.ts:69:1 › 小结失败可重试，问候失败回退；输入框在缩小视口可达 (591ms)
+  ✓  6 tests-agent/h/browser.spec.ts:79:1 › 开发者开关默认关；隐私列出记录类型；旧 chat 导航回首页 (673ms)
+  ✓  7 tests-agent/h/browser.spec.ts:86:1 › 没有本地服务时保留旧首页按钮 (191ms)
+  ✘  8 tests-agent/h/browser.spec.ts:93:1 › 旧 support 场次未切换成功时，不假装进入专业模式 (5.6s)
+
+
+  1) tests-agent/h/browser.spec.ts:93:1 › 旧 support 场次未切换成功时，不假装进入专业模式 ─────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。') with timeout 5000ms
+      - waiting for getByText('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。')
+
+
+       96 |  await page.getByRole('button',{name:'今天先休息',exact:true}).click();await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
+       97 |  await page.getByRole('button',{name:'去专业模式',exact:true}).click();
+    >  98 |  await expect(page.getByText('上次的学习还没结束，暂时没能切到专业模式。可以先继续聊天。')).toBeVisible();await expect(page).not.toHaveURL(/#explore$/);
+          |                                                                ^
+       99 | });
+      100 |
+        at /Users/ami/Documents/个人/ACC黑客松-wt/integration/outputs/xiaon/tests-agent/h/browser.spec.ts:98:64
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-NKyKTs/artifacts/browser-旧-support-场次未切换成功时，不假装进入专业模式/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-NKyKTs/artifacts/browser-旧-support-场次未切换成功时，不假装进入专业模式/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-NKyKTs/artifacts/browser-旧-support-场次未切换成功时，不假装进入专业模式/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests-agent/h/browser.spec.ts:93:1 › 旧 support 场次未切换成功时，不假装进入专业模式 ──────────────────────────────
+  7 passed (12.0s)
+exit 1
+
+# 重跑：第 8 项原断言钉的是「旧场次切不过去」的已知限制；按 H 申请实现显式切换后改为期望进入探索页
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-AGx5xC
+
+Running 8 tests using 1 worker
+
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-h-browser-AGx5xC
+  ✓  1 tests-agent/h/browser.spec.ts:16:1 › 首次记忆选择无预选，告知清楚；开与关均能保存 (967ms)
+  ✓  2 tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 (845ms)
+  ✓  3 tests-agent/h/browser.spec.ts:48:1 › 正式测试需二次确认，启动失败留在首页并可重试 (587ms)
+  ✓  4 tests-agent/h/browser.spec.ts:57:1 › 陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结 (1.3s)
+  ✓  5 tests-agent/h/browser.spec.ts:69:1 › 小结失败可重试，问候失败回退；输入框在缩小视口可达 (591ms)
+  ✓  6 tests-agent/h/browser.spec.ts:79:1 › 开发者开关默认关；隐私列出记录类型；旧 chat 导航回首页 (622ms)
+  ✓  7 tests-agent/h/browser.spec.ts:86:1 › 没有本地服务时保留旧首页按钮 (191ms)
+  ✓  8 tests-agent/h/browser.spec.ts:94:1 › 已暂停的 support 场次，学生确认后切到专业模式并进入探索页 (575ms)
+
+  8 passed (6.8s)
+exit 0
