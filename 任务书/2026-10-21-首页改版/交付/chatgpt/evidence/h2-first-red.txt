@@ -1,0 +1,40 @@
+✖ entry explains time and order, requires an explicit start, and can pause (15.058125ms)
+✖ report shows all five fixed levels, raw quotes and comparisons, without numeric scoring (6.188708ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 268.610166
+
+✖ failing tests:
+
+test at tests-agent/h/professional-ui.test.ts:1:727
+✖ entry explains time and order, requires an explicit start, and can pause (15.058125ms)
+  AssertionError [ERR_ASSERTION]: 分钟
+      at TestContext.<anonymous> (/Users/ami/.codex/worktrees/h2-professional-ui/ACC黑客松/outputs/xiaon/tests-agent/h/professional-ui.test.ts:18:81)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests-agent/h/professional-ui.test.ts:1:1781
+✖ report shows all five fixed levels, raw quotes and comparisons, without numeric scoring (6.188708ms)
+  AssertionError [ERR_ASSERTION]: 本次观察
+      at TestContext.<anonymous> (/Users/ami/.codex/worktrees/h2-professional-ui/ACC黑客松/outputs/xiaon/tests-agent/h/professional-ui.test.ts:29:103)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

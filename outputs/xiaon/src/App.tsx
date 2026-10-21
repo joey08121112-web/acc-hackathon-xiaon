@@ -2746,7 +2746,7 @@ function App() {
                     <item.icon size={22} />
                     {s.tab === item.name && <i />}
                   </span>
-                  {item.name}
+                  {item.name === "探索" ? "专业模式" : item.name}
                 </button>
               ))}
             </nav>

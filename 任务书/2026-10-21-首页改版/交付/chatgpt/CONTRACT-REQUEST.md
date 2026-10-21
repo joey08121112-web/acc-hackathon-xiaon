@@ -19,3 +19,15 @@ H 只在学生点击确认后调用 start，并检查返回的 LearningSession.m
 ## 另外两路影响
 
 zCode 的错题/记忆接口与共享类型无需改变。Claude 的 start 协调器及对应模式切换回归需补充。H 已用本路浏览器用例验证「旧 support 未切成功时不跳页」。本问题是集成前的已知限制，不能算完整模式切换验收通过。
+
+# H 第二期集成接线请求：旧页面外壳与工程用语
+
+2026-10-21，基线 `revamp-base2` = `b611610`。不改共享契约，不改 Claude 的文件。
+
+- `LearningPages.tsx` 中的旧报告页在新的 `ProfessionalReportView` 后，仍并排显示旧的「根据当前证据生成报告与计划草案」、另一套「报告历史」、以及「观察快照 · 证据版本」等内容；全局错误区也会直接展示服务端错误。请 Claude 在第二期集成时把工程细节接到既有 `useDevMode()`，明确两套报告的名称与入口。H 的新组件内部已用开关收起 id、revision、basis、mode 等信息。
+- `LearningPages.tsx` 的旧探索页仍有地图自由选题、旧「主动恢复本次学习」按钮和计算题计数。H 的面试区只按冻结顺序开始/续测。建议 Claude 在集成时区分「面试测评」与原地图任务，并决定测评进行中是否折叠地图，避免学生绕到另一条任务流。H 没有用 CSS 隐藏或 DOM 操作绕过所有权。
+- `App.tsx` 页面标题映射的 explore 仍为「五维探索」；H 仅获底部导航区块的改名权限，已把第二个按钮显示成「专业模式」，保留内部「探索」tab 键以兼容原导航/离线分支。若统一页头名称，请 Claude 集成时授权或接线。
+- 首页建议进入说明页现在不调用 `learning/start`。只有面试区「开始」调用 `interview/start`，既有未完成测评只调用 `interview/resume`；由协调器进行显式模式切换。原 H 首页浏览器相应断言已更新。
+- `ProfessionalReportView` 的月阶段按钮仅 `navigate('plan','成长')`，沿用契约挂载的 zCode `MonthStageView`；历史报告切换只读，不自行草拟月阶段、不传客户端等级、不写趋势。当前挂载没有选中报告的 prop，月阶段应由 zCode 处理自己的来源报告选择。
+
+这些是交给集成方的明确边界。本路不会擅改 `LearningPages.tsx`、`src/agents/devMode.ts`、共享类型、服务端插件或另一条路的组件。

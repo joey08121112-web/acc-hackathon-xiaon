@@ -1,0 +1,6 @@
+
+> xiaon-learning-companion@1.0.0 typecheck:agent
+> tsc -p tsconfig.agent.json
+
+tests-agent/h/professional-server.ts(18,209): error TS2339: Property 'dataVersion' does not exist on type 'LearningRepository'.
+tests-agent/h/professional-server.ts(26,132): error TS2339: Property 'dataVersion' does not exist on type 'LearningRepository'.
