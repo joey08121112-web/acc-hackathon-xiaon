@@ -1,0 +1,48 @@
+
+> xiaon-learning-companion@1.0.0 test:agent:i
+> node scripts/agent/test.mjs i
+
+✔ G0 zCode-lane schemas: drafts carry no answer status, secrets are separate, recognition needs mask confirmation (1.313708ms)
+✔ zCode-lane routes: problem/memory/greeting live, recognize still 501; program-gated inputs rejected first (59.1845ms)
+✔ validateMemoryDraft: 关闭即拒、情绪与评价丢弃、40 字上限、origin 由程序决定 (0.668ms)
+✔ shouldOfferMemory: 同一场次最多两次提议机会；新场次重新计 (11.565417ms)
+✔ confirmMemoryDraft: 只有学生确认才写入；写 chat 提起与 30 天复核；关闭时拒绝 (7.296125ms)
+✔ greeting: 优先接上次小结（记忆关闭也可以）；没有小结才提记忆 (17.679083ms)
+✔ greeting: 离线（无模型）返回默认文字；刚确认的记忆不会被马上提起 (6.205958ms)
+✔ selectMemoriesForContext: 只取与当前话题相关的记忆，按相关度排序，最多 5 条 (0.463875ms)
+✔ greeting 只从有效记忆里挑：过期、到期待复核、已停用的一律不提 (7.639584ms)
+✔ Tutor 上下文经协调器按需取用：相关记忆才进上下文 (13.223667ms)
+/Users/ami/Documents/个人/ACC黑客松-wt/zcode2/outputs/xiaon/tests-agent/i/plan-tracking.test.ts:10
+import { draftMonthStage,confirmMonthStage,declineRetest,retestReminder,focusModule } from '../../server/plugins/stages';
+                                                                        ^
+SyntaxError: The requested module '../../server/plugins/stages' does not provide an export named 'focusModule'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:463:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:561:5)
+    at async node:internal/modules/esm/loader:650:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.8.2
+✖ tests-agent/i/plan-tracking.test.ts (1267.784708ms)
+✔ validateProblemDraft: 出处核对、知识点归一、不完整草稿不通过 (2.632375ms)
+✔ 首页流程：合法草稿透传到确认卡，未点「记下」不写入；确认后才落库并与场次关联 (24.526083ms)
+✔ confirmProblem: 两次解题一致且 expression 核对一致 → verified，秘密只在服务端 (9.595041ms)
+✔ confirmProblem: 两次解题不一致 → unknown 且不写 ProblemSecret (7.716333ms)
+✔ confirmProblem: 两次一致但与题目算不出同一结果 → unknown（不写秘密） (6.175791ms)
+✔ confirmProblem: 学生改后的文字被保存；模型离线仍能确认（无参考答案） (13.227625ms)
+✔ confirmProblem: 题库题用题库答案（verified）；错题确认同时确认被引用的卡点 (12.371584ms)
+✔ confirmProblem: 学生自带参考答案记 student_provided，不冒充已核验 (6.466416ms)
+✔ 重置整个演示：错题记录与参考答案一并清除 (7.461333ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 19
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1361.819791
+
+✖ failing tests:
+
+test at tests-agent/i/plan-tracking.test.ts:1:1
+✖ tests-agent/i/plan-tracking.test.ts (1267.784708ms)
+  'test failed'

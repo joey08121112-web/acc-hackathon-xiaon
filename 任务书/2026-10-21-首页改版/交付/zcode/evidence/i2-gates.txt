@@ -1,0 +1,16 @@
+# zCode 第二期门禁记录（revamp/i2-plan-tracking，基于 revamp-base2 = b611610）
+
+命令与退出码（按总控第六节顺序）：
+
+| 命令 | 退出码 | 结果 |
+| --- | --- | --- |
+| npm run typecheck:agent | 0 | |
+| npm test | 0 | 25/25 |
+| npm run test:agent（a b c d e g h i） | 1 | 205/206，唯一失败为 tests-agent/h/phase2-contract-smoke.test.ts 钉死「GET trend 桩 501」的阶段 0 快照断言（本路实现后返回 200）；属 ChatGPT 目录，集成时更新期望值 |
+| npm run build | 0 | built |
+| npm run test:agent:i | 0 | 28/28 |
+
+首次失败：evidence/i2-first-run-stubs.txt —— 测试先于实现编写；桩阶段未导出 focusModule 等符号，整文件在模块加载期失败（not_implemented 桩状态的原样留档）。
+修复后重跑：evidence/i2-tests-pass.txt（28/28）。
+
+本路未运行 D 阶段浏览器测试（总控第六节）；未调用真实模型（无 .env.server，模型措辞用合成 Provider 单测 + 离线回退）。
