@@ -25,7 +25,9 @@ export class StudentEvents {
    const seen=new Set(exposures.filter(e=>e.kind==='task'&&this.task(e.taskId,e.taskVersion).primaryDimension==='计算').map(e=>e.taskId));
    if(t.primaryDimension==='计算'&&!seen.has(t.id)&&seen.size>=10)throw new RuntimeError('invalid_state','本场次最多 10 道不同计算题');
    if(s.mode==='exploration'&&!['理解','逻辑'].includes(t.primaryDimension)){
-    const attempted=repository.list('attempts').filter(a=>a.sessionId===s.id);
+    // G2: a professional-mode interview resumed in a new session brings its own finished 理解/逻辑 attempts with it (its turns link them).
+    const carried=new Set(repository.list('interviewTurns').filter(x=>x.attemptId&&repository.get('interviews',x.interviewId)?.learningSessionId===s.id).map(x=>x.attemptId));
+    const attempted=repository.list('attempts').filter(a=>a.sessionId===s.id||carried.has(a.id));
     if(!['理解','逻辑'].every(d=>attempted.some(a=>this.task(a.taskId,a.taskVersion).primaryDimension===d)))throw new RuntimeError('invalid_state','探索先进行理解和逻辑');
    }
   }else if(!exposures.some(e=>e.taskId===t.id&&e.taskVersion===t.version&&e.kind==='task'))throw new RuntimeError('invalid_state','请先打开题目');

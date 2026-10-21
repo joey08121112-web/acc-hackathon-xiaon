@@ -161,7 +161,8 @@ const InterviewSession = z.strictObject({...base,...operation,revision:version,l
   moduleOrder:z.tuple([z.literal('理解'),z.literal('逻辑'),z.literal('计算'),z.literal('建模'),z.literal('空间想象')]),
   currentModule:dimension.nullable(),completedModules:z.array(dimension).max(5),status:z.enum(['in_progress','paused','completed']),
   pending:InterviewPending.nullable(),startedAt:utc,pausedAt:nullableTime,completedAt:nullableTime,updatedAt:utc});
-// One answered question. attemptId links the Attempt graded through the normal submit path (null for a follow-up, which is reasoning evidence only).
+// One answered question. attemptId links the Attempt graded through the normal submit path. It sits on the follow-up turn: the follow-up answer
+// completes the attempt (as its explanation line when the task has a reason point), so question/transfer turns carry null. A follow-up is never a new task.
 const InterviewTurn = z.strictObject({...base,...operation,interviewId:id,seq:version,module:dimension,task:ref,kind:interviewTurnKind,
   prompt:z.string().min(1).max(300),answer:z.string().min(1).max(2000),attemptId:id.nullable(),mode:z.enum(['model','local_rules']),askedAt:utc,answeredAt:utc});
 // scope marks every level as 「本次观察」 of this interview. quotes are the student's own words (依据原话); suggestions only for partial/needs_work.

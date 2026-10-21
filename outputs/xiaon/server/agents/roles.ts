@@ -9,7 +9,7 @@ import type { ModelCall } from '../plugins/context';
 import { COMPANION_PROMPT } from './prompts/companion';
 import { THINK_PROMPT } from './prompts/think';
 import { REFLECT_PROMPT,PROGRESS_CARD_FIELD } from './prompts/reflect';
-import { OBSERVE_PROMPT } from './prompts/observe';
+import { OBSERVE_PROMPT,OBSERVE_ANSWER_PROMPT } from './prompts/observe';
 import { PROBLEM_DRAFT_PROMPT } from './prompts/problem-draft';
 import { MEMORY_DRAFT_PROMPT } from './prompts/memory-draft';
 import { containsAnswer,fitReply,replyLength } from './stages';
@@ -68,11 +68,13 @@ const FIELD_BLOCK:Partial<Record<StageField,string>>={observation:OBSERVE_PROMPT
  * even when another unattempted catalog task shares them. */
 export type HomeInvoke={prompt:{version:string;text:string};secrets?:string[];releasedAnswers?:string[]};
 /** G0 home-flow Tutor prompt. The stage machine decides stage and allowed fields; the model only sees the blocks it may use this turn. */
-export function homeTutorPrompt(decision:{stage:ChatStage;allowed:StageField[]}){
+/** answerTurn: observation is allowed only to record the answer to last turn's probe (OBSERVE_ANSWER_PROMPT instead of OBSERVE_PROMPT). */
+export function homeTutorPrompt(decision:{stage:ChatStage;allowed:StageField[];answerTurn?:boolean}){
  const extra=decision.allowed.length?'，可以另外输出这些字段（没有就不输出）：'+decision.allowed.join('、'):'';
  const rule8='8. 输出严格JSON {"message":"...","taskIds":[]}'+extra+'。没列出的字段不要输出，不要任何其他文字。';
- const blocks=[tutorBase(RULE6[decision.stage],rule8),STAGE_BLOCK[decision.stage],...decision.allowed.flatMap(f=>FIELD_BLOCK[f]?[FIELD_BLOCK[f]]:[])];
- return {version:'tutor-g0-'+decision.stage+(decision.allowed.includes('observation')?'-observe':''),text:blocks.filter(Boolean).join('\n')};
+ const field=(f:StageField)=>f==='observation'&&decision.answerTurn?OBSERVE_ANSWER_PROMPT.text:FIELD_BLOCK[f];
+ const blocks=[tutorBase(RULE6[decision.stage],rule8),STAGE_BLOCK[decision.stage],...decision.allowed.flatMap(f=>field(f)?[field(f)!]:[])];
+ return {version:'tutor-g0-'+decision.stage+(decision.allowed.includes('observation')?decision.answerTurn?'-observe-answer':'-observe':''),text:blocks.filter(Boolean).join('\n')};
 }
 export const PROMPTS={
  tutor:{version:'tutor-d3',text:TUTOR_BASE},

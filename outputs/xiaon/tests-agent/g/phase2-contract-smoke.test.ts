@@ -1,4 +1,4 @@
-/** 所有者：Claude。第二期契约冒烟（Claude 路：专业模式面试与报告）。面试插件是桩：程序门控先生效，之后如实返回 501 not_implemented。 */
+/** 所有者：Claude。第二期契约冒烟（Claude 路：专业模式面试与报告）。面试引擎已实现：程序门控先生效，之后交给引擎；完整流程见 interview.test.ts。 */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRuntime } from '../../server/bootstrap';
@@ -47,7 +47,7 @@ test('report gate: levels follow the program basis, untested stays untested, cit
  assert.ok(reportProblems(report({version:2}),facts).length>0,'first report of an interview is version 1');
 });
 
-test('interview routes: gates first (session, schema, safety, existence, state, revision), then the stub honestly answers 501',async()=>{
+test('interview routes over HTTP: gates first (session, schema, safety, existence, state, revision), then the engine',async()=>{
  const f=temporaryRepository(),r=createRuntime(f);installLearning(r,{timeoutMs:2000});const port=await freePort(),base=`http://127.0.0.1:${port}`;
  const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[origin]});await new Promise<void>(resolve=>server.listen(port,'127.0.0.1',resolve));
  try{
@@ -55,29 +55,29 @@ test('interview routes: gates first (session, schema, safety, existence, state, 
   const login=await fetch(base+'/api/local-session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});const token=(await login.json()).csrfToken,cookie=login.headers.get('set-cookie')!.split(';')[0];
   const post=(path:string,body:unknown)=>fetch(base+'/api/learning/'+path,{method:'POST',headers:{Origin:origin,Cookie:cookie,'X-Xiaon-CSRF':token,'Content-Type':'application/json'},body:JSON.stringify(body)});
   const code=async(res:Response)=>({status:res.status,code:(await res.json()).error?.code});
-  // Start reuses the phase-1 explicit mode switch: the open support session becomes exploration (same id), then the stub answers 501.
-  const support=await (await post('start',{operationId:id(),mode:'support'})).json();
-  assert.deepEqual(await code(await post('interview/start',{operationId:id()})),{status:501,code:'not_implemented'});
-  const open=r.events.sessions().filter(s=>s.status!=='closed');assert.equal(open.length,1);assert.equal(open[0].id,support.id);assert.equal(open[0].mode,'exploration');
   assert.equal((await post('interview/start',{operationId:id(),extra:1})).status,400);
   // Safety comes before everything and stores nothing, even for an unknown interview.
   const safe=schemas.InterviewStep.parse(await (await post('interview/answer',{operationId:id(),interviewId:'iv-none',expectedRevision:1,text:'我不想活了'})).json());
   assert.equal(safe.safety,true);assert.equal(safe.interview,null);assert.equal(safe.reportReady,false);
   assert.deepEqual(await code(await post('interview/answer',{operationId:id(),interviewId:'iv-none',expectedRevision:1,text:'x=3'})),{status:404,code:'not_found'});
   for(const path of ['interview/pause','interview/resume','interview/report'])assert.deepEqual(await code(await post(path,{operationId:id(),interviewId:'iv-none'})),{status:404,code:'not_found'},path);
-  r.repository.append('interviews',interview({learningSessionId:support.id}));
+  // Start reuses the phase-1 explicit mode switch: the open support session becomes exploration (same id).
+  const support=await (await post('start',{operationId:id(),mode:'support'})).json();
+  const started=schemas.InterviewStep.parse(await (await post('interview/start',{operationId:id()})).json());
+  assert.equal(started.interview!.learningSessionId,support.id);assert.equal(started.interview!.currentModule,'理解');assert.equal(started.task!.id,started.interview!.pending!.task.taskId);
+  const open=r.events.sessions().filter(s=>s.status!=='closed');assert.equal(open.length,1);assert.equal(open[0].mode,'exploration');
   assert.deepEqual(await code(await post('interview/start',{operationId:id()})),{status:409,code:'invalid_state'},'one unfinished interview at a time');
-  assert.deepEqual(await code(await post('interview/answer',{operationId:id(),interviewId:'iv-1',expectedRevision:2,text:'x=3'})),{status:409,code:'conflict'},'stale revision');
-  assert.deepEqual(await code(await post('interview/answer',{operationId:id(),interviewId:'iv-1',expectedRevision:1,text:'x=3'})),{status:501,code:'not_implemented'});
-  assert.deepEqual(await code(await post('interview/answer',{operationId:id(),interviewId:'iv-1',expectedRevision:1,text:'我想休息一下'})),{status:501,code:'not_implemented'},'rest goes to pauseInterview');
-  assert.deepEqual(await code(await post('interview/pause',{operationId:id(),interviewId:'iv-1'})),{status:501,code:'not_implemented'});
-  assert.deepEqual(await code(await post('interview/resume',{operationId:id(),interviewId:'iv-1'})),{status:501,code:'not_implemented'});
-  assert.deepEqual(await code(await post('interview/report',{operationId:id(),interviewId:'iv-1'})),{status:409,code:'invalid_state'},'理解 and 逻辑 first');
-  r.repository.append('interviews',interview({revision:2,learningSessionId:support.id,completedModules:['理解','逻辑'],currentModule:'计算',pending:null,status:'paused',pausedAt:at}));
-  assert.deepEqual(await code(await post('interview/report',{operationId:id(),interviewId:'iv-1'})),{status:501,code:'not_implemented'});
-  assert.equal((await (await post('interview/pause',{operationId:id(),interviewId:'iv-1'})).json()).status,'paused','pausing a paused interview is a no-op');
-  assert.deepEqual(await code(await post('interview/answer',{operationId:id(),interviewId:'iv-1',expectedRevision:2,text:'x=3'})),{status:409,code:'invalid_state'},'no answers while paused');
-  assert.equal(r.repository.list('interviews').length,2);assert.equal(r.repository.list('interviewTurns').length+r.repository.list('professionalReports').length,0);
+  const iv=started.interview!;
+  assert.deepEqual(await code(await post('interview/answer',{operationId:id(),interviewId:iv.id,expectedRevision:iv.revision+1,text:'2x-3'})),{status:409,code:'conflict'},'stale revision');
+  assert.deepEqual(await code(await post('interview/report',{operationId:id(),interviewId:iv.id})),{status:409,code:'invalid_state'},'理解 and 逻辑 first');
+  const asked=schemas.InterviewStep.parse(await (await post('interview/answer',{operationId:id(),interviewId:iv.id,expectedRevision:iv.revision,text:'2x-3'})).json());
+  assert.equal(asked.interview!.pending!.kind,'follow_up');
+  const paused=schemas.InterviewSession.parse(await (await post('interview/pause',{operationId:id(),interviewId:iv.id})).json());assert.equal(paused.status,'paused');
+  assert.equal((await (await post('interview/pause',{operationId:id(),interviewId:iv.id})).json()).revision,paused.revision,'pausing a paused interview is a no-op');
+  assert.deepEqual(await code(await post('interview/answer',{operationId:id(),interviewId:iv.id,expectedRevision:paused.revision,text:'先翻倍'})),{status:409,code:'invalid_state'},'no answers while paused');
+  const resumed=schemas.InterviewStep.parse(await (await post('interview/resume',{operationId:id(),interviewId:iv.id})).json());
+  assert.equal(resumed.interview!.pending!.kind,'follow_up');assert.equal(resumed.interview!.status,'in_progress');
+  assert.equal(r.repository.list('interviewTurns').length,1);assert.equal(r.repository.list('professionalReports').length,0);
  }finally{await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}
 });
 

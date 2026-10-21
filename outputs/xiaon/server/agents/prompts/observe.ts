@@ -5,3 +5,9 @@ export const OBSERVE_PROMPT={version:'observe-g0',text:[
  '如果学生这一句已经能看出理解或逻辑的情况，可以输出一条observation：{"dimension":"理解|逻辑","signal":"clear|partial|confused","quote":"逐字抄学生本次对话里说过的原话","note":"一句话写你看到了什么"}。',
  '观察只是"待核实"，不是评分；看不出来就不输出。计算、建模、空间想象不记观察。',
 ].join('\n')} as const;
+/** G2（REPORT-1 遗留）：试探之后的下一轮。学生这一句多半是在回答上一句的试探，可以记下来，但不再追问。 */
+export const OBSERVE_ANSWER_PROMPT={version:'observe-answer-g2',text:[
+ '【上一句你轻轻试探过，这一句多半是学生的回答】这一轮不要再试探或追问理解、逻辑。',
+ '如果学生这一句已经能看出理解或逻辑的情况，可以输出一条observation：{"dimension":"理解|逻辑","signal":"clear|partial|confused","quote":"只能逐字抄学生这一句里的原话","note":"一句话写你看到了什么"}。',
+ '观察只是"待核实"，不是评分；看不出来就不输出。计算、建模、空间想象不记观察。',
+].join('\n')} as const;

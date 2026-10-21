@@ -48,8 +48,9 @@ test('chat: an allowed probe turn stores an unverified observation; listen, gap 
   const c=await f.say('第3题我做错了，每份是什么意思我不懂');
   assert.equal(c.stage,'probe');assert.equal(f.obs().length,1);
   const o=f.obs()[0];assert.equal(o.status,'unverified');assert.equal(o.sessionId,c.sessionId);assert.equal(o.quote,'每份是什么意思');
-  await f.say('嗯');assert.equal(f.obs().length,1,'gap turn: observation not allowed');
-  assert.deepEqual(f.turns().at(-1)!.dropped.find(x=>x.field==='observation'),{field:'observation',reason:'stage_not_allowed'});
+  // G2: the turn after a probe may record the answer, but only by quoting that answer; an older quote is invalid there.
+  await f.say('嗯');assert.equal(f.obs().length,1,'answer turn: only this message may be quoted');
+  assert.deepEqual(f.turns().at(-1)!.dropped.find(x=>x.field==='observation'),{field:'observation',reason:'invalid'});
   // Observations never touch scoring evidence or skill state.
   assert.equal(f.r.repository.list('evidence').length,0);assert.equal(f.r.repository.list('skills').length,0);
  }finally{f.dispose();}

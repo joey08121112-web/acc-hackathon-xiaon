@@ -1,0 +1,147 @@
+✔ level rule: every boundary maps through the program basis (0.448292ms)
+✖ order is fixed: 理解 then 逻辑 then 计算 → 建模 → 空间想象; no report before 理解 and 逻辑; each answer asks one follow-up (10.803416ms)
+✖ a transfer question is asked only after a wrong first answer, from the same family (5.6325ms)
+✖ calculation levels: stated reason → good, no reason → partial, hint → partial, both wrong → needs_work (4.636083ms)
+✖ pause keeps the pending question and pauses the session; resume (also next day) continues there without re-asking (5.602042ms)
+✖ rest words pause; safety words store nothing and leave the interview as it was (5.659792ms)
+✖ report: comparison cites only real observations; a second interview compares with the last report; a re-report supersedes (4.978375ms)
+✖ per-session calculation cap reached: 计算 is skipped and reported as not tested (12.989958ms)
+✖ with a model: questions are phrased by the model, the program keeps the level, a stated reason makes 理解 good (4.380875ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 1
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 164.110042
+
+✖ failing tests:
+
+test at tests-agent/g/interview.test.ts:1:3373
+✖ order is fixed: 理解 then 逻辑 then 计算 → 建模 → 空间想象; no report before 理解 and 逻辑; each answer asks one follow-up (10.803416ms)
+  Error: startInterview 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/context.ts:51:44)
+      at startInterview (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/interview/index.ts:6:170)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:208)
+      at LearningCoordinator.interviewStart (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:15)
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/interview.test.ts:46:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/interview.test.ts:1:5373
+✖ a transfer question is asked only after a wrong first answer, from the same family (5.6325ms)
+  Error: startInterview 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/context.ts:51:44)
+      at startInterview (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/interview/index.ts:6:170)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:208)
+      at LearningCoordinator.interviewStart (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:15)
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/interview.test.ts:67:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/interview.test.ts:1:6781
+✖ calculation levels: stated reason → good, no reason → partial, hint → partial, both wrong → needs_work (4.636083ms)
+  Error: startInterview 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/context.ts:51:44)
+      at startInterview (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/interview/index.ts:6:170)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:208)
+      at LearningCoordinator.interviewStart (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:15)
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/interview.test.ts:91:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/interview.test.ts:1:8176
+✖ pause keeps the pending question and pauses the session; resume (also next day) continues there without re-asking (5.602042ms)
+  Error: startInterview 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/context.ts:51:44)
+      at startInterview (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/interview/index.ts:6:170)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:208)
+      at LearningCoordinator.interviewStart (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:15)
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/interview.test.ts:101:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/interview.test.ts:1:9843
+✖ rest words pause; safety words store nothing and leave the interview as it was (5.659792ms)
+  Error: startInterview 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/context.ts:51:44)
+      at startInterview (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/interview/index.ts:6:170)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:208)
+      at LearningCoordinator.interviewStart (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:15)
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/interview.test.ts:120:14)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/interview.test.ts:1:10417
+✖ report: comparison cites only real observations; a second interview compares with the last report; a re-report supersedes (4.978375ms)
+  Error: startInterview 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/context.ts:51:44)
+      at startInterview (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/interview/index.ts:6:170)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:208)
+      at LearningCoordinator.interviewStart (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:15)
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/interview.test.ts:130:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/interview.test.ts:1:12012
+✖ per-session calculation cap reached: 计算 is skipped and reported as not tested (12.989958ms)
+  Error: startInterview 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/context.ts:51:44)
+      at startInterview (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/interview/index.ts:6:170)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:208)
+      at LearningCoordinator.interviewStart (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:15)
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/interview.test.ts:146:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }
+
+test at tests-agent/g/interview.test.ts:1:13923
+✖ with a model: questions are phrased by the model, the program keeps the level, a stated reason makes 理解 good (4.380875ms)
+  Error: startInterview 尚未实现（阶段 0 桩）
+      at notImplemented (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/context.ts:51:44)
+      at startInterview (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/plugins/interview/index.ts:6:170)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:71)
+      at <anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:66)
+      at LearningCoordinator.perform (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:91:208)
+      at LearningCoordinator.interviewStart (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/server/agents/learning.ts:298:15)
+      at async TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/interview.test.ts:167:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'not_implemented',
+    recoverable: true
+  }

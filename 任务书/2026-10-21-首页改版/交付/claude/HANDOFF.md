@@ -124,3 +124,110 @@ XIAON_API_PORT=18951 XIAON_DB_PATH=.local/claude.sqlite npm run server
   6. 再聊一句回到 companion；
   7. 调用 `/api/learning/conversation/end` 拿到小结。
 - 界面联调：ChatGPT 把 `HOME_FLOW` 改为 true 之后，`ProgressCardView` 从 `reply.progressCardDraft` 出现，成长页显示进步卡和对话小结。
+
+## 第二期（2026-10-21）：专业模式面试引擎
+
+### 1. 范围与未完成项
+
+已完成（`server/plugins/interview/`、`prompts/interviewer.ts`）：
+
+- **顺序与续测**：
+  - 固定按理解 → 逻辑 → 计算 → 建模 → 空间想象出题；
+  - 随时可以暂停，`pending` 保留，续测原样再问，已答的不重问；
+  - 换天续测开新的探索场次，测评记下新的 `learningSessionId`，并在新场次重新打开那道题。
+- **选题**：
+  - 只用题库题，不用模型生成的 `gen-` 题；
+  - 每个模块优先选没见过的题，顺序是观察题 → 延迟题 → 迁移题；
+  - 第一题找不到没见过的题时，用见过的观察题，并明说「题库不足，这次就当回顾」；
+  - 答错时才加问同类题，加问只用没见过的迁移题或延迟题；
+  - 先修规则照旧（计算模块在没练过合并同类项时先出 `b-like-observation`）；
+  - 每场次计算题上限和探索顺序由现有的打开题目事件把关，被拦下就换下一道；整个模块都打不开时跳过，报告标「还没测到」。
+- **出题与追问**：
+  - 有模型时，小N的开场白和追问由模型写，题目原文由程序接在后面，不改写；
+  - 模型写的话里有答案或「答案」字样、写失败、或没有模型时，用固定问法；
+  - 每题追问一次。追问答完后合成一次作答，走现有提交和判分（`ctx.submitAttempt`）：
+    - 有理由评分点的题（理解、逻辑、建模）：作答 = 答案 + 换行 + 追问回答，交给 Assessor；
+    - 计算、空间想象：只交答案行。
+  - 学生说「提示」时，记一次提示暴露，给出题库提示，不推进题目；这道题之后判为「提示后完成」。
+- **等级判定**（`levels.ts`，纯函数，常量 `REASON_MIN_CHARS=4`、`NO_REASON_PATTERN`）：
+  - 答对 + 有理由 → 掌握得不错；
+  - 答对但理由不全 / 提示后完成 / 加问题才答对 → 部分掌握；
+  - 两题都没答对 → 需要加强；
+  - 没测 → 还没测到。
+  - 「理由」的认定：
+    - 有理由评分点的题，看 Assessor 给的理由点是否 supported；
+    - 没有理由评分点的题，只看追问是否说出了内容，程序不评判理由本身。
+  - 模型只写每个模块的一句话（`report-wording-g2`），等级以程序为准，协调器的 `reportProblems` 再查一遍。
+- **对照**：报告列出上一份报告之后综合模式里的「待核实」观察（最多 50 条）：
+  - 观察是 clear，且本次「掌握得不错」→ 得到确认；
+  - 观察是 partial 或 confused，且本次「部分掌握」或「需要加强」→ 得到确认；
+  - 其余 → 没有看到。
+  - 有上次测评的报告时，逐模块写变化；同一测评再出报告时版本号 +1，并标明取代哪一份。
+- **学习建议**：每个「部分掌握 / 需要加强」的模块给 1–2 条固定建议（`SUGGESTIONS`），供 zCode 的月阶段使用。
+- **暂停**：同时暂停所在的学习场次（与「休息」的含义一致）；续测时经 `learning/start` 恢复。
+- **REPORT-1 遗留**：试探的下一轮可以记下学生对试探的回答。只能引用这一句原话，提示词换成 `observe-answer` 块，不再试探。
+
+契约变更写在 `CONTRACT-CHANGE.md` 的「第二期：面试引擎」一节：
+
+- `InterviewTurn.attemptId` 放在追问轮（只改注释）；
+- `server/core/events.ts` 的探索顺序规则加了续测的情况；
+- 新增 `StageDecision.answerTurn`；
+- 暂停测评时同时暂停学习场次。
+
+未完成 / 已知限制：
+
+- 没有模型时，理由评分点按现有规则是 uncertain，所以理解、逻辑、建模答对也只到「部分掌握」，评语写「理由还没说完整（或者还没能核实）」。这是如实的结果，不是 bug。如果要让本地模式也能到「掌握得不错」，需要新增一个依据代码，要提契约变更。
+- 判分是 needs_review、或答案无法解析（比如「不知道」）时，结果点不是 supported，按答错处理，会触发加问。
+- 两题都没答对、和因题库不足没能加问，依据代码都写 `incorrect_on_both`。
+- 浏览器走查没有做：本路没有界面，界面是 ChatGPT 的 `ProfessionalModeView`，留到第二期集成。
+
+### 2. 分支、提交与改动文件
+
+- 分支 `revamp/g2-interview`（worktree `.claude/worktrees/g2-contracts-163adf`），从 `revamp-base2`（b611610）开始。
+- 代码提交 `fa8d24c`；本节和 CONTRACT-CHANGE 在其后单独提交。未推送、未合并。
+- 改动文件（相对 `outputs/xiaon/`）：
+  - 新增 `server/plugins/interview/levels.ts`；改写 `server/plugins/interview/index.ts`（替换桩）；
+  - `server/agents/prompts/interviewer.ts`（加 `REPORT_WORDING_PROMPT`）、`server/agents/prompts/observe.ts`（加 `OBSERVE_ANSWER_PROMPT`）；
+  - `server/agents/stages.ts`、`server/agents/roles.ts`、`server/agents/learning.ts`（回答轮的观察）；
+  - `server/core/events.ts`（探索顺序，见契约变更）；
+  - `shared/learning-contracts.ts`（只改注释）；
+  - 测试：新增 `tests-agent/g/interview.test.ts`、`observe-answer.test.ts`；更新 `phase2-contract-smoke.test.ts`，以及 `home-chat`、`conversation`、`stages` 各一处原先钉着 REPORT-1 限制的断言。
+- 没有改 ChatGPT（`src/components/professional/**`、App.tsx 等）和 zCode（`server/plugins/stages|tracking/**`、`src/components/plan/**`）的文件。
+
+### 3. 命令、退出码与首次失败
+
+| 命令 | 退出码 | 结果 |
+| --- | --- | --- |
+| `npm run typecheck:agent` | 0 | |
+| `npm test` | 0 | 25/25 |
+| `npm run test:agent`（a b c d e g h i） | 0 | 212/212 |
+| `npm run build` | 0 | built |
+| `npm run test:agent:g` | 0 | 58/58 |
+
+记录在 `evidence/g2-interview-gates.txt`。
+
+首次失败留档（先写测试再实现）：
+
+- `evidence/g2-interview-first-run.txt`：9 项中 8 项以 `not_implemented` 失败（等级规则的纯函数先写好了，所以那一项通过）。实现后第一轮仍有 1 项失败，原因是测试自己的错：合成模型只看第一条 system 消息，没认出 Assessor 调用（Assessor 前面还有一条版本消息）。改了测试脚本后全部通过。
+- `evidence/g2-observe-answer-first-run.txt`：2 项都失败（`answerTurn` 还不存在）。另外，测试里第二次观察的脚本下标写错了一位，在实现前改正。
+- 原有 g 测试里有 3 条断言钉的是 REPORT-1 的旧限制（试探后的下一轮不能记观察），已按新规则改写，改动处有注释。
+
+### 4. 证据级别
+
+| 级别 | 状态 |
+| --- | --- |
+| 静态检查 | 跑了 |
+| 规则单测 | 跑了（等级边界、阶段机回答轮） |
+| 模拟模型端到端 | 跑了：协调器层的本地规则和合成模型（措辞、Assessor 理由点、模型想改等级被程序否决）；HTTP 层（`phase2-contract-smoke`） |
+| 真实模型 | 未运行（没有读取 `.env.server`） |
+| 浏览器 | 未运行（本路没有界面；g 走查 spec 没有重跑；D 阶段浏览器测试按约束不跑） |
+| 真实设备 | 未运行 |
+
+### 5. 给集成方的入口
+
+- 启动：`npm run dev:learning`，或按 g 走查的 `walkthrough-server.ts` 方式。不用浏览器时，可以直接调 HTTP：
+  1. `POST /api/learning/interview/start {operationId}` → `InterviewStep`（理解的第一题）；
+  2. `POST interview/answer {operationId, interviewId, expectedRevision: interview.revision, text}`：先答题，再回答追问，依次推进；说「给我一点提示」会得到提示；
+  3. 中途 `POST interview/pause`，之后 `interview/resume` 接着测；
+  4. 理解、逻辑测完后，`POST interview/report {operationId, interviewId}` → `ProfessionalReport`，同时写入 `professionalReports`。
+- 合并顺序按 04：Claude → zCode → ChatGPT。zCode 的 `draftMonthStage` 读的是 `report.modules[].level` 和 `suggestions`。

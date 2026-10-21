@@ -43,7 +43,8 @@ test('home flow: listen 2 turns, needs-check once, every field outside the stage
   // observation: the quote "这道题我做错了" is not what the student said ("第3题我做错了"), so the program rejects it.
   assert.deepEqual(f.turns()[2].dropped.map(x=>x.field+':'+x.reason).sort(),['memoryDraft:stage_not_allowed','observation:invalid','problemDraft:invalid','progressCardDraft:stage_not_allowed']);
   assert.equal(c.problemDraft,null);assert.equal(f.r.repository.list('observations').length,0);
-  const d=await f.say('嗯');assert.equal(d.stage,'probe');assert.match(p.systems[3],/^tutor-g0-probe$/m);
+  // G2: the turn after a probe may only record the answer to it (observe-answer block), never probe again.
+  const d=await f.say('嗯');assert.equal(d.stage,'probe');assert.match(p.systems[3],/^tutor-g0-probe-observe-answer$/m);assert.doesNotMatch(p.systems[3],/本轮程序允许一次轻轻的试探/);
   assert.deepEqual(f.turns().map(t=>t.turn),[1,2,3,4]);
   for(const t of f.turns())assert.doesNotMatch(JSON.stringify(t),/考砸|错题|第3题/,'chat turns never store student text');
  }finally{f.dispose();}

@@ -1,0 +1,56 @@
+✖ the turn right after a probe may record the answer, without probing again; the gap after it may not (1.480709ms)
+✖ chat: the answer turn stores an observation quoting that answer only; an older quote is refused there (19.341375ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 199.79625
+
+✖ failing tests:
+
+test at tests-agent/g/observe-answer.test.ts:1:713
+✖ the turn right after a probe may record the answer, without probing again; the gap after it may not (1.480709ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      false,
+  +   undefined
+  -   true
+    ]
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/observe-answer.test.ts:15:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ false, undefined ],
+    expected: [ false, true ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests-agent/g/observe-answer.test.ts:1:1855
+✖ chat: the answer turn stores an observation quoting that answer only; an older quote is refused there (19.341375ms)
+  AssertionError [ERR_ASSERTION]: the answer turn gets its own block: record, do not probe again
+  + actual - expected
+  
+  + 'tutor-g0-probe'
+  - 'tutor-g0-probe-observe-answer'
+                   ^
+  
+      at TestContext.<anonymous> (/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g2-contracts-163adf/outputs/xiaon/tests-agent/g/observe-answer.test.ts:38:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'tutor-g0-probe',
+    expected: 'tutor-g0-probe-observe-answer',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
