@@ -9,8 +9,8 @@
 | 实际分支 | `claude/g0-contracts-6a70eb`（app 分配；任务书写的是 `revamp/g0-contracts`） |
 | 实际 worktree | `/Users/ami/Documents/个人/ACC黑客松/.claude/worktrees/g0-contracts-6a70eb`（任务书写的是 `ACC黑客松-wt/g0`） |
 | 基于 | main `9e9b759` |
-| 代码提交 | `9b70d31c65776fd81026b3efe20d41fd496b7bdc`（首页改版阶段0：契约冻结与骨架，47 个文件） |
-| 本文件 | 在其后的一个单独提交里（只加本文件） |
+| 代码提交 | `9b70d31`（契约冻结与骨架）→ `6e49f31`（与 P0 卡点补丁 8a97be9 对齐，加记忆选择与回复长度门控）。以 `6e49f31` 为准 |
+| 本文件 | 在代码提交之后单独提交（`76605d0` 首版，其后一版加入第 13 节） |
 | 待用户操作 | 确认后把本分支合入 main，并在合入后的提交上打 tag `revamp-base`。本路没有推送、没有合并 |
 
 ## 2. 先读这四条（与任务书的差异）
@@ -19,6 +19,8 @@
 2. **`intent` 多一个值 `formal_test`**（确定需求卡上的「做个正式测试」）。回复带 `modeSuggestion`，学生点确认才切换。
 3. **`ModelMessage` 用可选 `parts` 承载图文分段，`content` 仍是字符串。** 改成联合类型会让现有 D/E 测试里大量 `JSON.parse(m.content)` 编译失败。zCode 第三期在 `glm.ts` 里：有 `parts` 时发 `parts`，否则照旧发 `content`。
 4. **新增一个集合 `chatTurns`（类型 `ChatTurn`）**，任务书集合清单之外。阶段机状态（倾听轮数、陪聊连续轮数、是否问过、拒绝过、上次试探轮次）必须在服务端，客户端发来的 history 不可信且最多 20 条。每轮一条记录，**不存学生原话**；`dropped` 字段就是「不允许的字段被丢弃并记入轨迹」。
+
+第 13 节写了与 main 上 Tutor 卡点补丁（`8a97be9`）的对齐方式，阶段 0 定稿时已纳入。
 
 其他小差异：`ProblemDraft` 不含 `answerStatus`（由程序在 `ProblemRecord` 上决定，草稿来自模型或客户端，不能自称已核验），另有 `catalogTask` 引用题库题；`Greeting` 多 `summaryId`；`ConversationSummary` 多 `sessionId`、`trigger`、`mode`；`EndConversation` 带 `history`（服务端不存聊天原文，小结需要它）。`SCHEMA_VERSION` 仍为 `1.0.0`，旧记录照常可读。
 
@@ -41,7 +43,7 @@
 | `ObservationDraft` | 模型输出：`dimension`（只有 理解/逻辑）`signal`（clear/partial/confused）`quote` `note` |
 | `ChatObservation` | 上面 + `id` `sessionId` `status:'unverified'` `at` |
 | `ConversationSummary` | `sessionId` `trigger`(student_end/farewell) `topics` `observationIds` `comparedWithSummaryId` `changes` `planSuggestions`(1–3) `suggestProfessionalMode` `progressCardId` `mode`(model/local_rules) `createdAt` |
-| `ProblemDraft` | `source`(photo/spoken/catalog) `questionText` `studentWork` `knowledgePointId` `stuckPoint` `catalogTask` |
+| `ProblemDraft` | `source`(photo/spoken/catalog) `questionText` `studentWork` `knowledgePointId` `stuckQuote`（学生关于这道题的原话） `stuckPointId`（可空，引用 `StuckPoint`） `catalogTask` |
 | `ProblemRecord` | 草稿字段 + `id` `operationId` `sessionId` `answerStatus`(verified/unknown) `confirmedAt` |
 | `ProblemSecret` | `problemId` `answer[]` `origin`(catalog/student_provided/program_computed) `createdAt`；只在服务端 |
 | `LearningEpisode` | `revision`（追加修订，同 ReviewItem）`sessionId` `problemId` `task` `stage`(think/reflect) `helpLevelsUsed` `studentSolvedAt` `endReason`(solved/understood/turn_limit) `status`(active/reflecting/closed) |
@@ -51,7 +53,7 @@
 | `MemoryDraft` | `text` `kind`(event/interest/method) `origin`(chat/progress_card) |
 | `MemoryMention` | `memoryId` `sessionId` `via`(greeting/chat) `at` |
 | `Greeting` | `text` `memoryId` `summaryId` `memoryOff` |
-| `ChatTurn` | 一轮的阶段机结果与计数、`signals`、`dropped[{field, reason: stage_not_allowed/memory_off/invalid/not_implemented}]` |
+| `ChatTurn` | 一轮的阶段机结果与计数、`signals`、`dropped[{field, reason: stage_not_allowed/memory_off/invalid/not_implemented}]`、`replyFit`(ok/retried/truncated) |
 | `RecognizeResult` | `{draft: ProblemDraft|null, notice}` |
 | 请求 `ConfirmProblem` | `operationId` `sessionId` `draft` `referenceAnswer`（只写 problemSecrets） |
 | 请求 `Recognize` | `operationId` `sessionId` `mimeType:'image/jpeg'` `image`(base64，解码后 ≤1.5MB) `maskConfirmed: true`（必填） |
@@ -63,6 +65,9 @@
 | 类型 `Validation<T>` | `{ok:true;value:T}` 或 `{ok:false;reasons:string[]}` |
 | 类型 `ModelContentPart` / `ModelMessage.parts` | `{type:'text';text}` 或 `{type:'image_url';image_url:{url}}` |
 | 常量 `RECOGNIZE_MAX_IMAGE_BYTES` | `1_500_000` |
+| 常量 `TUTOR_REPLY_MAX_CHARS` | `80`（Tutor 回复长度门控） |
+| 常量 `MEMORY_CONTEXT_MAX_ITEMS` / `MEMORY_CONTEXT_MAX_CHARS` | `5` / `300`（Tutor 上下文中的记忆上限） |
+| `StuckPoint`（P0 已有，语义收紧） | `studentConfirmed` 由程序写 false；是否确认由程序推导，见第 13 节 |
 
 确认后的记忆仍写成现有 `MemoryItem`（`source:'student_explicit'`），没有新增记忆来源。
 
@@ -106,13 +111,14 @@ interface MemoryDraftCheck extends FieldCheck { memoryEnabled:boolean; origin:'c
 interface ProgressDraftInput { sessionId:string; episode:LearningEpisode|null; studentTexts:string[]; candidate:unknown }
 interface EndConversationInput { operationId:string; sessionId:string; trigger:'student_end'|'farewell'; history:ChatMessage[] }
 interface MemoryOfferInput { sessionId:string; stage:ChatStage; turn:number }
+interface MemorySelectionInput { sessionId:string|null; stage:ChatStage|null; studentTexts:string[]; memories:MemoryItem[] } // 旧流程 sessionId/stage 为 null；memories = 当前有效记忆
 const notImplemented: (name:string) => RuntimeError   // code 'not_implemented'
 ```
 
 | 文件（所有者） | 导出 |
 | --- | --- |
 | `server/plugins/problems/index.ts`（zCode） | `validateProblemDraft(candidate:unknown, check:FieldCheck): Validation<ProblemDraft>`<br>`confirmProblem(input:ConfirmProblem, ctx:RevampContext): Promise<ProblemRecord>`<br>`recognize(input:Recognize, ctx:RevampContext, signal?:AbortSignal): Promise<RecognizeResult>` |
-| `server/plugins/memory-flow/index.ts`（zCode） | `validateMemoryDraft(candidate:unknown, check:MemoryDraftCheck): Validation<MemoryDraft>`<br>`confirmMemoryDraft(input:ConfirmMemoryDraft, ctx:RevampContext): Promise<MemoryItem>`<br>`greeting(input:GreetingRequest, ctx:RevampContext, signal?:AbortSignal): Promise<Greeting>`<br>`shouldOfferMemory(input:MemoryOfferInput, ctx:RevampContext): boolean` |
+| `server/plugins/memory-flow/index.ts`（zCode） | `validateMemoryDraft(candidate:unknown, check:MemoryDraftCheck): Validation<MemoryDraft>`<br>`confirmMemoryDraft(input:ConfirmMemoryDraft, ctx:RevampContext): Promise<MemoryItem>`<br>`greeting(input:GreetingRequest, ctx:RevampContext, signal?:AbortSignal): Promise<Greeting>`<br>`shouldOfferMemory(input:MemoryOfferInput, ctx:RevampContext): boolean`<br>`selectMemoriesForContext(input:MemorySelectionInput, ctx:RevampContext): MemoryItem[]` |
 | `server/plugins/progress/index.ts`（Claude） | `draftProgressCard(input:ProgressDraftInput, ctx:RevampContext, signal?:AbortSignal): Promise<{draft:ProgressCardDraft; memoryDraft:MemoryDraft|null}>`<br>`confirmProgressCard(input:ConfirmProgressCard, ctx:RevampContext): Promise<ProgressCard>` |
 | `server/plugins/conversation/index.ts`（Claude） | `validateObservation(candidate:unknown, check:ObservationCheck): Validation<ObservationDraft>`<br>`endConversation(input:EndConversationInput, ctx:RevampContext, signal?:AbortSignal): Promise<ConversationSummary>`<br>`latestSummary(ctx:RevampContext): ConversationSummary|null` |
 
@@ -124,11 +130,14 @@ const notImplemented: (name:string) => RuntimeError   // code 'not_implemented'
 - `reflect` 阶段（刚进入，或模型本轮提议了卡片）调用 `draftProgressCard`；它给的 `memoryDraft` 只在记忆开启时下发。
 - 学生道别（`FAREWELL_PATTERN`）时调用 `endConversation`（trigger `farewell`），成功则回复带 `summary`；`RuntimeError` 时 `summary` 为 null。
 - `latestSummary` 协调器不直接调，留给 `greeting` 使用。
+- 构建 Tutor 上下文时（两种流程）调用 `selectMemoriesForContext`，再经 `capMemorySelection` 截断（见第 13 节第 4 条）。
+- `problem/confirm`：调用插件前，程序先校验 `draft.stuckPointId`（见第 13 节第 1 条）。
 
 ## 7. 对话阶段机（`server/agents/stages.ts`，所有者 Claude）
 
 纯函数，只在 `flow:'home'` 时使用。导出：
 
+- 回复长度：`fitReply(text, max)`、`replyLength(text)`（见第 13 节第 5 条）
 - 常量：`LISTEN_MIN_TURNS=2` `ASK_STUDY_AFTER_COMPANION_TURNS=6` `PROBE_GAP_TURNS=3` `THINK_MAX_TURNS=10` `CHAT_STALE_MS=6h`
 - 程序判定用的正则：`SAFETY_PATTERN`（从 learning.ts 移来，内容不变）`REST_PATTERN` `STUDY_PATTERN` `DECLINE_PATTERN` `INTENSE_PATTERN` `PROBLEM_PATTERN` `UNDERSTOOD_PATTERN` `FAREWELL_PATTERN`
 - `STAGE_FIELDS: Record<ChatStage, StageField[]>`、`HOME_QUICK_REPLIES: Record<ChatStage, string[]>`
@@ -202,18 +211,23 @@ const notImplemented: (name:string) => RuntimeError   // code 'not_implemented'
 | --- | --- | --- |
 | `npm run typecheck:agent` | 0 | |
 | `npm test` | 0 | 25/25 |
-| `npm run test:agent`（a b c d e g h i） | 0 | 142/142 |
+| `npm run test:agent`（a b c d e g h i） | 0 | 147/147（含 `d/stuck-point.test.ts`） |
 | `npm run build` | 0 | built |
-| `npm run test:agent:g` | 0 | 19/19 |
+| `npm run test:agent:g` | 0 | 24/24 |
 | `npm run test:agent:h` | 0 | 2/2 |
 | `npm run test:agent:i` | 0 | 2/2 |
 
-记录在 `evidence/g0-gates.txt`。首次失败留档：先写阶段机单测再实现，第一次运行 11 项全部以 `not_implemented` 失败，原样存于 `evidence/g0-stages-first-run.txt`。
+记录在 `evidence/g0-gates.txt`，里面有两轮记录，以第二轮为准。
+
+首次失败留档：
+- 阶段机：先写单测再实现，第一次运行 11 项全部以 `not_implemented` 失败，原样存于 `evidence/g0-stages-first-run.txt`。
+- 第 13 节的对齐：测试和实现同时写，没有做到先写测试。第一次运行有 2 项失败，是测试自己的错：长度截断正确停在了「？」，断言却只接受「。」。原样存于 `evidence/g0-alignment-first-run.txt`，改正断言后全部通过。
 
 新增测试：
 
 - `tests-agent/g/stages.test.ts`：阶段机单测 11 项（倾听 ≥2 轮、确定需求只问一次并避开强烈情绪、陪聊停留、第 6 轮陪聊问一次、拒绝后不再问、试探间隔与情绪、安全/休息优先、askProblem、think/reflect/companion 路径、各阶段字段、正式测试与道别）。
 - `tests-agent/g/home-chat.test.ts`：经协调器的端到端，用合成模型（每轮把四种字段全部提议一遍）。阶段由程序定；丢弃原因写入 `chatTurns`；`chatTurns` 不含学生原话；安全不留记录；无模型时给固定温和回复。
+- `tests-agent/g/alignment.test.ts`：第 13 节五条各有测试。
 - `tests-agent/{g,h,i}/contract-smoke.test.ts`：各路契约冒烟。新 schema 可解析、拒绝多余字段；新路由在桩阶段返回 501 `not_implemented`；recognize 先拒绝未遮挡、非 JPEG 和超限；`problemSecrets` 不进 view；重置清除新集合。h、i 两份可由所有者整体替换。
 
 证据级别：
@@ -236,3 +250,49 @@ const notImplemented: (name:string) => RuntimeError   // code 'not_implemented'
 ## 12. 本路下一步
 
 停在这里，等用户确认：合入 main，打 tag `revamp-base`。之后三路从 `revamp-base` 开始第一期；Claude 第一期 A 从 `conversation` 插件开始（`validateObservation`、`endConversation`、`latestSummary`）。
+
+## 13. 与 Tutor 卡点补丁（main `8a97be9`）的对齐
+
+任务书编写时没有考虑 `8a97be9`。该补丁加了 `stuckPoints` 实体、`record_stuck_point` / `get_latest_feedback` 工具、`select_task` 按知识点选题，chat 每轮注入 `latestFeedback` 和最近 3 条卡点，提示词升到 `tutor-d3`。以下五点按需求评审会话的要求处理：
+
+**1. 卡点只有一个概念。** 继续用 `StuckPoint`，不另起一套。`ProblemRecord` 通过 `stuckPointId` 引用它，不改成 `StuckPoint` 的一种。理由：
+
+- `StuckPoint` 是对话里的方法层假设（知识点 + 概念/方法/起步），只限两个计算知识点，由 Tutor 工具写入，现有 D 测试固定了这些约束。
+- 错题记录是学生确认的一道具体题，覆盖 7 个知识点取值和拍照、题库两种来源。
+
+把两者并成一个实体，就得放宽 `StuckPoint` 的知识点限制并改动现有工具行为，所以选「引用 + 分工」，更干净。
+
+分工与转换：
+- 原 `ProblemDraft.stuckPoint` 文字字段改名为 `stuckQuote`，避免和实体同名。
+- `stuckPointId` 可空。`problem/confirm` 时程序先校验：所引卡点必须存在且知识点一致，否则 400；插件返回的记录必须保留同一个引用。
+- 转换方向只有一个：Tutor 记的卡点 → 学生确认错题时被引用。不从错题反向生成卡点。
+- `ChatObservation` 与卡点是两回事：观察记理解/逻辑两维「怎么读题、怎么想」，带 signal，不涉及知识点；卡点记「哪个知识点的哪一步」。两者互不派生，小结分别引用。
+
+**2. 保留 tutor-d3 的规则。** 首页流程的通用规则沿用 `tutorBase`：第 9 条（latestFeedback、stuckPoints）原样保留。probe 阶段块由 `STAGE_PROBE` 派生，record_stuck_point、select_task 的规则原样保留，只改两句：
+- 「禁止：讲解知识、给提示、给答案」→ 可以给思路、不给完整答案（第 6 条按阶段放开）。
+- 「学生已确认才把 studentConfirmed 设为 true」→「一律填 false，由程序决定」。
+
+旧流程 `tutor-d3-*` 文本逐字未改。`d/stuck-point.test.ts`、`d/voice-stage.test.ts` 等全部通过。
+
+**3. 「学生确认」只由程序判定。** `8a97be9` 里 `record_stuck_point` 把模型传入的 `studentConfirmed` 直接落库，确实是由模型决定的确认。已修正：
+- `server/tools/registry.ts` 一律写 `false`。工具参数仍接受该字段，是为了兼容旧调用，值被忽略。
+- 是否确认由程序推导：存在一条引用该卡点的 `ProblemRecord`（学生点了确认）即为已确认。
+- 注入 Tutor 的最近卡点和 `view().stuckPoints` 都用推导值。已有旧数据里模型写的 `true` 不再被采信。
+
+本阶段的其他确认（错题、进步卡、记忆草稿）都只走学生点击的路由，不读模型字段。
+
+旧流程提示词里仍有「学生确认后把 studentConfirmed 设为 true」这句。它已经没有效果，等旧流程退役时一并删掉，算作待修。
+
+**4. 记忆选择 `selectMemoriesForContext`（zCode 实现）。** 签名见第 6 节。协调器在两种流程构建 Tutor 上下文时都调用它，再由程序 `capMemorySelection` 截断：
+- 只认当前有效记忆的 id，用服务端自己的记忆文本，不用插件给的；
+- 去重，≤ `MEMORY_CONTEXT_MAX_ITEMS`(5) 条，总长 ≤ `MEMORY_CONTEXT_MAX_CHARS`(300) 字。
+
+桩阶段（抛 `not_implemented`）保持现有行为，发送全部有效记忆，已有测试覆盖。关闭记忆时 `context.memories` 为空，不调用该函数。
+
+**5. Tutor 回复长度门控。** 在 `ControlledRoles.invoke` 里对每轮 Tutor 回复做程序校验，两种流程都生效，上限 `TUTOR_REPLY_MAX_CHARS = 80` 字（按字符计）：
+- 超长时把原回复和一句改写要求追加给模型，重试一次（计入原有的 4 轮预算）；
+- 仍超长就用 `fitReply` 截到上限内最后一个句末标点（。！？!?…）；没有句末标点时截到最后一个逗号并补「。」；都没有则硬截。
+- 截断后再过原有的答案拦截。
+- 首页流程把结果记在 `ChatTurn.replyFit`（ok / retried / truncated）。旧流程没有 ChatTurn，不单独记录。
+
+提示词里「60 字以内两句话」不变，80 是程序的硬上限。
