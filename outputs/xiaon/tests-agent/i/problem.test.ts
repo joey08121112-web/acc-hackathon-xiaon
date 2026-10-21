@@ -33,6 +33,8 @@ test('validateProblemDraft: 出处核对、知识点归一、不完整草稿不�
  assert.equal(other.ok,true);if(other.ok)assert.equal(other.ok&&other.value.knowledgePointId,'other');
  // 模型编造的卡点（学生没说过）→ 整份丢弃
  assert.equal(validateProblemDraft(draft({stuckQuote:'移项要变号但我总忘记'}),check).ok,false);
+ // 只有标点的“原话”归一后为空，不能冒充出处
+ assert.equal(validateProblemDraft(draft({stuckQuote:'。。。'}),check).ok,false,'空串出处不算找到');
  // 编造的题目文字被丢弃；只剩卡点没有题目/作答 → 草稿不完整
  const noQuestion=validateProblemDraft(draft({questionText:'解方程 2x+1=7',studentWork:null}),check);
  assert.equal(noQuestion.ok,false,'题目与作答都找不到出处时不展示确认卡');
@@ -42,6 +44,34 @@ test('validateProblemDraft: 出处核对、知识点归一、不完整草稿不�
  // studentWork 找不到出处 → 只丢这个字段，其余保留
  const work=validateProblemDraft(draft({studentWork:'我先去了括号'}),check);
  assert.equal(work.ok,true);if(work.ok)assert.equal(work.value.studentWork,null);
+});
+
+/** 首页流程里模型提议了一份合法草稿：程序放行到确认卡，但没点「记下」之前什么都不写。 */
+class ProposingProvider implements ModelProvider {
+ readonly kind='synthetic' as const;readonly supportsTools=true;
+ async complete(input:Parameters<ModelProvider['complete']>[0]):ReturnType<ModelProvider['complete']>{
+  const system=input.messages.filter(m=>m.role==='system').map(m=>m.content).join('\n');
+  const extra=system.includes('tutor-g0-probe')?{problemDraft:{source:'spoken',questionText:'化简 3x − (2x − 5)',studentWork:null,knowledgePointId:'negative-brackets',stuckQuote:'括号前面是负号我就懵了',stuckPointId:null,catalogTask:null}}:{};
+  return{content:JSON.stringify({message:'嗯，我在听。',taskIds:[],...extra}),toolCalls:[]};
+ }
+}
+test('首页流程：合法草稿透传到确认卡，未点「记下」不写入；确认后才落库并与场次关联',async()=>{
+ const f=setup(new ProposingProvider());try{
+  const history:{role:'user'|'assistant';content:string}[]=[];
+  const say=async(text:string)=>{history.push({role:'user',content:text});const r=await f.d.chat({operationId:id(),history:history.slice(-20),flow:'home'});history.push({role:'assistant',content:r.text});return r;};
+  await say('今天考砸了');await say('数学');
+  const probe=await say('第3题我做错了：化简 3x − (2x − 5)，括号前面是负号我就懵了');
+  assert.equal(probe.stage,'probe');assert.equal(probe.askProblem,true);
+  assert.ok(probe.problemDraft,'合法草稿经程序校验后下发');
+  assert.equal(probe.problemDraft?.stuckQuote,'括号前面是负号我就懵了');
+  assert.equal(f.r.repository.list('chatTurns').at(-1)!.dropped.some(d=>d.field==='problemDraft'),false,'没有被丢弃');
+  assert.equal(f.r.repository.list('problems').length,0,'未确认的草稿不写入');
+  const record=await f.d.confirmProblem({operationId:id(),sessionId:probe.sessionId,draft:probe.problemDraft!,referenceAnswer:null});
+  assert.equal(record.sessionId,probe.sessionId);assert.equal('answer' in record,false,'确认响应里没有参考答案字段');
+  assert.equal(f.r.repository.list('problems').length,1);
+  // 下一轮：本场次已有错题，不再追问要不要记
+  const next=await say('嗯');assert.equal(next.askProblem,false);
+ }finally{f.dispose();}
 });
 
 test('confirmProblem: 两次解题一致且 expression 核对一致 → verified，秘密只在服务端',async()=>{

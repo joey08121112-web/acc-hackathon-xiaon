@@ -13,8 +13,9 @@ const SOLVE_PROMPT={version:'problem-solve-i1',text:[
 ].join('\n')} as const;
 const KNOWN_POINTS=new Set(['math-language','counterexample','negative-brackets','like-terms','fixed-variable-cost','rotation-2d']);
 // 出处匹配：忽略空白与连字符变体、全半角括号、大小写——模型逐字抄写常见差异不算编造。
+// 全是标点的“原话”归一后为空串，includes 会恒真，必须排除。
 const norm=(s:string)=>normalizeSource(s).replace(/[，。、；：？！“”‘’"'\.,;:?!()（）\[\]{}]/g,'').toLowerCase();
-const traceable=(quote:string,texts:string[])=>quote.length>0&&texts.some(t=>norm(t).includes(norm(quote)));
+const traceable=(quote:string,texts:string[])=>{const q=norm(quote);return q.length>0&&texts.some(t=>norm(t).includes(q));};
 const lenient={source:'spoken' as const,questionText:null,studentWork:null,knowledgePointId:'other',stuckQuote:'',stuckPointId:null,catalogTask:null};
 /** probe 阶段模型提议的 problemDraft。程序校验：知识点只认现有 6 个（否则 other）；stuckQuote 必须能在学生本场次原话里找到出处，
  * questionText / studentWork 找不到出处就丢弃该字段；只剩卡点、没有题目或作答的草稿视为不完整，不展示确认卡。 */

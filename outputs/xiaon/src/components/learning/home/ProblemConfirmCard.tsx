@@ -50,6 +50,6 @@ export function ProblemConfirmCard({draft,sessionId,l,onConfirmed}:ProblemConfir
    {!editing&&<button className="secondary" disabled={l.busy} onClick={()=>setEditing(true)}><Pencil size={16}/>改一下</button>}
    <button className="text-button" disabled={l.busy} onClick={()=>setDismissed(true)}><X size={15}/>不用了</button>
   </div>
-  <p className="small muted">参考答案只保存在你的电脑上（小N的服务端），不会发到聊天里。</p>
+  <p className="small muted">参考答案只保存在这台设备的记录里，不会发到聊天里。</p>
  </section>;
 }

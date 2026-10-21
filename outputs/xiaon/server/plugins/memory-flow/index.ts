@@ -14,7 +14,8 @@ export const MEMORY_MENTION_COOLDOWN_DAYS=3;
 export const MEMORY_REVIEW_DAYS=30;
 const OFFER_MARKER='memory-offer';
 // 只记事件、兴趣、有用的方法；情绪状态和对人的评价一律丢弃。
-const EMOTION_OR_JUDGEMENT=/焦虑|紧张|害怕|恐惧|难过|伤心|哭|崩溃|绝望|烦|生气|愤怒|郁闷|压力大|开心|高兴|兴奋|讨厌|喜欢抱怨|差|弱|笨|聪明|不努力|懒|不认真|学不会|没天赋|粗心/;
+// “差/弱”这类单字必须带语境才算评价，避免误伤“差不多每天练琴”这类事件。
+const EMOTION_OR_JUDGEMENT=/焦虑|紧张|害怕|恐惧|难过|伤心|哭|崩溃|绝望|烦|生气|愤怒|郁闷|压力大|开心|高兴|兴奋|讨厌|(?:数学|语文|英语|物理|成绩|考试|考得|学得|很|太|比较|相当)差|差劲|(?:很|太|身体)弱|笨|聪明|不努力|懒|不认真|学不会|没天赋|粗心/;
 const norm=(s:string)=>s.replace(/[\s，。、；：？！]/g,'').toLowerCase();
 const trimTo=(s:string,max:number)=>Array.from(s.trim()).slice(0,max).join('');
 function mention(memoryId:string,sessionId:string|null,ctx:RevampContext):MemoryMention{

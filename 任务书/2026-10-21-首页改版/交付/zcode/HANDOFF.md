@@ -45,12 +45,24 @@
 | `npm ci` | 0 | worktree 初装 |
 | `npm run typecheck:agent` | 0 | |
 | `npm test` | 0 | 原 25 项规则 |
-| `npm run test:agent:i` | 0 | 17/17（problem 8、memory 7、contract-smoke 2） |
-| `npm run test:agent` | **1** | 162 项中 158 通过；仅 `tests-agent/g` 4 条钉死 zCode 桩的断言失败（见 `CONTRACT-REQUEST.md` 第 1 条，g 目录归 Claude，集成时更新） |
+| `npm run test:agent:i` | 0 | 19/19（problem 9、memory 8、contract-smoke 2） |
+| `npm run test:agent` | **1** | 164 项中 160 通过；仅 `tests-agent/g` 4 条钉死 zCode 桩的断言失败（见 `CONTRACT-REQUEST.md` 第 1 条，g 目录归 Claude，集成时更新） |
 | `npm run build` | 0 | |
 | `node --import tsx scripts/agent/vision-smoke.ts` | 2 | 无 Key →「未运行」，符合预期 |
 
-**首次失败留档**（`evidence/i-first-run-stub.txt`）：测试写完后用 `git stash` 临时还原两个插件的阶段 0 桩再跑 `test:agent:i`，17 项按预期全部失败（not_implemented / 断言不符），随后恢复实现转绿。这满足「先写能揭露错误的测试、第一次失败原样留档」。修复过程中的真实失败（测试自己的 `f.r` 笔误、题干无冒号时表达式没核对到、greeting 合成模型措辞替换了默认文字）都已在最终版本中改正，无未决失败。
+**首次失败留档**（`evidence/i-first-run-stub.txt`）：测试写完后用 `git stash` 临时还原两个插件的阶段 0 桩再跑 `test:agent:i`，按预期全部失败（not_implemented / 断言不符），随后恢复实现转绿。这满足「先写能揭露错误的测试、第一次失败原样留档」。修复过程中的真实失败（测试自己的 `f.r` 笔误、题干无冒号时表达式没核对到、greeting 合成模型措辞替换了默认文字、首页流程测试的消息没触发 `STUDY_PATTERN` 落在 companion）都已在最终版本中改正，无未决失败。
+
+**交付后深度复查（同日第二轮）修正了三处实现问题并补了测试**：
+1. `traceable` 归一后为空串的「原话」（全是标点）会让 `includes` 恒真——已加非空校验，并有用例「。。。」不通过。
+2. 情绪/评价正则里单字「差/弱」会误伤「差不多每天练琴」这类事件——改成带语境匹配（数学差/成绩差/很差/差劲/很弱等），并加了不误伤用例。
+3. 确认卡底部「保存在小N的服务端」含工程味措辞——改为「保存在这台设备的记录里」。
+4. 补测：首页流程合法草稿透传 + 未点「记下」不写入（A1）+ 确认响应无答案字段；greeting 只从有效记忆里挑（过期/到期待复核/已停用不提，B12）；相关记忆超过 5 条的截断。
+
+**复查确认的设计取舍（此前未写明，补充在这里）**：
+- `shouldOfferMemory` 计数的是「程序放行的提议机会」（memory-offer 标记），不是模型实际提议次数：模型在放行轮保持沉默也会消耗一次。方向是宁少勿多（学生最多被问两次），与任务书「同一场次最多提议 2 次」的上限语义一致。
+- `ProblemConfirmCard` 确认后「只有知识点、没有题目文字」的同类题建议走 `l.choose`（现有选题/支持练习流程），不是 think 聊天——`ProblemConfirmCardProps` 冻结没有 send/navigate，无法在此组件里再发 `start_together`。已在 `CONTRACT-REQUEST.md` 第 3 条一并提出。
+- `MemoryOffNotice` 的 `where:'progress_card'` 挂载位：ChatPanel 目前只挂 `where='home'`；进步卡处的提示需要 Claude 的 `ProgressCardView` 或 ChatGPT 在挂载位补一行（props 已支持）。
+- 记忆页手动新增表单传 `expiresAt/reviewAt` 空值的问题在 `LearningPages.tsx`（Claude 拥有），本路只能保证自己确认路径带 30 天复核，已在 `CONTRACT-REQUEST.md` 第 2 条提出。
 
 ## 4. 证据级别
 

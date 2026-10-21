@@ -33,6 +33,7 @@ test('validateMemoryDraft: 关闭即拒、情绪与评价丢弃、40 字上限�
  assert.equal(validateMemoryDraft({text:'下周有篮球赛',kind:'event'},{...on,memoryEnabled:false}).ok,false,'记忆关闭一律拒绝');
  assert.equal(validateMemoryDraft({text:'他最近很焦虑',kind:'event'},on).ok,false,'情绪不记');
  assert.equal(validateMemoryDraft({text:'数学差，要多练',kind:'method'},on).ok,false,'评价不记');
+ assert.equal(validateMemoryDraft({text:'差不多每天练琴，坚持一个月了',kind:'event'},on).ok,true,'“差不多”是事件不是评价，不误伤');
  assert.equal(validateMemoryDraft({text:'下'.repeat(MEMORY_DRAFT_MAX_CHARS+1),kind:'event'},on).ok,false,'超过 40 字丢弃');
  assert.equal(validateMemoryDraft({text:'下周有篮球赛',kind:'feeling'},on).ok,false,'种类只能是事件/兴趣/方法');
  assert.equal(validateMemoryDraft({text:'先抄题再化简，一步一步来',kind:'method'},on).ok,true,'有用的方法可以记');
@@ -100,11 +101,28 @@ test('greeting: 离线（无模型）返回默认文字；刚确认的记忆不�
  }finally{f.dispose();}
 });
 
-test('selectMemoriesForContext: 只取与当前话题相关的记忆，按相关度排序',()=>{
+test('selectMemoriesForContext: 只取与当前话题相关的记忆，按相关度排序，最多 5 条',()=>{
  const items=[mem(0,'喜欢打篮球'),mem(1,'下周有班级篮球赛'),mem(2,'解释时一次只讲一步'),mem(3,'喜欢下围棋')];
  const picked=selectMemoriesForContext({sessionId:'chat-x',stage:'probe',studentTexts:['上次说的篮球赛怎么样了'],memories:items},null as never);
  assert.deepEqual(picked.map(m=>m.id),['m1','m0'],'更相关的排前面');
  assert.deepEqual(selectMemoriesForContext({sessionId:null,stage:null,studentTexts:['你好'],memories:items},null as never),[],'没有相关记忆时不带');
+ const six=[...Array.from({length:6},(_,i)=>mem(10+i,'每天练琴'+i+'小时')),...items];
+ assert.equal(selectMemoriesForContext({sessionId:'chat-x',stage:'probe',studentTexts:['每天练琴多久'],memories:six},null as never).length,5,'相关记忆超过上限只带 5 条');
+});
+
+test('greeting 只从有效记忆里挑：过期、到期待复核、已停用的一律不提',async()=>{
+ const f=setup(new LaneProvider());try{
+  f.r.events.consent({operationId:id(),optionalMemory:true});
+  const base=f.clock.now();
+  const expired=await f.r.events.remember({operationId:id(),text:'上周就要交的报名表',source:'student_explicit',purpose:'tutoring',expiresAt:new Date(Date.parse(base)-86_400_000).toISOString(),reviewAt:null});
+  const reviewDue=await f.r.events.remember({operationId:id(),text:'喜欢下围棋',source:'student_explicit',purpose:'tutoring',expiresAt:null,reviewAt:new Date(Date.parse(base)-86_400_000).toISOString()});
+  const valid=await f.r.events.remember({operationId:id(),text:'喜欢打篮球',source:'student_explicit',purpose:'tutoring',expiresAt:null,reviewAt:null});
+  const stopped=await f.r.events.remember({operationId:id(),text:'在学吉他',source:'student_explicit',purpose:'tutoring',expiresAt:null,reviewAt:null});
+  f.r.events.memoryState({operationId:id(),memoryId:stopped.id,action:'stop'});
+  const g=await f.d.greeting({operationId:id()});
+  assert.equal(g.memoryId,valid.id,'只有仍有效的记忆会被提起');
+  assert.notEqual(g.memoryId,expired.id);assert.notEqual(g.memoryId,reviewDue.id);assert.notEqual(g.memoryId,stopped.id);
+ }finally{f.dispose();}
 });
 
 test('Tutor 上下文经协调器按需取用：相关记忆才进上下文',async()=>{
