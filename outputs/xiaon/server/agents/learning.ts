@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { z } from 'zod';
-import { schemas,SCHEMA_VERSION,retentionWindow,MEMORY_CONTEXT_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,type ChatReply,type MemoryItem,type ChatStage,type ChatTurn,type LearningEpisode,type ModelProvider,type StageField,type TaskPublicView,type Validation,type InterviewSession,type InterviewStep,type MonthStage,type ProfessionalReport,type RetestReminder } from '../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,retentionWindow,MODULE_LEVEL_LABELS,MEMORY_CONTEXT_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,type ChatReply,type MemoryItem,type ChatStage,type ChatTurn,type LearningEpisode,type ModelProvider,type StageField,type TaskPublicView,type Validation,type InterviewSession,type InterviewStep,type MonthStage,type ProfessionalReport,type RetestReminder } from '../../shared/learning-contracts';
 import type { LearningRuntime } from '../bootstrap';
 import { RubricAssessment,createModelAnalyzer,classifyAttempt } from '../plugins/assessment';
 import { PlanningEngine } from '../plugins/planning';
@@ -171,6 +171,15 @@ export class LearningCoordinator {
  /** Stuck-point confirmation is derived from a student event: a confirmed ProblemRecord that links the stuck point. */
  private stuckConfirmed(stuckPointId:string){return this.r.repository.list('problems').some(p=>p.stuckPointId===stuckPointId);}
  private recentStuckPoints(){return this.r.repository.list('stuckPoints').slice(-3).map(({id,knowledgePointId,kind,summary,createdAt})=>({knowledgePointId,kind,summary,studentConfirmed:this.stuckConfirmed(id),createdAt}));}
+ /** Professional-mode background for the home Tutor: the latest report's tested modules (level labels only, no evidence or quotes)
+  * and this Shanghai month's student-confirmed goal. Learning records, so the memory switch does not apply. null when there is neither. */
+ private growthSnapshot(){
+  const repo=this.r.repository,report=repo.list('professionalReports').at(-1),month=shanghaiDate(this.r.clock.now()).slice(0,7);
+  const stage=latestRevisions(repo.list('monthStages')).find(s=>s.month===month&&s.status==='confirmed');
+  if(!report&&!stage)return null;
+  return {report:report?{createdAt:report.createdAt,modules:report.modules.filter(m=>m.level!=='not_tested').map(m=>({module:m.module,level:MODULE_LEVEL_LABELS[m.level]}))}:null,
+   monthGoal:stage?{month:stage.month,module:stage.module,goal:stage.goal}:null};
+ }
  /** Tutor context with memory-flow's selection. The program keeps only active memories, ≤ MEMORY_CONTEXT_MAX_ITEMS and ≤ MEMORY_CONTEXT_MAX_CHARS in total.
   * While the plugin is a stub the previous behaviour (all active tutoring memories) is kept unchanged. */
  private tutorContext(history:{role:'user'|'assistant';content:string}[],sessionId:string|null,stage:ChatStage|null){
@@ -233,7 +242,9 @@ export class LearningCoordinator {
    const context=this.tutorContext(p.history,sessionId,stage),ectx=this.r.engineContext();
    const stuckPoints=this.recentStuckPoints();
    const signals={needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem};
-   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals,helpLevel,helpLevelsUsed:live?.helpLevelsUsed??[]},signal,{prompt:homeTutorPrompt({stage,allowed,answerTurn:decision.answerTurn}),secrets,releasedAnswers});
+   // Growth background only on study stages; listen/companion stay away from levels and plans.
+   const growth=stage==='probe'||stage==='think'||stage==='reflect'?this.growthSnapshot():null;
+   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals,helpLevel,helpLevelsUsed:live?.helpLevelsUsed??[],...(growth?{growth}:{})},signal,{prompt:homeTutorPrompt({stage,allowed,answerTurn:decision.answerTurn,growth:!!growth}),secrets,releasedAnswers});
    if(exposed&&session&&result.run.status==='completed')this.r.events.expose({operationId:p.operationId+'-help',sessionId:session.id,taskId:exposed.taskId,taskVersion:exposed.taskVersion,kind:'chat_help',hintId:null});
    const out=homeTutorOutput.safeParse(result.value);const value=out.success?out.data:{message:result.run.error?.code==='forbidden'?ANSWER_HELD_TEXT:result.run.error?.message??'我在这里，按你的节奏来。',taskIds:[]};
    const proposed:Partial<Record<StageField,unknown>>=out.success?{problemDraft:out.data.problemDraft,observation:out.data.observation,progressCardDraft:out.data.progressCardDraft,memoryDraft:out.data.memoryDraft}:{};
