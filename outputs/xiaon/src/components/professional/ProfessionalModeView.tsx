@@ -5,10 +5,12 @@ import type { LearningUI } from '../../agents/useLearning';
 import { useDevMode } from '../../agents/devMode';
 import { ProfessionalAnswer } from './ProfessionalAnswer';
 import { ProfessionalMap,placeOf,type MapModule } from './ProfessionalMap';
-export type ProfessionalModeViewProps={l:LearningUI;navigate:(page:string,tab?:string)=>void;safety:boolean};
-export function ProfessionalModeView({l,navigate,safety}:ProfessionalModeViewProps){
- const dev=useDevMode(),[step,setStep]=useState<InterviewStep|null>(null),[notice,setNotice]=useState(''),[working,setWorking]=useState(false),[open,setOpen]=useState<string|false>(false);
- const lock=useRef(false),mounted=useRef(true),pauseAfter=useRef(false),startRef=useRef<HTMLButtonElement>(null);
+import { explorationStatus } from '../learning/ExplorationMap';
+/** onPractice(index): the existing free-practice entry for that place (welcome card → one task, 理解/逻辑 first). */
+export type ProfessionalModeViewProps={l:LearningUI;navigate:(page:string,tab?:string)=>void;safety:boolean;onPractice?:(index:number)=>void};
+export function ProfessionalModeView({l,navigate,safety,onPractice}:ProfessionalModeViewProps){
+ const dev=useDevMode(),[step,setStep]=useState<InterviewStep|null>(null),[notice,setNotice]=useState(''),[working,setWorking]=useState(false),[open,setOpen]=useState<string|false>(false),[card,setCard]=useState<MapModule|null>(null);
+ const lock=useRef(false),mounted=useRef(true),pauseAfter=useRef(false),startRef=useRef<HTMLButtonElement>(null),cardRef=useRef<HTMLDivElement>(null);
  useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;};},[]);
  const interview=[...(l.view?.interviews??[])].filter(i=>i.status!=='completed').sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))[0]??null;
  const latest=interview??[...(l.view?.interviews??[])].sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))[0];
@@ -27,14 +29,17 @@ export function ProfessionalModeView({l,navigate,safety}:ProfessionalModeViewPro
   setOpen(false);
   if(latest?.completedModules.includes(open as MapModule))setNotice(`${placeOf(open)}点亮啦！`+(interview?.currentModule?`下一站：${placeOf(interview.currentModule)}，点它接着走。`:''));
  },[open,interview?.status,interview?.currentModule,latest?.completedModules.length]);
- function onNode(m:MapModule){
-  const state=stateOf(m);
-  if(!interview){setNotice(latest?.status==='completed'?'想再走一遍，点下面的「开始」。':state==='current'?'':`先从${placeOf(INTERVIEW_MODULE_ORDER[0])}出发，点下面的「开始」。`);startRef.current?.scrollIntoView({block:'center'});startRef.current?.focus();}
-  else if(state==='current'){
-   if(interview.status==='paused')void act('resume');
-   else{setNotice('');setOpen(stop(interview));}
-  }else if(state==='done')setNotice(`${placeOf(m)}已经点亮了。`+(current?`接着去${placeOf(current)}吧。`:''));
-  else setNotice(`先去${placeOf(current??INTERVIEW_MODULE_ORDER[0])}，一站一站来。`);
+ // 一张地图两种用法：点地点出卡片，里面是「测评这一站」和「在这里自由练习」。测评没做完时自由练习锁住，测评题才算没见过。
+ useEffect(()=>{if(card)cardRef.current?.scrollIntoView?.({block:'nearest'});},[card]);
+ const focusStart=()=>{setCard(null);startRef.current?.scrollIntoView({block:'center'});startRef.current?.focus();};
+ function onNode(m:MapModule){setNotice('');setCard(m);}
+ function assessAction(m:MapModule):{text:string;go?:()=>void}{
+  const state=stateOf(m),place=placeOf(m);
+  if(state==='done')return {text:`${place}已经点亮了。`+(current&&interview?`测评接着去${placeOf(current)}。`:'')};
+  if(state==='waiting')return {text:interview&&current?`测评按顺序来，先去${placeOf(current)}。`:latest?.status==='completed'?'这次测评已经走完，想再测一次点下面的「开始」。':`测评从${placeOf(INTERVIEW_MODULE_ORDER[0])}出发。`};
+  if(!interview)return {text:'测评从这里出发：大约 10–15 分钟，五站依次走，可以随时暂停，不打总分。',go:focusStart};
+  if(interview.status==='paused')return {text:'上次停在这一站，已答的不会重问。',go:()=>{setCard(null);void act('resume');}};
+  return {text:'小N在这一站等你。',go:()=>{setCard(null);setNotice('');setOpen(stop(interview));}};
  }
  const pause=()=>{if(working||l.busy){pauseAfter.current=true;l.cancel();setNotice('正在保存暂停位置…');}else void act('pause');};
  async function act(kind:'start'|'resume'|'pause'|'answer'|'report'|'hint',text?:string){
@@ -82,6 +87,14 @@ export function ProfessionalModeView({l,navigate,safety}:ProfessionalModeViewPro
   </>:<>
    <div className="professional-heading"><span className="eyebrow">跟着小N，一站一站来</span><h2>一起看看你的思考方式</h2><p>本次观察，不打总分，不排名。</p></div>
    <ProfessionalMap stateOf={stateOf} onNode={onNode}/>
+   {card&&(()=>{const index=INTERVIEW_MODULE_ORDER.indexOf(card),a=assessAction(card),locked=!!interview,status=l.view?explorationStatus(l.view,card):'未开始';
+    return <div className="professional-place" role="region" aria-label={placeOf(card)} ref={cardRef}>
+     <div className="professional-place-head"><strong>{placeOf(card)}</strong><button className="text-button" onClick={()=>setCard(null)}>收起</button></div>
+     <div className="professional-place-row"><h4>测评</h4><p className="small">{a.text}</p>{a.go&&<button className="primary" disabled={disabled} onClick={a.go}>测评这一站</button>}</div>
+     <div className="professional-place-row"><h4>自由练习</h4><p className="small">{locked?'测评做完就能在这里自由练习。':`做一道这里的小任务，按自己的节奏来。练习记录：${status}。`}</p>
+      {!locked&&l.view?.paused&&<p className="small">学习已暂停。<button className="text-button" disabled={l.busy||safety} onClick={()=>void l.run('learning/start',{mode:'exploration'}).catch(()=>{})}>主动恢复本次学习</button></p>}
+      <button className="secondary" disabled={locked||!onPractice||disabled} onClick={()=>{setCard(null);onPractice?.(index);}}>在这里自由练习</button></div>
+    </div>;})()}
    {notice&&<p className="notice" role="status">{notice}</p>}
    {!interview&&latest?.status==='completed'&&<p className="notice">这次五个模块都走过了，辛苦啦。</p>}
    {!interview&&<div className="professional-intro"><p>先用约 10–15 分钟试试，实际时间按你的节奏。理解 → 逻辑 → 计算 → 建模 → 空间想象，五个地点依次点亮，可以随时暂停。</p><p>先走完理解和逻辑，就能看看本次报告。还没测的模块会如实标记。</p><div className="home-card-actions"><button ref={startRef} className="primary" disabled={disabled} onClick={()=>void act('start')}>开始</button><button className="secondary" disabled={disabled} onClick={()=>navigate('home','小N')}>先回首页</button></div></div>}

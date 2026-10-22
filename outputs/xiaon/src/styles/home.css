@@ -50,6 +50,13 @@
 .professional-map .map-node[data-state="done"] small { background: #dce9cc; color: #354e28; }
 @keyframes professional-glow { 50% { box-shadow: 0 0 0 9px #dce9cc99; } }
 @media (prefers-reduced-motion: reduce) { .professional-map .map-node[data-state="current"] .node-icon { animation: none; } }
+.professional-place { margin: 0 0 16px; padding: 14px 16px; border: 1px solid #d9dfcd; border-radius: 18px; background: #f7f8ef; scroll-margin-block: 90px; }
+.professional-place-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.professional-place-head strong { font-size: 1.05rem; }
+.professional-place-row { border-top: 1px solid var(--line); padding: 10px 0 4px; margin-top: 10px; }
+.professional-place-row h4 { margin: 0 0 4px; }
+.professional-place-row p { margin: 0 0 8px; }
+.professional-place-row > button { width: 100%; }
 .professional-convo-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .professional-intro { padding: 4px 0 12px; }
 .professional-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border-block: 1px solid var(--line); padding: 12px 0; margin: 16px 0; }

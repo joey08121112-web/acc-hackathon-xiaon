@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ExplorationMap } from './ExplorationMap';
 import { ArrowRight,Leaf,Pause,Send } from 'lucide-react';
 import type { LearningUI } from '../../agents/useLearning';
 import { retentionWindow,type MemoryRetention,type TaskPublicView } from '../../../shared/learning-contracts';
@@ -47,7 +46,8 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false}:
  {(page==='explore'||page==='growth')&&<>
  {headline(page==='explore'?'A SMALL WORLD TO EXPLORE':'GROW AT YOUR OWN PACE',page==='explore'?'每一种思考，都值得发现。':'每一点变化，都有来处。',page==='explore'?'不用证明什么。去几个地方，看看你怎样理解和解决问题。':'结果仅限已观察的子技能；待观察不代表能力弱。可以随时暂停。')}
  {v.paused&&page==='growth'&&!unfinishedInterview&&<div className="notice">学习已暂停，由你决定何时继续。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}
- {page==='explore'?<><ProfessionalModeView l={l} navigate={navigate} safety={safety}/><details className="info-paper" key={unfinishedInterview?'interview':'free-explore'}><summary>自由探索五维地图{unfinishedInterview?'（测评结束后可选）':''}</summary>{unfinishedInterview?<p>这次测评还没结束，可以在上方继续，或先暂停休息。</p>:<>{v.paused&&<div className="notice">学习已暂停。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}<ExplorationMap view={v} onDimension={onExploreDimension} onReport={()=>navigate('report','成长')}/></>}</details></>:<>
+ {/* One map for both: the assessment lights the places up, and each place card also offers free practice (locked until the assessment is finished). */}
+ {page==='explore'?<ProfessionalModeView l={l} navigate={navigate} safety={safety} onPractice={onExploreDimension}/>:<>
  {['理解','逻辑','计算','建模','空间想象'].map(dim=><section className="info-paper" key={dim}><h2>{dim}</h2>{v.assessment.skills.filter(s=>s.dimension===dim).map(s=><div className="learning-skill" key={s.id}><strong>{names[s.knowledgePointId]}</strong><span className="tag">{skillStatusLabels[s.status]}</span><p>{s.coverage}</p>{s.recentDifficulty&&<p>最近一次仍有困难，此前成功继续保留。</p>}{isGenerationKnowledgePoint(s.knowledgePointId)&&<details><summary>针对这个环节出一道新题</summary><GenerationPanel l={l} knowledgePointId={s.knowledgePointId} purpose="practice" navigate={navigate} safety={safety}/></details>}<details><summary>观察范围与待了解</summary>{s.unknowns.map((u,i)=><p className="small" key={i}>{u}</p>)}</details></div>)}</section>)}
  <ProblemList l={l} navigate={navigate}/>
  <GrowthArchive l={l} navigate={navigate}/>
