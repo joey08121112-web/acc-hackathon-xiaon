@@ -14,6 +14,7 @@ import { PROBLEM_DRAFT_PROMPT } from './prompts/problem-draft';
 import { MEMORY_DRAFT_PROMPT } from './prompts/memory-draft';
 import { containsAnswer,fitReply,replyLength } from './stages';
 const REPLY_REWRITE='上一条回复的message超过'+TUTOR_REPLY_MAX_CHARS+'字。请保持原意改写到'+TUTOR_REPLY_MAX_CHARS+'字以内、最多2句，其他字段不变，仍只输出JSON。';
+const JSON_REPAIR='上一条回复不是严格JSON。请把刚才想说的话放进message重新输出，只输出严格JSON {"message":"...","taskIds":[]}，不要任何其他文字。';
 export type TutorStage='listen'|'probe';
 // G0: rule 6 opens up by stage (home flow only). The legacy D flow keeps the original wording byte for byte.
 const RULE6_LEGACY='6. 不讲题、不给任何题目答案和提示，不主动开题，不声称学生的能力或分数。';
@@ -97,8 +98,15 @@ export class ControlledRoles {
    while(run.rounds<4){
     this.check(controller.signal);run.rounds++;
     const response=await this.complete([...messages],this.r.tools.definitions(role),controller.signal);
-    if(!response.toolCalls.length){const value=JSON.parse(response.content);if(role==='tutor'){
-      let out=(home?homeTutorOutput:tutorOutput).parse(value);
+    if(!response.toolCalls.length){
+     if(role==='tutor'){
+      // GLM occasionally replies as plain chat without the JSON wrapper (seen on probe turns): one repair round, then the raw text itself becomes the message so the answer-leak guards below still run on it.
+      let out:z.infer<typeof homeTutorOutput>|undefined;
+      try{out=(home?homeTutorOutput:tutorOutput).parse(JSON.parse(response.content));}catch{out=undefined;}
+      if(!out){
+       if(run.rounds<4){replyFit='retried';messages.push({role:'assistant',content:response.content.slice(0,4000)},{role:'user',content:JSON_REPAIR});continue;}
+       out={message:response.content.trim().slice(0,TUTOR_REPLY_MAX_CHARS)||'我在这里，按你的节奏来。',taskIds:[]};
+      }
       if(replyLength(out.message)>TUTOR_REPLY_MAX_CHARS){
        if(replyFit==='ok'&&run.rounds<4){replyFit='retried';messages.push({role:'assistant',content:response.content.slice(0,4000)},{role:'user',content:REPLY_REWRITE});continue;}
        out={...out,message:fitReply(out.message,TUTOR_REPLY_MAX_CHARS)};replyFit='truncated';
@@ -118,7 +126,7 @@ export class ControlledRoles {
       if(home?.secrets?.some(a=>containsAnswer(out.message,a)))throw new RuntimeError('forbidden','未完成题目的答案已拦截');
       return out;
      }
-     const out=plannerOutput.parse(value);const count=(data as {report:{statements:unknown[]}}).report.statements.length;
+     const value=JSON.parse(response.content);const out=plannerOutput.parse(value);const count=(data as {report:{statements:unknown[]}}).report.statements.length;
      if(out.statementIndexes.some(i=>i>=count))throw new RuntimeError('provider_error','报告引用越界');return out;
     }
     messages.push({role:'assistant',content:'',toolCalls:response.toolCalls});

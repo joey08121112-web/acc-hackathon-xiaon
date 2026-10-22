@@ -18,7 +18,7 @@
 |---|---|---|---|
 | 本机开发 | `npm run dev:learning` | 只有本机 | 日常开发 |
 | 现场演示 | `./demo-tunnel.sh` | 任何人（临时 HTTPS 地址） | 比赛现场、手机扫码 |
-| 公网部署 | Dockerfile → Zeabur / Railway 等 | 任何人（固定 HTTPS 域名） | 提交表里的部署链接 |
+| 公网部署 | Dockerfile → Railway（主）/ 腾讯云 CloudBase（国内，需实名） | 任何人（固定 HTTPS 域名） | 提交表里的部署链接 |
 
 ## 2. 三个可选环境变量（公网部署的开关）
 
@@ -32,16 +32,17 @@
 
 另外：平台注入的 `PORT` 优先于 `XIAON_API_PORT`；模型相关变量（`XIAON_GLM_API_KEY` 等）与本机一致。**真实 Key 永远只填在平台的环境变量里或本机 `.env.server`，不进 Git。**
 
-## 3. 方式 A：Zeabur 一键部署（主路径）
+## 3. 方式 A：Railway 免费试用部署（主路径，2026-10-21 更新）
 
-Zeabur 支持 GitHub 登录、支付宝付款、香港区域（国内访问正常，不需要 ICP 备案）。仓库里已有 `Dockerfile`，平台会自动识别。
+Railway 新账号送 **30 天试用 + $5 一次性额度**，用 GitHub 登录即可，**不需要信用卡**（[$5 试用额度够这个小服务跑数周](https://docs.railway.com/pricing/free-trial)，本次比赛全程免费）。试用与付费版功能基本一致：支持 Docker 部署、公网域名、持久卷。国内直连 `*.up.railway.com` 域名 2026-10-21 实测连通正常（首次字节约 1.1 秒）。
+
+> **必须用 GitHub 账号登录**：未通过 GitHub 验证的「受限试用」会限制出站网络，服务将连不上智谱 API，模型模式直接失效（降级为本地规则回复）。
 
 1. 确认 GitHub 仓库 `joey08121112-web/acc-hackathon-xiaon` 已包含本次改动（`outputs/xiaon/Dockerfile` 存在即可）。
-2. 打开 [zeabur.com](https://zeabur.com)，用 GitHub 账号登录；按页面提示绑定支付方式（有免费/低价档，以官网当期为准）。
-3. 新建 Project，区域选 **Hong Kong**（或最近的亚洲区域）。
-4. Add Service → **Git** → 授权并选择仓库 `acc-hackathon-xiaon`。
-5. 在服务的 Settings 里把 **Root Directory** 设为 `outputs/xiaon`（仓库根目录不是应用目录，这一步不能漏）。平台会按 `Dockerfile` 构建，端口自动识别为 8080；若要求手填端口就填 `8080`。
-6. 打开 **Variables（环境变量）**，逐条添加（值从本机 `outputs/xiaon/.env.server` 复制，不要截图或粘进聊天）：
+2. 打开 [railway.com](https://railway.com)，用 GitHub 账号登录，即获完整试用。
+3. New Project → **Deploy from GitHub repo** → 授权并选择仓库 `acc-hackathon-xiaon`。
+4. 在服务 Settings 里把 **Root Directory** 设为 `outputs/xiaon`（仓库根目录不是应用目录，这一步不能漏）。平台按 `Dockerfile` 构建，自动注入 `PORT`，代码已兼容。
+5. **Variables（环境变量）**逐条添加（值从本机 `outputs/xiaon/.env.server` 复制，不要截图或粘进聊天）：
 
    ```
    XIAON_GLM_API_KEY      = <你的 Coding Plan Key>
@@ -51,19 +52,33 @@ Zeabur 支持 GitHub 登录、支付宝付款、香港区域（国内访问正�
    XIAON_GLM_MAX_TOKENS   = 8192
    ```
 
-   `XIAON_API_HOST` / `XIAON_API_PORT` / `XIAON_STATIC_DIR` 已在 Dockerfile 里写好。数据库默认 `XIAON_DB_PATH=/data/learning.sqlite`，必须按第 9 节挂载持久卷后再使用；只设置路径不会自动获得持久卷。
-7. 等第一次部署完成，进入 **Networking → Generate Domain**，得到类似 `https://xiaon-xxxx.zeabur.app` 的地址。
-8. **回到 Variables 添加** `XIAON_PUBLIC_ORIGIN = https://xiaon-xxxx.zeabur.app`（和第 7 步的域名一字不差，不带末尾斜杠）。保存后平台会自动重新部署。这一步之前打开页面会显示白屏或 403，是预期行为。
-9. 打开域名，按第 6 节自检。把这个地址填进比赛提交表。
+   `XIAON_API_HOST` / `XIAON_API_PORT` / `XIAON_STATIC_DIR` / `XIAON_DB_PATH` 已在 Dockerfile 里写好。
+6. （可选，建议）按第 9 节给服务添加 Volume（Mount Path `/data`），学习记录在重新部署后保留。不加也能正常运行，只是每次重新部署记录清空——对比赛演示反而合适（见第 7 节）。
+7. Settings → Networking → **Generate Domain**，得到 `https://xxx-production.up.railway.app`。
+8. **回到 Variables 添加** `XIAON_PUBLIC_ORIGIN = https://xxx-production.up.railway.app`（和第 7 步域名一字不差、不带末尾斜杠）。这一步之前打开页面会白屏或 403，是预期行为。
+9. 打开域名，按第 6 节自检，把地址填进比赛提交表。
+10. 比赛结束不再需要时，项目 Settings → Delete Project 即可，全程不产生费用。
 
-想换成自己的域名：Networking 里添加 Custom Domain，按提示加一条 DNS CNAME，然后把新域名也加进 `XIAON_PUBLIC_ORIGIN`（逗号分隔）。
+## 3A. 方式 A-国内：腾讯云开发 CloudBase 云托管（国内访问最优，需实名）
 
-## 4. 方式 B：Railway / Render（备选）
+2026-10-21 验证可行后新增。免费体验版环境每月 3000 资源点（≈¥3）：0.25 核 0.5G 常驻约 714 点/天，够连续跑约 4 天；无人访问自动缩容到 0、不计费，覆盖比赛评审期足够。默认域名 `*.app.tcloudbase.com` 自带 HTTPS 且为腾讯已备案域名，**国内打开最快**。需要微信注册腾讯云 + 身份证实名；免费版超额不能补费（服务停），比赛期够用。阿里云函数计算不可选：默认域名会强制浏览器下载网页，必须绑已备案自定义域名。
 
-步骤和 Zeabur 几乎一样，都靠仓库里的 `Dockerfile`：
+1. **部署包**：`outputs/xiaon-cloudbase-deploy.zip`（已剔除 node_modules、dist、.local、.env.server；仅凭包内内容即可构建运行，已本机验证）。源码更新后重打：在 `outputs/xiaon` 执行 `zip -rq ../../outputs/xiaon-cloudbase-deploy.zip . -x "node_modules/*" -x ".local/*" -x "dist/*" -x ".env.server"`。
+2. 腾讯云控制台搜「云开发 CloudBase」→ 创建环境 → 计费选**免费体验版** → 地域选**上海**（云托管计费项在上海地域）。
+3. 环境内打开**云托管** → 创建服务：名称 `xiaon`，按量计费，规格 0.25 核 0.5G。
+4. 服务里**部署新版本** → 上传方式选**本地代码** → 上传 zip → 等构建（几分钟）。
+5. 服务设置：监听端口 `8080`；环境变量加模型五变量（同第 3 节）。
+6. 开启公网访问/默认域名，得到 `https://xiaon-xxxx.sh.app.tcloudbase.com`。
+7. 回环境变量加 `XIAON_PUBLIC_ORIGIN = 该域名`（一字不差、无末尾斜杠），重新部署。
+8. 按第 6 节自检。**若首页 403 而 `/api/health` 正常**：网关未传 `X-Forwarded-Host`，补一条 `XIAON_ALLOWED_ORIGINS = https://该域名` 再重部署。
+9. 控制台如有「请求超时」，调到 ≥120 秒（GLM 回复上限 120s）。
 
-- **Railway**：New Project → Deploy from GitHub repo → Settings 里设 Root Directory `outputs/xiaon` → Variables 填第 3 节的模型变量 → Settings → Networking → Generate Domain → 回填 `XIAON_PUBLIC_ORIGIN`。Railway 会自动注入 `PORT`，代码已兼容。需要国际信用卡。
-- **Render**：New → Web Service → 连接仓库 → Root Directory `outputs/xiaon`，Runtime 选 Docker → 其余同上。免费档闲置 15 分钟会休眠，评委第一次点开要等约 1 分钟，**不建议把免费档链接交给评委**。
+与 Railway 的差异：无持久卷，SQLite 随重新部署/缩容清空（演示期反而合适）；其余同第 7 节。
+
+## 4. 方式 B：Render 免费版（备选）；Zeabur 已不可用
+
+- **Render**（[免费政策](https://render.com/docs/free)）：New → Web Service → 连接仓库 → Root Directory `outputs/xiaon`、Runtime 选 Docker → Variables 同第 3 节 → 生成域名 → 回填 `XIAON_PUBLIC_ORIGIN`。不需要信用卡、**永久免费**；但免费服务 **15 分钟无访问会休眠**，下一次打开要等约 1 分钟才唤醒，**不建议作为交给评委的主链接**；也没有持久磁盘，SQLite 每次部署清空。作为 Railway 之外的兜底可用。
+- **Zeabur（作废）**：共享集群 [2026-03-15 起停止接收新项目](https://zeabur.com/zh-CN/changelogs/phasing-out-shared-cluster)（免费托管同步取消，新用户须自带服务器）；平台已于 [2026-10-17 宣布整体关停](https://zeabur.com/zh-CN/blogs/zeabur-is-shutting-down)，2026-12-31 前全部下线。本文档此前的 Zeabur 部署步骤全部作废。
 
 ## 5. 方式 C：现场演示保底 `demo-tunnel.sh`
 
@@ -110,11 +125,9 @@ cd outputs/xiaon
 node --import tsx scripts/agent/backup.ts --check-volume
 ```
 
-### Zeabur
+### Zeabur（已停运，仅存档）
 
-在应用服务的 **Volumes** 页点击 **Mount Volumes**，Volume ID 填 `xiaon-data`，Mount Directory 填 `/data`；保存。Variables 设置 `XIAON_DB_PATH=/data/learning.sqlite`，再部署。首次挂载会遮住该目录原有内容；已有记录时，先下载一致性备份，挂卷后停服务再恢复。不要通过删卷来重置演示。
-
-步骤依据 [Zeabur 官方持久卷说明](https://zeabur.com/docs/en-US/data-management/volumes)（2026-10-21 查阅）；本路没有实际操作平台。
+Zeabur 已宣布关停、共享集群不再接收新项目（见第 4 节），以下步骤**作废**，仅作历史存档：在应用服务的 **Volumes** 页点击 **Mount Volumes**，Volume ID 填 `xiaon-data`，Mount Directory 填 `/data`；保存。Variables 设置 `XIAON_DB_PATH=/data/learning.sqlite`，再部署。
 
 ### Railway
 

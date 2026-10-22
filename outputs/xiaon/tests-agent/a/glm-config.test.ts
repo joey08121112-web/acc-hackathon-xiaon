@@ -12,7 +12,7 @@ test('05 config defaults personal Coding Plan GLM Flash, one server-side variabl
  for(const env of [{XIAON_GLM_TIMEOUT_MS:'0'},{XIAON_GLM_MAX_TOKENS:'NaN'},{XIAON_GLM_BASE_URL:'http://unsafe.invalid'},{XIAON_GLM_BASE_URL:'https://user:secret@unsafe.invalid'}])assert.throws(()=>readGlmConfig(env),{code:'invalid_params'});
 });
 
-test('GLM configured endpoint/token budget and native thinking fields roundtrip without leaking private thought',async()=>{
+test('GLM configured endpoint/token budget disables thinking and still roundtrips native reasoning fields without leaking private thought',async()=>{
  let calls=0;let sent:Record<string,unknown>={};let target='';
  const provider=new GlmProvider('SYNTHETIC_KEY','glm-5.3-flash',async(url,options)=>{
   target=String(url);sent=JSON.parse(String(options?.body));calls++;
@@ -20,7 +20,7 @@ test('GLM configured endpoint/token budget and native thinking fields roundtrip 
  },{baseUrl:'https://official.example.test/v5',maxTokens:4096,timeoutMs:45000});
  const signal=new AbortController().signal;const first=await provider.complete({messages:[{role:'user',content:'合成测试'}],tools:[],signal});assert.equal(JSON.stringify(first).includes('SYNTHETIC_PRIVATE_THOUGHT'),false);
  const second=await provider.complete({messages:[{role:'assistant',content:'',toolCalls:first.toolCalls},{role:'tool',toolCallId:first.toolCalls[0].id,content:'{}'}],tools:[],signal});
- assert.equal(target,'https://official.example.test/v5/chat/completions');assert.equal(sent.max_tokens,4096);assert.equal((sent.messages as {reasoning_content?:string}[])[0].reasoning_content,'SYNTHETIC_PRIVATE_THOUGHT');assert.equal(JSON.stringify(second).includes('THOUGHT'),false);assert.notEqual((sent.thinking as {type?:string}|undefined)?.type,'disabled');
+ assert.equal(target,'https://official.example.test/v5/chat/completions');assert.equal(sent.max_tokens,4096);assert.equal((sent.messages as {reasoning_content?:string}[])[0].reasoning_content,'SYNTHETIC_PRIVATE_THOUGHT');assert.equal(JSON.stringify(second).includes('THOUGHT'),false);assert.equal((sent.thinking as {type?:string}|undefined)?.type,'disabled');
 });
 
 test('truncation refuses tool execution; configured provider timeout reports timeout',async()=>{
