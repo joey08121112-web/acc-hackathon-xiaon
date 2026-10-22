@@ -6,6 +6,7 @@ import "./style.css";
 import "./styles/home.css";
 import "./styles/problem.css";
 import "./styles/progress.css";
+import "./styles/guardian.css";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />

@@ -1,0 +1,111 @@
+/* 监护人页：学习概览列表 + 每周学习小结（GuardianOverview.tsx）。 */
+.guardian-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+.guardian-list strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.guardian-list small {
+  color: #98a58a;
+  margin-left: 2px;
+}
+.guardian-note {
+  display: block;
+  font-size: 0.72rem;
+  color: #7d8a71;
+  margin: 10px 0;
+}
+.guardian-week {
+  border: 1px solid #dfe5d2;
+  border-radius: 14px;
+  padding: 19px;
+  background: #fffef7;
+  margin-bottom: 25px;
+}
+.guardian-week h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+}
+.guardian-week-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.guardian-week-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.guardian-week-nav .text-button {
+  font-size: 0.75rem;
+  padding: 4px 2px;
+}
+.guardian-week-nav .text-button:disabled {
+  opacity: 0.35;
+}
+.guardian-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 16px 0 10px;
+}
+.guardian-stats div {
+  background: #f3f4ea;
+  border-radius: 10px;
+  padding: 12px 6px;
+  text-align: center;
+}
+.guardian-stats strong {
+  display: block;
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: var(--green);
+}
+.guardian-stats span {
+  font-size: 0.7rem;
+  color: #6f7c64;
+}
+.guardian-kinds {
+  font-size: 0.74rem;
+  color: #6f7c64;
+  margin: 0 0 6px;
+}
+.guardian-block,
+.guardian-tips {
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+  margin-top: 12px;
+}
+.guardian-block h3,
+.guardian-tips h3 {
+  font-size: 0.86rem;
+  font-weight: 500;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.guardian-block p,
+.guardian-tips p {
+  font-size: 0.8rem;
+  color: #5d6c53;
+  margin: 4px 0;
+}
+.guardian-block strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+.guardian-tips {
+  background: #eef2e4;
+  border-top: none;
+  border-radius: 10px;
+  padding: 12px 14px;
+}

@@ -46,6 +46,8 @@ import { useLearning } from "./agents/useLearning";
 import { useDevMode, setDevMode } from "./agents/devMode";
 import { ChatPanel } from "./components/learning/ChatPanel";
 import { LearningPages, LearningStatus } from "./components/learning/LearningPages";
+import { GuardianOverview } from "./components/guardian/GuardianOverview";
+import { guardianDigest } from "./components/guardian/digest";
 import { aiConfigured, chatWithAI } from "./ai";
 import {
   correct,
@@ -2752,9 +2754,12 @@ function App() {
                     这是权限设计演示。前端切换页面没有实现真实身份核验或数据访问隔离。
                   </SectionHeading>
                   {guardianPanel()}
+                  {learning.enabled && learning.view ? (
+                    <GuardianOverview view={learning.view} />
+                  ) : (
                   <div className="guardian-overview">
                     <h2>学习概览</h2>
-                    <Tag>不展示敏感倾诉原文</Tag>
+                    <Tag>离线规则版示例 · 不展示敏感倾诉原文</Tag>
                     <dl>
                       <dt>当前目标</dt>
                       <dd>
@@ -2771,6 +2776,7 @@ function App() {
                       <dd>{report[2].finding}</dd>
                     </dl>
                   </div>
+                  )}
                   <div className="rights-card">
                     <h2>信息查阅申请 · 演示</h2>
                     <label className="field">
@@ -2841,7 +2847,12 @@ function App() {
                           ? "结果：需进一步核实必要性与权限，没有直接展示敏感倾诉内容。"
                           : s.rightsScope === "授权状态与保存规则"
                             ? `演示结果：长期记忆${s.longMemory ? "开启" : "关闭"}；研究用途${s.research ? "选择授权演示" : "关闭"}。内容保留在本机，直至主动删除。`
-                            : `演示结果：${s.plan === "none" ? "尚未接受计划" : "目标为看清括号前的负号"}；已有 ${doneCount} 个维度留下完成记录。`}
+                            : learning.enabled && learning.view
+                              ? (() => {
+                                  const o = guardianDigest(learning.view).overview;
+                                  return `演示结果：${o.planGoal ? `当前计划为${o.planGoal}` : "孩子还没有确认计划"}；已观察 ${o.skills.length} 个知识点。`;
+                                })()
+                              : `演示结果：${s.plan === "none" ? "尚未接受计划" : "目标为看清括号前的负号"}；已有 ${doneCount} 个维度留下完成记录。`}
                       </div>
                     )}
                   </div>
