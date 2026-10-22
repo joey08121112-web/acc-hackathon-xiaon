@@ -1,6 +1,6 @@
 /** 所有者：ChatGPT。首页综合模式与冻结契约组件的挂载位。 */
-import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowRight, Keyboard, Loader2, Mic, Send, Square, Volume2, VolumeX } from 'lucide-react';
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react';
+import { ArrowRight, AudioLines, Keyboard, Loader2, Volume2, VolumeX } from 'lucide-react';
 import type { LearningUI } from '../../agents/useLearning';
 import { apiRequest, newOperationId } from '../../agent-client';
 import { useDevMode } from '../../agents/devMode';
@@ -27,11 +27,15 @@ const CHIPS: {text:string;intent?:ChatIntent}[] = [
  {text:'陪我看看这张卷子吧',intent:'study'}, {text:'不想聊学习了，聊点别的吧',intent:'life'},
 ];
 const STALE_MS = 6 * 3600_000;
+// 输入栏像微信：左边切换语音/打字，记住上次用的那一种。
+const TALK_MODE_KEY = 'xiaon-talk-mode';
+const HOLD_MS = 450;
+const readTyping = () => { try { return localStorage.getItem(TALK_MODE_KEY) !== 'voice'; } catch { return true; } };
 const swallow = (p: Promise<unknown>) => { void p.catch(() => {}); };
 /** active=false: the home page is hidden but kept mounted (cards and pending replies survive); stay silent until the student comes back. */
 export function ChatPanel({ l, paused, safety, navigate, trace, active = true }: { l: LearningUI; paused: boolean; safety: boolean; navigate: (page: string, tab?: string) => void; trace: ReactNode; active?: boolean }) {
  const dev=useDevMode();
- const [message,setMessage]=useState(''),[reply,setReply]=useState<ChatReply|null>(null),[awaiting,setAwaiting]=useState(false),[typing,setTyping]=useState(true);
+ const [message,setMessage]=useState(''),[reply,setReply]=useState<ChatReply|null>(null),[awaiting,setAwaiting]=useState(false),[typing,setTyping]=useState(readTyping),[holding,setHolding]=useState(false);
  const [greeting,setGreeting]=useState(OPENER),[notice,setNotice]=useState(''),[summary,setSummary]=useState<ConversationSummary|null>(null),[manualSuggestion,setManualSuggestion]=useState<ModeSuggestion|null>(null);
  const [needsSeen,setNeedsSeen]=useState(false),[keyboard,setKeyboard]=useState(false);
  const requestLock=useRef(false),sent=useRef(false),greetingAbort=useRef<AbortController|null>(null),composer=useRef<HTMLFormElement>(null);
@@ -105,8 +109,24 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   if(mic.phase==='idle'){v.actions.unlock();void mic.actions.start(text=>send(text),()=>pet.say('idle','retry'));}
   else if(mic.phase==='listening')mic.actions.stop();else mic.actions.cancel();
  };
+ // 按住说话、松开发送；轻点一下也行（再点一下结束），键盘回车/空格走 onClick。
+ const pressedAt=useRef(0);
+ const holdDown=(e:PointerEvent<HTMLButtonElement>)=>{
+  if(e.button!==0||(disabled&&mic.phase==='idle'))return;
+  e.currentTarget.setPointerCapture?.(e.pointerId);
+  pressedAt.current=mic.phase==='idle'?Date.now():0;setHolding(mic.phase==='idle');onMic();
+ };
+ const holdUp=()=>{
+  const held=pressedAt.current&&Date.now()-pressedAt.current>=HOLD_MS;
+  pressedAt.current=0;setHolding(false);
+  if(held&&mic.phase==='listening')mic.actions.stop();
+ };
+ const setMode=(next:boolean)=>{
+  setTyping(next);try{localStorage.setItem(TALK_MODE_KEY,next?'typing':'voice');}catch{/* remembering is optional */}
+  if(!next)mic.actions.cancel();
+ };
  const disabled=l.busy||awaiting||!l.connected;
- const micLabel=mic.phase==='listening'?'我在听，说完点一下':mic.phase==='requesting'?'请允许使用麦克风':mic.phase==='transcribing'?'识别中…':disabled?'小N在想…':'点一下，直接对小N说话';
+ const micLabel=mic.phase==='listening'?(holding?'松开 发送':'我在听，说完点一下'):mic.phase==='requesting'?'请允许使用麦克风':mic.phase==='transcribing'?'识别中…':disabled?'小N在想…':'按住 说话';
  const showComposer=typing||mic.engine==='none';
  const note=mic.engine==='server'?'你的声音会发送到火山引擎豆包识别成文字，服务端不保存录音。':mic.engine==='browser'?'语音由浏览器自带的识别服务转成文字，可能由浏览器厂商处理。':'';
  return <div className={'home-chat'+(keyboard?' keyboard-open':'')} aria-busy={awaiting||l.busy}>
@@ -115,16 +135,16 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   <p className="small muted pet-hint">摸摸小N，也可以直接说说今天的事。</p>
   {!blocked&&<RetestReminder reminder={l.view?.retestReminder??null} where="home" l={l} navigate={navigate}/>}
   {!l.connected&&<p className="notice">暂时连不上，之前的话还在。<button onClick={()=>swallow(l.connect())}>重新连接</button></p>}
-  {paused&&<p className="notice">今天先歇一歇，不急着看题。想说话时，小N还在。</p>}
-  {blocked&&<p className="notice" role="alert">学习先暂停。<button onClick={()=>navigate('help')}>查看求助与安全支持</button></p>}
+  {blocked&&<p className="safety-link" role="alert"><button className="text-button" onClick={()=>navigate('help')}>查看求助与安全支持</button></p>}
   {(notice||l.error)&&<p className="notice" role="status">{notice|| (dev?l.error:'这次没有完成，请稍后重试。')}</p>}
-  <div className="talk-row">
-   {mic.engine!=='none'&&<button className="mic-button" data-phase={mic.phase} disabled={disabled&&mic.phase==='idle'} onClick={onMic} aria-label={micLabel}>{mic.phase==='listening'?<Square size={26}/>:mic.phase==='transcribing'||mic.phase==='requesting'?<Loader2 size={28} className="spin"/>:<Mic size={30}/>}</button>}
-   <div className="talk-side"><button className="secondary" aria-pressed={showComposer} disabled={mic.engine==='none'} onClick={()=>setTyping(t=>!t)}><Keyboard size={16}/>打字</button>
-    {v.available&&<button className="secondary" aria-pressed={v.enabled} onClick={()=>{v.actions.unlock();v.actions.setEnabled(!v.enabled);}}>{v.enabled?<Volume2 size={16}/>:<VolumeX size={16}/>}声音：{v.enabled?'开':'关'}</button>}
-   </div>
-  </div>
-  {mic.engine!=='none'&&<p className="mic-label" role="status">{micLabel}</p>}
+  <form className="talk-bar" ref={composer} onSubmit={e=>{e.preventDefault();send(message);}}>
+   {mic.engine!=='none'&&<button type="button" className="talk-icon" aria-label={showComposer?'切换到语音':'切换到打字'} onClick={()=>setMode(!showComposer)}>{showComposer?<AudioLines size={22}/>:<Keyboard size={22}/>}</button>}
+   {showComposer?<>
+    <textarea className="talk-input" aria-label="对小N说" rows={1} value={message} maxLength={2000} onChange={e=>setMessage(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();e.currentTarget.form?.requestSubmit();}}} onFocus={()=>requestAnimationFrame(()=>composer.current?.scrollIntoView({block:'nearest'}))} placeholder={shownSummary?'想接着聊，随时告诉我…':'想说什么，慢慢说…'} enterKeyHint="send"/>
+    {message.trim()&&<button className="talk-send" disabled={disabled}>发送</button>}
+   </>:<button type="button" className="talk-hold" data-phase={mic.phase} data-holding={holding||undefined} disabled={disabled&&mic.phase==='idle'} aria-label={micLabel} onPointerDown={holdDown} onPointerUp={holdUp} onPointerCancel={holdUp} onClick={e=>{if(e.detail===0)onMic();}} onContextMenu={e=>e.preventDefault()}>{mic.phase==='transcribing'||mic.phase==='requesting'?<Loader2 size={18} className="spin"/>:null}<span role="status">{micLabel}</span></button>}
+   {v.available&&<button type="button" className="talk-icon" aria-pressed={v.enabled} aria-label={v.enabled?'声音：开':'声音：关'} title={v.enabled?'小N的回复会读出来':'小N的回复不读出来'} onClick={()=>{v.actions.unlock();v.actions.setEnabled(!v.enabled);}}>{v.enabled?<Volume2 size={22}/>:<VolumeX size={22}/>}</button>}
+  </form>
   {v.phase==='playing'&&<button className="text-button" onClick={()=>v.actions.stop()}>停止朗读</button>}
   {(mic.error||v.error)&&<p className="notice" role="status">{mic.error||v.error}</p>}
   {(note||(v.available&&v.enabled))&&<p className="small muted mic-note">{note}{v.available&&v.enabled?' 朗读时，小N的回复会发送到火山引擎豆包合成语音。':''}</p>}
@@ -144,7 +164,6 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   <ConversationSummaryView key={`${shownSummary?.id}`} summary={blocked?null:shownSummary} l={l} navigate={startProfessional}/>
   {chat.length>0&&<details className="chat-log" open><summary>聊天记录（{chat.length}）</summary><div className="messages">{chat.map((m,i)=><div className={'message '+(m.role==='user'?'user':'ai')} key={i}><div>{m.content}</div>{m.role==='assistant'&&v.available&&<button className="text-button say-button" onClick={()=>void v.actions.speak(m.content)}><Volume2 size={13}/>朗读</button>}</div>)}</div></details>}
   <div className="home-composer-wrap">
-   {showComposer&&<form className="learning-composer" ref={composer} onSubmit={e=>{e.preventDefault();send(message);}}><label className="field">对小N说<textarea value={message} maxLength={2000} onChange={e=>setMessage(e.target.value)} onFocus={()=>requestAnimationFrame(()=>composer.current?.scrollIntoView({block:'nearest'}))} placeholder={shownSummary?'想接着聊，随时告诉我…':'想说什么，慢慢说…'} enterKeyHint="send"/></label><button className="primary" disabled={disabled||!message.trim()}><Send size={17}/>发送</button></form>}
    <div className="home-card-actions"><button className="secondary" disabled={disabled||blocked||!sessionId||!!shownSummary} onClick={end}>今天先聊到这</button><button className="text-button" disabled={disabled} onClick={()=>void pause()}>今天先休息</button></div>
   </div>
   {l.candidate&&!paused&&!blocked&&<button className="learning-choice" onClick={()=>navigate('task')}>小N建议：{l.candidate.title}，由我确认 <ArrowRight size={17}/></button>}

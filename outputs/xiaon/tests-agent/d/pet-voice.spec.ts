@@ -46,9 +46,8 @@ test('chat page: big pet, mic and keyboard side by side; quick replies; typing i
  const pet=page.locator('.pet-hero .mascot');await expect(pet).toBeVisible();
  const box=(await pet.boundingBox())!;expect(box.width).toBeGreaterThan(240);expect(box.height).toBeGreaterThan(225); // the pet is the main thing on screen
  await expect(page.locator('.pet-hero-bubble')).toHaveText('嗨，我是小N。今天过得怎么样？想跟我说说吗？');
- await expect(page.getByRole('button',{name:/点一下，直接对小N说话/})).toBeVisible();
- await expect(page.getByLabel('对小N说',{exact:true})).toBeHidden();
- await page.getByRole('button',{name:'打字'}).click();await expect(page.getByLabel('对小N说',{exact:true})).toBeVisible();await page.getByRole('button',{name:'打字'}).click();
+ await expect(page.getByLabel('对小N说',{exact:true})).toBeVisible(); // the input bar starts in typing mode, like the last-used mode in WeChat
+ await page.getByRole('button',{name:'切换到语音'}).click();await expect(page.getByRole('button',{name:/按住 说话/})).toBeVisible();await expect(page.getByLabel('对小N说',{exact:true})).toBeHidden();
  await page.screenshot({path:join(shots,'chat-first-screen.png')});
  // a quick-reply the student chose changes the pet's face; free text never does
  await page.getByRole('button',{name:'今天有点烦',exact:true}).click();expect(await moodOf(page,'.pet-hero')).toBe('concerned');
@@ -65,24 +64,25 @@ test('chat page: big pet, mic and keyboard side by side; quick replies; typing i
 test('microphone: one tap records, stops by itself after a pause, sends a WAV to the server, shows what was heard and the pet answers aloud',async({page})=>{
  await onboard(page);await page.getByRole('button',{name:/先聊聊/}).first().click();
  await expect.poll(()=>page.evaluate(()=>fetch('/api/health').then(r=>r.json()).then(d=>d.voice.asr))).toBe(true);
- const mic=page.getByRole('button',{name:/点一下，直接对小N说话/});await mic.click();
- await expect(page.locator('.mic-button')).toHaveAttribute('data-phase','listening');expect(await moodOf(page,'.pet-hero')).toBe('listening');
- await expect(page.locator('.mic-button')).toHaveCSS('background-color','rgb(196, 105, 79)'); // a clearly different, high-contrast "recording" colour
+ await page.getByRole('button',{name:'切换到语音'}).click();
+ const mic=page.getByRole('button',{name:/按住 说话/});await mic.click();
+ await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','listening');expect(await moodOf(page,'.pet-hero')).toBe('listening');
+ await expect(page.locator('.talk-hold')).toHaveCSS('background-color','rgb(196, 105, 79)'); // a clearly different, high-contrast "recording" colour
  await expect(page.locator('.pet-hero-bubble')).toHaveText('我在听，你慢慢说…');await page.screenshot({path:join(shots,'chat-listening.png')});
  // no second tap: the pause after the fake voice ends the recording
  await expect(page.locator('.pet-hero-bubble')).toHaveText('我在这里。我们只做你愿意的一步。',{timeout:20000});
  const log=await voiceLog(page);expect(log.heard).toHaveLength(1);expect(log.heard[0].wav).toBe(true);expect(log.heard[0].bytes).toBeGreaterThan(30000);expect(log.heard[0].bytes).toBeLessThan(400000);
  await expect(page.locator('details.chat-log')).toHaveAttribute('open','');await expect(page.locator('.chat-log .message.user')).toHaveText('我今天有点烦');
  await expect.poll(async()=>(await voiceLog(page)).spoken).toContain('我在这里。我们只做你愿意的一步。');
- await expect(page.locator('.mic-button')).toHaveAttribute('data-phase','idle');
+ await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','idle');
 });
 
 test('microphone can be cancelled by tapping again, and a refused permission leaves typing available',async({page,context})=>{
  await onboard(page);await page.getByRole('button',{name:/先聊聊/}).first().click();
- await page.getByRole('button',{name:/点一下，直接对小N说话/}).click();await expect(page.locator('.mic-button')).toHaveAttribute('data-phase','listening');
+ await page.getByRole('button',{name:'切换到语音'}).click();await page.getByRole('button',{name:/按住 说话/}).click();await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','listening');
  await page.getByRole('button',{name:/我在听/}).click(); // second tap = stop and send what was said (nothing was said yet)
- await expect(page.locator('.mic-button')).not.toHaveAttribute('data-phase','listening',{timeout:8000});
- await page.getByRole('button',{name:'打字'}).click();await page.getByLabel('对小N说',{exact:true}).fill('我想打字说');await page.getByRole('button',{name:'发送',exact:true}).click();
+ await expect(page.locator('.talk-hold')).not.toHaveAttribute('data-phase','listening',{timeout:8000});
+ await page.getByRole('button',{name:'切换到打字'}).click();await page.getByLabel('对小N说',{exact:true}).fill('我想打字说');await page.getByRole('button',{name:'发送',exact:true}).click();
  await expect(page.locator('.pet-hero-bubble')).toHaveText('我在这里。我们只做你愿意的一步。');
  await context.clearPermissions();
 });
@@ -96,8 +96,8 @@ test('the microphone is never requested by loading, refreshing, switching pages 
  const asked=()=>page.evaluate(()=>{const m=(window as unknown as {__mic:{getUserMedia:number;recognition:number}}).__mic;return m.getUserMedia+m.recognition;});
  await onboard(page);expect(await asked()).toBe(0);
  await tap(page,'.hero-art','belly');await page.reload();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();expect(await asked()).toBe(0);
- await page.getByRole('button',{name:/先聊聊/}).first().click();await expect(page.locator('.mic-button')).toBeVisible();
+ await page.getByRole('button',{name:/先聊聊/}).first().click();await page.getByRole('button',{name:'切换到语音'}).click();await expect(page.locator('.talk-hold')).toBeVisible();
  await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'探索',exact:true}).click();await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'小N',exact:true}).click();
  await page.reload();await page.waitForTimeout(800);expect(await asked()).toBe(0);
- await page.getByRole('button',{name:/先聊聊/}).first().click();await page.locator('.mic-button').click();await expect.poll(asked).toBeGreaterThan(0);
+ await page.getByRole('button',{name:/先聊聊/}).first().click();await page.locator('.talk-hold').click();await expect.poll(asked).toBeGreaterThan(0);
 });

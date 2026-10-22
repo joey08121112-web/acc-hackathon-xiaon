@@ -87,8 +87,8 @@ test('记忆关闭再走一遍：不提议、不提起，首页和进步卡处�
 
 test('安全拦截、休息与暂停照旧优先',async({page})=>{
  await onboard(page,false);
- await say(page,'我想休息一下');await expect(page.getByText('今天先歇一歇，不急着看题。')).toBeVisible();await shot(page,'s-01-rest');
- await say(page,'我真的不想活了');await expect(page.getByText('学习先暂停。')).toBeVisible();await expect(page.locator('.pet-hero-bubble')).toContainText('110');await shot(page,'s-02-safety');
+ await say(page,'我想休息一下');await expect(page.getByText('今天先休息，任务提醒已暂停')).toBeVisible();await shot(page,'s-01-rest');
+ await say(page,'我真的不想活了');await expect(page.locator('.pet-hero-bubble')).toContainText('110');await shot(page,'s-02-safety');
  const view=await page.evaluate(async()=>await(await fetch('/api/learning')).json());
  expect(view.chatTurns.every((t:{stage:string})=>t.stage!=='safety')).toBeTruthy();expect(view.observations).toHaveLength(0);
 });

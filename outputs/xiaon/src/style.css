@@ -3119,17 +3119,20 @@ input[type="range"] {
 .pet-hero-bubble:after { content: ""; position: absolute; bottom: -7px; left: 50%; width: 12px; height: 12px; background: #fffdf4; border-right: 1px solid #dce6c9; border-bottom: 1px solid #dce6c9; transform: translateX(-50%) rotate(45deg); }
 .pet-hero-bubble.thinking { color: #6c7f5d; }
 .pet-hint { text-align: center; margin: 0 0 4px; }
-.talk-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 6px 0 2px; }
-.talk-side { display: flex; flex-direction: column; gap: 8px; }
-.talk-side button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: .8rem; padding: 8px 14px; min-height: 40px; }
-.talk-side button[aria-pressed="true"] { background: #e3eacd; border-color: #b9cc9b; }
-.mic-button { width: 78px; height: 78px; border-radius: 50%; border: none; display: grid; place-items: center; color: #fffdf3; background: var(--green); box-shadow: 0 8px 20px rgba(62, 98, 76, .3); cursor: pointer; flex: none; }
-.mic-button:disabled { opacity: .5; cursor: default; }
-.mic-button[data-phase="listening"] { background: #c4694f; animation: mic-pulse 1.2s ease-out infinite; }
-.mic-button[data-phase="requesting"], .mic-button[data-phase="transcribing"] { background: #7e946b; }
-@keyframes mic-pulse { 0% { box-shadow: 0 0 0 0 rgba(196, 105, 79, .5); } 100% { box-shadow: 0 0 0 20px rgba(196, 105, 79, 0); } }
+/* 安全拦截后只留一行去求助页的入口，不再用整块卡片 */
+.safety-link { text-align: center; margin: 0 0 4px; }
+.safety-link .text-button { color: #8a4a36; text-decoration: underline; text-underline-offset: 3px; }
+/* 微信式输入栏：[语音/键盘切换] [输入框 或 按住说话] [声音开关] */
+.talk-bar { display: flex; align-items: flex-end; gap: 8px; margin: 8px 0 6px; padding: 8px; background: #eef1e6; border: 1px solid var(--line); border-radius: 18px; }
+.talk-icon { flex: none; width: 42px; height: 42px; margin-bottom: 1px; border-radius: 50%; border: 1.8px solid #2f4a3a; display: grid; place-items: center; color: #2f4a3a; }
+.talk-icon[aria-pressed="false"] { color: #7d8a74; border-color: #9aa690; }
+.talk-bar .talk-input { flex: 1; min-width: 0; width: auto; min-height: 44px; max-height: 120px; padding: 9px 12px; line-height: 1.5; resize: none; margin: 0; border: 1px solid #dce6c9; border-radius: 10px; background: #fffdf7; field-sizing: content; }
+.talk-send { flex: none; height: 44px; padding: 0 16px; border-radius: 10px; color: #fffdf3; background: var(--green); font-weight: 600; }
+.talk-hold { flex: 1; min-width: 0; height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; border: 1px solid #dce6c9; background: #fffdf7; color: #2f4a3a; font-weight: 600; letter-spacing: .04em; touch-action: none; -webkit-touch-callout: none; }
+.talk-hold[data-phase="listening"] { color: #fffdf3; border-color: #c4694f; background: #c4694f; animation: mic-pulse 1.2s ease-out infinite; }
+.talk-hold[data-phase="requesting"], .talk-hold[data-phase="transcribing"] { color: #5d6f55; background: #e3eacd; }
+@keyframes mic-pulse { 0% { box-shadow: 0 0 0 0 rgba(196, 105, 79, .5); } 100% { box-shadow: 0 0 0 10px rgba(196, 105, 79, 0); } }
 .spin { animation: spin 1s linear infinite; }
-.mic-label { text-align: center; margin: 4px 0 8px; font-size: .82rem; color: #5d6f55; }
 .mic-note { font-size: .7rem; margin: 0 0 8px; }
 .chat-log { margin: 12px 0; }
 .chat-log > summary { cursor: pointer; font-size: .82rem; color: #6a7a62; padding: 6px 0; }
@@ -3137,7 +3140,6 @@ input[type="range"] {
 
 /* 小字链接/按钮在奶油纸色上达到 4.5:1 */
 .learning-pages .text-button, .center .text-button, .say-button, .chat-log > summary { color: #46603f; }
-/* 全局 button:hover 会把按钮变浅，话筒按钮的底色（白色图标）不能被它盖掉 */
-button.mic-button, button.mic-button:hover:not(:disabled) { background-color: var(--green); }
-button.mic-button[data-phase="requesting"], button.mic-button[data-phase="requesting"]:hover:not(:disabled), button.mic-button[data-phase="transcribing"], button.mic-button[data-phase="transcribing"]:hover:not(:disabled) { background-color: #7e946b; }
-button.mic-button[data-phase="listening"], button.mic-button[data-phase="listening"]:hover:not(:disabled) { background-color: #c4694f; }
+/* 全局 button:hover 会把按钮变浅，录音中和发送按钮的底色（白字）不能被它盖掉 */
+button.talk-send, button.talk-send:hover:not(:disabled) { background-color: var(--green); }
+button.talk-hold[data-phase="listening"], button.talk-hold[data-phase="listening"]:hover:not(:disabled) { background-color: #c4694f; }
