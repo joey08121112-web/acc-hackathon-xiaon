@@ -6,6 +6,8 @@ import type { TaskPublicView } from '../../shared/learning-contracts';
 export type { ChatReply,ChatIntent,ChatStage } from '../../shared/learning-contracts';
 export const WORKSPACE_KEY='xiaon-workspace-v2';
 const ACTIVATED='xiaon-sqlite-active';
+/** Written by the server's learning/preference when a pause defers the current plan. */
+const PAUSE_DEFER_REASON='学生暂停或暂不看题';
 export const isOfflineArtifact=()=>!!document.querySelector('meta[name="xiaon-offline"]')||location.protocol==='file:';
 type Cache={reviewLink:{id:string;revision:number}|null;activeTaskId:string|null;drafts:Record<string,string>;chat:{role:'user'|'assistant';content:string}[];chatAt:number;pending:{path:string;body:Record<string,unknown>}|null};
 const fresh=():Cache=>({reviewLink:null,activeTaskId:null,drafts:{},chat:[],chatAt:0,pending:null});
@@ -38,6 +40,9 @@ export function useLearning(){
  return {view,connected,enabled,mode,error,busy,cache,candidate,activeTask,update,choose,setCandidate,confirmCandidate,run,reload,connect,cancel:()=>abort.current?.abort(),setError,
   retry:()=>cache.pending?run(cache.pending.path,cache.pending.body,{retry:true}):Promise.resolve(),
   async pause(){abort.current?.abort();try{await apiRequest('learning/preference',{operationId:newOperationId(),rest:true,questionInvitePaused:true});await reload();}catch(e){setError((e as Error).message);}},
+  /** One resume for every page: reopen the paused session; a plan the pause deferred (not one the student deferred) resumes too. */
+  async resume(){await run('learning/start',{mode:view?.session?.mode??'support'});const plan=(await reload()).plans.at(-1)?.snapshot;
+   if(plan&&plan.confirmation.action==='defer'&&plan.confirmation.reason===PAUSE_DEFER_REASON)await run('learning/confirm',{proposalId:plan.proposalId,expectedPreviousVersionId:plan.id,action:'resume',scheduledDate:null,reason:'学生主动恢复，避免任务堆积'});},
   async reset(){await run('learning/reset',{confirmation:'清除本机学习记录与偏好'},{persist:false});localStorage.removeItem(WORKSPACE_KEY);localStorage.removeItem(ACTIVATED);setCache(fresh());setView(null);setCandidate(null);setActivated(false);},
  };
 }

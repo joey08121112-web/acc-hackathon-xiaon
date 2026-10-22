@@ -195,12 +195,26 @@ function App() {
     return h?.page === "explore" && h.station ? h.station : false;
   });
   // 每条应用内历史记录带 depth：返回键有上一页就退一步，没有才回到当前 Tab 首页。
-  const pushEntry = (entry: Record<string, unknown>, hash: string) =>
-    window.history.pushState(
-      { ...entry, depth: (window.history.state?.depth ?? 0) + 1 },
-      "",
-      hash,
-    );
+  // 弹窗也占一条历史记录：返回手势先关弹窗。从弹窗里跳去别处时，新页面顶替弹窗那条记录。
+  const pushEntry = (entry: Record<string, unknown>, hash: string) => {
+    const h = window.history.state;
+    if (h?.modal) window.history.replaceState({ ...entry, depth: h.depth }, "", hash);
+    else window.history.pushState({ ...entry, depth: (h?.depth ?? 0) + 1 }, "", hash);
+  };
+  const openModal = (name: string) => {
+    const h = window.history.state;
+    if (!h?.modal)
+      window.history.pushState(
+        { ...h, modal: true, depth: (h?.depth ?? 0) + 1 },
+        "",
+        window.location.hash,
+      );
+    setModal(name);
+  };
+  const closeModal = () => {
+    setModal(null);
+    if (window.history.state?.modal) window.history.back();
+  };
   const navigate = (page: string, _tab?: string) => {
     // 只有四个 Tab 首页才切换 Tab；子页面沿用来处的 Tab，底栏高亮和兜底返回都回到原来的地方。
     const tab = TAB_OF_PAGE[page] ?? stateRef.current.tab;
@@ -254,6 +268,7 @@ function App() {
       `#${s.page}`,
     );
     const pop = (e: PopStateEvent) => {
+      if (!e.state?.modal) setModal(null);
       if (!e.state?.page) return;
       setStation(e.state.page === "explore" && e.state.station ? e.state.station : false);
       if (e.state.page === "task" && e.state.taskId) {
@@ -286,7 +301,7 @@ function App() {
     const dialog = document.querySelector(".modal") as HTMLElement | null;
     dialog?.querySelector<HTMLButtonElement>(".modal-close")?.focus();
     const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setModal(null);
+      if (event.key === "Escape") closeModal();
       if (event.key === "Tab" && dialog) {
         const els = Array.from(
           dialog.querySelectorAll<HTMLElement>(
@@ -371,8 +386,9 @@ function App() {
     [],
   );
   const openTask = (id: string, entryMode: "support" | "exploration" = "support") => {
-    if (learning.enabled) { const candidate = learning.view?.tasks.find(t=>t.id===id); if (candidate) { learning.choose(candidate, entryMode); learning.update({reviewLink:null}); navigate("task"); } else say("本地服务未就绪，请先连接后选择题目。"); return; }
+    if (learning.enabled) { const candidate = learning.view?.tasks.find(t=>t.id===id); if (candidate) { learning.choose(candidate, entryMode); learning.update({reviewLink:null}); navigate("task"); } else { closeModal(); say("本地服务未就绪，请先连接后选择题目。"); } return; }
     if (s.safety) {
+      closeModal();
       say("当前已暂停学习。请在支持页面中自主选择恢复。");
       return;
     }
@@ -381,6 +397,7 @@ function App() {
       !s.calcSeen.includes(id) &&
       s.calcSeen.length >= 10
     ) {
+      closeModal();
       say("本次计算探索已达到 10 题上限。可以回看已有记录。");
       return;
     }
@@ -413,7 +430,9 @@ function App() {
     });
     say("今天先休息。任务提醒已暂停，回来时由你决定。");
   };
-  const help = () => {
+  // 心形按钮只打开求助页，不打断正在进行的事；要不要暂停学习，由学生在求助页里自己选。
+  const help = () => navigate("help");
+  const pauseForSafety = () => {
     if (learning.enabled) { learning.cancel(); void learning.pause().catch(()=>{}); }
     if (taskTimer.current) clearTimeout(taskTimer.current);
     submitLock.current = false;
@@ -423,8 +442,19 @@ function App() {
     patch({
       safety: true,
       chatStatus: s.chatStatus === "waiting" ? "paused" : s.chatStatus,
+      page: s.page,
+      tab: s.tab,
     });
-    navigate("help");
+  };
+  // 所有页面共用的恢复：解除求助暂停和休息，新版同时恢复本地服务里的学习场次。
+  const resumeLearning = async () => {
+    patch({ safety: false, rest: false });
+    if (!learning.enabled) return;
+    try {
+      await learning.resume();
+    } catch {
+      say("这次没有恢复成功，请稍后再试。已有记录都还在。");
+    }
   };
   const submit = (taskId: string) => {
     const r = s.records[taskId];
@@ -849,19 +879,31 @@ function App() {
                 </button>
               </div>
             )}
+            {!s.safety && learning.enabled && (s.rest || !!learning.view?.paused) && (
+              <div className="safety-bar rest-bar" role="status">
+                <Leaf size={16} />
+                今天先休息，任务提醒已暂停
+                <button disabled={learning.busy} onClick={() => void resumeLearning()}>
+                  继续学习
+                </button>
+              </div>
+            )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
             <LearningStatus l={learning} />
             {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在本地服务里；真实模型会向智谱发送本次需要的学习内容和获准记忆。你可以查看记录、管理记忆或重置整个演示。{devMode && <p>SQLite 保存学习事实，浏览器缓存草稿；单用户演示。</p>}</div>}
             <main className={`page page-${s.page}`}>
-              {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>setModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
-              {s.page === "home" && (
+              {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>openModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
+              {/* 新版首页离开时只隐藏不卸载：聊天里弹出的卡片、改到一半的草稿和还在等的回复，回来都还在。 */}
+              {learning.enabled && (
+                <div className="home-learning" hidden={s.page !== "home"}>
+                  <div className="home-heading"><div><span className="eyebrow">HI, 很高兴见到你</span><h1>心事有人听，进步有人记。</h1></div></div>
+                  <ChatPanel l={learning} paused={s.rest || !!learning.view?.paused} safety={s.safety} navigate={navigate} trace={null} active={s.page === "home"} />
+                  {learning.cache.activeTaskId && <div className="resume-strip"><Pause size={17}/><div><strong>上次停在这里</strong><small>你的作答草稿还在</small></div><button onClick={() => navigate("task")}>继续 <ArrowRight size={15}/></button></div>}
+                  <div className="home-foot"><ShieldCheck size={13}/>你的选择会被尊重。<button onClick={() => navigate("privacy")}>了解信息与授权</button></div>
+                </div>
+              )}
+              {s.page === "home" && !learning.enabled && (
                 <>
-                  {learning.enabled ? <>
-                    <div className="home-heading"><div><span className="eyebrow">HI, 很高兴见到你</span><h1>心事有人听，进步有人记。</h1></div></div>
-                    <ChatPanel l={learning} paused={s.rest || !!learning.view?.paused} safety={s.safety} navigate={navigate} trace={null} />
-                    {learning.cache.activeTaskId && <div className="resume-strip"><Pause size={17}/><div><strong>上次停在这里</strong><small>你的作答草稿还在</small></div><button onClick={() => navigate("task")}>继续 <ArrowRight size={15}/></button></div>}
-                    <div className="home-foot"><ShieldCheck size={13}/>你的选择会被尊重。<button onClick={() => navigate("privacy")}>了解信息与授权</button></div>
-                  </> : <>
                   <div className="home-heading">
                     <div>
                       <span className="eyebrow">HI, 很高兴见到你</span>
@@ -869,7 +911,7 @@ function App() {
                         {s.rest ? "今天，先好好休息。" : "今天，按你的节奏来。"}
                       </h1>
                     </div>
-                    <button className="ai-pill" onClick={() => setModal("ai")}>
+                    <button className="ai-pill" onClick={() => openModal("ai")}>
                       AI 学伴 <CircleHelp size={12} />
                     </button>
                   </div>
@@ -919,7 +961,7 @@ function App() {
                         <ArrowRight size={20} />
                       </button>
                       <div className="choice-pair">
-                        <button onClick={() => setModal("start-question")}>
+                        <button onClick={() => openModal("start-question")}>
                           <BookOpen size={20} />
                           <span>一起看一道题</span>
                           <ChevronRight size={16} />
@@ -976,7 +1018,6 @@ function App() {
                       了解信息与授权
                     </button>
                   </div>
-                  </>}
                 </>
               )}
               {!learning.enabled && s.page === "chat" && (
@@ -989,7 +1030,7 @@ function App() {
                     </div>
                     <button
                       className="text-button"
-                      onClick={() => setModal("ai")}
+                      onClick={() => openModal("ai")}
                     >
                       能力说明
                     </button>
@@ -1050,7 +1091,7 @@ function App() {
                     <div className="chat-invitation">
                       <Leaf size={17} />
                       <p>如果愿意，我们可以只看一道题。</p>
-                      <button onClick={() => setModal("start-question")}>
+                      <button onClick={() => openModal("start-question")}>
                         我愿意 <ArrowRight size={15} />
                       </button>
                     </div>
@@ -1060,7 +1101,7 @@ function App() {
                       先聊聊，暂不邀请看题。想开始时，由你决定。
                       <button
                         className="text-button"
-                        onClick={() => setModal("start-question")}
+                        onClick={() => openModal("start-question")}
                       >
                         我想开始看题
                       </button>
@@ -1184,7 +1225,7 @@ function App() {
                           <button
                             className={`map-node node-${i}`}
                             key={d.name}
-                            onClick={() => setModal(`dimension-${i}`)}
+                            onClick={() => openModal(`dimension-${i}`)}
                           >
                             <span
                               className="node-icon"
@@ -1217,7 +1258,7 @@ function App() {
                         return (
                           <button
                             key={d.name}
-                            onClick={() => setModal(`dimension-${i}`)}
+                            onClick={() => openModal(`dimension-${i}`)}
                           >
                             <span
                               className="dimension-icon"
@@ -1870,7 +1911,7 @@ function App() {
                         <Minus size={18} />
                         少做一点
                       </button>
-                      <button onClick={() => setModal("date")}>
+                      <button onClick={() => openModal("date")}>
                         <Clock3 size={18} />
                         换个时间
                       </button>
@@ -2190,7 +2231,7 @@ function App() {
                       checked={offline}
                       onChange={() => setOffline(!offline)}
                     />
-                    <button onClick={() => setModal("ai")}>
+                    <button onClick={() => openModal("ai")}>
                       <CircleHelp size={22} />
                       <span>
                         <strong>关于小N与服务说明</strong>
@@ -2221,7 +2262,7 @@ function App() {
                     </button>
                     <button
                       className="danger"
-                      onClick={() => setModal("reset")}
+                      onClick={() => openModal("reset")}
                     >
                       <Trash2 size={20} />
                       <span>
@@ -2481,13 +2522,13 @@ function App() {
                     </button>
                     <button
                       className="secondary wide"
-                      onClick={() => setModal("feedback")}
+                      onClick={() => openModal("feedback")}
                     >
                       提交反馈演示
                     </button>
                     <button
                       className="text-button danger"
-                      onClick={() => setModal("reset")}
+                      onClick={() => openModal("reset")}
                     >
                       清除本机演示内容
                     </button>
@@ -2503,10 +2544,18 @@ function App() {
                     </span>
                     <h1>先照顾好此刻的你。</h1>
                     <p>
-                      谢谢你愿意停下来。学习任务和测评已经暂停。
+                      {s.safety
+                        ? "谢谢你愿意停下来。学习任务和测评已经暂停。"
+                        : "谢谢你愿意停下来。刚才的学习还在原处，没有被打断。"}
                       <br />
                       你可以慢慢说，也可以先不说。
                     </p>
+                    {!s.safety && (
+                      <button className="secondary" onClick={pauseForSafety}>
+                        <Pause size={16} />
+                        先暂停学习任务和测评
+                      </button>
+                    )}
                   </div>
                   <div className="support-paper">
                     <h2>找一个现实中可信任的人</h2>
@@ -2667,15 +2716,22 @@ function App() {
                       坐到让自己安心的位置，喝一点水，或邀请一个信任的人陪你。你不需要先完成学习任务。
                     </p>
                   </div>
-                  <button
-                    className="secondary wide"
-                    onClick={() => {
-                      patch({ safety: false });
-                      goTab("小N");
-                    }}
-                  >
-                    我想自主返回学习空间
-                  </button>
+                  {s.safety ? (
+                    <button
+                      className="secondary wide"
+                      disabled={learning.busy}
+                      onClick={() => {
+                        void resumeLearning();
+                        back();
+                      }}
+                    >
+                      我想自主返回学习空间
+                    </button>
+                  ) : (
+                    <button className="secondary wide" onClick={back}>
+                      回到刚才的页面
+                    </button>
+                  )}
                   <button
                     className="text-button"
                     onClick={() => {
@@ -2831,7 +2887,7 @@ function App() {
           </div>
         )}
         {modal && (
-          <div className="modal-backdrop" onClick={() => setModal(null)}>
+          <div className="modal-backdrop" onClick={() => closeModal()}>
             <section
               className="modal"
               role="dialog"
@@ -2842,7 +2898,7 @@ function App() {
               <button
                 className="modal-close icon-button"
                 aria-label="关闭弹窗"
-                onClick={() => setModal(null)}
+                onClick={() => closeModal()}
               >
                 <X size={22} />
               </button>
@@ -2862,7 +2918,7 @@ function App() {
                   </p>
                   <button
                     className="primary wide"
-                    onClick={() => setModal(null)}
+                    onClick={() => closeModal()}
                   >
                     我了解了
                   </button>
@@ -2895,7 +2951,7 @@ function App() {
                     className="text-button"
                     onClick={() => {
                       patch({ questionInvitePaused: true });
-                      setModal(null);
+                      closeModal();
                       say("好的，先不看题。想开始时由你决定。");
                     }}
                   >
@@ -2965,7 +3021,7 @@ function App() {
                       )}
                       <button
                         className="text-button"
-                        onClick={() => setModal(null)}
+                        onClick={() => closeModal()}
                       >
                         先看看地图
                       </button>
@@ -2994,7 +3050,7 @@ function App() {
                         plan: "rescheduled",
                         planDate: s.planDate || "2026-10-22",
                       });
-                      setModal(null);
+                      closeModal();
                       say("计划日期已调整，今日页会同步显示。");
                     }}
                   >
@@ -3015,7 +3071,7 @@ function App() {
                   </button>
                   <button
                     className="secondary wide"
-                    onClick={() => setModal(null)}
+                    onClick={() => closeModal()}
                   >
                     保留内容，返回
                   </button>
@@ -3037,7 +3093,7 @@ function App() {
                   <button
                     className="primary wide"
                     onClick={() => {
-                      setModal(null);
+                      closeModal();
                       say("反馈演示结束。没有向任何服务发送内容。");
                     }}
                   >

@@ -334,6 +334,11 @@ test("09 求助失败、取消、安全联系人替代、模拟成功并非已�
 }) => {
   await basic(page);
   await page.getByRole("button", { name: "帮助与支持", exact: true }).click();
+  // 打开求助页不打断学习；暂停由学生在求助页里自己选。
+  expect((await state(page)).safety).toBe(false);
+  await page
+    .getByRole("button", { name: "先暂停学习任务和测评", exact: true })
+    .click();
   expect((await state(page)).safety).toBe(true);
   await page
     .getByRole("button", { name: "准备求助信息", exact: false })

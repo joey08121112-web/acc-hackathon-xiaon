@@ -28,13 +28,16 @@ const CHIPS: {text:string;intent?:ChatIntent}[] = [
 ];
 const STALE_MS = 6 * 3600_000;
 const swallow = (p: Promise<unknown>) => { void p.catch(() => {}); };
-export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningUI; paused: boolean; safety: boolean; navigate: (page: string, tab?: string) => void; trace: ReactNode }) {
+/** active=false: the home page is hidden but kept mounted (cards and pending replies survive); stay silent until the student comes back. */
+export function ChatPanel({ l, paused, safety, navigate, trace, active = true }: { l: LearningUI; paused: boolean; safety: boolean; navigate: (page: string, tab?: string) => void; trace: ReactNode; active?: boolean }) {
  const dev=useDevMode();
  const [message,setMessage]=useState(''),[reply,setReply]=useState<ChatReply|null>(null),[awaiting,setAwaiting]=useState(false),[typing,setTyping]=useState(true);
  const [greeting,setGreeting]=useState(OPENER),[notice,setNotice]=useState(''),[summary,setSummary]=useState<ConversationSummary|null>(null),[manualSuggestion,setManualSuggestion]=useState<ModeSuggestion|null>(null);
  const [needsSeen,setNeedsSeen]=useState(false),[keyboard,setKeyboard]=useState(false);
  const requestLock=useRef(false),sent=useRef(false),greetingAbort=useRef<AbortController|null>(null),composer=useRef<HTMLFormElement>(null);
  const v=useVoice(),mic=useMic(),chat=l.cache.chat;
+ const activeRef=useRef(active);activeRef.current=active;
+ useEffect(()=>{if(!active){v.actions.stop();mic.actions.cancel();}},[active]); // eslint-disable-line react-hooks/exhaustive-deps
  const latestTurn=l.view?.chatTurns.at(-1);
  const sessionId=reply?.sessionId??(chat.length?latestTurn?.sessionId??null:null);
  const savedSummary=l.view?.summaries.find(s=>s.sessionId===sessionId)??null;
@@ -42,7 +45,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
  const blocked=safety||!!reply?.safety||SAFETY_PATTERN.test([...chat].reverse().find(m=>m.role==='user')?.content??'');
  const memoryEnabled=l.view?.optionalMemory??false;
  const busy:PetBusy=mic.phase==='listening'?'listening':v.phase==='playing'?'speaking':awaiting||v.phase==='loading'||mic.phase==='transcribing'?'thinking':null;
- const pet=usePetReactions({busy,resting:paused}),thinkingText=useThinkingText(awaiting);
+ const pet=usePetReactions({busy,resting:paused}),thinkingText=useThinkingText(awaiting&&active);
  useEffect(()=>{
   if(!l.connected)return;
   if(chat.length&&l.cache.chatAt&&Date.now()-l.cache.chatAt>STALE_MS)l.update({chat:[],chatAt:0});
@@ -73,7 +76,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
    setReply(next);if(next.summary)setSummary(next.summary);
    l.update({chat:[...history,{role:'assistant',content:next.text}],chatAt:Date.now()});
    if(next.suggestions.length&&!next.safety)l.choose(next.suggestions[0]);
-   if(v.enabled)void v.actions.speak(next.text);
+   if(v.enabled&&activeRef.current)void v.actions.speak(next.text);
   }).catch(()=>setNotice('刚才没能收到回复，你的话还在。可以重新发送。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
  };
  const chooseNeed=(intent:ChatIntent,label:string)=>{
@@ -91,7 +94,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace }: { l: LearningU
   requestLock.current=true;setAwaiting(true);setNotice('');v.actions.stop();mic.actions.cancel();
   // chatTurns stores metadata, not dialogue text. Keep the schema-bounded recent history;
   // the server also includes all saved observations, problems and progress from this session.
-  l.run<ConversationSummary>('learning/conversation/end',{sessionId,history:chat.slice(-20)}).then(next=>{setSummary(next);if(v.enabled)void v.actions.speak(summaryBubbleText(next));}).catch(()=>setNotice('这次的小结还没整理好，对话已保留，可以再试一次。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
+  l.run<ConversationSummary>('learning/conversation/end',{sessionId,history:chat.slice(-20)}).then(next=>{setSummary(next);if(v.enabled&&activeRef.current)void v.actions.speak(summaryBubbleText(next));}).catch(()=>setNotice('这次的小结还没整理好，对话已保留，可以再试一次。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
  };
  const pause=async()=>{
   if(l.busy||requestLock.current)return;

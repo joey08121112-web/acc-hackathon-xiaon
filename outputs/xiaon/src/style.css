@@ -2225,6 +2225,9 @@ input[type="range"] {
   font-size: 0.88rem;
   color: #8b9b7b;
 }
+.help-hero > button {
+  margin-top: 16px;
+}
 .support-paper {
   padding: 22px 0;
   border-block: 1px solid var(--line);
