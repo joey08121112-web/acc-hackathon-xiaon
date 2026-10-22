@@ -540,10 +540,9 @@ function App() {
     return (
       <div className="guardian-panel">
         <ShieldCheck size={24} />
-        <h3>监护人确认 · 仅演示</h3>
+        <h3>请家长看一眼</h3>
         <p>
-          未满 14
-          周岁的示例使用者，需要监护人了解基本服务后确认。前端切换不构成真实身份核验。
+          未满 14 岁的同学，开始前要让家长知道小N是做什么的。现在是演示，不会真的联系家长。
         </p>
         <div className="status-line">
           当前状态：
@@ -569,7 +568,7 @@ function App() {
         ) : (
           <>
             <p className="small muted">
-              请模拟监护人阅读：仅提供数学学习支持；可选用途分别决定；不自动分享敏感倾诉。
+              请家长读一读：小N只陪孩子学数学；记不记住小事由孩子自己决定；孩子跟小N说的心里话，不会自动给家长看。
             </p>
             <button
               className="primary wide"
@@ -595,7 +594,7 @@ function App() {
         )}
         {s.guardian === "failed" && (
           <p className="error">
-            没有完成确认。可以重试，当前没有真实请求发出。
+            这次没确认成功，可以再试一次。（演示，没有真的发出请求）
           </p>
         )}
       </div>
@@ -656,7 +655,7 @@ function App() {
               </span>
             </div>
             <p className="small muted">
-              提供日常学习支持，不作智力、人格或心理疾病诊断，也不替代现实中的老师和家人。
+              我陪你学数学、聊聊天，不会给你贴“聪明”或“笨”的标签，也代替不了身边的老师和家人。
             </p>
             <button
               className="primary wide"
@@ -672,7 +671,7 @@ function App() {
             eyebrow="A LITTLE ABOUT YOU"
             title="从适合你的起点开始"
           >
-            仅用于选择学习内容。这里使用虚构信息体验。
+            只用来挑适合你的题，不用填真实信息。
           </SectionHeading>
           <label className="field">
             年龄段
@@ -708,12 +707,12 @@ function App() {
             </label>
           </div>
           <div className="info-paper">
-            <h3>基本体验需要什么？</h3>
+            <h3>小N会记下什么？</h3>
             <p>
-              年龄段、年级、教材，以及你在演示中提交的作答与任务进度，用于提供合适的内容和恢复学习。
+              你的年级、教材，还有做过的题和学习计划，这样下次能接着上次学。
             </p>
             <p className="small">
-              记录保存在这台设备的浏览器或本地服务里。启用真实模型时，会发送必要对话、作答和你许可的偏好到智谱。请勿输入真实姓名、学校或联系方式。
+              这些记录存在这台设备上。小N连上 AI 时，会把聊天和作答发给帮它思考的 AI 服务（智谱）。所以别告诉小N你的真名、学校和电话。
             </p>
           </div>
           <label className="check-row">
@@ -722,7 +721,7 @@ function App() {
               checked={s.necessary}
               onChange={(e) => patch({ necessary: e.target.checked })}
             />
-            <span>我已了解基本服务所需信息与本机演示规则</span>
+            <span>我看懂了</span>
           </label>
           {s.age === "under14" && guardianPanel()}
           <button
@@ -752,16 +751,16 @@ function App() {
             <label><input type="radio" name="intro-memory" checked={memoryChoice === true} onChange={() => setMemoryChoice(true)} /><span>愿意，让小N在我确认后记住</span></label>
             <label><input type="radio" name="intro-memory" checked={memoryChoice === false} onChange={() => setMemoryChoice(false)} /><span>暂时不记住，照样可以聊</span></label>
           </fieldset>
-          <p className="small muted">关闭后，小N不提议记住，也不主动提起。对话观察、对话小结、进步卡和错题记录属于学习记录，仍会保存。以后随时可以修改选择。</p>
+          <p className="small muted">选“暂时不记住”，小N就不会问你要不要记，也不会主动提起。你做过的题、错题和每次的小结还是会留着，方便接着学。以后随时可以改。</p>
           <Toggle
             title="用于学习研究"
-            description="独立的用途授权演示。本版本没有研究数据收集或传输；切换仅展示授权状态。"
+            description="这个版本不收集任何研究数据，开关只是演示。"
             checked={s.research}
             onChange={() => patch({ research: !s.research })}
           />
           <div className="notice">
             <ShieldCheck size={18} />
-            以后随时可在“我的与设置”里更改选择、查看信息用途或清除本机数据。
+            以后随时可以在“我的与设置”里改选择，或者清空这台设备上的记录。
           </div>
           {introError && <p className="error" role="alert">{introError}</p>}
           <button className="primary wide" disabled={memoryChoice === null || introSaving || learning.busy} onClick={() => void finishIntroduction()}>
@@ -776,7 +775,7 @@ function App() {
         </div>
       )}
       <footer className="onboard-footer">
-        本机合成材料体验 · AI 也会出错 · 通知为演示
+        体验版 · 别输入真名和联系方式
       </footer>
     </div>
   );
@@ -901,7 +900,7 @@ function App() {
                   <div className="home-heading"><div><span className="eyebrow">HI, 很高兴见到你</span><h1>心事有人听，进步有人记。</h1></div></div>
                   <ChatPanel l={learning} paused={s.rest || !!learning.view?.paused} safety={s.safety} navigate={navigate} trace={null} active={s.page === "home"} />
                   {learning.cache.activeTaskId && <div className="resume-strip"><Pause size={17}/><div><strong>上次停在这里</strong><small>你的作答草稿还在</small></div><button onClick={() => navigate("task")}>继续 <ArrowRight size={15}/></button></div>}
-                  <div className="home-foot"><ShieldCheck size={13}/>你的选择会被尊重。<button onClick={() => navigate("privacy")}>了解信息与授权</button></div>
+                  <div className="home-foot"><ShieldCheck size={13}/>你的选择会被尊重。<button onClick={() => navigate("privacy")}>我说的话会去哪里？</button></div>
                 </div>
               )}
               {s.page === "home" && !learning.enabled && (
@@ -1017,7 +1016,7 @@ function App() {
                     <ShieldCheck size={13} />
                     你的选择会被尊重。{" "}
                     <button onClick={() => navigate("privacy")}>
-                      了解信息与授权
+                      我说的话会去哪里？
                     </button>
                   </div>
                 </>
@@ -1028,7 +1027,7 @@ function App() {
                     <Mascot small />
                     <div>
                       <strong>小N在这里</strong>
-                      <span>AI · 本地预设回复演示</span>
+                      <span>AI · 现在没连上 AI，先用准备好的回复</span>
                     </div>
                     <button
                       className="text-button"

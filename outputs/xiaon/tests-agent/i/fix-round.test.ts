@@ -64,7 +64,7 @@ test('修复：shouldOfferMemory 是纯判断，不写假 memoryId 或消耗提�
  const f=temporaryRepository();try{
   const r=createRuntime(f),ctx=context(r);r.events.consent({operationId:id(),optionalMemory:true});
   const before=r.repository.revision();
-  for(let n=0;n<4;n++)assert.equal(shouldOfferMemory({sessionId:'chat-fix',stage:'companion',turn:1},ctx),true);
+  for(let n=0;n<4;n++)assert.equal(shouldOfferMemory({sessionId:'chat-fix',stage:'companion',turn:3},ctx),true);
   assert.equal(r.repository.revision(),before,'判断不能有任何写入');assert.equal(r.repository.list('memoryMentions').length,0);
  }finally{f.dispose();}
 });

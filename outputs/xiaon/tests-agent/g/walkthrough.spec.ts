@@ -14,7 +14,7 @@ async function chatAfter(page:Page,act:()=>Promise<unknown>){
 const say=(page:Page,text:string)=>chatAfter(page,async()=>{await page.getByRole('textbox',{name:'对小N说'}).fill(text);await page.getByRole('button',{name:'发送',exact:true}).click();});
 async function onboard(page:Page,memory:boolean){
  await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');
- await page.getByRole('checkbox',{name:'我已了解基本服务所需信息与本机演示规则'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();
+ await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();
  await page.getByRole('radio',{name:memory?'愿意，让小N在我确认后记住':'暂时不记住，照样可以聊'}).check();await page.getByRole('button',{name:'按我的选择，开始'}).click();
  await expect(page.getByRole('heading',{name:'心事有人听，进步有人记。'})).toBeVisible();
 }
@@ -76,7 +76,8 @@ test('记忆关闭再走一遍：不提议、不提起，首页和进步卡处�
  await expect(page.getByText('记忆已关，小N不会记住这次的方法，下次也不会主动提起。')).toBeVisible();await shot(page,'m0-01-home-memory-off');
  await throughReflect(page,null);
  await expect(page.getByRole('heading',{name:'要我记住这件小事吗？'})).toHaveCount(0);
- await expect(page.getByText('记忆已关，小N不会记住这次的方法，下次也不会主动提起。')).toHaveCount(2);await shot(page,'m0-02-progress-card-memory-off');
+ // One card at a time: the progress card carries its own memory-off line, so the home one steps aside.
+ await expect(page.getByText('记忆已关，小N不会记住这次的方法，下次也不会主动提起。')).toHaveCount(1);await expect(page.locator('.memory-off-notice[data-where="progress_card"]')).toBeVisible();await shot(page,'m0-02-progress-card-memory-off');
  await page.getByRole('button',{name:'确认保存'}).click();await expect(page.getByText('进步卡已保存')).toBeVisible();
  const ended=page.waitForResponse(r=>r.url().endsWith('/learning/conversation/end'));await page.getByRole('button',{name:'今天先聊到这'}).click();expect((await ended).ok()).toBeTruthy();
  await expect(page.getByRole('region',{name:'这次的对话小结'})).toContainText('理解 · 待专业模式确认');

@@ -64,8 +64,10 @@ test('home flow: safety first (nothing stored), rest pauses, intent without the 
 test('home flow: with memory on the chat memory draft is offered (zCode memory-flow); farewell ends the session with a summary',async()=>{
  const f=setup(new Greedy());try{
   f.r.events.consent({operationId:id(),optionalMemory:true});
-  const a=await f.say('今天去打球了');assert.deepEqual(a.memoryDraft,{text:'喜欢打篮球',kind:'interest',origin:'chat'});
-  assert.equal(f.turns()[0].dropped.find(x=>x.field==='memoryDraft'),undefined);
+  const early=[await f.say('今天去打球了'),await f.say('和同学一起打的')];
+  for(const [i,r] of early.entries()){assert.equal(r.memoryDraft,null,'no memory offer in the first two turns');assert.ok(f.turns()[i].dropped.some(x=>x.field==='memoryDraft'));}
+  const a=await f.say('周末还想再去');assert.deepEqual(a.memoryDraft,{text:'喜欢打篮球',kind:'interest',origin:'chat'});
+  assert.equal(f.turns()[2].dropped.find(x=>x.field==='memoryDraft'),undefined);
   const bye=await f.say('今天先聊到这，拜拜');assert.equal(bye.summary?.trigger,'farewell');assert.equal(bye.summary?.sessionId,a.sessionId);assert.equal(f.turns().at(-1)!.ended,true);
   const next=await f.say('我又来了');assert.notEqual(next.sessionId,a.sessionId);assert.equal(f.turns().at(-1)!.turn,1);
  }finally{f.dispose();}

@@ -5,7 +5,7 @@ import { join } from 'node:path';
 const shots=join(tmpdir(),'xiaon-f-browser','shots');
 const api=process.env.XIAON_F_API_PORT??'18963';
 const voiceLog=async(page:Page)=>(await page.request.get(`http://127.0.0.1:${api}/__test/voice-log`,{headers:{'X-Xiaon-Test':'synthetic-f-only'}})).json() as Promise<{spoken:string[];heard:{bytes:number;wav:boolean}[]}>;
-async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我已了解基本服务所需信息与本机演示规则'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}
+async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}
 /** Viewport centre of a spot that really belongs to the zone (curved arms and leaves are not their bounding-box centre). */
 async function point(page:Page,scope:string,zone:string){
  return page.evaluate(([s,z])=>{const svg=document.querySelector(`${s} .mascot`)!,r=svg.querySelector(`[data-zone="${z}"]`)!.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best:[number,number]|null=null,bd=1e9;

@@ -6,7 +6,7 @@ const evidence=process.env.XIAON_E_EVIDENCE??'../../文档/交接/2026-10-21/交
 const api=()=>process.env.XIAON_E_API_PORT??'18938';
 const control=async(page:Page,path:string)=>(await page.request.get(`http://127.0.0.1:${api()}/__test/${path}`,{headers:{'X-Xiaon-Test':'synthetic-e-only'}})).json();
 const tab=async(page:Page,name:string)=>page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name,exact:true}).click();
-async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我已了解基本服务所需信息与本机演示规则'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}
+async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}
 async function submit(page:Page,value:string){await page.getByLabel('我的作答与过程',{exact:true}).fill(value);await page.getByRole('button',{name:'保存尝试并核对'}).click();await expect(page.getByRole('button',{name:'保存尝试并核对'})).toBeEnabled();}
 async function learning(page:Page){return page.evaluate(async()=>(await fetch('/api/learning')).json());}
 /** Map → 计算工坊 entry, doing the understand/logic stations first exactly as a student would. */

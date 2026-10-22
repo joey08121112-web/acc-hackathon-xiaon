@@ -42,12 +42,14 @@ test('validateMemoryDraft: 关闭即拒、情绪与评价丢弃、40 字上限�
 test('shouldOfferMemory: 同一场次最多两次实际提议；新场次重新计',()=>{
  const f=setup();try{
   const ctx=offlineContext(f.r);f.r.events.consent({operationId:id(),optionalMemory:true});
-  assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'companion',turn:1},ctx),true);
-  recordMemoryOffer({operationId:id(),sessionId:'chat-a',stage:'companion',turn:1},ctx);
+  assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'companion',turn:1},ctx),false,'前两句先好好聊，不提议记忆');
+  assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'companion',turn:2},ctx),false);
+  assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'companion',turn:3},ctx),true);
+  recordMemoryOffer({operationId:id(),sessionId:'chat-a',stage:'companion',turn:3},ctx);
   assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'companion',turn:4},ctx),true);
   recordMemoryOffer({operationId:id(),sessionId:'chat-a',stage:'companion',turn:4},ctx);
   assert.equal(shouldOfferMemory({sessionId:'chat-a',stage:'reflect',turn:7},ctx),false,'第三次不再提议');
-  assert.equal(shouldOfferMemory({sessionId:'chat-b',stage:'companion',turn:1},ctx),true,'新场次重新计');
+  assert.equal(shouldOfferMemory({sessionId:'chat-b',stage:'companion',turn:3},ctx),true,'新场次重新计');
  }finally{f.dispose();}
 });
 

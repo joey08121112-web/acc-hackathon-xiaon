@@ -17,7 +17,7 @@ test('首次记忆选择无预选，告知清楚；开与关均能保存',async(
  for(const enabled of [true,false]){
   await page.goto('/');await page.evaluate(()=>localStorage.clear());await page.reload();
   await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');
-  await page.getByRole('checkbox',{name:'我已了解基本服务所需信息与本机演示规则'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();
+  await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();
   await expect(page.getByText('聊天时小N会留意你怎么读题、怎么想，帮你找方法，不打分。')).toBeVisible();
   const radios=page.getByRole('radio');expect(await radios.count()).toBe(2);for(const radio of await radios.all())await expect(radio).not.toBeChecked();
   await expect(page.getByRole('button',{name:'按我的选择，开始'})).toBeDisabled();

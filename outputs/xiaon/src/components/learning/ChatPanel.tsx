@@ -4,7 +4,7 @@ import { ArrowRight, AudioLines, Keyboard, Loader2, Volume2, VolumeX } from 'luc
 import type { LearningUI } from '../../agents/useLearning';
 import { apiRequest, newOperationId } from '../../agent-client';
 import { useDevMode } from '../../agents/devMode';
-import type { ChatIntent, ChatReply, ConversationSummary, Greeting, ModeSuggestion } from '../../../shared/learning-contracts';
+import type { ChatIntent, ChatReply, ConversationSummary, Greeting, MemoryDraft, ModeSuggestion } from '../../../shared/learning-contracts';
 import { SAFETY_PATTERN } from '../../../server/agents/stages';
 import { PetHero, useThinkingText } from './PetStage';
 import { useVoice } from '../../voice/voice';
@@ -28,13 +28,22 @@ const TALK_MODE_KEY = 'xiaon-talk-mode';
 const HOLD_MS = 450;
 const readTyping = () => { try { return localStorage.getItem(TALK_MODE_KEY) !== 'voice'; } catch { return true; } };
 const swallow = (p: Promise<unknown>) => { void p.catch(() => {}); };
+/** 首页一次只出一张选择卡。顺序：先处理这道题，再问下一步，最后才是记住小事和提醒。 */
+export type HomeSlot='problemConfirm'|'progressCard'|'problemCapture'|'needsCheck'|'modeSwitch'|'askStudy'|'taskSuggestion'|'memory'|'retest'|'memoryOff'|null;
+export function pickHomeSlot(r:{problemDraft:boolean;progressCardDraft:boolean;askProblem:boolean;needsCheck:boolean;modeSuggestion:boolean;askStudy:boolean;taskSuggestion:boolean;memory:boolean;retest:boolean;memoryOff:boolean}):HomeSlot{
+ return r.problemDraft?'problemConfirm':r.progressCardDraft?'progressCard':r.askProblem?'problemCapture':r.needsCheck?'needsCheck':r.modeSuggestion?'modeSwitch':r.askStudy?'askStudy':r.taskSuggestion?'taskSuggestion':r.memory?'memory':r.retest?'retest':r.memoryOff?'memoryOff':null;
+}
+/** 进步卡里提炼的“记住这个方法”是进步卡的一部分，跟着进步卡一起出；聊天里的记忆提议排在别的卡后面。 */
+const withProgressCard=(r:Pick<ChatReply,'progressCardDraft'|'memoryDraft'>|null)=>!!r?.progressCardDraft&&r.memoryDraft?.origin==='progress_card';
+/** 回复里比记忆提议更要紧的卡（被它挡住的记忆提议先留着，等首页空出来再问）。 */
+const outranksMemory=(r:ChatReply)=>!withProgressCard(r)&&!!(r.problemDraft||r.progressCardDraft||r.askProblem||r.needsCheck||r.modeSuggestion||r.askStudy);
 /** active=false: the home page is hidden but kept mounted (cards and pending replies survive); stay silent until the student comes back. */
 export function ChatPanel({ l, paused, safety, navigate, trace, active = true }: { l: LearningUI; paused: boolean; safety: boolean; navigate: (page: string, tab?: string) => void; trace: ReactNode; active?: boolean }) {
  const dev=useDevMode();
  const [message,setMessage]=useState(''),[reply,setReply]=useState<ChatReply|null>(null),[awaiting,setAwaiting]=useState(false),[typing,setTyping]=useState(readTyping),[holding,setHolding]=useState(false);
  const [greeting,setGreeting]=useState(OPENER),[notice,setNotice]=useState(''),[summary,setSummary]=useState<ConversationSummary|null>(null),[manualSuggestion,setManualSuggestion]=useState<ModeSuggestion|null>(null);
- const [needsSeen,setNeedsSeen]=useState(false),[keyboard,setKeyboard]=useState(false);
- const requestLock=useRef(false),sent=useRef(false),greetingAbort=useRef<AbortController|null>(null),composer=useRef<HTMLFormElement>(null);
+ const [needsSeen,setNeedsSeen]=useState(false),[keyboard,setKeyboard]=useState(false),[memoryDraft,setMemoryDraft]=useState<MemoryDraft|null>(null);
+ const requestLock=useRef(false),sent=useRef(false),greetingAbort=useRef<AbortController|null>(null),composer=useRef<HTMLFormElement>(null),heldMemory=useRef<MemoryDraft|null>(null);
  const v=useVoice(),mic=useMic(),chat=l.cache.chat;
  const activeRef=useRef(active);activeRef.current=active;
  useEffect(()=>{if(!active){v.actions.stop();mic.actions.cancel();}},[active]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -74,6 +83,8 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   if(shownSummary||latestTurn?.ended)setNeedsSeen(false);
   l.run<ChatReply>('learning/chat',HOME_FLOW?{history,flow:'home',...extra}:{history}).then(next=>{
    setReply(next);if(next.summary)setSummary(next.summary);
+   if(outranksMemory(next)){heldMemory.current=next.memoryDraft??heldMemory.current;setMemoryDraft(null);}
+   else{setMemoryDraft(next.memoryDraft??heldMemory.current);heldMemory.current=null;}
    l.update({chat:[...history,{role:'assistant',content:next.text}],chatAt:Date.now()});
    if(next.suggestions.length&&!next.safety)l.choose(next.suggestions[0]);
    if(v.enabled&&activeRef.current)void v.actions.speak(next.text);
@@ -122,6 +133,8 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   if(!next)mic.actions.cancel();
  };
  const disabled=l.busy||awaiting||!l.connected;
+ const suggestion=manualSuggestion??reply?.modeSuggestion??null;
+ const slot=blocked||shownSummary?null:pickHomeSlot({problemDraft:!!reply?.problemDraft,progressCardDraft:!!reply?.progressCardDraft,askProblem:!!reply?.askProblem,needsCheck:!!reply?.needsCheck&&!needsSeen,modeSuggestion:!!suggestion,askStudy:!!reply?.askStudy&&!reply.safety&&!reply.summary,taskSuggestion:!!l.candidate&&!paused,memory:!!memoryDraft&&memoryEnabled,retest:!!l.view?.retestReminder,memoryOff:!memoryEnabled});
  const micLabel=mic.phase==='listening'?(holding?'松开 发送':'我在听，说完点一下'):mic.phase==='requesting'?'请允许使用麦克风':mic.phase==='transcribing'?'识别中…':disabled?'小N在想…':'按住 说话';
  const showComposer=typing||mic.engine==='none';
  const note=mic.engine==='server'?'你的声音会发送到火山引擎豆包识别成文字，服务端不保存录音。':mic.engine==='browser'?'语音由浏览器自带的识别服务转成文字，可能由浏览器厂商处理。':'';
@@ -129,27 +142,28 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   <span className="eyebrow">先听你说</span>
   <PetHero mood={pet.mood} bubble={bubble} thinking={awaiting&&!pet.line} onTouch={pet.onTouch}/>
   <p className="small muted pet-hint">摸摸小N，也可以直接说说今天的事。</p>
-  {!blocked&&<RetestReminder reminder={l.view?.retestReminder??null} where="home" l={l} navigate={navigate}/>}
+  {slot==='retest'&&<RetestReminder reminder={l.view?.retestReminder??null} where="home" l={l} navigate={navigate}/>}
   {!l.connected&&<p className="notice">暂时连不上，之前的话还在。<button onClick={()=>swallow(l.connect())}>重新连接</button></p>}
   {blocked&&<p className="safety-link" role="alert"><button className="text-button" onClick={()=>navigate('help')}>查看求助与安全支持</button></p>}
   {(notice||l.error)&&<p className="notice" role="status">{notice|| (dev?l.error:'这次没有完成，请稍后重试。')}</p>}
+  {/* 卡片组一直挂着（确认后的“记下了/记住了”要留在原处），每张卡只在轮到它时出现 */}
   {!blocked&&!shownSummary&&<>
-   <NeedsCheckCard key={sessionId??'new'} open={!!reply?.needsCheck&&!needsSeen} disabled={disabled} onChoose={chooseNeed}/>
-   <HomeChat l={l} reply={reply} send={send} navigate={navigate}/>
-   <fieldset className="home-mode-actions" disabled={disabled}><ModeSwitchCard key={`${sessionId}-${manualSuggestion?'manual':reply?.modeSuggestion?.reason}`} suggestion={manualSuggestion??reply?.modeSuggestion??null} navigate={startProfessional}/></fieldset>
+   <NeedsCheckCard key={sessionId??'new'} open={slot==='needsCheck'} disabled={disabled} onChoose={chooseNeed}/>
+   {slot==='askStudy'&&<HomeChat l={l} reply={reply} send={send} navigate={navigate}/>}
+   <fieldset className="home-mode-actions" disabled={disabled}><ModeSwitchCard key={`${sessionId}-${manualSuggestion?'manual':reply?.modeSuggestion?.reason}`} suggestion={slot==='modeSwitch'?suggestion:null} navigate={startProfessional}/></fieldset>
    <div className="home-slots">
-    <ProblemCapture open={!!reply?.askProblem} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
-    <ProblemConfirmCard draft={reply?.problemDraft??null} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
-    <ProgressCardView draft={reply?.progressCardDraft??null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l} navigate={navigate}/>
-    <MemoryPrompt draft={reply?.memoryDraft??null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l}/>
+    <ProblemCapture open={slot==='problemCapture'} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
+    <ProblemConfirmCard draft={slot==='problemConfirm'?reply?.problemDraft??null:null} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
+    <ProgressCardView draft={slot==='progressCard'?reply?.progressCardDraft??null:null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l} navigate={navigate}/>
+    <MemoryPrompt draft={slot==='memory'||(slot==='progressCard'&&withProgressCard(reply))?memoryDraft:null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l}/>
    </div>
   </>}
-  <MemoryOffNotice memoryEnabled={memoryEnabled} where="home" navigate={navigate}/>
+  {slot==='memoryOff'&&<MemoryOffNotice memoryEnabled={memoryEnabled} where="home" navigate={navigate}/>}
   <ConversationSummaryView key={`${shownSummary?.id}`} summary={blocked?null:shownSummary} l={l} navigate={startProfessional}/>
   <div className="home-composer-wrap">
    <div className="home-card-actions"><button className="secondary" disabled={disabled||blocked||!sessionId||!!shownSummary} onClick={end}>今天先聊到这</button><button className="text-button" disabled={disabled} onClick={()=>void pause()}>今天先休息</button></div>
   </div>
-  {l.candidate&&!paused&&!blocked&&<button className="learning-choice" onClick={()=>navigate('task')}>小N建议：{l.candidate.title}，由我确认 <ArrowRight size={17}/></button>}
+  {slot==='taskSuggestion'&&l.candidate&&<button className="learning-choice" onClick={()=>navigate('task')}>小N建议：{l.candidate.title}，由我确认 <ArrowRight size={17}/></button>}
   {dev&&(trace??<details className="evidence-details"><summary>查看 Agent 与工具轨迹</summary>{l.view?.runs.slice(-10).map(run=><p className="small" key={run.id}>{run.role} · {run.providerKind} · {run.status}</p>)}</details>)}
   {/* 输入栏固定在底部导航上面；语音去向只在请求麦克风那一刻说明，平时不占地方 */}
   <div className="talk-dock">

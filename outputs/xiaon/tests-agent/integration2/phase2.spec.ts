@@ -12,7 +12,7 @@ const mode=(page:Page)=>page.getByRole('region',{name:'专业模式测评'});
 const report=(page:Page)=>page.getByRole('region',{name:'专业评测报告'});
 async function onboard(page:Page){
  await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');
- await page.getByRole('checkbox',{name:'我已了解基本服务所需信息与本机演示规则'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();
+ await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();
  await page.getByRole('radio',{name:'暂时不记住，照样可以聊'}).check();await page.getByRole('button',{name:'按我的选择，开始'}).click();
  await expect(page.getByRole('textbox',{name:'对小N说'})).toBeVisible();
 }

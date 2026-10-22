@@ -87,9 +87,11 @@ async function phrase(ctx:RevampContext,operationId:string,kind:'summary'|'memor
  }catch{/* 模型失败用默认文字 */}
  return fallback;
 }
-/** Pure gate: only actual, validated chat offers consume the two chances. */
+/** 聊天里最早在学生第几句话之后才问要不要记住：先好好聊，不一开口就弹记忆卡。进步卡里的记忆不受这条限制。 */
+export const MEMORY_OFFER_MIN_TURN=3;
+/** Pure gate: only actual, validated chat offers consume the two chances, and none before MEMORY_OFFER_MIN_TURN. */
 export function shouldOfferMemory(input:MemoryOfferInput,ctx:RevampContext):boolean{
- return ctx.memoryEnabled()&&ctx.repository.list('memoryOffers').filter(o=>o.sessionId===input.sessionId).length<2;
+ return ctx.memoryEnabled()&&input.turn>=MEMORY_OFFER_MIN_TURN&&ctx.repository.list('memoryOffers').filter(o=>o.sessionId===input.sessionId).length<2;
 }
 /** Called only by the program after a valid chat-origin draft; retries have the same event id. */
 export function recordMemoryOffer(input:MemoryOfferInput&{operationId:string},ctx:RevampContext):void{
