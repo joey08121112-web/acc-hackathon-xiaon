@@ -9,6 +9,12 @@ tsconfig.tsbuildinfo
 # 内部过程工作目录（浏览器测试中间产物，不随仓库分发）
 work/
 
+# AI 助手本地内部目录（含 worktrees，体积大，不属于项目交付物）
+.claude/
+
+# 部署打包产物（每次部署由 outputs/xiaon 重新生成）
+outputs/xiaon-cloudbase-deploy.zip
+
 # 旧版原型（已被 outputs/xiaon 取代）
 outputs/xiaon-prototype/
 outputs/xiaon-prototype.zip

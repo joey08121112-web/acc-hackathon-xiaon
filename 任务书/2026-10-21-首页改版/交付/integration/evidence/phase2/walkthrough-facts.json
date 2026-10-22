@@ -4,18 +4,18 @@
     "comparedWithReportId": null,
     "createdAt": "2026-10-22T01:00:00.000Z",
     "evidenceRevision": 30,
-    "id": "preport-967d5ade-55a6-498b-b4d5-200375846062",
-    "interviewId": "interview-3bfa6d23-28df-4478-8f1f-820ba41130fa",
+    "id": "preport-2bb1a493-fd59-464e-802e-ab6f5706c8ab",
+    "interviewId": "interview-8fb63ebc-c60f-4403-aca0-f913a5d4cf53",
     "mode": "model",
     "modules": [
       {
         "attemptIds": [
-          "af048ab0-b9a2-42a2-8b2f-6d58620ac2d6"
+          "428f6651-1007-49b8-92f1-490c319d1a7f"
         ],
         "basis": "correct_with_reason",
         "evidenceIds": [
-          "109d9b5c-c0f2-47c3-a0ba-1ab0c9734ed5",
-          "f4115b83-c178-4ede-8f76-7ef024ad79df"
+          "aee20bc5-0175-4b5d-be19-408bbc39895a",
+          "ecf3d173-d81a-4986-b75c-4647671e158c"
         ],
         "level": "good",
         "module": "理解",
@@ -25,22 +25,22 @@
         "scope": "this_interview",
         "suggestions": [],
         "turnIds": [
-          "iturn-8501a352-b5c7-40dd-91bb-0a211f019424",
-          "iturn-805e0792-b1b0-4df5-b6f9-8d2d9ccd9932"
+          "iturn-41554bd4-2b23-446c-bc34-8564b93097c8",
+          "iturn-9d146085-257a-400c-97bb-263f04d046e9"
         ],
         "wording": "这次把条件读清楚了。"
       },
       {
         "attemptIds": [
-          "b6559c8e-b0d3-40ec-8e98-7033135819d6",
-          "09e4c167-420d-46aa-9c58-f60ec6bc92fc"
+          "a02078e5-968e-4400-b614-45358e25fe57",
+          "bcb581ee-fd05-4c21-8eec-5d2be8d4865d"
         ],
         "basis": "correct_on_transfer",
         "evidenceIds": [
-          "1899b2b8-adfc-4ec1-a8dc-11d429941793",
-          "09830773-d721-42bb-a0d9-03dbaf14813b",
-          "d1b75b01-d852-4998-aa62-6cfbf4e33d3f",
-          "d7b34728-1a7f-4a5d-a5ab-21cea6fd7b06"
+          "94ddb4bf-9af3-400c-8c05-3d705ffaba1a",
+          "97d4206f-9f82-4b92-8599-5dda64cf93d7",
+          "0b2dadf0-1761-42ca-9c18-61ca24e77bfe",
+          "fe79b7a3-8d8a-42a0-93b5-1807fdcd6d7f"
         ],
         "level": "partial",
         "module": "逻辑",
@@ -53,20 +53,20 @@
           "举反例时先检查它是否满足题目的前提。"
         ],
         "turnIds": [
-          "iturn-644ee052-1486-45b4-a8c7-cfd23ee4fa5d",
-          "iturn-cb8e9de2-3653-432f-9c55-dd480e4e85c0",
-          "iturn-791507cf-1a99-49d2-bf9d-1f266cd2f4ad",
-          "iturn-6b3fa72e-0331-44b5-ad5c-df447fdadb53"
+          "iturn-5ab29bbc-1095-4976-939e-4edf1f69073d",
+          "iturn-5f1a1172-783f-40c1-9e4c-f49512c34bf9",
+          "iturn-1d67abd9-cb6f-46c1-87bc-04842ec83094",
+          "iturn-b498f65d-68ad-4db4-ae6f-9d412a80c403"
         ],
         "wording": "第一题没做对，同类的第二题做对了。"
       },
       {
         "attemptIds": [
-          "60988c23-ee4e-4c8f-bde3-3cd048d554c9"
+          "021de0d8-4b6b-402a-800c-a30ff506e464"
         ],
         "basis": "completed_with_hint",
         "evidenceIds": [
-          "088e27ef-0961-47d9-b5d7-05914819693a"
+          "b704e2c5-94c5-4ae3-91d0-325851398537"
         ],
         "level": "partial",
         "module": "计算",
@@ -78,19 +78,19 @@
           "写出每一步等号，做完把结果代一个数检查。"
         ],
         "turnIds": [
-          "iturn-29325769-983d-4cb4-b4b5-2f05f094bae4",
-          "iturn-c6157e4e-a075-4fae-a757-aa49f9e5c839"
+          "iturn-d838fac9-3970-4a37-810e-9f7224753c46",
+          "iturn-ece584d3-481a-4c49-ab7a-386444f40a82"
         ],
         "wording": "在一个小提示之后做出来了。"
       },
       {
         "attemptIds": [
-          "eed64ebc-caf2-4891-9663-642faec8f172"
+          "42eaebab-a776-4264-b9de-ae81e2331b3a"
         ],
         "basis": "correct_with_reason",
         "evidenceIds": [
-          "7a54dee8-ea9f-46bb-88cb-aa1e403d5566",
-          "b47d1e38-3ba2-4a60-a346-462f7a377b8a"
+          "2f83c5c6-189c-4076-80ab-cf281e2f29b1",
+          "a29556a2-ded0-4fd1-a5e7-e1d2186483e3"
         ],
         "level": "good",
         "module": "建模",
@@ -100,18 +100,18 @@
         "scope": "this_interview",
         "suggestions": [],
         "turnIds": [
-          "iturn-67dc1f18-9656-451f-93e6-8412de0b1752",
-          "iturn-a19b8944-5f5f-4e89-b0e4-cd6a248d8f33"
+          "iturn-ab417369-1655-410e-b698-7cde67b5864a",
+          "iturn-68661b0f-f4c2-412f-b8bc-70cd57943cb6"
         ],
         "wording": "这次答对了，也说清了自己的想法。"
       },
       {
         "attemptIds": [
-          "a60b048a-7289-4d45-b577-e024a8e9e1dc"
+          "b08026b9-8cfd-4afe-aad7-3087ee3d9d4d"
         ],
         "basis": "correct_with_reason",
         "evidenceIds": [
-          "ed825210-63fa-4d96-837b-8c6532ad55cd"
+          "5986d958-3d2d-45ce-84d2-8ac98c49f641"
         ],
         "level": "good",
         "module": "空间想象",
@@ -121,8 +121,8 @@
         "scope": "this_interview",
         "suggestions": [],
         "turnIds": [
-          "iturn-f715b8a9-44a3-4bf3-ac5a-9170d1e620bb",
-          "iturn-57a10fbf-723f-4a62-917f-dce39ad2ce64"
+          "iturn-2a906795-cc38-4be1-a64b-aea390ea955f",
+          "iturn-44324cbe-8aa4-4803-b23b-76de2c33e498"
         ],
         "wording": "这次答对了，也说清了自己的想法。"
       }
@@ -130,16 +130,16 @@
     "observationChecks": [
       {
         "dimension": "理解",
-        "observationId": "obs-442c0c94-b68a-4737-afa1-b5e303ba08f6",
+        "observationId": "obs-80bc6459-79e0-4502-9a57-6140895f47bb",
         "result": "confirmed"
       },
       {
         "dimension": "理解",
-        "observationId": "obs-d470f05b-8b4e-45aa-8a47-128fc62aa0de",
+        "observationId": "obs-f4af53d9-f962-4a10-97fd-9466eea18ea0",
         "result": "confirmed"
       }
     ],
-    "operationId": "967d5ade-55a6-498b-b4d5-200375846062",
+    "operationId": "2bb1a493-fd59-464e-802e-ab6f5706c8ab",
     "schemaVersion": "1.0.0",
     "supersedesReportId": null,
     "version": 1
@@ -159,21 +159,21 @@
         "to": "good"
       }
     ],
-    "comparedWithReportId": "preport-967d5ade-55a6-498b-b4d5-200375846062",
+    "comparedWithReportId": "preport-2bb1a493-fd59-464e-802e-ab6f5706c8ab",
     "createdAt": "2026-11-01T01:00:00.000Z",
     "evidenceRevision": 53,
-    "id": "preport-3290bded-c92d-40b1-9cc2-08a021c9ffe3",
-    "interviewId": "interview-d5207d3d-4110-43ed-a668-3b7302fe6add",
+    "id": "preport-176bf358-fcbb-41b6-a8cd-2b2b6c25e155",
+    "interviewId": "interview-b72beef3-0c48-4067-bf52-8c5e379114b4",
     "mode": "model",
     "modules": [
       {
         "attemptIds": [
-          "311c85f5-aae0-4ae3-b8d6-e71696d844ef"
+          "255eecb6-39d1-449b-b175-c348d40a204e"
         ],
         "basis": "correct_with_reason",
         "evidenceIds": [
-          "cac464d3-1c55-4812-8291-a0310cd8cb6a",
-          "7cef776a-05af-4573-ac2b-0cb96edeaba7"
+          "8f2be0cf-aab5-484a-8106-09c8db166e74",
+          "a501b549-78a0-492c-86da-9e47105d1003"
         ],
         "level": "good",
         "module": "理解",
@@ -183,19 +183,19 @@
         "scope": "this_interview",
         "suggestions": [],
         "turnIds": [
-          "iturn-7b412894-48d7-4be2-a93a-195de9f0956e",
-          "iturn-3888a454-6ed5-44b4-99c6-9f27ac1a2015"
+          "iturn-8a8a477d-d07c-456e-85d8-414b5b2afe1e",
+          "iturn-4d451537-66ed-4c45-8280-6f005f2abcb5"
         ],
         "wording": "这次把条件读清楚了。"
       },
       {
         "attemptIds": [
-          "3405db24-f18c-4949-bc65-c7b66c934eb1"
+          "e0366c68-3674-4826-8367-fcf9fbd24caa"
         ],
         "basis": "correct_with_reason",
         "evidenceIds": [
-          "ff6a07a2-8af6-46fa-a0c7-2bcd5ec37092",
-          "31f5fac6-829d-4486-a560-da5e1c6bd66c"
+          "e22966be-cc19-487b-b7eb-d4dc7d2ed074",
+          "7fccbb47-c5df-488f-9cec-59fe7288b960"
         ],
         "level": "good",
         "module": "逻辑",
@@ -205,18 +205,18 @@
         "scope": "this_interview",
         "suggestions": [],
         "turnIds": [
-          "iturn-652ac073-5b35-4f6c-af7c-feebf74881bc",
-          "iturn-22b29b9b-2b76-4707-b32b-49e472435566"
+          "iturn-987895de-6e0d-4696-8295-4e62e34cabaa",
+          "iturn-948eb299-db5e-4086-8c98-d7f6c5f63ee6"
         ],
         "wording": "这次答对了，也说清了自己的想法。"
       },
       {
         "attemptIds": [
-          "024f5fd3-5370-4cca-ae72-c8375b94ff8b"
+          "74f2b76e-7deb-46a8-a820-f659603820af"
         ],
         "basis": "correct_with_reason",
         "evidenceIds": [
-          "ccf47190-838c-4760-b949-12d97a7d0957"
+          "456859f5-3005-4a89-bb44-ec07f27c8a25"
         ],
         "level": "good",
         "module": "计算",
@@ -226,19 +226,19 @@
         "scope": "this_interview",
         "suggestions": [],
         "turnIds": [
-          "iturn-b07b5a19-a347-4397-b6b9-3743e6dc261c",
-          "iturn-f7d4bccd-350b-41ba-b4ca-777a5848f579"
+          "iturn-754c0b6d-3861-460c-8b57-86f85b81312d",
+          "iturn-265d3ad6-758b-4d0b-9e2a-f3b6d8888bda"
         ],
         "wording": "这次答对了，也说清了自己的想法。"
       },
       {
         "attemptIds": [
-          "7a606256-ec41-4dac-b0e2-5ab58c981fc5"
+          "6b744906-96c3-473d-b2a9-c4d53a7f8525"
         ],
         "basis": "correct_with_reason",
         "evidenceIds": [
-          "cdbf5ba2-caef-441c-a0de-296ba36026b0",
-          "b13a4302-301b-4021-8b81-224df3b2ce9f"
+          "f1aa7875-4627-48b8-b218-034d4f6c38ef",
+          "9d000aa1-7ff7-47f6-b936-3c5cd42c3909"
         ],
         "level": "good",
         "module": "建模",
@@ -248,18 +248,18 @@
         "scope": "this_interview",
         "suggestions": [],
         "turnIds": [
-          "iturn-e96e306e-f6a0-44ab-9e2a-8dcf68b78a78",
-          "iturn-262949e8-e7bd-4519-a871-039744bcfdad"
+          "iturn-f6f3aa9a-8d29-48b3-98f4-31f27fe84d72",
+          "iturn-dc81b3c4-d105-488c-904a-b2295f6bef33"
         ],
         "wording": "这次答对了，也说清了自己的想法。"
       },
       {
         "attemptIds": [
-          "8cc2ff04-05b7-4313-b31c-d3b9f1ebf17e"
+          "41c8b7e5-36d2-4ce6-9986-e9a4b4d9c885"
         ],
         "basis": "correct_with_reason",
         "evidenceIds": [
-          "c8257540-0e9d-47ad-9e9a-fbac1ad4e2f7"
+          "1de7c75f-16b3-49f9-8200-dac311440129"
         ],
         "level": "good",
         "module": "空间想象",
@@ -269,14 +269,14 @@
         "scope": "this_interview",
         "suggestions": [],
         "turnIds": [
-          "iturn-66228694-c532-4c42-93f9-54b659fcbb42",
-          "iturn-cbdd11f3-9bde-4066-983d-fb0c08df40cd"
+          "iturn-e4b04a58-9c89-4543-8c0f-919f03d40436",
+          "iturn-b44d23c2-c168-4c96-a3e7-b6dfed62aee4"
         ],
         "wording": "这次答对了，也说清了自己的想法。"
       }
     ],
     "observationChecks": [],
-    "operationId": "3290bded-c92d-40b1-9cc2-08a021c9ffe3",
+    "operationId": "176bf358-fcbb-41b6-a8cd-2b2b6c25e155",
     "schemaVersion": "1.0.0",
     "supersedesReportId": null,
     "version": 1
@@ -290,27 +290,27 @@
       },
       "createdAt": "2026-10-22T01:00:00.000Z",
       "goal": "这个月在逻辑上往前一步：举反例时先检查它是否满足题目的前提。",
-      "id": "stage-9cc90c44-d85b-4fd2-94cf-082a5d633777",
+      "id": "stage-bbae771e-9d33-4609-8720-b3cf68855c02",
       "mode": "local_rules",
       "module": "逻辑",
       "month": "2026-10",
-      "operationId": "dcce8a15-9c20-49a0-ac1f-7af5e7338a64",
+      "operationId": "5641fcf7-d79a-440e-831a-7c82b0122b91",
       "retestDeclinedAt": "2026-10-31T01:00:00.000Z",
       "retestSuggestedAt": "2026-10-31",
-      "revision": 3,
+      "revision": 6,
       "schemaVersion": "1.0.0",
-      "sourceReportId": "preport-967d5ade-55a6-498b-b4d5-200375846062",
+      "sourceReportId": "preport-2bb1a493-fd59-464e-802e-ab6f5706c8ab",
       "status": "confirmed",
       "updatedAt": "2026-10-31T01:00:00.000Z",
       "weeks": [
         {
-          "planVersionId": null,
-          "proposalId": "8d1e9a8a-90d7-431e-a23e-ae879a083737",
+          "planVersionId": "a365d278-1f65-4e39-a431-4d3ea89d01d6",
+          "proposalId": "a09438f5-dfda-47e2-aecd-7db0ec48ebbe",
           "weekStart": "2026-10-19"
         },
         {
-          "planVersionId": null,
-          "proposalId": null,
+          "planVersionId": "cffcce0c-278c-4fba-979a-55f2daec885c",
+          "proposalId": "29b4e5e0-15bb-4233-9f77-93ad3d6ebe05",
           "weekStart": "2026-10-26"
         }
       ]
@@ -327,8 +327,8 @@
         "空间想象"
       ],
       "currentModule": null,
-      "id": "interview-3bfa6d23-28df-4478-8f1f-820ba41130fa",
-      "learningSessionId": "93f4b964-98f9-41e2-b6fa-17da661d2a74",
+      "id": "interview-8fb63ebc-c60f-4403-aca0-f913a5d4cf53",
+      "learningSessionId": "301464b3-5b08-4595-ad5c-479365a95728",
       "moduleOrder": [
         "理解",
         "逻辑",
@@ -336,7 +336,7 @@
         "建模",
         "空间想象"
       ],
-      "operationId": "3bfa6d23-28df-4478-8f1f-820ba41130fa",
+      "operationId": "8fb63ebc-c60f-4403-aca0-f913a5d4cf53",
       "pausedAt": null,
       "pending": null,
       "revision": 15,
@@ -355,8 +355,8 @@
         "空间想象"
       ],
       "currentModule": null,
-      "id": "interview-d5207d3d-4110-43ed-a668-3b7302fe6add",
-      "learningSessionId": "7e117e98-8821-436d-9322-97feb6dc57f0",
+      "id": "interview-b72beef3-0c48-4067-bf52-8c5e379114b4",
+      "learningSessionId": "b0e0c644-ba04-4d27-ad16-6477c95f9e0f",
       "moduleOrder": [
         "理解",
         "逻辑",
@@ -364,7 +364,7 @@
         "建模",
         "空间想象"
       ],
-      "operationId": "d5207d3d-4110-43ed-a668-3b7302fe6add",
+      "operationId": "b72beef3-0c48-4067-bf52-8c5e379114b4",
       "pausedAt": null,
       "pending": null,
       "revision": 11,
@@ -567,44 +567,80 @@
         },
         "createdAt": "2026-10-22T01:00:00.000Z",
         "evidenceRevision": 30,
-        "goal": "like-terms：从提示帮助过渡到独立处理",
-        "id": "892773c6-a585-490e-b4ff-c4bec6113c3d",
+        "goal": "这个月在逻辑上往前一步：举反例时先检查它是否满足题目的前提。（本周聚焦逻辑）",
+        "id": "a365d278-1f65-4e39-a431-4d3ea89d01d6",
         "items": [
           {
-            "estimatedMinutes": 3,
+            "estimatedMinutes": 4,
             "evidenceIds": [
-              "088e27ef-0961-47d9-b5d7-05914819693a"
+              "94ddb4bf-9af3-400c-8c05-3d705ffaba1a",
+              "97d4206f-9f82-4b92-8599-5dda64cf93d7",
+              "0b2dadf0-1761-42ca-9c18-61ca24e77bfe",
+              "fe79b7a3-8d8a-42a0-93b5-1807fdcd6d7f"
             ],
-            "goal": "只看当前知识点的一个具体步骤，先提供支持",
-            "id": "27a70aca-de65-4920-841b-f3674b4553dd",
-            "knowledgePointId": "like-terms",
-            "scheduledDate": "2026-10-22",
-            "status": "scheduled",
-            "task": null,
-            "taskType": "supported_practice"
-          },
-          {
-            "estimatedMinutes": 3,
-            "evidenceIds": [
-              "088e27ef-0961-47d9-b5d7-05914819693a"
-            ],
-            "goal": "支持后自选未见新题；完成支持前须再次核对题目暴露",
-            "id": "cdff40b3-4a14-479d-a319-8786b9a63c43",
-            "knowledgePointId": "like-terms",
+            "goal": "这个月在逻辑上往前一步：举反例时先检查它是否满足题目的前提。：延迟未见同类题检查；题库不足时等待补充可信题目",
+            "id": "8ff323d0-eee0-4b24-aa08-8445eab7719c",
+            "knowledgePointId": "counterexample",
             "scheduledDate": "2026-10-22",
             "status": "scheduled",
             "task": {
-              "taskId": "b-like-transfer",
+              "taskId": "b-logic-delayed",
               "taskVersion": 2
             },
-            "taskType": "independent_transfer"
+            "taskType": "delayed_check"
           }
         ],
-        "operationId": "18f0d75f-82d1-4fb1-a1b8-6cadb254e8ba",
+        "operationId": "747323a8-8142-45a6-85e6-88f81d89a0a1",
         "previousVersionId": null,
-        "proposalId": "8d1e9a8a-90d7-431e-a23e-ae879a083737",
+        "proposalId": "a09438f5-dfda-47e2-aecd-7db0ec48ebbe",
         "schemaVersion": "1.0.0",
         "version": 1
+      },
+      "basisRevised": false,
+      "replacementId": "cffcce0c-278c-4fba-979a-55f2daec885c"
+    },
+    {
+      "snapshot": {
+        "changes": [
+          "学生选择 accept：学生明确选择接受"
+        ],
+        "confirmation": {
+          "action": "accept",
+          "actor": "student",
+          "confirmedAt": "2026-10-26T01:00:00.000Z",
+          "expectedPreviousVersionId": "a365d278-1f65-4e39-a431-4d3ea89d01d6",
+          "reason": "学生明确选择接受"
+        },
+        "createdAt": "2026-10-26T01:00:00.000Z",
+        "evidenceRevision": 30,
+        "goal": "这个月在逻辑上往前一步：举反例时先检查它是否满足题目的前提。（本周聚焦逻辑）",
+        "id": "cffcce0c-278c-4fba-979a-55f2daec885c",
+        "items": [
+          {
+            "estimatedMinutes": 4,
+            "evidenceIds": [
+              "94ddb4bf-9af3-400c-8c05-3d705ffaba1a",
+              "97d4206f-9f82-4b92-8599-5dda64cf93d7",
+              "0b2dadf0-1761-42ca-9c18-61ca24e77bfe",
+              "fe79b7a3-8d8a-42a0-93b5-1807fdcd6d7f"
+            ],
+            "goal": "这个月在逻辑上往前一步：举反例时先检查它是否满足题目的前提。：延迟未见同类题检查；题库不足时等待补充可信题目",
+            "id": "5e4128ff-bed3-4bda-8611-89da2563cc3a",
+            "knowledgePointId": "counterexample",
+            "scheduledDate": "2026-10-26",
+            "status": "scheduled",
+            "task": {
+              "taskId": "b-logic-delayed",
+              "taskVersion": 2
+            },
+            "taskType": "delayed_check"
+          }
+        ],
+        "operationId": "b2c8f049-a95c-45be-9186-ce07c155a8a8",
+        "previousVersionId": "a365d278-1f65-4e39-a431-4d3ea89d01d6",
+        "proposalId": "29b4e5e0-15bb-4233-9f77-93ad3d6ebe05",
+        "schemaVersion": "1.0.0",
+        "version": 2
       },
       "basisRevised": false,
       "replacementId": null
