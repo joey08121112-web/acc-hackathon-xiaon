@@ -1,0 +1,2702 @@
+{
+  "now": "2026-10-22T01:00:00.000Z",
+  "session": {
+    "endedAt": null,
+    "id": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+    "mode": "support",
+    "operationId": "e3b4ff72-ab90-40c5-83de-8e85a7a94eb1",
+    "schemaVersion": "1.0.0",
+    "startedAt": "2026-10-22T01:00:00.000Z",
+    "status": "active",
+    "timezone": "Asia/Shanghai"
+  },
+  "paused": false,
+  "assessment": {
+    "schemaVersion": "1.0.0",
+    "id": "8df10b1c-6dcb-4c5a-a5e8-feaf197d6687",
+    "evidenceRevision": 16,
+    "createdAt": "2026-10-22T01:00:00.000Z",
+    "skills": [
+      {
+        "schemaVersion": "1.0.0",
+        "id": "c5d06285-d19a-48be-8b48-9fc7795646ac",
+        "evidenceRevision": 16,
+        "knowledgePointId": "math-language",
+        "dimension": "理解",
+        "status": "unobserved",
+        "evidenceIds": [],
+        "attemptIds": [],
+        "observedTaskIds": [],
+        "trustedLearningDates": [],
+        "recentDifficulty": false,
+        "coverage": "数学语句与条件提取：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+        "unknowns": [
+          "只覆盖先后运算关系及条件解释，不外推整个维度",
+          "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+        ],
+        "computedAt": "2026-10-22T01:00:00.000Z"
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "516f39f6-d99f-4e6a-a5a3-4b3ed7a91f37",
+        "evidenceRevision": 16,
+        "knowledgePointId": "counterexample",
+        "dimension": "逻辑",
+        "status": "unobserved",
+        "evidenceIds": [],
+        "attemptIds": [],
+        "observedTaskIds": [],
+        "trustedLearningDates": [],
+        "recentDifficulty": false,
+        "coverage": "反例与条件结论：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+        "unknowns": [
+          "只覆盖满足前提且推翻结论的反例及解释，不外推整个维度",
+          "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+        ],
+        "computedAt": "2026-10-22T01:00:00.000Z"
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "2e783b7f-ab60-4b3a-804d-18b5e8e7ebfd",
+        "evidenceRevision": 16,
+        "knowledgePointId": "negative-brackets",
+        "dimension": "计算",
+        "status": "first_independent",
+        "evidenceIds": [
+          "84226500-1d01-493e-bf7d-77c3eb6b517b",
+          "e9c89ef5-c7b5-4ec9-a9cc-08d1e569451c",
+          "578770fd-9ae6-464a-85c7-631d01ef539f"
+        ],
+        "attemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021",
+          "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb"
+        ],
+        "observedTaskIds": [
+          "bracket",
+          "transfer"
+        ],
+        "trustedLearningDates": [
+          "2026-10-22"
+        ],
+        "recentDifficulty": false,
+        "coverage": "去括号负号处理：3次有效尝试，1道未见题独立完成，1次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+        "unknowns": [
+          "只覆盖受限一次式结果表现，具体心理过程待核实，不外推整个维度",
+          "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+        ],
+        "computedAt": "2026-10-22T01:00:00.000Z"
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "d64f4b0c-73b8-4f3d-b8eb-d03c632f5b49",
+        "evidenceRevision": 16,
+        "knowledgePointId": "like-terms",
+        "dimension": "计算",
+        "status": "first_independent",
+        "evidenceIds": [
+          "1591fe37-6443-40bf-8917-2a118b050171"
+        ],
+        "attemptIds": [
+          "5627c2e4-3469-4045-924f-7efb1b47bec2"
+        ],
+        "observedTaskIds": [
+          "b-like-observation"
+        ],
+        "trustedLearningDates": [
+          "2026-10-22"
+        ],
+        "recentDifficulty": false,
+        "coverage": "合并同类项：1次有效尝试，1道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+        "unknowns": [
+          "只覆盖受限一次式系数和常数合并结果，不外推整个维度",
+          "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+        ],
+        "computedAt": "2026-10-22T01:00:00.000Z"
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "797c425e-c68f-4151-b0d0-c8fbd434815e",
+        "evidenceRevision": 16,
+        "knowledgePointId": "fixed-variable-cost",
+        "dimension": "建模",
+        "status": "unobserved",
+        "evidenceIds": [],
+        "attemptIds": [],
+        "observedTaskIds": [],
+        "trustedLearningDates": [],
+        "recentDifficulty": false,
+        "coverage": "一次费用与随数量变化费用：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+        "unknowns": [
+          "只覆盖单一线性数量关系及费用来源解释，不外推整个维度",
+          "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+        ],
+        "computedAt": "2026-10-22T01:00:00.000Z"
+      },
+      {
+        "schemaVersion": "1.0.0",
+        "id": "3986d044-c910-412f-9eec-2bdecaa811be",
+        "evidenceRevision": 16,
+        "knowledgePointId": "rotation-2d",
+        "dimension": "空间想象",
+        "status": "unobserved",
+        "evidenceIds": [],
+        "attemptIds": [],
+        "observedTaskIds": [],
+        "trustedLearningDates": [],
+        "recentDifficulty": false,
+        "coverage": "二维旋转与位置关系：0次有效尝试，0道未见题独立完成，0次提示后完成，0次原题重做；同题族简单换数覆盖有限",
+        "unknowns": [
+          "只覆盖明确坐标系、旋转中心和方向的折线旋转识别，不外推整个维度",
+          "跨次产品规则尚未满足：2道未见题、2个可信日期、2个场次"
+        ],
+        "computedAt": "2026-10-22T01:00:00.000Z"
+      }
+    ],
+    "coverage": [
+      {
+        "dimension": "理解",
+        "knowledgePointIds": [],
+        "evidenceCount": 0,
+        "lastObservedAt": null,
+        "unknowns": [
+          "尚未观察：数学语句与条件提取",
+          "覆盖仅限列出的子技能，不能解释为完整五维测量"
+        ]
+      },
+      {
+        "dimension": "逻辑",
+        "knowledgePointIds": [],
+        "evidenceCount": 0,
+        "lastObservedAt": null,
+        "unknowns": [
+          "尚未观察：反例与条件结论",
+          "覆盖仅限列出的子技能，不能解释为完整五维测量"
+        ]
+      },
+      {
+        "dimension": "计算",
+        "knowledgePointIds": [
+          "negative-brackets",
+          "like-terms"
+        ],
+        "evidenceCount": 4,
+        "lastObservedAt": "2026-10-22T01:00:00.000Z",
+        "unknowns": [
+          "覆盖仅限列出的子技能，不能解释为完整五维测量"
+        ]
+      },
+      {
+        "dimension": "建模",
+        "knowledgePointIds": [],
+        "evidenceCount": 0,
+        "lastObservedAt": null,
+        "unknowns": [
+          "尚未观察：一次费用与随数量变化费用",
+          "覆盖仅限列出的子技能，不能解释为完整五维测量"
+        ]
+      },
+      {
+        "dimension": "空间想象",
+        "knowledgePointIds": [],
+        "evidenceCount": 0,
+        "lastObservedAt": null,
+        "unknowns": [
+          "尚未观察：二维旋转与位置关系",
+          "覆盖仅限列出的子技能，不能解释为完整五维测量"
+        ]
+      }
+    ],
+    "evidenceIds": [
+      "84226500-1d01-493e-bf7d-77c3eb6b517b",
+      "e9c89ef5-c7b5-4ec9-a9cc-08d1e569451c",
+      "578770fd-9ae6-464a-85c7-631d01ef539f",
+      "1591fe37-6443-40bf-8917-2a118b050171"
+    ],
+    "limitations": [
+      "状态是可配置产品规则，不是标准化测评；不计算五维平均分、不推断智力/人格",
+      "同题族简单换数不证明广泛迁移；原题延迟保持不等于新题独立完成",
+      "模型仅提供带原文定位的评分点分析；真实模型与长期教学效果仍需另行验证"
+    ]
+  },
+  "tasks": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "understand",
+      "version": 2,
+      "title": "数学语句与条件提取",
+      "question": "“比 x 的 2 倍少 3”可以怎样表示？第一行写式子，另起一行解释先后关系。",
+      "choices": [],
+      "knowledgePoints": [
+        "math-language"
+      ],
+      "primaryDimension": "理解",
+      "auxiliaryDimensions": [],
+      "familyId": "family-math-language",
+      "variantKind": "observation",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-language-transfer",
+      "version": 2,
+      "title": "数学语句与条件提取",
+      "question": "先把 a 增加 2，再把所得结果乘 3。第一行写式子，另起一行说明运算次序。",
+      "choices": [],
+      "knowledgePoints": [
+        "math-language"
+      ],
+      "primaryDimension": "理解",
+      "auxiliaryDimensions": [],
+      "familyId": "family-math-language",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-language-delayed",
+      "version": 2,
+      "title": "数学语句与条件提取",
+      "question": "一根长 x 厘米的绳先剪去 4 厘米，另一根长为剩下部分的 2 倍。第一行写另一根绳长度的式子，另起一行说明条件。",
+      "choices": [],
+      "knowledgePoints": [
+        "math-language"
+      ],
+      "primaryDimension": "理解",
+      "auxiliaryDimensions": [],
+      "familyId": "family-math-language",
+      "variantKind": "delayed",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "logic",
+      "version": 2,
+      "title": "反例与条件结论",
+      "question": "小林说“两个负数的和一定是正数”。哪个例子否定这句话？第一行写选项字母，另起一行说明前提与结论。",
+      "choices": [
+        "A: (-2)+(-3)=-5",
+        "B: 2+3=5",
+        "C: (-2)×(-3)=6"
+      ],
+      "knowledgePoints": [
+        "counterexample"
+      ],
+      "primaryDimension": "逻辑",
+      "auxiliaryDimensions": [],
+      "familyId": "family-counterexample",
+      "variantKind": "observation",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-logic-transfer",
+      "version": 2,
+      "title": "反例与条件结论",
+      "question": "有人说“两个正数中，较大的数的平方反而较小”。哪个例子能反驳？第一行写选项字母，另起一行解释。",
+      "choices": [
+        "A: -2<-1，但4>1",
+        "B: 1=1，平方也相等",
+        "C: 1<2，且1<4"
+      ],
+      "knowledgePoints": [
+        "counterexample"
+      ],
+      "primaryDimension": "逻辑",
+      "auxiliaryDimensions": [],
+      "familyId": "family-counterexample",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-logic-delayed",
+      "version": 2,
+      "title": "反例与条件结论",
+      "question": "“两个奇数的和一定是奇数”，哪个例子能反驳？第一行写选项字母，另起一行解释。",
+      "choices": [
+        "A: 2+3=5",
+        "B: 3+5=8",
+        "C: 3×5=15"
+      ],
+      "knowledgePoints": [
+        "counterexample"
+      ],
+      "primaryDimension": "逻辑",
+      "auxiliaryDimensions": [],
+      "familyId": "family-counterexample",
+      "variantKind": "delayed",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "bracket",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：3x − (2x − 5)。可写一次式或以等号相连的完整等价步骤。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "observation",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "transfer",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：7a − (3a − 2)。可写一次式或以等号相连的完整等价步骤。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-neg-delayed",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：8 − (3x − 4)。可写一次式或以等号相连的完整等价步骤。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "delayed",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-like-observation",
+      "version": 2,
+      "title": "合并同类项",
+      "question": "化简：2x + 3x − 4。",
+      "choices": [],
+      "knowledgePoints": [
+        "like-terms"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-like-terms",
+      "variantKind": "observation",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-like-transfer",
+      "version": 2,
+      "title": "合并同类项",
+      "question": "化简：7a + 2 − 4a + 5。",
+      "choices": [],
+      "knowledgePoints": [
+        "like-terms"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-like-terms",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-like-delayed",
+      "version": 2,
+      "title": "合并同类项",
+      "question": "化简：6 − 2x + 5x − 1。",
+      "choices": [],
+      "knowledgePoints": [
+        "like-terms"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-like-terms",
+      "variantKind": "delayed",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "model",
+      "version": 2,
+      "title": "一次费用与随数量变化费用",
+      "question": "每本练习本3元，买x本，另付一次纸袋费2元。第一行写总费用式子，另起一行说明两部分来源。",
+      "choices": [],
+      "knowledgePoints": [
+        "fixed-variable-cost"
+      ],
+      "primaryDimension": "建模",
+      "auxiliaryDimensions": [
+        "理解"
+      ],
+      "familyId": "family-fixed-variable-cost",
+      "variantKind": "observation",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-cost-transfer",
+      "version": 2,
+      "title": "一次费用与随数量变化费用",
+      "question": "租自行车每小时5元，另付一次头盔租金8元。租a小时，第一行写总费用式子，另起一行解释各项。",
+      "choices": [],
+      "knowledgePoints": [
+        "fixed-variable-cost"
+      ],
+      "primaryDimension": "建模",
+      "auxiliaryDimensions": [
+        "理解"
+      ],
+      "familyId": "family-fixed-variable-cost",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-cost-delayed",
+      "version": 2,
+      "title": "一次费用与随数量变化费用",
+      "question": "寄件先收一次包装费12元，每件运费2元，共x件。第一行写总费用式子，另起一行解释各项。",
+      "choices": [],
+      "knowledgePoints": [
+        "fixed-variable-cost"
+      ],
+      "primaryDimension": "建模",
+      "auxiliaryDimensions": [
+        "理解"
+      ],
+      "familyId": "family-fixed-variable-cost",
+      "variantKind": "delayed",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 4,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "space",
+      "version": 2,
+      "title": "二维旋转与位置关系",
+      "question": "坐标横轴向右、纵轴向上。折线依次为(0,0)、(0,3)、(1,3)，绕(0,0)顺时针90°。哪个选项给出旋转后的对应顶点？第一行写字母。",
+      "choices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "knowledgePoints": [
+        "rotation-2d"
+      ],
+      "primaryDimension": "空间想象",
+      "auxiliaryDimensions": [],
+      "familyId": "family-rotation-2d",
+      "variantKind": "observation",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 3,
+      "visual": {
+        "kind": "rotation2d",
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "center": [
+          0,
+          0
+        ],
+        "clockwiseDegrees": 90,
+        "options": [
+          {
+            "label": "A",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                -3,
+                0
+              ],
+              [
+                -3,
+                1
+              ]
+            ]
+          },
+          {
+            "label": "B",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                3,
+                0
+              ],
+              [
+                3,
+                -1
+              ]
+            ]
+          },
+          {
+            "label": "C",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                -3
+              ],
+              [
+                1,
+                -3
+              ]
+            ]
+          }
+        ]
+      },
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-space-transfer",
+      "version": 2,
+      "title": "二维旋转与位置关系",
+      "question": "坐标横轴向右、纵轴向上。折线依次为(1,1)、(3,1)、(3,2)，绕(1,1)顺时针180°。哪个选项给出对应顶点？第一行写字母。",
+      "choices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "knowledgePoints": [
+        "rotation-2d"
+      ],
+      "primaryDimension": "空间想象",
+      "auxiliaryDimensions": [],
+      "familyId": "family-rotation-2d",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 3,
+      "visual": {
+        "kind": "rotation2d",
+        "points": [
+          [
+            1,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "center": [
+          1,
+          1
+        ],
+        "clockwiseDegrees": 180,
+        "options": [
+          {
+            "label": "A",
+            "points": [
+              [
+                1,
+                1
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                -1,
+                0
+              ]
+            ]
+          },
+          {
+            "label": "B",
+            "points": [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                -1
+              ],
+              [
+                2,
+                -1
+              ]
+            ]
+          },
+          {
+            "label": "C",
+            "points": [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                0,
+                3
+              ]
+            ]
+          }
+        ]
+      },
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "b-space-delayed",
+      "version": 2,
+      "title": "二维旋转与位置关系",
+      "question": "坐标横轴向右、纵轴向上。折线依次为(-1,0)、(-1,2)、(2,2)，绕(-1,0)顺时针270°。哪个选项给出对应顶点？第一行写字母。",
+      "choices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "knowledgePoints": [
+        "rotation-2d"
+      ],
+      "primaryDimension": "空间想象",
+      "auxiliaryDimensions": [],
+      "familyId": "family-rotation-2d",
+      "variantKind": "delayed",
+      "difficulty": "introductory",
+      "prerequisites": [],
+      "estimatedMinutes": 3,
+      "visual": {
+        "kind": "rotation2d",
+        "points": [
+          [
+            -1,
+            0
+          ],
+          [
+            -1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "center": [
+          -1,
+          0
+        ],
+        "clockwiseDegrees": 270,
+        "options": [
+          {
+            "label": "A",
+            "points": [
+              [
+                -1,
+                0
+              ],
+              [
+                -1,
+                -2
+              ],
+              [
+                -4,
+                -2
+              ]
+            ]
+          },
+          {
+            "label": "B",
+            "points": [
+              [
+                -1,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                -3
+              ]
+            ]
+          },
+          {
+            "label": "C",
+            "points": [
+              [
+                -1,
+                0
+              ],
+              [
+                -3,
+                0
+              ],
+              [
+                -3,
+                3
+              ]
+            ]
+          }
+        ]
+      },
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-0",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：5x − (2x − 1)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-1",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：6x − (3x − 2)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-2",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：7x − (4x − 3)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-3",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：8x − (5x − 4)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-4",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：9x − (6x − 5)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-5",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：10x − (7x − 6)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-6",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：11x − (8x − 7)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-7",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：12x − (9x − 8)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-8",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：13x − (10x − 9)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "calc-9",
+      "version": 2,
+      "title": "去括号负号处理",
+      "question": "化简：14x − (11x − 10)。",
+      "choices": [],
+      "knowledgePoints": [
+        "negative-brackets"
+      ],
+      "primaryDimension": "计算",
+      "auxiliaryDimensions": [],
+      "familyId": "family-negative-brackets",
+      "variantKind": "transfer",
+      "difficulty": "introductory",
+      "prerequisites": [
+        "like-terms"
+      ],
+      "estimatedMinutes": 3,
+      "visual": null,
+      "hintAvailable": true,
+      "eligible": true
+    }
+  ],
+  "attempts": [
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "d91f3579-502b-42d9-8164-e899838587a3"
+      ],
+      "hintSnapshot": [],
+      "id": "5627c2e4-3469-4045-924f-7efb1b47bec2",
+      "operationId": "d855b7f1-577f-4be1-9e84-260bc0ffc4c7",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T01:00:00.000Z",
+        "recordedAt": "2026-10-22T01:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "b-like-observation",
+      "taskVersion": 2,
+      "value": "5x-4",
+      "classification": {
+        "kind": "new_independent",
+        "novelty": "unseen",
+        "learningDate": "2026-10-22",
+        "independent": true,
+        "delayedRetention": false,
+        "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+      }
+    },
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "3c23e7d8-540b-4f5a-9e37-4a8c1050bcb1"
+      ],
+      "hintSnapshot": [],
+      "id": "56f62587-5539-4b34-a0f4-211d4deaa20f",
+      "operationId": "9f56b1d8-9713-45fc-849d-9bb5c89dec1c-attempt",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T01:00:00.000Z",
+        "recordedAt": "2026-10-22T01:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "value": "x-5",
+      "classification": {
+        "kind": "incorrect",
+        "novelty": "unseen",
+        "learningDate": "2026-10-22",
+        "independent": false,
+        "delayedRetention": false,
+        "reason": "这次作答的评分点未通过；保留具体证据，不推断人格或智力"
+      }
+    },
+    {
+      "answerExposed": true,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "3c23e7d8-540b-4f5a-9e37-4a8c1050bcb1",
+        "37853f9b-12bc-4c53-b5a3-ba9479e727aa"
+      ],
+      "hintSnapshot": [],
+      "id": "ae095e91-ab75-4cb9-bcb5-ae46f80db021",
+      "operationId": "e3ba937c-3945-4c04-95d2-c020b513545f-attempt",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T01:00:00.000Z",
+        "recordedAt": "2026-10-22T01:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "value": "x+5",
+      "classification": {
+        "kind": "completed_with_help",
+        "novelty": "seen",
+        "learningDate": "2026-10-22",
+        "independent": false,
+        "delayedRetention": false,
+        "reason": "作答之前存在提示、答案或聊天关键帮助"
+      }
+    },
+    {
+      "answerExposed": false,
+      "exposureHistory": "complete",
+      "exposureIds": [
+        "cef142cb-6b4d-4605-9e49-6d2b02d83789"
+      ],
+      "hintSnapshot": [],
+      "id": "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb",
+      "operationId": "7d4c35c9-d455-49fa-b7a8-82e454e630f8-attempt",
+      "origin": "student_api",
+      "schemaVersion": "1.0.0",
+      "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T01:00:00.000Z",
+        "recordedAt": "2026-10-22T01:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "supersedesAttemptId": null,
+      "taskId": "transfer",
+      "taskVersion": 2,
+      "value": "4a+2",
+      "classification": {
+        "kind": "new_independent",
+        "novelty": "unseen",
+        "learningDate": "2026-10-22",
+        "independent": true,
+        "delayedRetention": false,
+        "reason": "首次有效尝试正确且本场次之前无原题及关键帮助暴露"
+      }
+    }
+  ],
+  "exposures": [
+    {
+      "contentSnapshot": null,
+      "hintId": null,
+      "id": "d91f3579-502b-42d9-8164-e899838587a3",
+      "kind": "task",
+      "operationId": "3a879cbc-b831-46a5-a329-79ff0ba1cb1f",
+      "schemaVersion": "1.0.0",
+      "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T01:00:00.000Z",
+        "recordedAt": "2026-10-22T01:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "b-like-observation",
+      "taskVersion": 2
+    },
+    {
+      "contentSnapshot": null,
+      "hintId": null,
+      "id": "3c23e7d8-540b-4f5a-9e37-4a8c1050bcb1",
+      "kind": "task",
+      "operationId": "5bb880cc-9f1d-4e77-af16-b6adc2767a7c-open",
+      "schemaVersion": "1.0.0",
+      "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T01:00:00.000Z",
+        "recordedAt": "2026-10-22T01:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "bracket",
+      "taskVersion": 2
+    },
+    {
+      "contentSnapshot": "学生标记从聊天获得帮助",
+      "hintId": null,
+      "id": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+      "kind": "chat_help",
+      "operationId": "e9a4af0d-b73f-4536-8156-8dbb566f0c00-help",
+      "schemaVersion": "1.0.0",
+      "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T01:00:00.000Z",
+        "recordedAt": "2026-10-22T01:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "bracket",
+      "taskVersion": 2
+    },
+    {
+      "contentSnapshot": null,
+      "hintId": null,
+      "id": "cef142cb-6b4d-4605-9e49-6d2b02d83789",
+      "kind": "task",
+      "operationId": "b13f3912-4fa6-4964-bfc2-da4020cfdce2-verify-open",
+      "schemaVersion": "1.0.0",
+      "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+      "sourceTime": {
+        "legacyLabel": null,
+        "occurredAt": "2026-10-22T01:00:00.000Z",
+        "recordedAt": "2026-10-22T01:00:00.000Z",
+        "timezone": "Asia/Shanghai",
+        "trust": "server"
+      },
+      "taskId": "transfer",
+      "taskVersion": 2
+    }
+  ],
+  "gradings": [
+    {
+      "attemptId": "5627c2e4-3469-4045-924f-7efb1b47bec2",
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "errorClues": [],
+      "evidenceIds": [
+        "1591fe37-6443-40bf-8917-2a118b050171"
+      ],
+      "evidenceRevision": 4,
+      "id": "30e0d659-22f6-4392-a513-296581ef013d",
+      "method": "rubric_program",
+      "operationId": "grade-b606c9c346d695cf74cadd64c9b974a47cb9dac60a3fa894",
+      "points": [
+        {
+          "evidenceIds": [
+            "1591fe37-6443-40bf-8917-2a118b050171"
+          ],
+          "pointId": "result",
+          "status": "supported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "correct"
+    },
+    {
+      "attemptId": "56f62587-5539-4b34-a0f4-211d4deaa20f",
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "errorClues": [
+        "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+      ],
+      "evidenceIds": [
+        "84226500-1d01-493e-bf7d-77c3eb6b517b"
+      ],
+      "evidenceRevision": 8,
+      "id": "f61fbffe-4f11-4d57-889e-f45688060ba6",
+      "method": "rubric_program",
+      "operationId": "grade-e8447451790de716c721f294bb908bf202b5b1788bf77b27",
+      "points": [
+        {
+          "evidenceIds": [
+            "84226500-1d01-493e-bf7d-77c3eb6b517b"
+          ],
+          "pointId": "result",
+          "status": "unsupported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "incorrect"
+    },
+    {
+      "attemptId": "ae095e91-ab75-4cb9-bcb5-ae46f80db021",
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "errorClues": [],
+      "evidenceIds": [
+        "e9c89ef5-c7b5-4ec9-a9cc-08d1e569451c"
+      ],
+      "evidenceRevision": 12,
+      "id": "becc55ee-f9e0-4aff-8a63-b6431d1c744f",
+      "method": "rubric_program",
+      "operationId": "grade-6da1a642b96fd2603f832e5729e05eef00f4b5fd9d42ca6c",
+      "points": [
+        {
+          "evidenceIds": [
+            "e9c89ef5-c7b5-4ec9-a9cc-08d1e569451c"
+          ],
+          "pointId": "result",
+          "status": "supported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "correct"
+    },
+    {
+      "attemptId": "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb",
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "errorClues": [],
+      "evidenceIds": [
+        "578770fd-9ae6-464a-85c7-631d01ef539f"
+      ],
+      "evidenceRevision": 16,
+      "id": "52220d5a-e59c-469c-a68c-6c5c5f9d21e3",
+      "method": "rubric_program",
+      "operationId": "grade-ddd2ad923579515dda0ac43c7141d5c9c03e95273d5a7eed",
+      "points": [
+        {
+          "evidenceIds": [
+            "578770fd-9ae6-464a-85c7-631d01ef539f"
+          ],
+          "pointId": "result",
+          "status": "supported"
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "supersedesGradingId": null,
+      "uncertainties": [],
+      "verdict": "correct"
+    }
+  ],
+  "evidence": [
+    {
+      "attemptId": "5627c2e4-3469-4045-924f-7efb1b47bec2",
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "errorClues": [],
+      "evidenceRevision": 4,
+      "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+      "id": "1591fe37-6443-40bf-8917-2a118b050171",
+      "knowledgePointId": "like-terms",
+      "location": {
+        "end": 4,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "5x-4",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "supported",
+      "supersedesEvidenceId": null,
+      "taskId": "b-like-observation",
+      "taskVersion": 2,
+      "uncertainties": []
+    },
+    {
+      "attemptId": "56f62587-5539-4b34-a0f4-211d4deaa20f",
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "errorClues": [
+        "与典型错误结果一致；只作为待核实线索，不推断心理过程"
+      ],
+      "evidenceRevision": 8,
+      "explanation": "可解析的一次式或等号链存在与可信结果不等价的步骤",
+      "id": "84226500-1d01-493e-bf7d-77c3eb6b517b",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 3,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "x-5",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "unsupported",
+      "supersedesEvidenceId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "uncertainties": []
+    },
+    {
+      "attemptId": "ae095e91-ab75-4cb9-bcb5-ae46f80db021",
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "errorClues": [],
+      "evidenceRevision": 12,
+      "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+      "id": "e9c89ef5-c7b5-4ec9-a9cc-08d1e569451c",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 3,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "x+5",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "supported",
+      "supersedesEvidenceId": null,
+      "taskId": "bracket",
+      "taskVersion": 2,
+      "uncertainties": []
+    },
+    {
+      "attemptId": "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb",
+      "createdAt": "2026-10-22T01:00:00.000Z",
+      "errorClues": [],
+      "evidenceRevision": 16,
+      "explanation": "受限一次式的所有已写等号步骤均与参考结果等价；不推断心理过程",
+      "id": "578770fd-9ae6-464a-85c7-631d01ef539f",
+      "knowledgePointId": "negative-brackets",
+      "location": {
+        "end": 4,
+        "start": 0
+      },
+      "pointId": "result",
+      "quote": "4a+2",
+      "schemaVersion": "1.0.0",
+      "source": "program",
+      "status": "supported",
+      "supersedesEvidenceId": null,
+      "taskId": "transfer",
+      "taskVersion": 2,
+      "uncertainties": []
+    }
+  ],
+  "reports": [],
+  "plans": [],
+  "proposal": null,
+  "reviews": [],
+  "consentConfigured": true,
+  "optionalMemory": false,
+  "memories": [],
+  "runs": [
+    {
+      "callIds": [
+        "d855b7f1-577f-4be1-9e84-260bc0ffc4c7"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-22T01:00:00.000Z",
+      "id": "assess-f06dae5b-21f1-4d69-a087-cf32c33b43a6",
+      "operationId": "d855b7f1-577f-4be1-9e84-260bc0ffc4c7",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-22T01:00:00.000Z",
+      "id": "d-run-f48f5f3a-1a33-4e64-8def-7bb1705d4756",
+      "operationId": "5bb880cc-9f1d-4e77-af16-b6adc2767a7c-hypothesis",
+      "permissionFingerprint": "c8c34574e554ab2453e2a658f1c37088d19e9db944a491095ebe21051df1ee30",
+      "providerKind": "synthetic",
+      "role": "tutor",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    },
+    {
+      "callIds": [
+        "9f56b1d8-9713-45fc-849d-9bb5c89dec1c-grade"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-22T01:00:00.000Z",
+      "id": "assess-c9100336-9b15-43f1-bae7-b24066ff0d81",
+      "operationId": "9f56b1d8-9713-45fc-849d-9bb5c89dec1c-grade",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "e3ba937c-3945-4c04-95d2-c020b513545f-grade"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-22T01:00:00.000Z",
+      "id": "assess-79bbdc49-bb6b-4a3d-b605-aaced51ea8bf",
+      "operationId": "e3ba937c-3945-4c04-95d2-c020b513545f-grade",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [
+        "7d4c35c9-d455-49fa-b7a8-82e454e630f8-grade"
+      ],
+      "error": null,
+      "finishedAt": "2026-10-22T01:00:00.000Z",
+      "id": "assess-7b1ca603-7eaf-48ce-873c-c411ab09b98f",
+      "operationId": "7d4c35c9-d455-49fa-b7a8-82e454e630f8-grade",
+      "permissionFingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "providerKind": "synthetic",
+      "role": "assessor",
+      "rounds": 0,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 1
+    },
+    {
+      "callIds": [],
+      "error": null,
+      "finishedAt": "2026-10-22T01:00:00.000Z",
+      "id": "d-run-79223211-2ba2-49b5-b112-07291a80a4a3",
+      "operationId": "card-episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c-r12",
+      "permissionFingerprint": "c8c34574e554ab2453e2a658f1c37088d19e9db944a491095ebe21051df1ee30",
+      "providerKind": "synthetic",
+      "role": "tutor",
+      "rounds": 1,
+      "schemaVersion": "1.0.0",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "completed",
+      "toolExecutions": 0
+    }
+  ],
+  "toolCalls": [
+    {
+      "argumentsHash": "6c23f9ca337b60212e5740af6607dfea07b069c010e1c27b9283391189b400c1",
+      "at": "2026-10-22T01:00:00.000Z",
+      "callId": "d855b7f1-577f-4be1-9e84-260bc0ffc4c7",
+      "dataVersion": 7,
+      "errorCode": null,
+      "evidenceIds": [
+        "1591fe37-6443-40bf-8917-2a118b050171"
+      ],
+      "id": "call-0611a3244caf006079afc3e735521f8af014a77fdf51f4da",
+      "name": "grade_attempt",
+      "runId": "assess-f06dae5b-21f1-4d69-a087-cf32c33b43a6",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "a0aec2a6c9cb99f5b92b46056ec24d50d59bfe1852a2030ad1834e9831ddeb05",
+      "at": "2026-10-22T01:00:00.000Z",
+      "callId": "9f56b1d8-9713-45fc-849d-9bb5c89dec1c-grade",
+      "dataVersion": 32,
+      "errorCode": null,
+      "evidenceIds": [
+        "84226500-1d01-493e-bf7d-77c3eb6b517b"
+      ],
+      "id": "call-df2286e901b991dc514e388678c67091a170f6a93c0eb371",
+      "name": "grade_attempt",
+      "runId": "assess-c9100336-9b15-43f1-bae7-b24066ff0d81",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "2bea12b3ea5f79ea3bb1611d8dc21c03d88bf00e4f886b0d8ecf4b3f7270fec8",
+      "at": "2026-10-22T01:00:00.000Z",
+      "callId": "e3ba937c-3945-4c04-95d2-c020b513545f-grade",
+      "dataVersion": 55,
+      "errorCode": null,
+      "evidenceIds": [
+        "e9c89ef5-c7b5-4ec9-a9cc-08d1e569451c"
+      ],
+      "id": "call-7ece21ce17ca0afa32f5e042281d2acfaaffc013240b06f0",
+      "name": "grade_attempt",
+      "runId": "assess-79bbdc49-bb6b-4a3d-b605-aaced51ea8bf",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    },
+    {
+      "argumentsHash": "d64dff23159ffaac50626d8f0f0815ee2401017e339db95564c6a362fd30ff2d",
+      "at": "2026-10-22T01:00:00.000Z",
+      "callId": "7d4c35c9-d455-49fa-b7a8-82e454e630f8-grade",
+      "dataVersion": 80,
+      "errorCode": null,
+      "evidenceIds": [
+        "578770fd-9ae6-464a-85c7-631d01ef539f"
+      ],
+      "id": "call-ee958f79269d79c65aafab46500eb4c10cf9d88efedd8be4",
+      "name": "grade_attempt",
+      "runId": "assess-7b1ca603-7eaf-48ce-873c-c411ab09b98f",
+      "schemaVersion": "1.0.0",
+      "status": "succeeded"
+    }
+  ],
+  "stuckPoints": [],
+  "generations": [],
+  "generationAvailable": true,
+  "learningLoops": [
+    {
+      "episode": {
+        "endReason": "student_end",
+        "helpLevelsUsed": [
+          1
+        ],
+        "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+        "loop": {
+          "draft": "",
+          "ending": "student_end",
+          "help": [
+            {
+              "at": "2026-10-22T01:00:00.000Z",
+              "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+              "level": 1,
+              "representation": "ladder",
+              "task": {
+                "taskId": "bracket",
+                "taskVersion": 2
+              },
+              "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+            }
+          ],
+          "hypotheses": [
+            {
+              "at": "2026-10-22T01:00:00.000Z",
+              "quote": "我总忘记括号里第二项变号",
+              "source": "model",
+              "status": "proposed",
+              "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+            },
+            {
+              "at": "2026-10-22T01:00:00.000Z",
+              "quote": "其实我不知道负号管着哪些项",
+              "source": "student",
+              "status": "corrected",
+              "text": "其实我不知道负号管着哪些项"
+            }
+          ],
+          "knowledgePointId": "negative-brackets",
+          "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+          "phase": "verification",
+          "practice": {
+            "taskId": "bracket",
+            "taskVersion": 2
+          },
+          "practiceAttemptIds": [
+            "56f62587-5539-4b34-a0f4-211d4deaa20f",
+            "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+          ],
+          "verification": {
+            "attemptIds": [
+              "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb"
+            ],
+            "status": "completed",
+            "task": {
+              "taskId": "transfer",
+              "taskVersion": 2
+            }
+          }
+        },
+        "problemId": null,
+        "revision": 13,
+        "schemaVersion": "1.0.0",
+        "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+        "stage": "reflect",
+        "startedAt": "2026-10-22T01:00:00.000Z",
+        "status": "closed",
+        "studentSolvedAt": "2026-10-22T01:00:00.000Z",
+        "task": {
+          "taskId": "transfer",
+          "taskVersion": 2
+        },
+        "updatedAt": "2026-10-22T01:00:00.000Z"
+      },
+      "task": {
+        "schemaVersion": "1.0.0",
+        "id": "transfer",
+        "version": 2,
+        "title": "去括号负号处理",
+        "question": "化简：7a − (3a − 2)。可写一次式或以等号相连的完整等价步骤。",
+        "choices": [],
+        "knowledgePoints": [
+          "negative-brackets"
+        ],
+        "primaryDimension": "计算",
+        "auxiliaryDimensions": [],
+        "familyId": "family-negative-brackets",
+        "variantKind": "transfer",
+        "difficulty": "introductory",
+        "prerequisites": [
+          "like-terms"
+        ],
+        "estimatedMinutes": 3,
+        "visual": null,
+        "hintAvailable": true
+      },
+      "summary": "这道题在提示后改对了。本次同类新题首次无提示完成；隔天表现还要观察。",
+      "independent": true,
+      "currentGrade": {
+        "attemptId": "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb",
+        "createdAt": "2026-10-22T01:00:00.000Z",
+        "errorClues": [],
+        "evidenceIds": [
+          "578770fd-9ae6-464a-85c7-631d01ef539f"
+        ],
+        "evidenceRevision": 16,
+        "id": "52220d5a-e59c-469c-a68c-6c5c5f9d21e3",
+        "method": "rubric_program",
+        "operationId": "grade-ddd2ad923579515dda0ac43c7141d5c9c03e95273d5a7eed",
+        "points": [
+          {
+            "evidenceIds": [
+              "578770fd-9ae6-464a-85c7-631d01ef539f"
+            ],
+            "pointId": "result",
+            "status": "supported"
+          }
+        ],
+        "schemaVersion": "1.0.0",
+        "supersedesGradingId": null,
+        "uncertainties": [],
+        "verdict": "correct"
+      },
+      "draft": "",
+      "help": [],
+      "attempts": [
+        {
+          "answerExposed": false,
+          "exposureHistory": "complete",
+          "exposureIds": [
+            "cef142cb-6b4d-4605-9e49-6d2b02d83789"
+          ],
+          "hintSnapshot": [],
+          "id": "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb",
+          "operationId": "7d4c35c9-d455-49fa-b7a8-82e454e630f8-attempt",
+          "origin": "student_api",
+          "schemaVersion": "1.0.0",
+          "sessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+          "sourceTime": {
+            "legacyLabel": null,
+            "occurredAt": "2026-10-22T01:00:00.000Z",
+            "recordedAt": "2026-10-22T01:00:00.000Z",
+            "timezone": "Asia/Shanghai",
+            "trust": "server"
+          },
+          "supersedesAttemptId": null,
+          "taskId": "transfer",
+          "taskVersion": 2,
+          "value": "4a+2"
+        }
+      ]
+    }
+  ],
+  "problems": [],
+  "episodes": [
+    {
+      "endReason": null,
+      "helpLevelsUsed": [],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "practice",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [],
+        "verification": {
+          "attemptIds": [],
+          "status": "not_offered",
+          "task": null
+        }
+      },
+      "problemId": null,
+      "revision": 1,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": null,
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "practice",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [],
+        "verification": {
+          "attemptIds": [],
+          "status": "not_offered",
+          "task": null
+        }
+      },
+      "problemId": null,
+      "revision": 2,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": null,
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "practice",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f"
+        ],
+        "verification": {
+          "attemptIds": [],
+          "status": "not_offered",
+          "task": null
+        }
+      },
+      "problemId": null,
+      "revision": 3,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": null,
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "practice",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f"
+        ],
+        "verification": {
+          "attemptIds": [],
+          "status": "not_offered",
+          "task": null
+        }
+      },
+      "problemId": null,
+      "revision": 4,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": null,
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "practice",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f"
+        ],
+        "verification": {
+          "attemptIds": [],
+          "status": "not_offered",
+          "task": null
+        }
+      },
+      "problemId": null,
+      "revision": 5,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": null,
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "practice",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+        ],
+        "verification": {
+          "attemptIds": [],
+          "status": "not_offered",
+          "task": null
+        }
+      },
+      "problemId": null,
+      "revision": 6,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": null,
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "practice",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+        ],
+        "verification": {
+          "attemptIds": [],
+          "status": "offered",
+          "task": null
+        }
+      },
+      "problemId": null,
+      "revision": 7,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": "2026-10-22T01:00:00.000Z",
+      "task": {
+        "taskId": "bracket",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "verification",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+        ],
+        "verification": {
+          "attemptIds": [],
+          "status": "in_progress",
+          "task": {
+            "taskId": "transfer",
+            "taskVersion": 2
+          }
+        }
+      },
+      "problemId": null,
+      "revision": 8,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": "2026-10-22T01:00:00.000Z",
+      "task": {
+        "taskId": "transfer",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "4a+",
+        "ending": null,
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "verification",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+        ],
+        "verification": {
+          "attemptIds": [],
+          "status": "in_progress",
+          "task": {
+            "taskId": "transfer",
+            "taskVersion": 2
+          }
+        }
+      },
+      "problemId": null,
+      "revision": 9,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": "2026-10-22T01:00:00.000Z",
+      "task": {
+        "taskId": "transfer",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "verification",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+        ],
+        "verification": {
+          "attemptIds": [
+            "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb"
+          ],
+          "status": "in_progress",
+          "task": {
+            "taskId": "transfer",
+            "taskVersion": 2
+          }
+        }
+      },
+      "problemId": null,
+      "revision": 10,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": "2026-10-22T01:00:00.000Z",
+      "task": {
+        "taskId": "transfer",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": null,
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": null,
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "verification",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+        ],
+        "verification": {
+          "attemptIds": [
+            "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb"
+          ],
+          "status": "completed",
+          "task": {
+            "taskId": "transfer",
+            "taskVersion": 2
+          }
+        }
+      },
+      "problemId": null,
+      "revision": 11,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "think",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "active",
+      "studentSolvedAt": "2026-10-22T01:00:00.000Z",
+      "task": {
+        "taskId": "transfer",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": "student_end",
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": "student_end",
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "verification",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+        ],
+        "verification": {
+          "attemptIds": [
+            "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb"
+          ],
+          "status": "completed",
+          "task": {
+            "taskId": "transfer",
+            "taskVersion": 2
+          }
+        }
+      },
+      "problemId": null,
+      "revision": 12,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "reflect",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "reflecting",
+      "studentSolvedAt": "2026-10-22T01:00:00.000Z",
+      "task": {
+        "taskId": "transfer",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    },
+    {
+      "endReason": "student_end",
+      "helpLevelsUsed": [
+        1
+      ],
+      "id": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "loop": {
+        "draft": "",
+        "ending": "student_end",
+        "help": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "exposureId": "37853f9b-12bc-4c53-b5a3-ba9479e727aa",
+            "level": 1,
+            "representation": "ladder",
+            "task": {
+              "taskId": "bracket",
+              "taskVersion": 2
+            },
+            "text": "你更正的卡点：其实我不知道负号管着哪些项。这次作答与漏改符号的典型结果相同，只作线索。先看括号前是加号还是减号，再分别指出括号里的每一项。"
+          }
+        ],
+        "hypotheses": [
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "我总忘记括号里第二项变号",
+            "source": "model",
+            "status": "proposed",
+            "text": "规则你知道，但括号里第二项容易漏变号，是这样吗？"
+          },
+          {
+            "at": "2026-10-22T01:00:00.000Z",
+            "quote": "其实我不知道负号管着哪些项",
+            "source": "student",
+            "status": "corrected",
+            "text": "其实我不知道负号管着哪些项"
+          }
+        ],
+        "knowledgePointId": "negative-brackets",
+        "learningSessionId": "8dd500a2-6e57-49a2-88ab-14a19e5ac821",
+        "phase": "verification",
+        "practice": {
+          "taskId": "bracket",
+          "taskVersion": 2
+        },
+        "practiceAttemptIds": [
+          "56f62587-5539-4b34-a0f4-211d4deaa20f",
+          "ae095e91-ab75-4cb9-bcb5-ae46f80db021"
+        ],
+        "verification": {
+          "attemptIds": [
+            "b7f37d22-fb0c-4ff4-904b-95a0dfbaf2fb"
+          ],
+          "status": "completed",
+          "task": {
+            "taskId": "transfer",
+            "taskVersion": 2
+          }
+        }
+      },
+      "problemId": null,
+      "revision": 13,
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "stage": "reflect",
+      "startedAt": "2026-10-22T01:00:00.000Z",
+      "status": "closed",
+      "studentSolvedAt": "2026-10-22T01:00:00.000Z",
+      "task": {
+        "taskId": "transfer",
+        "taskVersion": 2
+      },
+      "updatedAt": "2026-10-22T01:00:00.000Z"
+    }
+  ],
+  "progressCards": [
+    {
+      "aiDraft": {
+        "breakthrough": "这次的作答已保存，完成情况见片段回顾",
+        "episodeId": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+        "method": "这次使用过帮助，帮助记录已保留",
+        "nextTry": "下次可以用同类新题或隔天复习核对"
+      },
+      "breakthrough": "我觉得自己更清楚了",
+      "confidence": null,
+      "confirmedAt": "2026-10-22T01:00:00.000Z",
+      "episodeId": "episode-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "id": "card-066334b4-7a94-4e81-8655-11bd33b9d704",
+      "method": "这次使用过帮助，帮助记录已保留",
+      "nextTry": "下次可以用同类新题或隔天复习核对",
+      "operationId": "066334b4-7a94-4e81-8655-11bd33b9d704",
+      "schemaVersion": "1.0.0",
+      "sessionId": "chat-loop-5bb880cc-9f1d-4e77-af16-b6adc2767a7c",
+      "skipped": []
+    }
+  ],
+  "memoryMentions": [],
+  "observations": [],
+  "summaries": [],
+  "chatTurns": [],
+  "interviews": [],
+  "interviewTurns": [],
+  "professionalReports": [],
+  "monthStages": [],
+  "retestReminder": null
+}

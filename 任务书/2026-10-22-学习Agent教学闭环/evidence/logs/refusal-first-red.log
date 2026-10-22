@@ -1,0 +1,26 @@
+✖ E03 natural refusal and farewell leave the exercise; pure chat is usable even after pausing (22.475042ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 162.336708
+
+✖ failing tests:
+
+test at tests-agent/g/learning-loop.test.ts:1:19126
+✖ E03 natural refusal and farewell leave the exercise; pure chat is usable even after pausing (22.475042ms)
+  Error: 场次暂停或已结束
+      at StudentEvents.requireSession (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/server/core/events.ts:10:168)
+      at <anonymous> (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/server/agents/learning.ts:163:19)
+      at <anonymous> (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/server/agents/learning.ts:92:66)
+      at LearningCoordinator.perform (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/server/agents/learning.ts:92:208)
+      at LearningCoordinator.chat (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/server/agents/learning.ts:162:16)
+      at TestContext.<anonymous> (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/g/learning-loop.test.ts:203:24)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'invalid_state',
+    recoverable: true
+  }

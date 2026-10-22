@@ -1,0 +1,11 @@
+{
+  "protectedCount": 59,
+  "changedProtectedPaths": [
+    ".claude/launch.json"
+  ],
+  "statusUnchanged": false,
+  "mainHead": [
+    "0445e60ba0306a104d7cbbcb3a8f0cbd6a93e074",
+    "06048b6a617268015af5469e3eaf0ffc0af17ed9"
+  ]
+}

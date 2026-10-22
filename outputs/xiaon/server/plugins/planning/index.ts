@@ -118,7 +118,7 @@ export class PlanningEngine implements PlanningEnginePort {
    const existing=c.repository.list('proposals').at(-1);
    if(existing?.evidenceRevision===input.assessment.evidenceRevision&&existing.constraints.timeBudgetMinutes===input.timeBudgetMinutes&&hash(existing.focus)===hash(input.focus)&&shanghaiDate(existing.createdAt)===shanghaiDate(c.clock.now()))return existing;
    // Filter only the selection projection; assertAssessment above still validates the complete saved snapshot.
-   const selection=input.focus?{...input.assessment,skills:input.assessment.skills.filter(s=>s.dimension===input.focus!.module)}:input.assessment;
+   const selection=input.focus?{...input.assessment,skills:input.assessment.skills.filter(s=>s.dimension===input.focus!.module&&(!input.focus!.knowledgePointId||s.knowledgePointId===input.focus!.knowledgePointId))}:input.assessment;
    if(input.focus&&!selection.skills.length)throw new RuntimeError('invalid_state','题库不足：这个模块还没有可安排的子技能');
    const choice=selectReviewTarget(selection,input.timeBudgetMinutes,c),skill=choice.skill;
    const optional=!skill||skill.status==='unobserved';

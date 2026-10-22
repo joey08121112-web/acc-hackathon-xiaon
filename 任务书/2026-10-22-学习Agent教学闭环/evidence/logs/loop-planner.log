@@ -1,0 +1,42 @@
+✔ A01/A02 partial, negated, quoted or reported understanding stays in think (0.737833ms)
+✔ B01 production interview report: no reason rubric never upgrades unrelated or unverified prose (48.852666ms)
+✔ A03/E01 unverified budget ending and unsupported AI facts fall back to saved process (4.480667ms)
+✔ C01/C02/D02 real loop saves first error, help, correction and a first independent unseen check (18.172458ms)
+✔ A01 coordinator revises neither completion nor end reason for mixed understanding (9.480583ms)
+✔ C03 verification help or wrong first answer cannot become first independent on correction (25.65175ms)
+✔ A04 help uses the corrected hypothesis; three levels then alternative representation; budget allows ending (11.847666ms)
+✔ C04 original, seen and alias fingerprints are rejected; exhausted catalog produces no pretend unseen task (7.367625ms)
+✔ D01/D02 SQLite restart retains task, draft, attempts and receipts; conflicting operation/revision rejected (13.694834ms)
+✔ D03 additive optional loop reads old episode/report without inventing or rewriting evidence (5.447459ms)
+✔ E01/E02 skip verification/card/confidence, optional memory off and student edits never change scoring (9.175084ms)
+✔ E03 safety stores nothing, pause rejects new tasks/help, resumed fragment uses same task (7.3585ms)
+✔ HTTP loop uses authentication, CSRF, strict schema, revision and operation receipts (33.911583ms)
+✖ F01 existing planner with TestClock creates confirmed review, next-day due is distinct from same-day new task (21.904625ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 13
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 359.448583
+
+✖ failing tests:
+
+test at tests-agent/g/learning-loop.test.ts:1:16596
+✖ F01 existing planner with TestClock creates confirmed review, next-day due is distinct from same-day new task (21.904625ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(items.some(i=>i.knowledgePointId==='negative-brackets'))
+  
+      at TestContext.<anonymous> (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/g/learning-loop.test.ts:180:75)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

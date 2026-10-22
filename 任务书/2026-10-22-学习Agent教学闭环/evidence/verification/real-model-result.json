@@ -1,0 +1,114 @@
+{
+  "status": "PASS",
+  "checks": {
+    "hypothesisSource": "model",
+    "partialUnderstanding": {
+      "stage": "think",
+      "modelRun": "completed"
+    },
+    "helped": "这道题在提示后改对了。尚未用新题核实。",
+    "unseen": "这道题在提示后改对了。本次同类新题首次无提示完成；隔天表现还要观察。",
+    "unrelatedReason": {
+      "basis": "correct_reason_incomplete",
+      "level": "partial",
+      "wording": "结果对了，理由这次还没说完整（或者还没能核实）。"
+    },
+    "runs": [
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "assessor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      },
+      {
+        "role": "tutor",
+        "status": "completed",
+        "error": null
+      }
+    ]
+  }
+}

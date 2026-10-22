@@ -1,3 +1,4 @@
+import { loopRequest,runLoop,loopView,recordLoopDialogue } from '../plugins/learning-loop';
 import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { z } from 'zod';
@@ -8,7 +9,7 @@ import { PlanningEngine } from '../plugins/planning';
 import { attemptFacts } from '../plugins/planning/evidence';
 import { currentReviewItems,planHistory,reportHistory,shanghaiDate } from '../../src/learning/review';
 import { ControlledRoles,tutorOutput,homeTutorOutput,homeTutorPrompt,type TutorStage } from './roles';
-import { decideStage,filterStageFields,matchesAnswer,HELP_PATTERN,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,UNDERSTOOD_PATTERN,type ChatStageState } from './stages';
+import { decideStage,filterStageFields,matchesAnswer,HELP_PATTERN,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,explicitUnderstanding,STOP_THINK_PATTERN,DECLINE_PATTERN,FAREWELL_PATTERN,type ChatStageState } from './stages';
 import type { ProfessionalContext,RevampContext } from '../plugins/context';
 import { startInterview,answerInterview,pauseInterview,resumeInterview,buildReport } from '../plugins/interview';
 import { draftMonthStage,confirmMonthStage,declineRetest,retestReminder,draftStageWeek,linkWeekPlan } from '../plugins/stages';
@@ -32,7 +33,7 @@ export const requests={
  hint:z.strictObject({operationId:op,sessionId:op,taskId:op,taskVersion:z.number().int().positive(),level:z.number().int().positive()}),
  submit:schemas.SubmitAttempt.extend({reviewItemId:op.nullable(),reviewRevision:z.number().int().positive().nullable()}),
  grade:z.strictObject({operationId:op,attemptId:op,expectedGradingId:op.optional()}),
- generate:z.strictObject({operationId:op,timeBudgetMinutes:z.number().int().min(1).max(30)}),
+ generate:z.strictObject({operationId:op,knowledgePointId:z.literal('negative-brackets').optional(),timeBudgetMinutes:z.number().int().min(1).max(30)}),
  confirm:z.strictObject({operationId:op,proposalId:op,expectedPreviousVersionId:op.nullable(),action:schemas.PlanVersion.shape.confirmation.shape.action,scheduledDate:z.string().nullable(),reason:z.string().min(1).max(1000)}),
  preference:z.strictObject({operationId:op,rest:z.boolean(),questionInvitePaused:z.boolean()}),
  // retention (optional): the student's chosen window for the corrected/renewed memory; omitted keeps the old behaviour (no expiry, no review).
@@ -91,6 +92,9 @@ export class LearningCoordinator {
   const promise=(async()=>{this.check(signal);const result=await work();this.check(signal);if(epoch!==this.epoch)throw new RuntimeError('cancelled');return this.r.repository.once(receipt,request,()=>result);})();
   this.flights.set(operationId,{hash:digest,promise});return promise.finally(()=>{this.active=false;this.flights.delete(operationId);});
  }
+ async loopEvent(raw:z.infer<typeof loopRequest>,signal?:AbortSignal){const p=this.parse(loopRequest,raw);
+  return this.perform(p.operationId,p,()=>runLoop(p,this.r,{context:this.revamp(),assess:(a,op,signal)=>this.assess(a,op,signal),generate:(op,signal)=>this.generator.generate({operationId:op,knowledgePointId:'negative-brackets',purpose:'practice',reviewItemId:null,timeBudgetMinutes:5},signal,()=>true)},signal),signal);
+ }
  async start(raw:z.infer<typeof requests.start>){const p=this.parse(requests.start,raw);const {switchMode,...input}=p;return this.perform(p.operationId,p,async()=>{
   const old=this.r.events.sessions().find(s=>s.status!=='closed');
   if(old&&shanghaiDate(old.startedAt)!==shanghaiDate(this.r.clock.now()))this.r.events.sessionState({operationId:p.operationId+'-close',sessionId:old.id,status:'closed'});
@@ -129,7 +133,7 @@ export class LearningCoordinator {
  async generate(raw:z.infer<typeof requests.generate>,signal?:AbortSignal){const p=this.parse(requests.generate,raw);return this.perform(p.operationId,p,async()=>{
   const ctx=this.r.engineContext(),assessment=await this.r.assessment().snapshot({operationId:p.operationId+'-s'},ctx);
   const report=await this.r.planning().report({operationId:p.operationId+'-r',assessment,previousReportId:this.r.repository.list('reports').at(-1)?.id??null},ctx);
-  const proposal=await this.r.planning().propose({...p,assessment,operationId:p.operationId+'-p'},ctx);
+  const proposal=await this.r.planning().propose({timeBudgetMinutes:p.timeBudgetMinutes,assessment,operationId:p.operationId+'-p',...(p.knowledgePointId?{focus:{module:'计算' as const,knowledgePointId:p.knowledgePointId,goal:'隔天用同类新题核对去括号负号处理'}}:{})},ctx);
   const organization=await this.roles.invoke('planner',p.operationId+'-agent',{report,proposal},signal);return {report,proposal,organization:organization.run};
  },signal);}
  /** E1 student event: generate one validated task. Publishing never opens or exposes it. */
@@ -148,6 +152,28 @@ export class LearningCoordinator {
   if(p.flow!=='home'&&(p.intent||p.problemId))throw new RuntimeError('invalid_params','intent 和 problemId 只用于首页综合模式');
   // Program-level safety gate for minors: never delegated to the model or the prompt. Nothing is stored from this message.
   if(SAFETY_PATTERN.test(last))return chatReply({text:SAFETY_REPLY,stage:'safety',safety:true});
+  const activeLoop=latestRevisions(this.r.repository.list('episodes')).filter(e=>e.loop&&e.status!=='closed').at(-1);
+  if(p.flow==='home'&&activeLoop){
+   if(p.intent==='decline_study'||p.intent==='life'||DECLINE_PATTERN.test(last)||FAREWELL_PATTERN.test(last)){
+    const ended=await this.loopEvent({operationId:p.operationId+'-leave-loop',action:'leave',episodeId:activeLoop.id,expectedRevision:activeLoop.revision},signal);
+    return chatReply({text:'好，先收好这次的记录，想聊什么由你决定。'+ended.summary,stage:'companion',sessionId:activeLoop.sessionId});
+   }
+   if(REST_PATTERN.test(last)){await this.preference({operationId:p.operationId+'-pause',rest:true,questionInvitePaused:true});return chatReply({text:REST_TEXT,stage:'rest',sessionId:activeLoop.sessionId});}
+   return this.perform(p.operationId,p,async()=>{
+    this.r.events.requireSession(activeLoop.loop!.learningSessionId);
+    let live=activeLoop;
+    if(HELP_PATTERN.test(last)||STOP_THINK_PATTERN.test(last)){
+     const out=await runLoop({operationId:p.operationId+'-loop',action:STOP_THINK_PATTERN.test(last)?'end':'help',episodeId:live.id,expectedRevision:live.revision},this.r,{context:this.revamp(),assess:(a,op,signal)=>this.assess(a,op,signal),generate:(op,signal)=>this.generator.generate({operationId:op,knowledgePointId:'negative-brackets',purpose:'practice',reviewItemId:null,timeBudgetMinutes:5},signal,()=>true)},signal);
+     live=out.episode;
+     return chatReply({text:STOP_THINK_PATTERN.test(last)?out.summary:out.help.at(-1)?.text??'可以先回顾，或换种方法继续。',stage:live.stage,sessionId:live.sessionId});
+    }
+    const current=loopView(live,this.r),hypothesis=live.loop!.hypotheses.at(-1)!;
+    const result=await this.roles.invoke('tutor',p.operationId,{stage:live.stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context:this.tutorContext(p.history,live.sessionId,live.stage),task:current.task,confirmedStuckPoint:hypothesis.status==='proposed'?null:hypothesis,unconfirmedHypothesis:hypothesis.status==='proposed'?hypothesis:null,latestFeedback:current.currentGrade,signals:{},helpLevel:0,helpLevelsUsed:live.helpLevelsUsed},signal,{prompt:homeTutorPrompt({stage:live.stage,allowed:[]}),secrets:current.task?this.r.catalog.definition(current.task.id,current.task.version)?.answer:[]});
+    const out=homeTutorOutput.safeParse(result.value);
+    if(out.success&&result.run.status==='completed')recordLoopDialogue(live,this.r,p.operationId,out.data.message);
+    return chatReply({text:out.success?out.data.message:'我们还在这一步。可以在题目下保存尝试，也可以选择一点提示。',stage:live.stage,sessionId:live.sessionId,run:result.run});
+   },signal);
+  }
   // G0: the home flow runs the stage machine; the legacy D two-step flow below is unchanged.
   if(p.flow==='home')return this.homeChat(p,last,signal);
   if(REST_PATTERN.test(last)){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});return chatReply({text:REST_TEXT,stage:'rest'});}
@@ -214,9 +240,10 @@ export class LearningCoordinator {
    // Episode revisions follow the program's stage, never the model.
    let episodeId=episode&&episode.status!=='closed'?episode.id:null;
    const revise=(e:LearningEpisode,change:Partial<LearningEpisode>)=>repo.append('episodes',{...e,...change,revision:e.revision+1,updatedAt:now});
-   if(stage==='think'&&fromStage!=='think'){const created:LearningEpisode={schemaVersion:SCHEMA_VERSION,id:'episode-'+p.operationId,revision:1,sessionId,problemId:problem?.id??null,task:problem||!exposed?null:{taskId:exposed.taskId,taskVersion:exposed.taskVersion},stage:'think',helpLevelsUsed:[],studentSolvedAt:null,endReason:null,status:'active',startedAt:now,updatedAt:now};repo.append('episodes',created);episodeId=created.id;}
+   if(stage==='think'&&fromStage!=='think'&&(!episode||episode.status==='closed')){const created:LearningEpisode={schemaVersion:SCHEMA_VERSION,id:'episode-'+p.operationId,revision:1,sessionId,problemId:problem?.id??null,task:problem||!exposed?null:{taskId:exposed.taskId,taskVersion:exposed.taskVersion},stage:'think',helpLevelsUsed:[],studentSolvedAt:null,endReason:null,status:'active',startedAt:now,updatedAt:now};repo.append('episodes',created);episodeId=created.id;}
    else if(episode&&episode.status!=='closed'){
-    if(stage==='reflect'&&fromStage==='think'){const solved=matchesAnswer(last,answers);revise(episode,{stage:'reflect',status:'reflecting',studentSolvedAt:solved?now:null,endReason:solved?'solved':UNDERSTOOD_PATTERN.test(last)?'understood':'turn_limit'});}
+    if(stage==='reflect'&&fromStage==='think'){const solved=matchesAnswer(last,answers);revise(episode,{stage:'reflect',status:'reflecting',studentSolvedAt:solved?now:null,endReason:solved?'solved':explicitUnderstanding(last)?'understood':STOP_THINK_PATTERN.test(last)?'student_end':'turn_limit'});}
+    else if(stage==='think'&&fromStage==='reflect')revise(episode,{stage:'think',status:'active',endReason:null});
     else if(stage!=='think'&&stage!=='reflect'&&stage!=='rest'){revise(episode,{status:'closed'});episodeId=null;}
    }
    // FR16 help ladder: one level per explicit request, at most 3; recorded on the episode and, for a catalog task, as an exposure.
@@ -384,6 +411,7 @@ export class LearningCoordinator {
   // Audit only: fingerprints and reason codes, never answers or model text. exposed derives from real task exposures.
   generations:this.r.repository.list('generations').map(g=>({...g,exposed:!!g.taskId&&this.r.repository.list('exposures').some(e=>e.kind==='task'&&e.taskId===g.taskId&&e.taskVersion===g.taskVersion)})),generationAvailable:this.r.provider.kind!=='offline',
   // G0: learning records for the home revamp. problemSecrets is deliberately absent; chatTurns carry no student text.
+  learningLoops:latestRevisions(this.r.repository.list('episodes')).filter(e=>e.loop).map(e=>loopView(e,this.r)),
   problems:this.r.repository.list('problems'),episodes:this.r.repository.list('episodes'),progressCards:this.r.repository.list('progressCards'),memoryMentions:this.r.repository.list('memoryMentions'),
   observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),
   // G2: professional-mode learning records, shown whatever the memory switch says. interviews/monthStages are the latest revision of each.

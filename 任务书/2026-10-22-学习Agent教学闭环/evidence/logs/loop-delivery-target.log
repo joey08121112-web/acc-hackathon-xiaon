@@ -1,0 +1,26 @@
+✔ A01/A02 partial, negated, quoted or reported understanding stays in think (1.064084ms)
+✔ B01 production interview report: no reason rubric never upgrades unrelated or unverified prose (73.30725ms)
+✔ A03/E01 unverified budget ending and unsupported AI facts fall back to saved process (18.909458ms)
+✔ C01/C02/D02 real loop saves first error, help, correction and a first independent unseen check (26.244792ms)
+✔ A01 coordinator revises neither completion nor end reason for mixed understanding (11.821708ms)
+✔ C03 verification help or wrong first answer cannot become first independent on correction (32.495708ms)
+✔ A04 help uses the corrected hypothesis; three levels then alternative representation; budget allows ending (15.036459ms)
+✔ C04 original, seen and alias fingerprints are rejected; exhausted catalog produces no pretend unseen task (9.191375ms)
+✔ D01/D02 SQLite restart retains task, draft, attempts and receipts; conflicting operation/revision rejected (18.114209ms)
+✔ D03 additive optional loop reads old episode/report without inventing or rewriting evidence (6.20825ms)
+✔ E01/E02 skip verification/card/confidence, optional memory off and student edits never change scoring (10.472ms)
+✔ E03 safety stores nothing, pause rejects new tasks/help, resumed fragment uses same task (8.529042ms)
+✔ HTTP loop uses authentication, CSRF, strict schema, revision and operation receipts (41.20925ms)
+✔ F01 existing planner with TestClock creates confirmed review, next-day due is distinct from same-day new task (23.4035ms)
+✔ D02 leaving during submission retains raw attempt and the original operation can finish after restart (11.372916ms)
+✔ E03 natural refusal and farewell leave the exercise; pure chat is usable even after pausing (19.190583ms)
+✔ C03 a model reply during verification is conservatively recorded as help before the next attempt (13.994792ms)
+✔ A04 proposed hypothesis cannot reveal a whitespace-normalized reference answer (7.579458ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 533.416292

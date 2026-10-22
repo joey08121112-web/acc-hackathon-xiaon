@@ -14,6 +14,9 @@ export const DECLINE_PATTERN=/不想学|不学了|先不学|不想做题|不用�
 export const INTENSE_PATTERN=/崩溃|气死|烦死|想哭|哭了|难受死|委屈|绝望|受不了|好怕|害怕|焦虑|压力好大/;
 export const PROBLEM_PATTERN=/(?:这|那)道题|(?:这|那)题|第\s*[0-9一二三四五六七八九十]+\s*(?:道|题)|错题|题.*(?:做错|算错|写错)|(?:做错|算错|写错).*题/;
 export const UNDERSTOOD_PATTERN=/懂了|明白了|会了|我知道了|原来如此/;
+/** A self-report can end discussion, never establish mastery. Mixed/quoted/negated reports need clarification. */
+export const explicitUnderstanding=(text:string)=>/^(?:哦|噢|嗯|好|现在|这下|我|已经|都|真的|终于|算是|，|,|\s)*(?:懂了|明白了|会了|知道了|原来如此)[。！!\s]*$/.test(text);
+export const STOP_THINK_PATTERN=/^(?:今天)?(?:先)?(?:不做了|不继续了|结束|到这里|停一下|跳过)(?:吧)?[。！!\s]*$/;
 /** In think, an explicit request for more help (button "给我一点提示" or words). The program decides the level, never the model. */
 export const HELP_PATTERN=/提示|帮帮我|帮我一下|没思路|想不出|怎么下手|给点思路/;
 export const FAREWELL_PATTERN=/拜拜|再见|晚安|下次(?:再)?聊|今天先(?:聊)?到这|先聊到这|我先走了|886/;
@@ -47,10 +50,10 @@ export function decideStage(previous:ChatStageState|null,event:StageEvent):Stage
  if(s.listenTurns<LISTEN_MIN_TURNS){stage='listen';s.listenTurns++;}
  else if(prior.stage==='think'){
   if(event.intent==='life'||event.intent==='decline_study')stage='companion';
-  else if(event.solved||UNDERSTOOD_PATTERN.test(text)||s.thinkTurns>=THINK_MAX_TURNS)stage='reflect';
+  else if(event.solved||explicitUnderstanding(text)||STOP_THINK_PATTERN.test(text)||s.thinkTurns>=THINK_MAX_TURNS)stage='reflect';
   else{stage='think';s.thinkTurns++;}
  }
- else if(prior.stage==='reflect')stage=event.progressCardDone?(study?'probe':'companion'):'reflect';
+ else if(prior.stage==='reflect')stage=!event.progressCardDone&&(HELP_PATTERN.test(text)||canThink)?'think':event.progressCardDone?(study?'probe':'companion'):'reflect';
  else if(prior.stage==='probe')stage=event.intent==='life'||declined?'companion':canThink?'think':'probe';
  else stage=study?'probe':'companion';
  if(stage==='think'&&prior.stage!=='think')s.thinkTurns=1;

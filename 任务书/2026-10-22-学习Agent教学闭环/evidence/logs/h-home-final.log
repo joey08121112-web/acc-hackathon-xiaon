@@ -1,0 +1,22 @@
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/h
+[WebServer] (node:61400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:61429) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 9 tests using 1 worker
+
+(node:61431) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+H browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/h
+  ✓  1 tests-agent/h/browser.spec.ts:16:1 › 首次记忆选择无预选，告知清楚；开与关均能保存 (978ms)
+  ✓  2 tests-agent/h/browser.spec.ts:30:1 › 首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式 (799ms)
+  ✓  3 tests-agent/h/browser.spec.ts:48:1 › 正式测试建议只进入说明，不点开始不切换场次 (506ms)
+  ✓  4 tests-agent/h/browser.spec.ts:56:1 › 陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结 (1.3s)
+  ✓  5 tests-agent/h/browser.spec.ts:68:1 › 小结失败可重试，问候失败回退；输入框在缩小视口可达 (498ms)
+  ✓  6 tests-agent/h/browser.spec.ts:78:1 › 开发者开关默认关；隐私列出记录类型；旧 chat 导航回首页 (608ms)
+  ✓  7 tests-agent/h/browser.spec.ts:85:1 › 没有本地服务时保留旧首页按钮 (196ms)
+  ✓  8 tests-agent/h/browser.spec.ts:93:1 › 已暂停的 support 场次，进入专业模式说明后仍未开始测评 (559ms)
+  ✓  9 tests-agent/h/browser.spec.ts:102:1 › 长聊天结束仍有小结，气泡与小结一致，不停留在上一句 (974ms)
+
+  9 passed (7.5s)

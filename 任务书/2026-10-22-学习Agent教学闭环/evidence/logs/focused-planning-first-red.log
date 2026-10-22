@@ -1,0 +1,23 @@
+✖ F01 existing planner with TestClock creates confirmed review, next-day due is distinct from same-day new task (30.614625ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 176.821583
+
+✖ failing tests:
+
+test at tests-agent/g/learning-loop.test.ts:1:16513
+✖ F01 existing planner with TestClock creates confirmed review, next-day due is distinct from same-day new task (30.614625ms)
+  Error: 无效的学生事件字段
+      at LearningCoordinator.parse (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/server/agents/learning.ts:83:104)
+      at LearningCoordinator.generate (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/server/agents/learning.ts:133:89)
+      at TestContext.<anonymous> (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/g/learning-loop.test.ts:176:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'invalid_params',
+    recoverable: true
+  }

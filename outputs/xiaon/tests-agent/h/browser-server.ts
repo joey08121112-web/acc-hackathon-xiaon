@@ -1,6 +1,5 @@
 /** H 浏览器专用：真 HTTP/SQLite/阶段机 + 合成 Tutor；问候/小结插件以显式夹具替代。 */
-import { mkdirSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { temporaryRepository } from '../../server/storage/testing';
 import { createRuntime } from '../../server/bootstrap';
 import { installLearning } from '../../server/agents/learning';
 import { createHttpServer } from '../../server/http/server';
@@ -11,8 +10,8 @@ class HomeProvider implements ModelProvider{
  async complete():ReturnType<ModelProvider['complete']>{return{content:JSON.stringify({message:'听起来这次让你有点累，我在这里听你说。',taskIds:[]}),toolCalls:[]};}
 }
 // This is this route's own database. Never open .env.server or the user's learning.sqlite.
-mkdirSync('.local',{recursive:true});
-const r=createRuntime({databasePath:resolve('.local/h.sqlite'),provider:new HomeProvider()}),d=installLearning(r);
+const fixture=temporaryRepository();
+const r=createRuntime({...fixture,provider:new HomeProvider()}),d=installLearning(r);
 const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[`http://127.0.0.1:${ui}`]});
 const listener=server.listeners('request')[0];server.removeAllListeners('request');
 server.on('request',async(req,res)=>{

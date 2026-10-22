@@ -1,0 +1,253 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests-agent/h/playwright.learning-loop.config.ts"
+    ],
+    "configFile": "/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/h/playwright.learning-loop.config.ts",
+    "rootDir": "/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/h",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/loop-browser-handoff/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/h",
+        "testIgnore": [],
+        "testMatch": [
+          "learning-loop.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/loop-browser-handoff/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/h",
+        "snapshotDir": "/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/h",
+        "testIgnore": [],
+        "testMatch": "learning-loop.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5318",
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "timezoneId": "Asia/Shanghai",
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/loop-browser-handoff/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "learning-loop.spec.ts",
+      "file": "learning-loop.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "375×812 complete teaching loop: correct hypothesis, first error, help, new independent check, honest card",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2610,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:28:53.903Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37aa30770dab5f43cc60-d84c2c3d5c31ff3f9a88",
+          "file": "learning-loop.spec.ts",
+          "line": 16,
+          "column": 1
+        },
+        {
+          "title": "partial understanding stays in help; draft, attempt and help survive refresh, pause/resume, focus at 375×420",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2056,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:28:56.697Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37aa30770dab5f43cc60-dacd1e9fe98bd3ca5184",
+          "file": "learning-loop.spec.ts",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "skip verification remains unverified; checking after error/help cannot claim independent; safety entry remains",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1311,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:28:58.757Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37aa30770dab5f43cc60-d5e3debcb6b55f6110f4",
+          "file": "learning-loop.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "student end control closes the current fragment before any chat turn exists",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 482,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:29:00.072Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37aa30770dab5f43cc60-b94cbc8eadc90bc1d626",
+          "file": "learning-loop.spec.ts",
+          "line": 57,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-22T08:28:52.905Z",
+    "duration": 7694.651,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

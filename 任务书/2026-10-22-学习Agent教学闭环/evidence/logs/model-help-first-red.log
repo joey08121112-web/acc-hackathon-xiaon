@@ -1,0 +1,25 @@
+✖ C03 a model reply during verification is conservatively recorded as help before the next attempt (30.669166ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1213.626208
+
+✖ failing tests:
+
+test at tests-agent/g/learning-loop.test.ts:1:19944
+✖ C03 a model reply during verification is conservatively recorded as help before the next attempt (30.669166ms)
+  AssertionError [ERR_ASSERTION]: model chat content must not be invisible to evidence classification
+      at TestContext.<anonymous> (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/g/learning-loop.test.ts:216:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

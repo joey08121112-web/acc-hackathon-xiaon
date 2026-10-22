@@ -1,0 +1,51 @@
+## main...origin/main [ahead 1]
+ M outputs/xiaon/server/plugins/memory-flow/index.ts
+ M outputs/xiaon/src/App.tsx
+ M outputs/xiaon/src/components/learning/ChatPanel.tsx
+ M outputs/xiaon/tests-agent/d/browser.spec.ts
+ M outputs/xiaon/tests-agent/d/pet-voice.spec.ts
+ M outputs/xiaon/tests-agent/e/browser.spec.ts
+ M outputs/xiaon/tests-agent/g/home-chat.test.ts
+ M outputs/xiaon/tests-agent/g/walkthrough.spec.ts
+ M outputs/xiaon/tests-agent/h/browser.spec.ts
+ M outputs/xiaon/tests-agent/i/fix-round.spec.ts
+ M outputs/xiaon/tests-agent/i/fix-round.test.ts
+ M outputs/xiaon/tests-agent/i/memory.test.ts
+ M outputs/xiaon/tests-agent/integration2/phase2.spec.ts
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/01-summary.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/02-intro.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/03-understanding.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/04-follow-up.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/05-transfer.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/06-next-day-paused.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/07-composer-390x420.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/08-report.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/09-month-draft.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/10-month-week-confirmed.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/11-today.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/13-month-end-reminder.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/14-declined.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/15-retest-comparison.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/16-archive-two-months.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/17-partial-report.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/18-safe-error.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/19-latest-report-stage.png
+ M 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/walkthrough-facts.json
+ M 文档/PRD/学伴小N-产品需求文档-v1.1.docx
+ M 文档/PRD/学伴小N-产品需求文档-v1.1.md
+ M 文档/PRD/新文档对照与未实现清单-20261021.md
+ M 文档/PRD/编制附件/v1.1增补/font-cache/00042df5f5f288a0032fa50b892b2d73-le64.cache-9
+?? .claude/
+?? outputs/xiaon-cloudbase-deploy.zip
+?? outputs/xiaon/tests-agent/g/home-slot.test.ts
+?? "outputs/学伴小N-队友体验包 2.zip"
+?? "outputs/学伴小N-阶段2修复源码 2.zip"
+?? 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/05b-map-two-lit.png
+?? 任务书/2026-10-21-首页改版/交付/integration/evidence/phase2/20-week-two-confirmed.png
+?? 任务书/2026-10-22-学习Agent教学闭环/
+?? 文档/PRD/编制附件/v1.1增补/20261021-配置复核快照.json
+?? 文档/PRD/编制附件/v1.1增补/render-current/
+?? 文档/PRD/编制附件/v1.1增补/本轮文档与验证记录.md
+?? 文档/交接/2026-10-22-部署信息交接-给其他AI助手.md
+?? 文档/交接/2026-10-22-队友体验与功能检查报告.md
+?? 文档/审查/

@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-22T16:32:50.294418+08:00",
+  "protectedCount": 59,
+  "changedProtectedPaths": [
+    ".claude/launch.json"
+  ],
+  "mainHead": [
+    "54690a97b86661c5745f88346da5ef2d3e2f69ae",
+    "06048b6a617268015af5469e3eaf0ffc0af17ed9"
+  ],
+  "isolatedHead": "06048b6a617268015af5469e3eaf0ffc0af17ed9",
+  "historicalEvidenceAndPRDUnchanged": true
+}

@@ -1,0 +1,22 @@
+{
+  "outputs/xiaon/scripts/agent/real-learning-loop.ts": "d384c631ea516abc91b73bb8cf307e9d8d2728ffb245009aace48be1af4f65c4",
+  "outputs/xiaon/server/plugins/learning-loop/index.ts": "5ecf9f3602b52ed32e1fe9a239b698bc064706ae7163191034000b7dcd21c0b9",
+  "outputs/xiaon/src/components/learning/home/LearningLoopCard.tsx": "4ffe4b293c144ea9f15f8a1f15e11baf15e81efced784bde35abf94f19c03e8a",
+  "outputs/xiaon/tests-agent/g/learning-loop.test.ts": "6b3f80c6849a19efce9ecafc81c067a82d2ff70b68797027a995f7d3a5daf239",
+  "outputs/xiaon/tests-agent/h/learning-loop-server.ts": "d588b8a4748bf40e57a06c0cccbdddec87101f61326c20f5a7d2e01e97096634",
+  "outputs/xiaon/tests-agent/h/learning-loop.spec.ts": "fbbd5bf625463be8f1be5533903604a4658aed2489637ed84e8f9ff142d42a55",
+  "outputs/xiaon/tests-agent/h/playwright.learning-loop.config.ts": "c53fe4aecdcc8e6b70df1d1238c61dbb2d930a7422a37b6d387a8a934587a371",
+  "outputs/xiaon/server/agents/learning.ts": "d983e79eb83491d9be78b3577a7666489f8321695c67b93db3f418cf7e48d077",
+  "outputs/xiaon/server/agents/stages.ts": "9923ebf5a5d83d687e07c038ba1c85584b4a3a8bbb6de96bf80d3a21c6b2f18c",
+  "outputs/xiaon/server/http/server.ts": "5b7eff969c8682334b67ce3a8b37383963aebc9f677b564b5aea24b068e64851",
+  "outputs/xiaon/server/plugins/interview/index.ts": "394e5a5eb946ed8f0cc344a9010f9cecbe9978722230059f040961e36444915a",
+  "outputs/xiaon/server/plugins/interview/levels.ts": "d3b4827215f263cf7d8862eed5d298e482cb0273398f4f7e49027bf97cb25448",
+  "outputs/xiaon/server/plugins/planning/index.ts": "88b941af05302aec22538e8a71e5e5414c87f959953164eaadfc628d446998f5",
+  "outputs/xiaon/server/plugins/progress/index.ts": "264f217d6e01f05d76e7660670c4d507bcfd7aac7ba7ca9f36301d545f876a2d",
+  "outputs/xiaon/shared/learning-contracts.schema.json": "8dd97e24e7bf74c1e5c36a99fb0a1a7349ba4785500b2375c97eb02f103ea22a",
+  "outputs/xiaon/shared/learning-contracts.ts": "1c78575cd3dbc989faffdaa8dc72ba014465ae8d1cec3f0b1b408197d288200b",
+  "outputs/xiaon/src/components/learning/ChatPanel.tsx": "8355e97dbc99d8caeee7b3a888ad641f4acc8d9b259f19118898c5c48e51d8ce",
+  "outputs/xiaon/src/style.css": "276c351d400b088e246c5b2f65a8cba10f16f5c9dd9a206be50dbc0ce5585f66",
+  "outputs/xiaon/tests-agent/g/interview.test.ts": "0f955f6168fa7486854b460a2f7dfed2471f30900cfc0971cbbb2cd3ead6cc50",
+  "outputs/xiaon/tests-agent/h/browser-server.ts": "f446063ecda257e98d600c1d5b82df999c873d5eb692a16d1cf3683e56e3472c"
+}

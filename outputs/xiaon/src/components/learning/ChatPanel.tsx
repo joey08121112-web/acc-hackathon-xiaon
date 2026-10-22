@@ -18,6 +18,7 @@ import { MemoryPrompt } from './home/MemoryPrompt';
 import { MemoryOffNotice } from './home/MemoryOffNotice';
 import { ProblemCapture } from './home/ProblemCapture';
 import { ProblemConfirmCard } from './home/ProblemConfirmCard';
+import { LearningLoopCard } from './home/LearningLoopCard';
 import { ProgressCardView } from './home/ProgressCardView';
 import { RetestReminder } from '../plan/RetestReminder';
 const HOME_FLOW = true;
@@ -28,10 +29,10 @@ const TALK_MODE_KEY = 'xiaon-talk-mode';
 const HOLD_MS = 450;
 const readTyping = () => { try { return localStorage.getItem(TALK_MODE_KEY) !== 'voice'; } catch { return true; } };
 const swallow = (p: Promise<unknown>) => { void p.catch(() => {}); };
-/** 首页一次只出一张选择卡。顺序：先处理这道题，再问下一步，最后才是记住小事和提醒。 */
-export type HomeSlot='problemConfirm'|'progressCard'|'problemCapture'|'needsCheck'|'modeSwitch'|'askStudy'|'taskSuggestion'|'memory'|'retest'|'memoryOff'|null;
-export function pickHomeSlot(r:{problemDraft:boolean;progressCardDraft:boolean;askProblem:boolean;needsCheck:boolean;modeSuggestion:boolean;askStudy:boolean;taskSuggestion:boolean;memory:boolean;retest:boolean;memoryOff:boolean}):HomeSlot{
- return r.problemDraft?'problemConfirm':r.progressCardDraft?'progressCard':r.askProblem?'problemCapture':r.needsCheck?'needsCheck':r.modeSuggestion?'modeSwitch':r.askStudy?'askStudy':r.taskSuggestion?'taskSuggestion':r.memory?'memory':r.retest?'retest':r.memoryOff?'memoryOff':null;
+/** 首页一次只出一张选择卡。顺序：正在进行的学习片段最先，再处理这道题、问下一步，最后才是记住小事、提醒和学习片段入口。 */
+export type HomeSlot='learningLoop'|'problemConfirm'|'progressCard'|'problemCapture'|'needsCheck'|'modeSwitch'|'askStudy'|'taskSuggestion'|'memory'|'retest'|'loopEntry'|'memoryOff'|null;
+export function pickHomeSlot(r:{learningLoop:boolean;loopEntry:boolean;problemDraft:boolean;progressCardDraft:boolean;askProblem:boolean;needsCheck:boolean;modeSuggestion:boolean;askStudy:boolean;taskSuggestion:boolean;memory:boolean;retest:boolean;memoryOff:boolean}):HomeSlot{
+ return r.learningLoop?'learningLoop':r.problemDraft?'problemConfirm':r.progressCardDraft?'progressCard':r.askProblem?'problemCapture':r.needsCheck?'needsCheck':r.modeSuggestion?'modeSwitch':r.askStudy?'askStudy':r.taskSuggestion?'taskSuggestion':r.memory?'memory':r.retest?'retest':r.loopEntry?'loopEntry':r.memoryOff?'memoryOff':null;
 }
 /** 进步卡里提炼的“记住这个方法”是进步卡的一部分，跟着进步卡一起出；聊天里的记忆提议排在别的卡后面。 */
 const withProgressCard=(r:Pick<ChatReply,'progressCardDraft'|'memoryDraft'>|null)=>!!r?.progressCardDraft&&r.memoryDraft?.origin==='progress_card';
@@ -48,7 +49,8 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  const activeRef=useRef(active);activeRef.current=active;
  useEffect(()=>{if(!active){v.actions.stop();mic.actions.cancel();}},[active]); // eslint-disable-line react-hooks/exhaustive-deps
  const latestTurn=l.view?.chatTurns.at(-1);
- const sessionId=reply?.sessionId??(chat.length?latestTurn?.sessionId??null:null);
+ const activeLoop=l.view?.learningLoops?.filter(v=>v.episode.status!=='closed').at(-1);
+ const sessionId=reply?.sessionId??activeLoop?.episode.sessionId??(chat.length?latestTurn?.sessionId??null:null);
  const savedSummary=l.view?.summaries.find(s=>s.sessionId===sessionId)??null;
  const shownSummary=summary??reply?.summary??savedSummary;
  const blocked=safety||!!reply?.safety||SAFETY_PATTERN.test([...chat].reverse().find(m=>m.role==='user')?.content??'');
@@ -103,6 +105,9 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  const end=()=>{
   if(!sessionId||blocked||l.busy||requestLock.current||shownSummary)return;
   requestLock.current=true;setAwaiting(true);setNotice('');v.actions.stop();mic.actions.cancel();
+  if(activeLoop){
+   l.run<{summary:string}>('learning/loop',{action:'leave',episodeId:activeLoop.episode.id,expectedRevision:activeLoop.episode.revision}).then(next=>{setReply(null);setNotice(next.summary);}).catch(()=>setNotice('这次的记录还在，可以重试结束。')).finally(()=>{requestLock.current=false;setAwaiting(false);});return;
+  }
   // chatTurns stores metadata, not dialogue text. Keep the schema-bounded recent history;
   // the server also includes all saved observations, problems and progress from this session.
   l.run<ConversationSummary>('learning/conversation/end',{sessionId,history:chat.slice(-20)}).then(next=>{setSummary(next);if(v.enabled&&activeRef.current)void v.actions.speak(summaryBubbleText(next));}).catch(()=>setNotice('这次的小结还没整理好，对话已保留，可以再试一次。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
@@ -134,7 +139,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  };
  const disabled=l.busy||awaiting||!l.connected;
  const suggestion=manualSuggestion??reply?.modeSuggestion??null;
- const slot=blocked||shownSummary?null:pickHomeSlot({problemDraft:!!reply?.problemDraft,progressCardDraft:!!reply?.progressCardDraft,askProblem:!!reply?.askProblem,needsCheck:!!reply?.needsCheck&&!needsSeen,modeSuggestion:!!suggestion,askStudy:!!reply?.askStudy&&!reply.safety&&!reply.summary,taskSuggestion:!!l.candidate&&!paused,memory:!!memoryDraft&&memoryEnabled,retest:!!l.view?.retestReminder,memoryOff:!memoryEnabled});
+ const slot=blocked||shownSummary?null:pickHomeSlot({learningLoop:!!activeLoop?.episode.loop,loopEntry:l.connected,problemDraft:!!reply?.problemDraft,progressCardDraft:!!reply?.progressCardDraft,askProblem:!!reply?.askProblem,needsCheck:!!reply?.needsCheck&&!needsSeen,modeSuggestion:!!suggestion,askStudy:!!reply?.askStudy&&!reply.safety&&!reply.summary,taskSuggestion:!!l.candidate&&!paused,memory:!!memoryDraft&&memoryEnabled,retest:!!l.view?.retestReminder,memoryOff:!memoryEnabled});
  const micLabel=mic.phase==='listening'?(holding?'松开 发送':'我在听，说完点一下'):mic.phase==='requesting'?'请允许使用麦克风':mic.phase==='transcribing'?'识别中…':disabled?'小N在想…':'按住 说话';
  const showComposer=typing||mic.engine==='none';
  const note=mic.engine==='server'?'你的声音会发送到火山引擎豆包识别成文字，服务端不保存录音。':mic.engine==='browser'?'语音由浏览器自带的识别服务转成文字，可能由浏览器厂商处理。':'';
@@ -152,13 +157,15 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
    {slot==='askStudy'&&<HomeChat l={l} reply={reply} send={send} navigate={navigate}/>}
    <fieldset className="home-mode-actions" disabled={disabled}><ModeSwitchCard key={`${sessionId}-${manualSuggestion?'manual':reply?.modeSuggestion?.reason}`} suggestion={slot==='modeSwitch'?suggestion:null} navigate={startProfessional}/></fieldset>
    <div className="home-slots">
+    {(slot==='learningLoop'||slot==='loopEntry')&&<LearningLoopCard l={l} blocked={blocked} navigate={navigate}/>}
     <ProblemCapture open={slot==='problemCapture'} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
     <ProblemConfirmCard draft={slot==='problemConfirm'?reply?.problemDraft??null:null} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
     <ProgressCardView draft={slot==='progressCard'?reply?.progressCardDraft??null:null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l} navigate={navigate}/>
     <MemoryPrompt draft={slot==='memory'||(slot==='progressCard'&&withProgressCard(reply))?memoryDraft:null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l}/>
    </div>
   </>}
-  {slot==='memoryOff'&&<MemoryOffNotice memoryEnabled={memoryEnabled} where="home" navigate={navigate}/>}
+  {/* 记忆已关是如实告知的一行状态，不是选择卡：首页空闲时（只剩学习片段入口）照样显示 */}
+  {(slot==='memoryOff'||slot==='loopEntry')&&<MemoryOffNotice memoryEnabled={memoryEnabled} where="home" navigate={navigate}/>}
   <ConversationSummaryView key={`${shownSummary?.id}`} summary={blocked?null:shownSummary} l={l} navigate={startProfessional}/>
   <div className="home-composer-wrap">
    <div className="home-card-actions"><button className="secondary" disabled={disabled||blocked||!sessionId||!!shownSummary} onClick={end}>今天先聊到这</button><button className="text-button" disabled={disabled} onClick={()=>void pause()}>今天先休息</button></div>

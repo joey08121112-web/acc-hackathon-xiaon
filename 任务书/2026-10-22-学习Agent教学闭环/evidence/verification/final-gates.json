@@ -1,0 +1,132 @@
+[
+  {
+    "name": "tsc",
+    "command": [
+      "npx",
+      "tsc",
+      "-b"
+    ],
+    "exit": 0,
+    "seconds": 2.3,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/tsc-final.log"
+  },
+  {
+    "name": "typecheck-agent",
+    "command": [
+      "npm",
+      "run",
+      "typecheck:agent"
+    ],
+    "exit": 0,
+    "seconds": 2.37,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/typecheck-agent-final.log"
+  },
+  {
+    "name": "schema",
+    "command": [
+      "npm",
+      "run",
+      "schema:agent"
+    ],
+    "exit": 0,
+    "seconds": 0.19,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/schema-final.log"
+  },
+  {
+    "name": "domain",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exit": 0,
+    "seconds": 0.21,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/domain-final.log"
+  },
+  {
+    "name": "agent",
+    "command": [
+      "npm",
+      "run",
+      "test:agent"
+    ],
+    "exit": 0,
+    "seconds": 56.56,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/agent-final.log"
+  },
+  {
+    "name": "build",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit": 0,
+    "seconds": 2.91,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/build-final.log"
+  },
+  {
+    "name": "h-home",
+    "command": [
+      "npx",
+      "playwright",
+      "test",
+      "-c",
+      "tests-agent/h/playwright.config.ts"
+    ],
+    "exit": 0,
+    "seconds": 7.86,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/h-home-final.log"
+  },
+  {
+    "name": "g-browser",
+    "command": [
+      "npx",
+      "playwright",
+      "test",
+      "-c",
+      "tests-agent/g/playwright.config.ts"
+    ],
+    "exit": 0,
+    "seconds": 6.53,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/g-browser-final.log"
+  },
+  {
+    "name": "h-professional",
+    "command": [
+      "npx",
+      "playwright",
+      "test",
+      "-c",
+      "tests-agent/h/playwright.professional.config.ts"
+    ],
+    "exit": 0,
+    "seconds": 7.54,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/h-professional-final.log"
+  },
+  {
+    "name": "i-browser",
+    "command": [
+      "npx",
+      "playwright",
+      "test",
+      "-c",
+      "tests-agent/i/playwright.config.ts"
+    ],
+    "exit": 0,
+    "seconds": 5.33,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/i-browser-final.log"
+  },
+  {
+    "name": "integration2",
+    "command": [
+      "npx",
+      "playwright",
+      "test",
+      "-c",
+      "tests-agent/integration2/playwright.config.ts"
+    ],
+    "exit": 0,
+    "seconds": 10.2,
+    "log": "/var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/integration2-final.log"
+  }
+]

@@ -19,9 +19,12 @@ function honest(value:string|null,helped:boolean,studentTexts:string[]):boolean{
 }
 /** Program facts for the card when no model text survives. */
 function programCard(episode:LearningEpisode,studentTexts:string[]):ProgressCardDraft{
+ if(episode.loop){
+  const l=episode.loop;return {episodeId:episode.id,breakthrough:episode.studentSolvedAt?'这次的作答已保存，完成情况见片段回顾':'这次先停在这里，尚未用新题核实',method:l.help.length?'这次使用过帮助，帮助记录已保留':null,nextTry:'下次可以用同类新题或隔天复习核对'};
+ }
  const helped=episode.helpLevelsUsed.length>0,top=Math.max(0,...episode.helpLevelsUsed);
  const breakthrough=episode.studentSolvedAt?(helped?`在第${top}级提示后算出了结果`:'自己算出了结果')
-  :episode.endReason==='understood'?(helped?'在提示后把这道题想通了一步':'说出了「懂了」，把这道题想通了一步'):'和小N一起把这道题从头想了一遍';
+  :'这次先停在这里，结果尚未核实';
  const reflection=studentTexts.at(-1)?.trim()??'';
  const method=reflection.length>=4&&!SKIP_PATTERN.test(reflection)?`「${reflection.slice(0,60)}」`:null;
  return {episodeId:episode.id,breakthrough,method,nextTry:'下次先把题目条件一条条说出来'};
@@ -35,7 +38,9 @@ export async function draftProgressCard(input:ProgressDraftInput,ctx:RevampConte
    candidate=schemas.ProgressCardDraft.safeParse(JSON.parse(content)).data;}
   catch(e){if(signal?.aborted)throw e;/* model unavailable or invalid: program card */}
  }
- const pick=(field:typeof FIELDS[number])=>{const v=candidate?.[field]??null;return honest(v,helped,input.studentTexts)?v:fallback[field];};
+ const pick=(field:typeof FIELDS[number])=>{const v=candidate?.[field]??null;if(field==='breakthrough')return fallback[field];
+  const sourced=field==='method'?!!v&&/^「[^」]+」$/.test(v):!!v&&/^(下次|下一次|可以试试)/.test(v)&&!/(完成|掌握|学会|独立|想通)/.test(v);
+  return sourced&&honest(v,helped,input.studentTexts)?v:fallback[field];};
  const draft=schemas.ProgressCardDraft.parse({episodeId:episode.id,breakthrough:pick('breakthrough'),method:pick('method'),nextTry:pick('nextTry')});
  // One memory line distilled from the method (else the breakthrough). Only when the student switched memory on; memory-flow shows and confirms it.
  const source=(draft.method??draft.breakthrough??'').replace(/[「」]/g,'').trim().slice(0,40);
@@ -45,7 +50,7 @@ export async function draftProgressCard(input:ProgressDraftInput,ctx:RevampConte
 /** Saved only on the student's confirm (or skip-all) click, once per episode, and only once the episode reached reflect. */
 export async function confirmProgressCard(input:ConfirmProgressCard,ctx:RevampContext):Promise<ProgressCard>{
  const repo=ctx.repository;
- if(!repo.list('chatTurns').some(t=>t.sessionId===input.sessionId))throw new RuntimeError('not_found','没有这次聊天');
+ if(!repo.list('chatTurns').some(t=>t.sessionId===input.sessionId)&&!repo.list('episodes').some(e=>e.loop&&e.sessionId===input.sessionId))throw new RuntimeError('not_found','没有这次聊天');
  if(input.episodeId!==null){
   const episode=repo.get('episodes',input.episodeId);
   if(!episode||episode.sessionId!==input.sessionId)throw new RuntimeError('not_found','没有这次一起思考');
@@ -56,5 +61,8 @@ export async function confirmProgressCard(input:ConfirmProgressCard,ctx:RevampCo
  const trimmed=(v:string|null)=>v?.trim()||null;
  const card=schemas.ProgressCard.parse({schemaVersion:SCHEMA_VERSION,id:'card-'+input.operationId,operationId:input.operationId,sessionId:input.sessionId,episodeId:input.episodeId,aiDraft:input.aiDraft,
   breakthrough:trimmed(input.breakthrough),method:trimmed(input.method),nextTry:trimmed(input.nextTry),skipped:FIELDS.filter(f=>!trimmed(input[f])),confidence:input.confidence,confirmedAt:ctx.clock.now()});
- repo.append('progressCards',card);return card;
+ repo.append('progressCards',card);
+ const episode=input.episodeId?repo.get('episodes',input.episodeId):null;
+ if(episode?.loop)repo.append('episodes',{...episode,revision:episode.revision+1,status:'closed',updatedAt:ctx.clock.now()});
+ return card;
 }

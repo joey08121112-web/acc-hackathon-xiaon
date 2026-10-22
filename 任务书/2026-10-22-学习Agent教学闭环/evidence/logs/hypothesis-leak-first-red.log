@@ -1,0 +1,28 @@
+✖ A04 proposed hypothesis cannot reveal a whitespace-normalized reference answer (25.219375ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 190.666917
+
+✖ failing tests:
+
+test at tests-agent/g/learning-loop.test.ts:1:20950
+✖ A04 proposed hypothesis cannot reveal a whitespace-normalized reference answer (25.219375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'model' !== 'program'
+  
+      at TestContext.<anonymous> (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/g/learning-loop.test.ts:223:49)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'model',
+    expected: 'program',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -41,7 +41,7 @@ const ReviewOutcome = z.strictObject({...base,...operation,...revision,reviewIte
 const statement = z.strictObject({text,kind:z.enum(['fact','inference','unknown']),evidenceIds:ids});
 const ReportSnapshot = z.strictObject({...base,...operation,...revision,createdAt:utc,assessmentSnapshotId:id,statements:z.array(statement),coverage:z.array(text),changes:z.array(text),recommendations:z.array(text),supersedesReportId:id.nullable()});
 const planItem = z.strictObject({id,knowledgePointId:id,taskType:z.enum(['explore','supported_practice','independent_transfer','delayed_check','original_review']),task:ref.nullable(),estimatedMinutes:z.number().int().positive(),scheduledDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),evidenceIds:ids,goal:text,status:z.enum(['proposed','scheduled','paused','completed','superseded'])});
-const PlanFocus = z.strictObject({module:dimension,goal:z.string().min(1).max(200)});
+const PlanFocus = z.strictObject({knowledgePointId:id.optional(),module:dimension,goal:z.string().min(1).max(200)});
 const PlanProposal = z.strictObject({focus:PlanFocus.optional(),...base,...operation,...revision,createdAt:utc,assessmentSnapshotId:id,goal:text,items:z.array(planItem),statements:z.array(statement),alternatives:z.array(text),constraints:z.strictObject({calculationLimit:z.literal(10),requireUnderstandLogicFirst:z.boolean(),timeBudgetMinutes:z.number().positive()}),supersedesProposalId:id.nullable()});
 const PlanVersion = z.strictObject({...base,...operation,...revision,version,proposalId:id,previousVersionId:id.nullable(),goal:text,items:z.array(planItem),changes:z.array(text),confirmation:z.strictObject({action:z.enum(['accept','lighter','reschedule','defer','resume']),confirmedAt:utc,actor:z.literal('student'),expectedPreviousVersionId:id.nullable(),reason:text}),createdAt:utc});
 const MemoryItem = z.strictObject({...base,...operation,text,source:z.literal('student_explicit'),purpose:z.enum(['tutoring','planning']),createdAt:utc,expiresAt:nullableTime,reviewAt:nullableTime,active:z.boolean()});
@@ -96,7 +96,16 @@ const ProblemRecord = z.strictObject({...base,...operation,...ProblemDraft.shape
 // Server-only reference answer. Never in view(), logs, traces, prompts or any response.
 const ProblemSecret = z.strictObject({...base,problemId:id,answer:z.array(z.string().min(1).max(500)).min(1).max(5),origin:z.enum(['catalog','student_provided','program_computed']),createdAt:utc});
 // One think→reflect episode. Append-only revisions (key id:r<revision>), like ReviewItem.
-const LearningEpisode = z.strictObject({...base,revision:version,sessionId:id,problemId:id.nullable(),task:ref.nullable(),stage:z.enum(['think','reflect']),helpLevelsUsed:z.array(z.number().int().min(1).max(3)).max(30),studentSolvedAt:nullableTime,endReason:z.enum(['solved','understood','turn_limit']).nullable(),status:z.enum(['active','reflecting','closed']),startedAt:utc,updatedAt:utc});
+// Optional additive state. All learning conclusions are derived from referenced attempts/exposures.
+const EpisodeLoop = z.strictObject({
+ knowledgePointId:z.literal('negative-brackets'),learningSessionId:id,
+ hypotheses:z.array(z.strictObject({text:shortText,quote:shortText,status:z.enum(['proposed','confirmed','corrected']),source:z.enum(['model','program','student']),at:utc})).min(1).max(50),
+ phase:z.enum(['practice','verification']),practice:ref,practiceAttemptIds:ids,
+ verification:z.strictObject({status:z.enum(['not_offered','offered','in_progress','completed','skipped','unavailable']),task:ref.nullable(),attemptIds:ids}),
+ help:z.array(z.strictObject({task:ref,level:z.number().int().min(0).max(3),representation:z.enum(['ladder','sign_table','dialogue']),text:z.string().min(1).max(600),exposureId:id,at:utc})).max(100),
+ draft:z.string().max(2000),ending:z.enum(['student_end','budget','completed']).nullable(),
+});
+const LearningEpisode = z.strictObject({...base,loop:EpisodeLoop.optional(),revision:version,sessionId:id,problemId:id.nullable(),task:ref.nullable(),stage:z.enum(['think','reflect']),helpLevelsUsed:z.array(z.number().int().min(1).max(3)).max(30),studentSolvedAt:nullableTime,endReason:z.enum(['solved','understood','turn_limit','student_end']).nullable(),status:z.enum(['active','reflecting','closed']),startedAt:utc,updatedAt:utc});
 const cardText = z.string().min(1).max(300);
 const ProgressCardDraft = z.strictObject({episodeId:id.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable()});
 const cardField = z.enum(['breakthrough','method','nextTry']);

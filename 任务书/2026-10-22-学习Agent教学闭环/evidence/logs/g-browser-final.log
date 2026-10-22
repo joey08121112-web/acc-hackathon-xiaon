@@ -1,0 +1,16 @@
+G browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/g
+[WebServer] (node:61497) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:61536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:61538) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+G browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/g
+  ✓  1 tests-agent/g/walkthrough.spec.ts:43:1 › 第一期演示路线：倾诉 → 确定需求 → 观察 → 错题 → 一起想 → 进步卡 → 记住方法 → 小结 → 专业模式 → 刷新接话；第二次对话和上次比 (3.0s)
+  ✓  2 tests-agent/g/walkthrough.spec.ts:74:1 › 记忆关闭再走一遍：不提议、不提起，首页和进步卡处都有提示 (1.5s)
+  ✓  3 tests-agent/g/walkthrough.spec.ts:88:1 › 安全拦截、休息与暂停照旧优先 (624ms)
+
+  3 passed (6.2s)

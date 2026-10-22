@@ -3150,3 +3150,16 @@ html:has(.talk-dock) { scroll-padding-bottom: calc(160px + env(safe-area-inset-b
 /* 全局 button:hover 会把按钮变浅，录音中和发送按钮的底色（白字）不能被它盖掉 */
 button.talk-send, button.talk-send:hover:not(:disabled) { background-color: var(--green); }
 button.talk-hold[data-phase="listening"], button.talk-hold[data-phase="listening"]:hover:not(:disabled) { background-color: #c4694f; }
+
+/* The fragment owns teaching controls; the existing talk dock remains fixed. */
+.learning-loop, .learning-loop-entry { display: grid; gap: 14px; margin: 14px 0; min-width: 0; }
+.loop-title { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; }
+.loop-hypothesis { border-left: 3px solid #b5c9aa; padding-left: 12px; display:grid; gap:6px; }
+.loop-question { background:#f4efdf; border-radius:14px; padding:16px; font-size:18px; line-height:1.65; overflow-wrap:anywhere; }
+.loop-answer, .loop-start { display:grid; gap:12px; }
+.learning-loop textarea, .loop-start textarea { width:100%; min-width:0; font-size:16px; }
+.loop-help { background:#eef3e8; border-radius:12px; padding:12px; display:grid; gap:6px; }
+.loop-summary { padding:12px 0; border-top:1px solid #dce3d5; line-height:1.7; }
+.loop-saved { white-space:pre-wrap; overflow-wrap:anywhere; padding:8px 0; }
+.app-shell:has(.loop-answer textarea:focus) .bottom-nav { visibility:hidden; pointer-events:none; }
+.learning-loop textarea { scroll-margin-bottom:180px; }

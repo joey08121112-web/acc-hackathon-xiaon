@@ -1,6 +1,6 @@
 /** 所有者：Claude（第二期：面试引擎）。模块等级的程序规则：纯函数，阈值写成常量。模型只负责把等级说成学生能懂的话，不能改等级。 */
 import { LEVEL_BY_BASIS,type InterviewModule,type ModuleLevelBasis,type ModuleLevelValue } from '../../../shared/learning-contracts';
-/** A follow-up answer this short, or matching NO_REASON_PATTERN, does not count as a stated reason (tasks without a reason rubric point). */
+/** Legacy public constants retained for callers; length cannot verify a reason. */
 export const REASON_MIN_CHARS=4;
 export const NO_REASON_PATTERN=/不知道|不清楚|猜的|蒙的|随便|忘了|没想|说不上来|不会/;
 /** One graded interview attempt as the level rule sees it. resultOk = the program's result point is supported. */
@@ -12,8 +12,8 @@ export function moduleBasis(facts:{observation:AttemptFact|null;transfer:Attempt
  return facts.transfer?.resultOk?'correct_on_transfer':'incorrect_on_both';
 }
 export const levelOf=(basis:ModuleLevelBasis):ModuleLevelValue=>LEVEL_BY_BASIS[basis];
-/** Without a reason rubric point the program only checks that the follow-up states something; it never judges the reasoning itself. */
-export function statedReason(text:string|undefined):boolean{const t=(text??'').trim();return Array.from(t).length>=REASON_MIN_CHARS&&!NO_REASON_PATTERN.test(t);}
+/** Without a trusted reason rubric the meaning is unverified, regardless of length. */
+export function statedReason(_text:string|undefined):boolean{return false;}
 /** Local-rules wording per basis: plain, no score, no ranking. */
 export const LOCAL_WORDING:Record<ModuleLevelBasis,string|null>={
  correct_with_reason:'这次答对了，也说清了自己的想法。',

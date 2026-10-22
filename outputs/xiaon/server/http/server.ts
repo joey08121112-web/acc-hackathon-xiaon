@@ -97,6 +97,7 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
     try{switch(path){
      case '/api/learning/activate':send(await d.activate(raw as never));break;
+     case '/api/learning/loop':send(await d.loopEvent(raw as never,c.signal));break;
      case '/api/learning/start':send(await d.start(raw as never));break;
      case '/api/learning/open':send(await d.open(raw as never));break;
      case '/api/learning/hint':send(await d.hint(raw as never));break;

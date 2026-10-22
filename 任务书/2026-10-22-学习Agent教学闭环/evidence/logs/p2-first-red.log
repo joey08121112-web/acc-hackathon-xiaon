@@ -1,0 +1,21 @@
+✔ A01/A02 partial, negated, quoted or reported understanding stays in think (0.678625ms)
+✔ B01 production interview report: no reason rubric never upgrades unrelated or unverified prose (54.433375ms)
+✔ A03/E01 unverified budget ending and unsupported AI facts fall back to saved process (4.504625ms)
+✖ C01/C02/D02 real loop saves first error, help, correction and a first independent unseen check (9.739417ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 255.441417
+
+✖ failing tests:
+
+test at tests-agent/g/learning-loop.test.ts:1:3564
+✖ C01/C02/D02 real loop saves first error, help, correction and a first independent unseen check (9.739417ms)
+  TypeError: d.loopEvent is not a function
+      at TestContext.<anonymous> (/Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/g/learning-loop.test.ts:45:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

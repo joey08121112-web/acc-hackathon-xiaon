@@ -1,0 +1,4 @@
+
+> xiaon-learning-companion@1.0.0 schema:agent
+> tsx scripts/agent/schema.ts
+

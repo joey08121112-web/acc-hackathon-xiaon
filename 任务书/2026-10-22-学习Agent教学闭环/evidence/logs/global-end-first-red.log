@@ -1,0 +1,49 @@
+[WebServer] (node:61979) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:62008) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:62017) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests-agent/h/learning-loop.spec.ts:54:1 › student end control closes the current fragment before any chat turn exists (5.5s)
+
+
+  1) tests-agent/h/learning-loop.spec.ts:54:1 › student end control closes the current fragment before any chat turn exists 
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  getByRole('button', { name: '今天先聊到这', exact: true })
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeEnabled" getByRole('button', { name: '今天先聊到这', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: '今天先聊到这', exact: true })
+        14 × locator resolved to <button disabled class="secondary">今天先聊到这</button>
+           - unexpected value "disabled"
+
+
+      54 | test('student end control closes the current fragment before any chat turn exists',async({page})=>{
+      55 |  await start(page);await click(page,'是这个卡点');
+    > 56 |  await expect(page.getByRole('button',{name:'今天先聊到这',exact:true})).toBeEnabled();
+         |                                                                    ^
+      57 |  await click(page,'今天先聊到这');
+      58 |  await expect.poll(async()=>((await state(page)).learningLoops[0].episode.status)).toBe('closed');
+      59 |  await expect(page.getByRole('region',{name:'一起看负号'})).toContainText('尚未用新题核实');
+        at /Users/ami/.codex/worktrees/learning-loop/ACC黑客松/outputs/xiaon/tests-agent/h/learning-loop.spec.ts:56:68
+
+    Error Context: ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/global-end-red/artifacts/learning-loop-student-end--0b2fd-before-any-chat-turn-exists/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/global-end-red/artifacts/learning-loop-student-end--0b2fd-before-any-chat-turn-exists/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../../../var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/global-end-red/artifacts/learning-loop-student-end--0b2fd-before-any-chat-turn-exists/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests-agent/h/learning-loop.spec.ts:54:1 › student end control closes the current fragment before any chat turn exists 

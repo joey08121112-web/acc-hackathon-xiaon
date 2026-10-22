@@ -1,0 +1,15 @@
+Integration2 browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/integration2
+[WebServer] (node:61773) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:61812) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:61814) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Integration2 browser output: /var/folders/fr/nbw51ddj6xx5kt_9qyh389br0000gn/T/xiaon-learning-loop-la49f7ci/integration2
+  ✓  1 tests-agent/integration2/phase2.spec.ts:32:1 › 390宽完整路线：小结→说明→追问与加问→计算暂停换天→报告→月周目标→今日→月底拒绝→次月复测成长 (7.0s)
+  ✓  2 tests-agent/integration2/phase2.spec.ts:76:1 › 仅理解与逻辑完成也能出报告，另三项还没测到；旧报告仅开发者可见，错误无原文 (1.8s)
+
+  2 passed (9.9s)

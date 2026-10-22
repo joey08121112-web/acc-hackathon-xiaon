@@ -38,7 +38,7 @@ test('level rule: every boundary maps through the program basis',()=>{
   [{observation:f(false),transfer:null},'incorrect_on_both','needs_work'],
  ];
  for(const [facts,basis,lvl] of cases){assert.equal(moduleBasis(facts),basis);assert.equal(levelOf(basis),lvl);}
- assert.equal(statedReason('先合并x项再算常数'),true);assert.equal(statedReason('不知道'),false);assert.equal(statedReason('嗯'),false);
+ assert.equal(statedReason('先合并x项再算常数'),false);assert.equal(statedReason('不知道'),false);assert.equal(statedReason('嗯'),false);
 });
 
 test('order is fixed: 理解 then 逻辑 then 计算 → 建模 → 空间想象; no report before 理解 and 逻辑; each answer asks one follow-up',async()=>{
@@ -80,9 +80,9 @@ test('a transfer question is asked only after a wrong first answer, from the sam
  }finally{t.dispose();}
 });
 
-test('calculation levels: stated reason → good, no reason → partial, hint → partial, both wrong → needs_work',async()=>{
+test('calculation without reason rubric: related but unverified prose → partial; hints and incorrect paths preserved',async()=>{
  for(const [label,run,basis] of [
-  ['good',async(t:ReturnType<typeof setup>,s:InterviewStep)=>t.pass(s,{reason:'先把x项合起来，再写常数'}),'correct_with_reason'],
+  ['unverified related reason',async(t:ReturnType<typeof setup>,s:InterviewStep)=>t.pass(s,{reason:'先把x项合起来，再写常数'}),'correct_reason_incomplete'],
   ['no reason',async(t:ReturnType<typeof setup>,s:InterviewStep)=>t.pass(s,{reason:'不知道'}),'correct_reason_incomplete'],
   ['hint',async(t:ReturnType<typeof setup>,s:InterviewStep)=>{const hinted=await t.answer(s,'给我一点提示');assert.match(hinted.text,/系数相加/);assert.equal(hinted.interview!.revision,s.interview!.revision,'a hint asks nothing new');return t.pass(hinted,{reason:'先把x项合起来，再写常数'});},'completed_with_hint'],
   ['both wrong',async(t:ReturnType<typeof setup>,s:InterviewStep)=>{const a=await t.pass(s,{wrong:true});assert.equal(a.interview!.pending!.task.taskId,'b-like-transfer');return t.pass(a,{wrong:true});},'incorrect_on_both'],
@@ -91,7 +91,7 @@ test('calculation levels: stated reason → good, no reason → partial, hint �
    let step=await t.d.interviewStart({operationId:id()});step=await t.pass(step);step=await t.pass(step);
    assert.equal(step.interview!.pending!.task.taskId,'b-like-observation','bracket needs like-terms first (existing prerequisite rule)');
    step=await run(t,step);const rep=await t.report(step);assert.equal(level(rep,'计算').basis,basis,label);
-   if(basis==='correct_with_reason')assert.deepEqual(level(rep,'计算').suggestions,[]);
+   assert.ok(level(rep,'计算').suggestions.length>0);
   }finally{t.dispose();}
  }
 });

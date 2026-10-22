@@ -170,7 +170,7 @@ export async function buildReport(input:ReportInput,ctx:ProfessionalContext,sign
    const tested=modules.filter(m=>m.level!=='not_tested');
    const {content}=await ctx.model({operationId:input.operationId+'-wording',prompt:REPORT_WORDING_PROMPT,data:{modules:tested.map(m=>({module:m.module,level:MODULE_LEVEL_LABELS[m.level],quotes:m.quotes}))},timeoutMs:20_000},signal);
    const parsed=wordingOutput.safeParse(JSON.parse(content));
-   if(parsed.success)for(const m of tested){const w=parsed.data.wordings[m.module]?.trim();if(w&&Array.from(w).length<=200&&!FORBIDDEN_WORDING.test(w)){m.wording=w;mode='model';}}
+   if(parsed.success)for(const m of tested){const w=parsed.data.wordings[m.module]?.trim();if(w&&m.basis==='correct_with_reason'&&Array.from(w).length<=200&&!FORBIDDEN_WORDING.test(w)){m.wording=w;mode='model';}}
   }catch(e){if(!(e instanceof RuntimeError)&&!(e instanceof SyntaxError))throw e;}
  }
  // Home-mode 「待核实」 observations since the last report of an earlier interview: confirmed when this interview points the same way.
