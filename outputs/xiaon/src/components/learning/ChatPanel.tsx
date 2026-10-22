@@ -22,10 +22,6 @@ import { ProgressCardView } from './home/ProgressCardView';
 import { RetestReminder } from '../plan/RetestReminder';
 const HOME_FLOW = true;
 const OPENER = '嗨，我是小N。今天过得怎么样？想跟我说说吗？';
-const CHIPS: {text:string;intent?:ChatIntent}[] = [
- {text:'我考砸了，不想说话'}, {text:'我怕爸妈问成绩'}, {text:'我明明努力了，还是没考好'},
- {text:'陪我看看这张卷子吧',intent:'study'}, {text:'不想聊学习了，聊点别的吧',intent:'life'},
-];
 const STALE_MS = 6 * 3600_000;
 // 输入栏像微信：左边切换语音/打字，记住上次用的那一种。
 const TALK_MODE_KEY = 'xiaon-talk-mode';
@@ -137,19 +133,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   {!l.connected&&<p className="notice">暂时连不上，之前的话还在。<button onClick={()=>swallow(l.connect())}>重新连接</button></p>}
   {blocked&&<p className="safety-link" role="alert"><button className="text-button" onClick={()=>navigate('help')}>查看求助与安全支持</button></p>}
   {(notice||l.error)&&<p className="notice" role="status">{notice|| (dev?l.error:'这次没有完成，请稍后重试。')}</p>}
-  <form className="talk-bar" ref={composer} onSubmit={e=>{e.preventDefault();send(message);}}>
-   {mic.engine!=='none'&&<button type="button" className="talk-icon" aria-label={showComposer?'切换到语音':'切换到打字'} onClick={()=>setMode(!showComposer)}>{showComposer?<AudioLines size={22}/>:<Keyboard size={22}/>}</button>}
-   {showComposer?<>
-    <textarea className="talk-input" aria-label="对小N说" rows={1} value={message} maxLength={2000} onChange={e=>setMessage(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();e.currentTarget.form?.requestSubmit();}}} onFocus={()=>requestAnimationFrame(()=>composer.current?.scrollIntoView({block:'nearest'}))} placeholder={shownSummary?'想接着聊，随时告诉我…':'想说什么，慢慢说…'} enterKeyHint="send"/>
-    {message.trim()&&<button className="talk-send" disabled={disabled}>发送</button>}
-   </>:<button type="button" className="talk-hold" data-phase={mic.phase} data-holding={holding||undefined} disabled={disabled&&mic.phase==='idle'} aria-label={micLabel} onPointerDown={holdDown} onPointerUp={holdUp} onPointerCancel={holdUp} onClick={e=>{if(e.detail===0)onMic();}} onContextMenu={e=>e.preventDefault()}>{mic.phase==='transcribing'||mic.phase==='requesting'?<Loader2 size={18} className="spin"/>:null}<span role="status">{micLabel}</span></button>}
-   {v.available&&<button type="button" className="talk-icon" aria-pressed={v.enabled} aria-label={v.enabled?'声音：开':'声音：关'} title={v.enabled?'小N的回复会读出来':'小N的回复不读出来'} onClick={()=>{v.actions.unlock();v.actions.setEnabled(!v.enabled);}}>{v.enabled?<Volume2 size={22}/>:<VolumeX size={22}/>}</button>}
-  </form>
-  {v.phase==='playing'&&<button className="text-button" onClick={()=>v.actions.stop()}>停止朗读</button>}
-  {(mic.error||v.error)&&<p className="notice" role="status">{mic.error||v.error}</p>}
-  {(note||(v.available&&v.enabled))&&<p className="small muted mic-note">{note}{v.available&&v.enabled?' 朗读时，小N的回复会发送到火山引擎豆包合成语音。':''}</p>}
   {!blocked&&!shownSummary&&<>
-   <div className="quick-replies home-quick" aria-label="可以点一下回答">{CHIPS.map(c=><button key={c.text} disabled={disabled} onClick={()=>{if(c.intent!=='life')pet.feel('concerned');send(c.text,c.intent?{intent:c.intent}:{});}}>{c.text}</button>)}</div>
    <NeedsCheckCard key={sessionId??'new'} open={!!reply?.needsCheck&&!needsSeen} disabled={disabled} onChoose={chooseNeed}/>
    <HomeChat l={l} reply={reply} send={send} navigate={navigate}/>
    <fieldset className="home-mode-actions" disabled={disabled}><ModeSwitchCard key={`${sessionId}-${manualSuggestion?'manual':reply?.modeSuggestion?.reason}`} suggestion={manualSuggestion??reply?.modeSuggestion??null} navigate={startProfessional}/></fieldset>
@@ -162,11 +146,25 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   </>}
   <MemoryOffNotice memoryEnabled={memoryEnabled} where="home" navigate={navigate}/>
   <ConversationSummaryView key={`${shownSummary?.id}`} summary={blocked?null:shownSummary} l={l} navigate={startProfessional}/>
-  {chat.length>0&&<details className="chat-log" open><summary>聊天记录（{chat.length}）</summary><div className="messages">{chat.map((m,i)=><div className={'message '+(m.role==='user'?'user':'ai')} key={i}><div>{m.content}</div>{m.role==='assistant'&&v.available&&<button className="text-button say-button" onClick={()=>void v.actions.speak(m.content)}><Volume2 size={13}/>朗读</button>}</div>)}</div></details>}
   <div className="home-composer-wrap">
    <div className="home-card-actions"><button className="secondary" disabled={disabled||blocked||!sessionId||!!shownSummary} onClick={end}>今天先聊到这</button><button className="text-button" disabled={disabled} onClick={()=>void pause()}>今天先休息</button></div>
   </div>
   {l.candidate&&!paused&&!blocked&&<button className="learning-choice" onClick={()=>navigate('task')}>小N建议：{l.candidate.title}，由我确认 <ArrowRight size={17}/></button>}
   {dev&&(trace??<details className="evidence-details"><summary>查看 Agent 与工具轨迹</summary>{l.view?.runs.slice(-10).map(run=><p className="small" key={run.id}>{run.role} · {run.providerKind} · {run.status}</p>)}</details>)}
+  {/* 输入栏固定在底部导航上面；语音去向只在请求麦克风那一刻说明，平时不占地方 */}
+  <div className="talk-dock">
+   {mic.phase==='requesting'&&note&&<p className="talk-dock-line">{note}</p>}
+   {(mic.error||v.error)&&<p className="talk-dock-line" role="status">{mic.error||v.error}</p>}
+   {v.phase==='playing'&&<p className="talk-dock-line"><button type="button" className="text-button" onClick={()=>v.actions.stop()}>停止朗读</button></p>}
+   {/* 点栏里的按钮不抢输入框的焦点：键盘不收起，输入栏也不会在按下和松开之间跳位置 */}
+   <form className="talk-bar" ref={composer} onSubmit={e=>{e.preventDefault();send(message);}} onMouseDown={e=>{if(e.target instanceof Element&&!e.target.closest('textarea'))e.preventDefault();}}>
+    {mic.engine!=='none'&&<button type="button" className="talk-icon" aria-label={showComposer?'切换到语音':'切换到打字'} onClick={()=>setMode(!showComposer)}>{showComposer?<AudioLines size={22}/>:<Keyboard size={22}/>}</button>}
+    {showComposer?<>
+     <textarea className="talk-input" aria-label="对小N说" rows={1} value={message} maxLength={2000} onChange={e=>setMessage(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();e.currentTarget.form?.requestSubmit();}}} placeholder={shownSummary?'想接着聊，随时告诉我…':'想说什么，慢慢说…'} enterKeyHint="send"/>
+     {message.trim()&&<button className="talk-send" disabled={disabled}>发送</button>}
+    </>:<button type="button" className="talk-hold" data-phase={mic.phase} data-holding={holding||undefined} disabled={disabled&&mic.phase==='idle'} aria-label={micLabel} onPointerDown={holdDown} onPointerUp={holdUp} onPointerCancel={holdUp} onClick={e=>{if(e.detail===0)onMic();}} onContextMenu={e=>e.preventDefault()}>{mic.phase==='transcribing'||mic.phase==='requesting'?<Loader2 size={18} className="spin"/>:null}<span role="status">{micLabel}</span></button>}
+    {v.available&&<button type="button" className="talk-icon" aria-pressed={v.enabled} aria-label={v.enabled?'声音：开':'声音：关'} title={v.enabled?'小N的回复会读出来（由火山引擎豆包合成语音）':'小N的回复不读出来'} onClick={()=>{v.actions.unlock();v.actions.setEnabled(!v.enabled);}}>{v.enabled?<Volume2 size={22}/>:<VolumeX size={22}/>}</button>}
+   </form>
+  </div>
  </div>;
 }

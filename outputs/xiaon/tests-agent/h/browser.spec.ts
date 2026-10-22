@@ -4,7 +4,7 @@ import { initial, PROGRESS_KEY } from '../../src/domain';
 async function ready(page:Page){
  await page.addInitScript(({key,value})=>localStorage.setItem(key,JSON.stringify(value)),{key:PROGRESS_KEY,value:{...initial(),onboarded:true,age:'adult',necessary:true,page:'home'}});
  await page.goto('/');await expect(page.getByRole('heading',{name:'心事有人听，进步有人记。'})).toBeVisible();
- await expect(page.getByRole('button',{name:'我考砸了，不想说话',exact:true})).toBeEnabled();
+ await expect(page.getByRole('textbox',{name:'对小N说'})).toBeVisible();
 }
 async function say(page:Page,text:string){
  const response=page.waitForResponse(r=>r.url().endsWith('/learning/chat'));
@@ -30,8 +30,8 @@ test('首次记忆选择无预选，告知清楚；开与关均能保存',async(
 test('首页主动开口、确定需求、错题挂载、小结与刷新问候；不自动切模式',async({page},info)=>{
  let starts=0;page.on('request',req=>{if(req.url().endsWith('/learning/start'))starts++;});await ready(page);
  await expect(page.locator('.pet-hero-bubble')).toContainText('今天过得怎么样');await expect(page.getByLabel('服务模式')).toHaveCount(0);
- const request=page.waitForRequest(r=>r.url().endsWith('/learning/chat'));await page.getByRole('button',{name:'我考砸了，不想说话',exact:true}).click();expect((await request).postDataJSON().flow).toBe('home');
- await expect(page.getByRole('button',{name:'我考砸了，不想说话',exact:true})).toBeEnabled();await say(page,'数学，今天好多了');
+ const request=page.waitForRequest(r=>r.url().endsWith('/learning/chat'));await page.getByRole('textbox',{name:'对小N说'}).fill('我考砸了，不想说话');await page.getByRole('button',{name:'发送',exact:true}).click();expect((await request).postDataJSON().flow).toBe('home');
+ await expect(page.getByRole('textbox',{name:'对小N说'})).toBeVisible();await say(page,'数学，今天好多了');
  await expect(page.getByRole('region',{name:'接下来想怎么聊'})).toBeVisible();
  const study=page.waitForResponse(r=>r.url().endsWith('/learning/chat'));await page.getByRole('button',{name:'看看哪里没考好',exact:true}).click();expect((await study).request().postDataJSON().intent).toBe('study');
  await expect(page.getByRole('region',{name:'接下来想怎么聊'})).toHaveCount(0);
@@ -58,7 +58,7 @@ test('陪聊第六轮轻问；拒绝后不再问；安全输入不请求小结',
  for(let i=0;i<6;i++)await say(page,'今天和朋友打球很开心');
  await expect(page.getByRole('button',{name:'今天先不了',exact:true})).toBeVisible();
  const declined=page.waitForRequest(r=>r.url().endsWith('/learning/chat'));await page.getByRole('button',{name:'今天先不了',exact:true}).click();expect((await declined).postDataJSON().intent).toBe('decline_study');
- await expect(page.getByRole('button',{name:'我考砸了，不想说话',exact:true})).toBeEnabled();for(let i=0;i<7;i++)await say(page,'聊聊今天的篮球比赛');
+ await expect(page.getByRole('textbox',{name:'对小N说'})).toBeVisible();for(let i=0;i<7;i++)await say(page,'聊聊今天的篮球比赛');
  await expect(page.getByRole('button',{name:'今天先不了',exact:true})).toHaveCount(0);
  let ends=0;page.on('request',r=>{if(r.url().endsWith('/conversation/end'))ends++;});
  const response=page.waitForResponse(r=>r.url().endsWith('/learning/chat'));await say(page,'我不想活了');const reply=await(await response).json();expect(reply.safety).toBe(true);

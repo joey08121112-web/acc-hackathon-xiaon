@@ -1,6 +1,6 @@
 /* 所有者：ChatGPT。首页、首次记忆选择与小结；不改旧离线首页。 */
 .home-chat { min-width: 0; }
-.home-chat .pet-hero .mascot { width: min(220px, 65%); }
+.home-chat .pet-hero .mascot { width: min(320px, 92%); }
 .home-chat .pet-hero-bubble { font-size: 16px; max-height: none; }
 .home-card { margin: 16px 0; padding: 18px; border: 1px solid #d9dfcd; border-radius: 20px; background: #fffdf5; overflow-wrap: anywhere; }
 .home-card h2 { font-size: 1.15rem; line-height: 1.5; margin: 5px 0 10px; }

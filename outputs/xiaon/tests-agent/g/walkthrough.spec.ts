@@ -20,7 +20,7 @@ async function onboard(page:Page,memory:boolean){
 }
 /** listen ×2 → 确定需求 → probe（第 6 轮试探记一条理解观察）→ 口述错题并确认 → 一起想（中途一次提示）→ 说出答案 → 说收获。 */
 async function throughReflect(page:Page,prefix:string|null){
- await chatAfter(page,()=>page.getByRole('button',{name:'我考砸了，不想说话',exact:true}).click());
+ await say(page,'我考砸了，不想说话');
  await say(page,'数学，好多题都错了');
  await expect(page.getByRole('heading',{name:'接下来，你想怎么聊？'})).toBeVisible();if(prefix)await shot(page,prefix+'-02-needs-check');
  await chatAfter(page,()=>page.getByRole('button',{name:'看看哪里没考好',exact:true}).click());

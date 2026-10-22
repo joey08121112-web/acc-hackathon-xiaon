@@ -4,7 +4,7 @@ import { initial, PROGRESS_KEY } from '../../src/domain';
 const api=Number(process.env.XIAON_H2_API_PORT??18952);
 async function ready(page:Page){
  await page.addInitScript(({key,value})=>{if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(value));},{key:PROGRESS_KEY,value:{...initial(),onboarded:true,age:'adult',necessary:true,page:'home'}});
- await page.goto('/');await expect(page.getByRole('button',{name:'我考砸了，不想说话',exact:true})).toBeEnabled();
+ await page.goto('/');await expect(page.getByRole('textbox',{name:'对小N说'})).toBeVisible();
  await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'专业模式',exact:true}).click();
  await expect(page.getByRole('region',{name:'专业模式测评'})).toBeVisible();
 }

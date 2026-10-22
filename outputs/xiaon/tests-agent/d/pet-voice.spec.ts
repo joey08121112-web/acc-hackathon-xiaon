@@ -53,7 +53,6 @@ test('chat page: big pet, mic and keyboard side by side; quick replies; typing i
  await page.getByRole('button',{name:'今天有点烦',exact:true}).click();expect(await moodOf(page,'.pet-hero')).toBe('concerned');
  await expect(page.locator('.pet-hero-bubble')).toHaveText('我在这里。我们只做你愿意的一步。');
  await expect(page.getByRole('button',{name:'考试没考好',exact:true})).toBeVisible();
- await expect(page.locator('details.chat-log')).toHaveAttribute('open','');await expect(page.locator('.chat-log .message.user')).toHaveText('今天有点烦');
  // poking works on this page too, and the pet looks at the pointer
  await page.mouse.move(10,300);const left=await page.locator('.pet-hero .pet-look').evaluate(el=>getComputedStyle(el).transform);await page.mouse.move(380,300);await expect.poll(()=>page.locator('.pet-hero .pet-look').evaluate(el=>getComputedStyle(el).transform)).not.toBe(left);
  await expect(page.locator('.pet-hero-bubble')).toBeVisible();
@@ -72,7 +71,6 @@ test('microphone: one tap records, stops by itself after a pause, sends a WAV to
  // no second tap: the pause after the fake voice ends the recording
  await expect(page.locator('.pet-hero-bubble')).toHaveText('我在这里。我们只做你愿意的一步。',{timeout:20000});
  const log=await voiceLog(page);expect(log.heard).toHaveLength(1);expect(log.heard[0].wav).toBe(true);expect(log.heard[0].bytes).toBeGreaterThan(30000);expect(log.heard[0].bytes).toBeLessThan(400000);
- await expect(page.locator('details.chat-log')).toHaveAttribute('open','');await expect(page.locator('.chat-log .message.user')).toHaveText('我今天有点烦');
  await expect.poll(async()=>(await voiceLog(page)).spoken).toContain('我在这里。我们只做你愿意的一步。');
  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','idle');
 });

@@ -3123,7 +3123,17 @@ input[type="range"] {
 .safety-link { text-align: center; margin: 0 0 4px; }
 .safety-link .text-button { color: #8a4a36; text-decoration: underline; text-underline-offset: 3px; }
 /* 微信式输入栏：[语音/键盘切换] [输入框 或 按住说话] [声音开关] */
-.talk-bar { display: flex; align-items: flex-end; gap: 8px; margin: 8px 0 6px; padding: 8px; background: #eef1e6; border: 1px solid var(--line); border-radius: 18px; }
+/* 固定在底部导航（.bottom-nav，高 76px + 安全区）正上方，宽度跟导航一致 */
+.talk-dock { position: fixed; z-index: 11; left: 0; right: 0; bottom: max(76px, calc(67px + env(safe-area-inset-bottom, 0px))); padding: 8px 12px; background: #f1f3ea; border-top: 1px solid #e1e5d7; }
+.page:has(.talk-dock) { padding-bottom: calc(176px + env(safe-area-inset-bottom, 0px)); }
+html:has(.talk-dock) { scroll-padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
+.talk-dock-line { margin: 0 4px 6px; font-size: .74rem; line-height: 1.5; color: #56664b; text-align: center; }
+.talk-dock-line .text-button { min-height: 0; padding: 0; font-size: .78rem; }
+@media (min-width: 650px) { .talk-dock { left: auto; right: auto; width: 458px; margin-left: -24px; } }
+/* 打字时键盘弹起：底部导航先让开，输入栏贴底 */
+.app-shell:has(.talk-input:focus) .bottom-nav { visibility: hidden; pointer-events: none; }
+.talk-dock:has(.talk-input:focus) { bottom: 0; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
+.talk-bar { display: flex; align-items: flex-end; gap: 8px; margin: 0; }
 .talk-icon { flex: none; width: 42px; height: 42px; margin-bottom: 1px; border-radius: 50%; border: 1.8px solid #2f4a3a; display: grid; place-items: center; color: #2f4a3a; }
 .talk-icon[aria-pressed="false"] { color: #7d8a74; border-color: #9aa690; }
 .talk-bar .talk-input { flex: 1; min-width: 0; width: auto; min-height: 44px; max-height: 120px; padding: 9px 12px; line-height: 1.5; resize: none; margin: 0; border: 1px solid #dce6c9; border-radius: 10px; background: #fffdf7; field-sizing: content; }
@@ -3133,13 +3143,10 @@ input[type="range"] {
 .talk-hold[data-phase="requesting"], .talk-hold[data-phase="transcribing"] { color: #5d6f55; background: #e3eacd; }
 @keyframes mic-pulse { 0% { box-shadow: 0 0 0 0 rgba(196, 105, 79, .5); } 100% { box-shadow: 0 0 0 10px rgba(196, 105, 79, 0); } }
 .spin { animation: spin 1s linear infinite; }
-.mic-note { font-size: .7rem; margin: 0 0 8px; }
-.chat-log { margin: 12px 0; }
-.chat-log > summary { cursor: pointer; font-size: .82rem; color: #6a7a62; padding: 6px 0; }
 .center { text-align: center; }
 
 /* 小字链接/按钮在奶油纸色上达到 4.5:1 */
-.learning-pages .text-button, .center .text-button, .say-button, .chat-log > summary { color: #46603f; }
+.learning-pages .text-button, .center .text-button, .say-button { color: #46603f; }
 /* 全局 button:hover 会把按钮变浅，录音中和发送按钮的底色（白字）不能被它盖掉 */
 button.talk-send, button.talk-send:hover:not(:disabled) { background-color: var(--green); }
 button.talk-hold[data-phase="listening"], button.talk-hold[data-phase="listening"]:hover:not(:disabled) { background-color: #c4694f; }

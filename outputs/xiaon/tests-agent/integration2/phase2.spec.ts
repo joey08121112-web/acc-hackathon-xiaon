@@ -14,7 +14,7 @@ async function onboard(page:Page){
  await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');
  await page.getByRole('checkbox',{name:'我已了解基本服务所需信息与本机演示规则'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();
  await page.getByRole('radio',{name:'暂时不记住，照样可以聊'}).check();await page.getByRole('button',{name:'按我的选择，开始'}).click();
- await expect(page.getByRole('button',{name:'我考砸了，不想说话',exact:true})).toBeEnabled();
+ await expect(page.getByRole('textbox',{name:'对小N说'})).toBeVisible();
 }
 async function say(page:Page,text:string){const done=page.waitForResponse(r=>r.url().endsWith('/learning/chat'));await page.getByRole('textbox',{name:'对小N说'}).fill(text);await page.getByRole('button',{name:'发送',exact:true}).click();expect((await done).ok()).toBe(true);await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');}
 /** 地图为主：一站走完回到地图，点亮着的当前地点再进入对话。 */
