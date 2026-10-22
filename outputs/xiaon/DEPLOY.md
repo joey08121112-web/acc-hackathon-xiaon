@@ -52,6 +52,8 @@ Railway 新账号送 **30 天试用 + $5 一次性额度**，用 GitHub 登录�
    XIAON_GLM_MAX_TOKENS   = 8192
    ```
 
+   可选：`XIAON_GLM_HEDGE_MS`（默认 20000）——单次请求超过这么久没回就自动再发一次，用先回来的那个；设 0 关闭。
+
    `XIAON_API_HOST` / `XIAON_API_PORT` / `XIAON_STATIC_DIR` / `XIAON_DB_PATH` 已在 Dockerfile 里写好。
 6. （可选，建议）按第 9 节给服务添加 Volume（Mount Path `/data`），学习记录在重新部署后保留。不加也能正常运行，只是每次重新部署记录清空——对比赛演示反而合适（见第 7 节）。
 7. Settings → Networking → **Generate Domain**，得到 `https://xxx-production.up.railway.app`。

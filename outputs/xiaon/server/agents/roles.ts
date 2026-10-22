@@ -73,6 +73,8 @@ const FIELD_BLOCK:Partial<Record<StageField,string>>={observation:OBSERVE_PROMPT
  * releasedAnswers: answers the student already said in a solved episode. The catalog guard stops holding exactly those expressions,
  * even when another unattempted catalog task shares them. */
 export type HomeInvoke={prompt:{version:string;text:string};secrets?:string[];releasedAnswers?:string[]};
+/** Home-flow stages that never suggest tasks, so the Tutor gets no tool definitions there. */
+export const TOOLLESS_HOME_STAGES:ReadonlySet<ChatStage>=new Set(['listen','companion']);
 /** G0 home-flow Tutor prompt. The stage machine decides stage and allowed fields; the model only sees the blocks it may use this turn. */
 /** answerTurn: observation is allowed only to record the answer to last turn's probe (OBSERVE_ANSWER_PROMPT instead of OBSERVE_PROMPT). */
 /** growth: the program passes professional-mode background this turn (see GROWTH_BLOCK). */
@@ -99,11 +101,14 @@ export class ControlledRoles {
  async invoke(role:'tutor'|'planner',operationId:string,data:unknown,signal?:AbortSignal,home?:HomeInvoke){
   // G0 length gate (every Tutor turn, both flows): one rewrite request above the limit, then a cut at a sentence end.
   let replyFit:'ok'|'retried'|'truncated'='ok';
+  // Home listen/companion turns only comfort and chat; the program already put the needed context in data.
+  // Offering no tools there saves the extra tool round that made these replies take 2-3 model calls.
+  const toolless=role==='tutor'&&!!home&&TOOLLESS_HOME_STAGES.has((data as {stage?:ChatStage}).stage!);
   const result=await this.run(role,operationId,async(messages,controller,run)=>{
    if(this.r.provider.kind==='offline')return role==='tutor'?{message:'我在这里。我们按你的节奏来。',taskIds:[]}: {statementIndexes:[]};
    while(run.rounds<4){
     this.check(controller.signal);run.rounds++;
-    const response=await this.complete([...messages],this.r.tools.definitions(role),controller.signal);
+    const response=await this.complete([...messages],toolless?[]:this.r.tools.definitions(role),controller.signal);
     if(!response.toolCalls.length){
      if(role==='tutor'){
       // GLM occasionally replies as plain chat without the JSON wrapper (seen on probe turns): one repair round, then the raw text itself becomes the message so the answer-leak guards below still run on it.
@@ -117,6 +122,7 @@ export class ControlledRoles {
        if(replyFit==='ok'&&run.rounds<4){replyFit='retried';messages.push({role:'assistant',content:response.content.slice(0,4000)},{role:'user',content:REPLY_REWRITE});continue;}
        out={...out,message:fitReply(out.message,TUTOR_REPLY_MAX_CHARS)};replyFit='truncated';
       }
+      if(toolless&&out.taskIds.length)out={...out,taskIds:[]}; // no tool ran, so no task can be suggested this turn
       const returned=new Set(messages.filter(m=>m.role==='tool').flatMap(m=>{try{const d=JSON.parse(m.content);return d.ok&&d.data?.question?[d.data.id]:[];}catch{return [];}}));
       if(out.taskIds.some(id=>!returned.has(id)))throw new RuntimeError('provider_error','题目建议缺少真实工具来源');
       const clean=(s:string)=>s.replace(/[\s−–]/g,'').toLowerCase();

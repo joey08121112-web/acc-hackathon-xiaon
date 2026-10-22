@@ -10,6 +10,7 @@ import { LegacyAssessment,legacyTasks } from './tools/legacy';
 import { ToolRegistry } from './tools/registry';
 import { OfflineProvider,GlmProvider } from './providers/glm';
 import { readGlmConfig,GLM_DEFAULTS } from './providers/config';
+import { HedgedProvider } from './providers/hedge';
 import { RuntimeError } from './core/errors';
 export function createRuntime(options:{repository?:LearningRepository;databasePath?:string;clock?:Clock;provider?:ModelProvider;engines?:EngineRegistration;modelTimeoutMs?:number}={}){
  const repository=options.repository??new SqliteRepository(options.databasePath??resolve('.local/learning.sqlite'));const clock=options.clock??systemClock;
@@ -27,5 +28,5 @@ export type LearningRuntime=ReturnType<typeof createRuntime>;
 export function runtimeFromEnvironment(){
  const path=resolve(process.env.XIAON_DB_PATH??'.local/learning.sqlite');mkdirSync(resolve(path,'..'),{recursive:true,mode:0o700});
  const config=readGlmConfig();
- return createRuntime({databasePath:path,provider:config.apiKey?new GlmProvider(config.apiKey,config.model,fetch,config):new OfflineProvider(),modelTimeoutMs:config.timeoutMs});
+ return createRuntime({databasePath:path,provider:config.apiKey?new HedgedProvider(new GlmProvider(config.apiKey,config.model,fetch,config),config.hedgeMs):new OfflineProvider(),modelTimeoutMs:config.timeoutMs});
 }
