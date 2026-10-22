@@ -2573,9 +2573,9 @@ input[type="range"] {
   }
   .bottom-nav {
     width: 458px;
-    border-radius: 0 0 27px 27px;
-    bottom: 30px;
-    padding-bottom: 12px;
+    border-radius: 0;
+    bottom: 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   }
   .page {
     min-height: calc(100dvh - 142px);
