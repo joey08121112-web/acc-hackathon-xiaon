@@ -7,9 +7,11 @@ import { ProfessionalAnswer } from './ProfessionalAnswer';
 import { ProfessionalMap,placeOf,type MapModule } from './ProfessionalMap';
 import { explorationStatus } from '../learning/ExplorationMap';
 /** onPractice(index): the existing free-practice entry for that place (welcome card → one task, 理解/逻辑 first). */
-export type ProfessionalModeViewProps={l:LearningUI;navigate:(page:string,tab?:string)=>void;safety:boolean;onPractice?:(index:number)=>void};
-export function ProfessionalModeView({l,navigate,safety,onPractice}:ProfessionalModeViewProps){
- const dev=useDevMode(),[step,setStep]=useState<InterviewStep|null>(null),[notice,setNotice]=useState(''),[working,setWorking]=useState(false),[open,setOpen]=useState<string|false>(false),[card,setCard]=useState<MapModule|null>(null);
+/** station/onStation: 正在走的一站由 App 管，记进浏览器历史，顶栏返回和系统返回手势都能退回地图；不传时组件自己记。 */
+export type ProfessionalModeViewProps={l:LearningUI;navigate:(page:string,tab?:string)=>void;safety:boolean;onPractice?:(index:number)=>void;station?:string|false;onStation?:(module:string|false)=>void};
+export function ProfessionalModeView({l,navigate,safety,onPractice,station,onStation}:ProfessionalModeViewProps){
+ const dev=useDevMode(),[step,setStep]=useState<InterviewStep|null>(null),[notice,setNotice]=useState(''),[working,setWorking]=useState(false),[localOpen,setLocalOpen]=useState<string|false>(false),[card,setCard]=useState<MapModule|null>(null);
+ const open=station??localOpen,setOpen=onStation??setLocalOpen;
  const lock=useRef(false),mounted=useRef(true),pauseAfter=useRef(false),startRef=useRef<HTMLButtonElement>(null),cardRef=useRef<HTMLDivElement>(null);
  useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;};},[]);
  const interview=[...(l.view?.interviews??[])].filter(i=>i.status!=='completed').sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))[0]??null;

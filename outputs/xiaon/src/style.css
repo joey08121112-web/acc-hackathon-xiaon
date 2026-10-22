@@ -766,6 +766,11 @@ input[type="range"] {
 .onboard-top .brand {
   font-size: 1.05rem;
 }
+.onboard-exit {
+  justify-content: flex-start;
+  margin-top: -12px;
+  padding: 0 0 14px;
+}
 .progress-line {
   height: 2px;
   background: #e5e7d9;

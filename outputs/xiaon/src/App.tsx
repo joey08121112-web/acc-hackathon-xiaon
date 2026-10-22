@@ -41,6 +41,7 @@ import {
 import { HeroArt, MapArt, Mascot, SpaceShape } from "./Art";
 import { HomeHero } from "./voice/HomeHero";
 import { explorationStatus } from "./components/learning/ExplorationMap";
+import { placeOf } from "./components/professional/ProfessionalMap";
 import { useLearning } from "./agents/useLearning";
 import { useDevMode, setDevMode } from "./agents/devMode";
 import { ChatPanel } from "./components/learning/ChatPanel";
@@ -74,6 +75,15 @@ const uid = () =>
   globalThis.crypto?.randomUUID?.() ??
   `local-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
 const icons = [Flower2, BookOpen, Plus, ShoppingBagIcon, Compass];
+const PAGE_OF_TAB: Record<string, string> = {
+  小N: "home",
+  探索: "explore",
+  今日: "today",
+  成长: "growth",
+};
+const TAB_OF_PAGE: Record<string, string> = Object.fromEntries(
+  Object.entries(PAGE_OF_TAB).map(([tab, page]) => [page, tab]),
+);
 function ShoppingBagIcon({ size = 20 }: { size?: number }) {
   return (
     <svg
@@ -120,7 +130,12 @@ function App() {
     try {
       if (learning.enabled && !learning.connected) throw new Error("请先连接，再保存你的选择。");
       if (learning.connected) await learning.run("consent", { optionalMemory: memoryChoice }, { persist: false });
-      patch({ longMemory: memoryChoice, onboarded: true, page: "home", tab: "小N" });
+      patch({ longMemory: memoryChoice, onboarded: true, introBackup: undefined, page: "home", tab: "小N" });
+      window.history.replaceState(
+        { ...window.history.state, page: "home", tab: "小N" },
+        "",
+        "#home",
+      );
     } catch { setIntroError("这次没有保存好，请连接后再试。你的选择还在。"); }
     finally { setIntroSaving(false); }
   };
@@ -161,7 +176,11 @@ function App() {
   useEffect(() => {
     if (learning.enabled && s.page === "chat") {
       patch({ page: "home", tab: "小N" });
-      window.history.replaceState({ page: "home", tab: "小N" }, "", "#home");
+      window.history.replaceState(
+        { ...window.history.state, page: "home", tab: "小N" },
+        "",
+        "#home",
+      );
     }
   }, [learning.enabled, s.page]);
   const contact = s.helpContact;
@@ -170,22 +189,48 @@ function App() {
   const stateRef = useRef(s);
   stateRef.current = s;
   const say = (text: string) => setToast(text);
-  const navigate = (page: string, tab?: string) => {
-    patch({ page, ...(tab ? { tab } : {}) });
-    window.history.pushState({ page, tab: tab || s.tab }, "", `#${page}`);
-  };
-  const goTab = (tab: string) =>
-    navigate(
-      (
-        {
-          小N: "home",
-          探索: "explore",
-          今日: "today",
-          成长: "growth",
-        } as Record<string, string>
-      )[tab],
-      tab,
+  // 专业模式里正在走的一站。它也是一条历史记录，系统返回手势能先退回地图。
+  const [station, setStation] = useState<string | false>(() => {
+    const h = window.history.state;
+    return h?.page === "explore" && h.station ? h.station : false;
+  });
+  // 每条应用内历史记录带 depth：返回键有上一页就退一步，没有才回到当前 Tab 首页。
+  const pushEntry = (entry: Record<string, unknown>, hash: string) =>
+    window.history.pushState(
+      { ...entry, depth: (window.history.state?.depth ?? 0) + 1 },
+      "",
+      hash,
     );
+  const navigate = (page: string, _tab?: string) => {
+    // 只有四个 Tab 首页才切换 Tab；子页面沿用来处的 Tab，底栏高亮和兜底返回都回到原来的地方。
+    const tab = TAB_OF_PAGE[page] ?? stateRef.current.tab;
+    setStation(false);
+    patch({ page, tab });
+    pushEntry({ page, tab }, `#${page}`);
+  };
+  const goTab = (tab: string) => navigate(PAGE_OF_TAB[tab], tab);
+  const back = () => {
+    if ((window.history.state?.depth ?? 0) > 0) {
+      window.history.back();
+      return;
+    }
+    const tab = stateRef.current.tab,
+      page = PAGE_OF_TAB[tab];
+    setStation(false);
+    patch({ page, tab });
+    window.history.replaceState({ page, tab, depth: 0 }, "", `#${page}`);
+  };
+  const openStation = (module: string) => {
+    const h = window.history.state;
+    if (h?.station)
+      window.history.replaceState({ ...h, station: module }, "", "#explore");
+    else pushEntry({ page: "explore", tab: "探索", station: module }, "#explore");
+    setStation(module);
+  };
+  const closeStation = () => {
+    setStation(false);
+    if (window.history.state?.station) window.history.back();
+  };
   const remember = (m: Memory) =>
     setMemories((items) => memoryAfter(stateRef.current, items, m));
   useEffect(() => {
@@ -203,9 +248,14 @@ function App() {
     }
   }, [memories]);
   useEffect(() => {
-    window.history.replaceState({ page: s.page, tab: s.tab }, "", `#${s.page}`);
+    window.history.replaceState(
+      { ...window.history.state, page: s.page, tab: s.tab },
+      "",
+      `#${s.page}`,
+    );
     const pop = (e: PopStateEvent) => {
       if (!e.state?.page) return;
+      setStation(e.state.page === "explore" && e.state.station ? e.state.station : false);
       if (e.state.page === "task" && e.state.taskId) {
         const known = stateRef.current.records[e.state.taskId];
         patch({
@@ -335,11 +385,7 @@ function App() {
       return;
     }
     dispatch({ type: "open-task", id });
-    window.history.pushState(
-      { page: "task", tab: s.tab, taskId: id },
-      "",
-      "#task",
-    );
+    pushEntry({ page: "task", tab: s.tab, taskId: id }, "#task");
   };
   const chatSend = (text: string) => {
     if (!text.trim() || s.chatStatus === "waiting" || s.chatStatus === "paused")
@@ -531,6 +577,23 @@ function App() {
         </span>
         <span className="muted small">认识彼此 · {s.onboardStep + 1}/3</span>
       </div>
+      {s.introBackup && (
+        <button
+          className="text-button onboard-exit"
+          onClick={() => {
+            setIntroError("");
+            patch({
+              ...s.introBackup,
+              onboarded: true,
+              onboardStep: 0,
+              introBackup: undefined,
+            });
+            say("已退出首次介绍，原来的选择没有改变。");
+          }}
+        >
+          <ArrowLeft size={16} /> 不重新体验了，回到设置
+        </button>
+      )}
       <div className="progress-line">
         <span style={{ width: `${((s.onboardStep + 1) / 3) * 100}%` }} />
       </div>
@@ -723,7 +786,7 @@ function App() {
         ) : (
           <>
             <header className="app-header">
-              {["home", "explore", "today", "growth"].includes(s.page) ? (
+              {TAB_OF_PAGE[s.page] && !(s.page === "explore" && station) ? (
                 <div className="brand">
                   <span className="brand-mark">
                     <Sprout size={21} />
@@ -742,11 +805,15 @@ function App() {
                   <button
                     className="icon-button"
                     aria-label="返回"
-                    onClick={() => goTab(s.tab)}
+                    onClick={back}
                   >
                     <ArrowLeft size={22} />
                   </button>
-                  <h2>{headerTitles[s.page]}</h2>
+                  <h2>
+                    {s.page === "explore" && station
+                      ? placeOf(station)
+                      : headerTitles[s.page]}
+                  </h2>
                 </>
               )}
               <div className="header-actions">
@@ -786,7 +853,7 @@ function App() {
             <LearningStatus l={learning} />
             {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在本地服务里；真实模型会向智谱发送本次需要的学习内容和获准记忆。你可以查看记录、管理记忆或重置整个演示。{devMode && <p>SQLite 保存学习事实，浏览器缓存草稿；单用户演示。</p>}</div>}
             <main className={`page page-${s.page}`}>
-              {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>setModal(`dimension-${index}`)} safety={s.safety} />}
+              {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>setModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
               {s.page === "home" && (
                 <>
                   {learning.enabled ? <>
@@ -2136,7 +2203,12 @@ function App() {
                     <button
                       onClick={() => {
                         setMemoryChoice(null); setIntroError("");
-                        patch({ onboarded: false, onboardStep: 0 });
+                        const { age, grade, book, necessary, guardian, research } = s;
+                        patch({
+                          onboarded: false,
+                          onboardStep: 0,
+                          introBackup: { age, grade, book, necessary, guardian, research },
+                        });
                         say("重新进入首次介绍，原有学习进度保留。");
                       }}
                     >

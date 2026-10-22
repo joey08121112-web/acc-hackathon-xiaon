@@ -65,6 +65,8 @@ export type State = {
   uploadConfirmed: boolean;
   storageNotice: string;
   statusTrail: Record<string, { status: string; time: string }[]>;
+  /** 从设置重新体验首次进入时备份原选择；中途退出就恢复，走完就清掉。 */
+  introBackup?: Pick<State, "age" | "grade" | "book" | "necessary" | "guardian" | "research">;
 };
 export function initial(): State {
   return {
