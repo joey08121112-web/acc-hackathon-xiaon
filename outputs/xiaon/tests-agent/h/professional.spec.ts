@@ -9,7 +9,10 @@ async function ready(page:Page){
  await expect(page.getByRole('region',{name:'专业模式测评'})).toBeVisible();
 }
 const mode=(page:Page)=>page.getByRole('region',{name:'专业模式测评'});
+/** 地图为主：一站走完回到地图，点亮着的当前地点再进入对话。 */
+async function enter(page:Page){await expect(mode(page)).toHaveAttribute('aria-busy','false');const box=mode(page).getByRole('textbox',{name:'我的回答'});if(!await box.isVisible())await mode(page).getByRole('group',{name:'五维地图'}).locator('[aria-current="step"]').click();await expect(box).toBeVisible();}
 async function answer(page:Page,text='每本是一本的价格'){
+ await enter(page);
  const response=page.waitForResponse(r=>r.url().endsWith('/interview/answer'));
  await mode(page).getByRole('textbox',{name:'我的回答'}).fill(text);await mode(page).getByRole('button',{name:'告诉小N',exact:true}).click();
  const res=await response;if(!res.ok())console.log('H2 answer status',res.status(),await res.text());const body=await res.json();if(body.interview?.status==='paused')await expect(page).toHaveURL(/#home$/);else await expect(mode(page)).toHaveAttribute('aria-busy','false');return res;
@@ -17,12 +20,18 @@ async function answer(page:Page,text='每本是一本的价格'){
 test.beforeEach(async({request})=>{expect((await request.post(`http://127.0.0.1:${api}/__h2/reset`,{headers:{'X-Xiaon-Test':'synthetic-h2-only'}})).ok()).toBeTruthy();});
 test('390宽：显式开始、五模块追问、暂停刷新续测、报告历史与月档案',async({page},info)=>{
  let starts=0;page.on('request',r=>{if(r.url().endsWith('/interview/start'))starts++;});await ready(page);expect(starts).toBe(0);
- await mode(page).getByRole('button',{name:'开始',exact:true}).click();await expect(mode(page).getByLabel('五模块进度').getByText('在这里')).toHaveCount(1);
- for(let i=0;i<4;i++)expect((await answer(page)).ok()).toBeTruthy();
- await expect(mode(page).locator('[aria-current="step"]')).toContainText('计算');
+ const map=mode(page).getByRole('group',{name:'五维地图'});await expect(map.getByRole('button')).toHaveCount(5);
+ await map.getByRole('button',{name:/理解花园/}).click();await expect(mode(page).getByRole('button',{name:'开始',exact:true})).toBeFocused();expect(starts).toBe(0);
+ await mode(page).getByRole('button',{name:'开始',exact:true}).click();await expect(mode(page).getByText('第 1 站 · 理解花园')).toBeVisible();await expect(mode(page).getByRole('textbox',{name:'我的回答'})).toBeVisible();
+ await mode(page).getByRole('button',{name:'← 回到地图'}).click();await expect(map.locator('[aria-current="step"]')).toContainText('理解花园在这里');await expect(map.locator('[data-state="waiting"]')).toHaveCount(4);await page.screenshot({path:info.outputPath('map-390.png'),fullPage:true});
+ for(let i=0;i<2;i++)expect((await answer(page)).ok()).toBeTruthy();
+ await expect(mode(page).getByRole('textbox')).toHaveCount(0);await expect(mode(page)).toContainText('理解花园点亮啦！下一站：逻辑小桥');await expect(map.locator('[data-state="done"]')).toContainText('理解花园');
+ await map.getByRole('button',{name:/空间山丘/}).click();await expect(mode(page)).toContainText('先去逻辑小桥');await expect(mode(page).getByRole('textbox')).toHaveCount(0);
+ for(let i=0;i<2;i++)expect((await answer(page)).ok()).toBeTruthy();
+ await expect(map.locator('[aria-current="step"]')).toContainText('计算');
  await mode(page).getByRole('button',{name:'先暂停',exact:true}).click();await expect(page).toHaveURL(/#home$/);await page.reload();
  await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'专业模式',exact:true}).click();await expect(mode(page).getByText('上次停在：计算')).toBeVisible();
- await mode(page).getByRole('button',{name:'继续测评'}).click();expect(starts).toBe(1);
+ await mode(page).getByRole('group',{name:'五维地图'}).locator('[aria-current="step"]').click();await expect(mode(page).getByText('第 3 站 · 计算工坊')).toBeVisible();expect(starts).toBe(1);
  const hintResponse=page.waitForResponse(r=>r.url().endsWith('/learning/hint'));await mode(page).getByRole('button',{name:'给一点小提示'}).click();const hint=await(await hintResponse).json();expect(hint.ok).toBe(true);await expect(mode(page)).toContainText(hint.data.hint);await expect(mode(page)).not.toContainText('undefined');
  await page.setViewportSize({width:390,height:420});const textbox=mode(page).getByRole('textbox',{name:'我的回答'});await textbox.fill('先写草稿');await textbox.focus();await expect(mode(page).getByRole('button',{name:'告诉小N'})).toBeInViewport();await page.screenshot({path:info.outputPath('composer-390x420.png')});await page.setViewportSize({width:390,height:844});
  for(let i=0;i<6;i++)expect((await answer(page,'先看条件，再说明理由')).ok()).toBeTruthy();
@@ -49,7 +58,7 @@ test('过期修订不丢草稿，失败不跳页；趋势断开仍能看小结',
  await mode(page).getByRole('button',{name:'开始',exact:true}).click();await expect(mode(page).getByRole('status')).toContainText('暂时没完成');await expect(page).toHaveURL(/#explore$/);await mode(page).getByRole('button',{name:'开始',exact:true}).click();
  let raw:Record<string,unknown>={};await page.route('**/api/learning/interview/answer',async route=>{raw=route.request().postDataJSON();await route.continue({postData:JSON.stringify({...raw,expectedRevision:999})});});
  const response=await answer(page,'这份草稿要保留');expect(response.status()).toBe(409);expect(raw.expectedRevision).toBe(1);expect(Object.keys(raw).sort()).toEqual(['expectedRevision','interviewId','operationId','text']);await expect(mode(page).getByRole('textbox')).toHaveValue('这份草稿要保留');
- await page.unroute('**/api/learning/interview/answer');await page.reload();await expect(mode(page).getByRole('textbox')).toHaveValue('这份草稿要保留');
+ await page.unroute('**/api/learning/interview/answer');await page.reload();await enter(page);await expect(mode(page).getByRole('textbox')).toHaveValue('这份草稿要保留');
  await page.route('**/api/learning/trend',route=>route.fulfill({status:501,json:{error:{message:'not_implemented'}}}));await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'成长',exact:true}).click();const archive=page.getByRole('region',{name:'成长档案'});await expect(archive).toContainText('等级趋势暂时还没接通');await expect(archive).toContainText('对话小结');await expect(archive).not.toContainText('not_implemented');
 });
 test('休息输入会暂停并回首页',async({page})=>{await ready(page);await mode(page).getByRole('button',{name:'开始',exact:true}).click();const res=await answer(page,'我想休息一下');expect((await res.json()).interview.status).toBe('paused');await expect(page).toHaveURL(/#home$/);});

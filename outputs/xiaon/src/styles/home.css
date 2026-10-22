@@ -42,13 +42,15 @@
 .professional button { min-height: 44px; white-space: normal; touch-action: manipulation; }
 .professional :is(textarea,select) { width: 100%; min-width: 0; font-size: 16px; }
 .professional :is(button,textarea,select,summary):focus-visible { outline: 3px solid #667d4f; outline-offset: 3px; }
-.professional-progress { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); list-style: none; padding: 0; gap: 5px; margin: 24px -8px; }
-.professional-progress li { display: flex; align-items: center; flex-direction: column; gap: 5px; text-align: center; font-size: 12px; }
-.professional-progress li > span { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid #c6cebc; border-radius: 50%; color: #59674f; }
-.professional-progress strong { font-size: 12px; font-weight: 600; }
-.professional-progress small { font-size: 10px; color: #65705e; }
-.professional-progress [data-state="done"] > span { background: #dce9cc; color: #354e28; }
-.professional-progress [data-state="current"] > span { background: #3e624c; color: white; outline: 3px solid #dce9cc; }
+.professional-map { margin: 18px -8px 14px; width: calc(100% + 16px); min-height: 440px; }
+.professional-map .map-node[data-state="waiting"] .node-icon { filter: grayscale(.9) opacity(.55); box-shadow: none; }
+.professional-map .map-node[data-state="waiting"] strong { color: #7d866f; }
+.professional-map .map-node[data-state="current"] .node-icon { outline: 3px solid #3e624c; outline-offset: 3px; animation: professional-glow 2.4s ease-in-out infinite; }
+.professional-map .map-node[data-state="current"] small { background: #3e624c; color: #fff; font-weight: 600; }
+.professional-map .map-node[data-state="done"] small { background: #dce9cc; color: #354e28; }
+@keyframes professional-glow { 50% { box-shadow: 0 0 0 9px #dce9cc99; } }
+@media (prefers-reduced-motion: reduce) { .professional-map .map-node[data-state="current"] .node-icon { animation: none; } }
+.professional-convo-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .professional-intro { padding: 4px 0 12px; }
 .professional-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border-block: 1px solid var(--line); padding: 12px 0; margin: 16px 0; }
 .professional-bubble { padding: 16px; border-radius: 16px 16px 16px 3px; background: #edf1e3; white-space: pre-wrap; }

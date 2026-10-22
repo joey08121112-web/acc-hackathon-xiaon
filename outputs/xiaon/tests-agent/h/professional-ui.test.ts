@@ -11,7 +11,7 @@ import type { LearningUI } from '../../src/agents/useLearning';
 import { ProfessionalModeView } from '../../src/components/professional/ProfessionalModeView';
 import { ProfessionalReportView } from '../../src/components/professional/ProfessionalReportView';
 const navigate=()=>{};
-test('entry explains time and order, requires an explicit start, and can pause',async()=>{
+test('entry explains time and order, requires an explicit start, shows the map, and can pause',async()=>{
  const f=temporaryRepository();try{
   const view=await installLearning(createRuntime(f)).view(),l={view,connected:true,busy:false} as LearningUI;
   const html=renderToStaticMarkup(createElement(ProfessionalModeView,{l,navigate,safety:false}));
@@ -19,6 +19,9 @@ test('entry explains time and order, requires an explicit start, and can pause',
   view.interviews=[{schemaVersion:'1.0.0',id:'interview-h',operationId:'start-h',revision:3,learningSessionId:'ls-h',moduleOrder:[...INTERVIEW_MODULE_ORDER],currentModule:'计算',completedModules:['理解','逻辑'],status:'paused',pending:null,startedAt:view.now,pausedAt:view.now,completedAt:null,updatedAt:view.now} satisfies InterviewSession];
   const paused=renderToStaticMarkup(createElement(ProfessionalModeView,{l,navigate,safety:false}));
   assert.match(paused,/上次停在：计算/);assert.match(paused,/继续测评/);
+  // 地图为主：走过的地点点亮，停下的地点标「在这里」，后面的待探索。
+  assert.match(paused,/aria-label="五维地图"/);
+  for(const [place,state] of [['理解花园','done'],['逻辑小桥','done'],['计算工坊','current'],['生活集市','waiting'],['空间山丘','waiting']])assert.match(paused,new RegExp(`data-state="${state}"[^>]*>(?:(?!</button>).)*${place}`),place);
  }finally{f.dispose();}
 });
 test('report shows all five fixed levels, raw quotes and comparisons, without numeric scoring',async()=>{

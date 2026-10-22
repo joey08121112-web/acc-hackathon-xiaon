@@ -5,7 +5,7 @@ import { dimensionDetails } from '../../data';
 import type { LearningUI } from '../../agents/useLearning';
 type View=NonNullable<LearningUI['view']>;
 function MarketIcon({size=20}:{size?:number}){return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M4 7h16l-1 14H5L4 7ZM8 7V5a4 4 0 018 0v2"/></svg>;}
-const icons=[Flower2,BookOpen,Plus,MarketIcon,Compass];
+export const icons=[Flower2,BookOpen,Plus,MarketIcon,Compass];
 /** Map labels summarize observed tasks; they never imply complete mastery of a dimension. */
 export function explorationStatus(view:View,dimension:string){
  const tasks=new Set(view.tasks.filter(t=>t.primaryDimension===dimension).map(t=>t.id));
