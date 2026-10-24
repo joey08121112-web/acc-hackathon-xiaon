@@ -1,5 +1,5 @@
 import { createServer,type IncomingMessage } from 'node:http';
-import { randomBytes,timingSafeEqual } from 'node:crypto';
+import { randomBytes,randomUUID,timingSafeEqual } from 'node:crypto';
 import { schemas,SCHEMA_VERSION,RECOGNIZE_MAX_IMAGE_BYTES } from '../../shared/learning-contracts';
 import type { LearningRuntime } from '../bootstrap';
 import { failure,RuntimeError } from '../core/errors';
@@ -76,7 +76,16 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
     if(asrInFlight||asrStarts.length>=20)throw new RuntimeError('invalid_state','语音识别请求太频繁，请稍后再试');
     asrStarts.push(now);asrInFlight=true;
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
-    try{send({text:await asr.transcribe(wav,c.signal)});}finally{asrInFlight=false;res.off('close',cancel);}
+    const requestId=randomUUID(),started=performance.now();res.setHeader('X-Xiaon-Voice-Request-Id',requestId);
+    // Metadata only: neither audio nor recognized text is written to logs.
+    console.info('[voice/asr]',JSON.stringify({requestId,stage:'received',bytes:wav.length}));
+    try{
+     const text=await asr.transcribe(wav,c.signal),ms=Math.round(performance.now()-started);
+     res.setHeader('Server-Timing',`asr;dur=${ms}`);send({text});
+     console.info('[voice/asr]',JSON.stringify({requestId,stage:'completed',ms,hasText:!!text.trim()}));
+    }catch(e){
+     console.info('[voice/asr]',JSON.stringify({requestId,stage:c.signal.aborted?'cancelled':'failed',ms:Math.round(performance.now()-started),code:e instanceof RuntimeError?e.code:'unknown'}));throw e;
+    }finally{asrInFlight=false;res.off('close',cancel);}
     return;
    }
    if(path==='/api/voice/tts'){

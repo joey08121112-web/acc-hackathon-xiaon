@@ -1,5 +1,5 @@
 /** 所有者：ChatGPT。首页综合模式与冻结契约组件的挂载位。 */
-import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowRight, AudioLines, Keyboard, Loader2, Volume2, VolumeX } from 'lucide-react';
 import type { LearningUI } from '../../agents/useLearning';
 import { apiRequest, newOperationId } from '../../agent-client';
@@ -9,6 +9,7 @@ import { SAFETY_PATTERN } from '../../../server/agents/stages';
 import { PetHero, useThinkingText } from './PetStage';
 import { useVoice } from '../../voice/voice';
 import { useMic } from '../../voice/mic';
+import { useVoiceConversation } from '../../voice/conversation';
 import { usePetReactions, type PetBusy } from '../../voice/pet';
 import { HomeChat } from './home/HomeChat';
 import { NeedsCheckCard } from './home/NeedsCheckCard';
@@ -26,7 +27,6 @@ const OPENER = '嗨，我是小N。今天过得怎么样？想跟我说说吗？
 const STALE_MS = 6 * 3600_000;
 // 输入栏像微信：左边切换语音/打字，记住上次用的那一种。
 const TALK_MODE_KEY = 'xiaon-talk-mode';
-const HOLD_MS = 450;
 const readTyping = () => { try { return localStorage.getItem(TALK_MODE_KEY) !== 'voice'; } catch { return true; } };
 const swallow = (p: Promise<unknown>) => { void p.catch(() => {}); };
 /** 首页一次只出一张选择卡。顺序：正在进行的学习片段最先，再处理这道题、问下一步，最后才是记住小事、提醒和学习片段入口。 */
@@ -41,7 +41,7 @@ const outranksMemory=(r:ChatReply)=>!withProgressCard(r)&&!!(r.problemDraft||r.p
 /** active=false: the home page is hidden but kept mounted (cards and pending replies survive); stay silent until the student comes back. */
 export function ChatPanel({ l, paused, safety, navigate, trace, active = true }: { l: LearningUI; paused: boolean; safety: boolean; navigate: (page: string, tab?: string) => void; trace: ReactNode; active?: boolean }) {
  const dev=useDevMode();
- const [message,setMessage]=useState(''),[reply,setReply]=useState<ChatReply|null>(null),[awaiting,setAwaiting]=useState(false),[typing,setTyping]=useState(readTyping),[holding,setHolding]=useState(false);
+ const [message,setMessage]=useState(''),[reply,setReply]=useState<ChatReply|null>(null),[awaiting,setAwaiting]=useState(false),[typing,setTyping]=useState(readTyping);
  const [greeting,setGreeting]=useState(OPENER),[notice,setNotice]=useState(''),[summary,setSummary]=useState<ConversationSummary|null>(null),[manualSuggestion,setManualSuggestion]=useState<ModeSuggestion|null>(null);
  const [needsSeen,setNeedsSeen]=useState(false),[keyboard,setKeyboard]=useState(false),[memoryDraft,setMemoryDraft]=useState<MemoryDraft|null>(null);
  const requestLock=useRef(false),sent=useRef(false),greetingAbort=useRef<AbortController|null>(null),composer=useRef<HTMLFormElement>(null),heldMemory=useRef<MemoryDraft|null>(null);
@@ -76,22 +76,25 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   return()=>{viewport?.removeEventListener('resize',resize);window.removeEventListener('focusout',resize);};
  },[]);
  const bubble=pet.line||(mic.phase==='listening'?mic.interim||'我在听，你慢慢说…':mic.phase==='transcribing'?'我听一听你说了什么…':mic.phase==='requesting'?'请允许使用麦克风…':awaiting?thinkingText:(summary??reply?.summary)?summaryBubbleText((summary??reply?.summary)!):reply?.text??greeting);
- const send=(raw:string,extra:{intent?:ChatIntent;problemId?:string}={})=>{
+ const send=(raw:string,extra:{intent?:ChatIntent;problemId?:string}={},voiceTurn=false)=>{
   const text=raw.trim();if(!text||l.busy||requestLock.current||!l.connected)return;
   requestLock.current=true;sent.current=true;greetingAbort.current?.abort();v.actions.unlock();v.actions.stop();
   // Ending a conversation is immutable. The next student turn starts a fresh history.
   const history=[...(shownSummary||latestTurn?.ended?[]:chat),{role:'user' as const,content:text}].slice(-20);
   l.update({chat:history,chatAt:Date.now()});setMessage('');setNotice('');setSummary(null);setManualSuggestion(null);setAwaiting(true);
   if(shownSummary||latestTurn?.ended)setNeedsSeen(false);
-  l.run<ChatReply>('learning/chat',HOME_FLOW?{history,flow:'home',...extra}:{history}).then(next=>{
+  return l.run<ChatReply>('learning/chat',HOME_FLOW?{history,flow:'home',...extra}:{history}).then(async next=>{
    setReply(next);if(next.summary)setSummary(next.summary);
    if(outranksMemory(next)){heldMemory.current=next.memoryDraft??heldMemory.current;setMemoryDraft(null);}
    else{setMemoryDraft(next.memoryDraft??heldMemory.current);heldMemory.current=null;}
    l.update({chat:[...history,{role:'assistant',content:next.text}],chatAt:Date.now()});
    if(next.suggestions.length&&!next.safety)l.choose(next.suggestions[0]);
-   if(v.enabled&&activeRef.current)void v.actions.speak(next.text);
-  }).catch(()=>setNotice('刚才没能收到回复，你的话还在。可以重新发送。')).finally(()=>{requestLock.current=false;setAwaiting(false);});
+   if(v.enabled&&activeRef.current&&(!voiceTurn||conversation.isRunning())){
+    if(voiceTurn)await v.actions.speak(next.text);else void v.actions.speak(next.text);
+   }
+  }).catch(()=>{if(voiceTurn)conversation.stop();setNotice('刚才没能收到回复，你的话还在。可以重新发送。');}).finally(()=>{requestLock.current=false;setAwaiting(false);});
  };
+ const conversation=useVoiceConversation({allowed:active&&!paused&&!blocked&&l.connected,busy:awaiting||l.busy,onText:text=>send(text,{},true),onNotice:setNotice});
  const chooseNeed=(intent:ChatIntent,label:string)=>{
   setNeedsSeen(true);
   if(intent==='formal_test'){send(label,{intent});setManualSuggestion({mode:'professional',reason:'你想做个正式测试。先了解一下，再决定要不要开始。'});return;}
@@ -104,7 +107,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  };
  const end=()=>{
   if(!sessionId||blocked||l.busy||requestLock.current||shownSummary)return;
-  requestLock.current=true;setAwaiting(true);setNotice('');v.actions.stop();mic.actions.cancel();
+  requestLock.current=true;setAwaiting(true);setNotice('');conversation.stop();
   if(activeLoop){
    l.run<{summary:string}>('learning/loop',{action:'leave',episodeId:activeLoop.episode.id,expectedRevision:activeLoop.episode.revision}).then(next=>{setReply(null);setNotice(next.summary);}).catch(()=>setNotice('这次的记录还在，可以重试结束。')).finally(()=>{requestLock.current=false;setAwaiting(false);});return;
   }
@@ -114,33 +117,21 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  };
  const pause=async()=>{
   if(l.busy||requestLock.current)return;
-  requestLock.current=true;setAwaiting(true);v.actions.stop();mic.actions.cancel();
+  requestLock.current=true;setAwaiting(true);conversation.stop();
   try{await l.pause();}finally{requestLock.current=false;setAwaiting(false);}
  };
  const onMic=()=>{
-  if(mic.phase==='idle'){v.actions.unlock();void mic.actions.start(text=>send(text),()=>pet.say('idle','retry'));}
-  else if(mic.phase==='listening')mic.actions.stop();else mic.actions.cancel();
- };
- // 按住说话、松开发送；轻点一下也行（再点一下结束），键盘回车/空格走 onClick。
- const pressedAt=useRef(0);
- const holdDown=(e:PointerEvent<HTMLButtonElement>)=>{
-  if(e.button!==0||(disabled&&mic.phase==='idle'))return;
-  e.currentTarget.setPointerCapture?.(e.pointerId);
-  pressedAt.current=mic.phase==='idle'?Date.now():0;setHolding(mic.phase==='idle');onMic();
- };
- const holdUp=()=>{
-  const held=pressedAt.current&&Date.now()-pressedAt.current>=HOLD_MS;
-  pressedAt.current=0;setHolding(false);
-  if(held&&mic.phase==='listening')mic.actions.stop();
+  if(conversation.running)conversation.stop();else conversation.start();
  };
  const setMode=(next:boolean)=>{
   setTyping(next);try{localStorage.setItem(TALK_MODE_KEY,next?'typing':'voice');}catch{/* remembering is optional */}
-  if(!next)mic.actions.cancel();
+  conversation.stop();
  };
  const disabled=l.busy||awaiting||!l.connected;
  const suggestion=manualSuggestion??reply?.modeSuggestion??null;
  const slot=blocked||shownSummary?null:pickHomeSlot({learningLoop:!!activeLoop?.episode.loop,loopEntry:false,problemDraft:!!reply?.problemDraft,progressCardDraft:!!reply?.progressCardDraft,askProblem:!!reply?.askProblem,needsCheck:!!reply?.needsCheck&&!needsSeen,modeSuggestion:!!suggestion,askStudy:!!reply?.askStudy&&!reply.safety&&!reply.summary,taskSuggestion:!!l.candidate&&!paused,memory:!!memoryDraft&&memoryEnabled,retest:!!l.view?.retestReminder,memoryOff:!memoryEnabled});
- const micLabel=mic.phase==='listening'?(holding?'松开 发送':'我在听，说完点一下'):mic.phase==='requesting'?'请允许使用麦克风':mic.phase==='transcribing'?'识别中…':disabled?'小N在想…':'按住 说话';
+ const micLabel=conversation.running?'结束语音对话':'开始语音对话';
+ const micStatus=mic.phase==='requesting'?'请允许使用麦克风…':mic.phase==='transcribing'?'正在识别…':awaiting?'小N正在想…':v.phase==='loading'?'正在准备回复…':v.phase==='playing'?'小N正在说…':mic.phase==='listening'?'我在听，说完停顿一下':'点一下开始，随时可结束';
  const showComposer=typing||mic.engine==='none';
  const note=mic.engine==='server'?'你的声音会发送到火山引擎豆包识别成文字，服务端不保存录音。':mic.engine==='browser'?'语音由浏览器自带的识别服务转成文字，可能由浏览器厂商处理。':'';
  return <div className={'home-chat'+(keyboard?' keyboard-open':'')} aria-busy={awaiting||l.busy}>
@@ -175,6 +166,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   {/* 输入栏固定在底部导航上面；语音去向只在请求麦克风那一刻说明，平时不占地方 */}
   <div className="talk-dock">
    {mic.phase==='requesting'&&note&&<p className="talk-dock-line">{note}</p>}
+   {!showComposer&&<p className="talk-dock-line" role="status">{conversation.running?micStatus:'点一下开始连续对话，再点一下结束'}</p>}
    {(mic.error||v.error)&&<p className="talk-dock-line" role="status">{mic.error||v.error}</p>}
    {v.phase==='playing'&&<p className="talk-dock-line"><button type="button" className="text-button" onClick={()=>v.actions.stop()}>停止朗读</button></p>}
    {/* 点栏里的按钮不抢输入框的焦点：键盘不收起，输入栏也不会在按下和松开之间跳位置 */}
@@ -183,8 +175,8 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
     {showComposer?<>
      <textarea className="talk-input" aria-label="对小N说" rows={1} value={message} maxLength={2000} onChange={e=>setMessage(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();e.currentTarget.form?.requestSubmit();}}} placeholder={shownSummary?'想接着聊，随时告诉我…':'想说什么，慢慢说…'} enterKeyHint="send"/>
      {message.trim()&&<button className="talk-send" disabled={disabled}>发送</button>}
-    </>:<button type="button" className="talk-hold" data-phase={mic.phase} data-holding={holding||undefined} disabled={disabled&&mic.phase==='idle'} aria-label={micLabel} onPointerDown={holdDown} onPointerUp={holdUp} onPointerCancel={holdUp} onClick={e=>{if(e.detail===0)onMic();}} onContextMenu={e=>e.preventDefault()}>{mic.phase==='transcribing'||mic.phase==='requesting'?<Loader2 size={18} className="spin"/>:null}<span role="status">{micLabel}</span></button>}
-    {v.available&&<button type="button" className="talk-icon" aria-pressed={v.enabled} aria-label={v.enabled?'声音：开':'声音：关'} title={v.enabled?'小N的回复会读出来（由火山引擎豆包合成语音）':'小N的回复不读出来'} onClick={()=>{v.actions.unlock();v.actions.setEnabled(!v.enabled);}}>{v.enabled?<Volume2 size={22}/>:<VolumeX size={22}/>}</button>}
+    </>:<button type="button" className="talk-hold" data-phase={mic.phase} aria-pressed={conversation.running} disabled={!conversation.running&&(disabled||paused||blocked)} aria-label={micLabel} onClick={onMic}><span>{micLabel}</span>{conversation.running&&(mic.phase==='transcribing'||mic.phase==='requesting'||awaiting||v.phase==='loading')?<Loader2 size={18} className="spin"/>:null}</button>}
+    {v.available&&<button type="button" className="talk-icon" aria-pressed={v.enabled} aria-label={v.enabled?'声音：开':'声音：关'} title={v.enabled?'小N的回复会读出来（由火山引擎豆包合成语音）':'小N的回复不读出来'} onClick={()=>{v.actions.unlock();if(v.enabled&&conversation.running)conversation.stop();v.actions.setEnabled(!v.enabled);}}>{v.enabled?<Volume2 size={22}/>:<VolumeX size={22}/>}</button>}
    </form>
   </div>
  </div>;

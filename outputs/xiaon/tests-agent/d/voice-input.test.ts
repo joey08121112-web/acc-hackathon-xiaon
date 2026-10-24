@@ -87,6 +87,8 @@ test('/api/voice/asr needs a session + CSRF, accepts only a base64 WAV, and heal
   assert.equal((await post({audio:wav,language:'en'})).status,400);assert.equal((await post({audio:'not base64!!'})).status,400);assert.equal((await post({audio:Buffer.from('plain text, not audio, but long enough to pass a size check....').toString('base64')})).status,400);
   assert.equal(heard.length,0,'nothing invalid reached the vendor');
   const good=await post({audio:wav});assert.equal(good.status,200);assert.deepEqual(await good.json(),{text:'我听到了'});assert.equal(heard.length,1);assert.deepEqual(heard[0],Buffer.from(wav,'base64'));
+  assert.match(good.headers.get('x-xiaon-voice-request-id')??'',/^[a-f0-9-]{36}$/);
+  assert.match(good.headers.get('server-timing')??'',/^asr;dur=\d+/);
   const huge=await post({audio:Buffer.alloc(1_700_000,1).toString('base64')});assert.equal(huge.status,400);
  }finally{server.closeAllConnections();await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}
  const g=temporaryRepository(),q=createRuntime(g);installLearning(q);const off=createHttpServer(q,{host:`127.0.0.1:${port2}`,allowedOrigins:[origin],asr:new NoAsr()});await new Promise<void>(resolve=>off.listen(port2,'127.0.0.1',resolve));

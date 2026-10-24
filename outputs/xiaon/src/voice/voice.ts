@@ -47,7 +47,7 @@ export const voice = {
   const a = player();
   if (a.paused && !a.src) { a.src = SILENT; a.play().then(() => { if (a.src === SILENT) a.pause(); }).catch(() => { unlocked = false; }); }
  },
- stop() { generation++; controller?.abort(); controller = null; kind = null; if (audio) audio.pause(); release(); set({ phase: 'idle' }); },
+ stop() { generation++; controller?.abort(); controller = null; kind = null; if (audio) audio.pause(); release(); set({ phase: 'idle', error: '' }); },
  setEnabled(on: boolean) { try { localStorage.setItem(KEY, String(on)); } catch { /* storage unavailable */ } set({ enabled: on }); if (!on) voice.stop(); },
  /** A fixed pre-recorded line, instant (no network synthesis). */
  playClip(target: ClipGroup | string) {
