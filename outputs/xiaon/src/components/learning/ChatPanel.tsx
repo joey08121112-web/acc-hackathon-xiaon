@@ -139,7 +139,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  };
  const disabled=l.busy||awaiting||!l.connected;
  const suggestion=manualSuggestion??reply?.modeSuggestion??null;
- const slot=blocked||shownSummary?null:pickHomeSlot({learningLoop:!!activeLoop?.episode.loop,loopEntry:l.connected,problemDraft:!!reply?.problemDraft,progressCardDraft:!!reply?.progressCardDraft,askProblem:!!reply?.askProblem,needsCheck:!!reply?.needsCheck&&!needsSeen,modeSuggestion:!!suggestion,askStudy:!!reply?.askStudy&&!reply.safety&&!reply.summary,taskSuggestion:!!l.candidate&&!paused,memory:!!memoryDraft&&memoryEnabled,retest:!!l.view?.retestReminder,memoryOff:!memoryEnabled});
+ const slot=blocked||shownSummary?null:pickHomeSlot({learningLoop:!!activeLoop?.episode.loop,loopEntry:false,problemDraft:!!reply?.problemDraft,progressCardDraft:!!reply?.progressCardDraft,askProblem:!!reply?.askProblem,needsCheck:!!reply?.needsCheck&&!needsSeen,modeSuggestion:!!suggestion,askStudy:!!reply?.askStudy&&!reply.safety&&!reply.summary,taskSuggestion:!!l.candidate&&!paused,memory:!!memoryDraft&&memoryEnabled,retest:!!l.view?.retestReminder,memoryOff:!memoryEnabled});
  const micLabel=mic.phase==='listening'?(holding?'松开 发送':'我在听，说完点一下'):mic.phase==='requesting'?'请允许使用麦克风':mic.phase==='transcribing'?'识别中…':disabled?'小N在想…':'按住 说话';
  const showComposer=typing||mic.engine==='none';
  const note=mic.engine==='server'?'你的声音会发送到火山引擎豆包识别成文字，服务端不保存录音。':mic.engine==='browser'?'语音由浏览器自带的识别服务转成文字，可能由浏览器厂商处理。':'';
@@ -157,7 +157,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
    {slot==='askStudy'&&<HomeChat l={l} reply={reply} send={send} navigate={navigate}/>}
    <fieldset className="home-mode-actions" disabled={disabled}><ModeSwitchCard key={`${sessionId}-${manualSuggestion?'manual':reply?.modeSuggestion?.reason}`} suggestion={slot==='modeSwitch'?suggestion:null} navigate={startProfessional}/></fieldset>
    <div className="home-slots">
-    {(slot==='learningLoop'||slot==='loopEntry')&&<LearningLoopCard l={l} blocked={blocked} navigate={navigate}/>}
+    {slot==='learningLoop'&&<LearningLoopCard l={l} blocked={blocked} navigate={navigate}/>}
     <ProblemCapture open={slot==='problemCapture'} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
     <ProblemConfirmCard draft={slot==='problemConfirm'?reply?.problemDraft??null:null} sessionId={sessionId} l={l} navigate={navigate} onConfirmed={problem=>send('就看这道题吧',{intent:'start_together',problemId:problem.id})}/>
     <ProgressCardView draft={slot==='progressCard'?reply?.progressCardDraft??null:null} sessionId={sessionId} memoryEnabled={memoryEnabled} l={l} navigate={navigate}/>
