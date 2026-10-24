@@ -13,7 +13,8 @@ export interface RevampContext extends EngineContext {
 }
 /** Program check inputs for model-proposed fields. studentTexts are this chat session's student messages (verbatim). */
 export interface FieldCheck { sessionId:string;stage:ChatStage;studentTexts:string[] }
-export interface ObservationCheck extends FieldCheck { probeAllowed:boolean;existing:ChatObservation[] }
+/** lifeScene=true：生活话题场景的回答轮（companion 阶段）同样允许观察；其余门不变。 */
+export interface ObservationCheck extends FieldCheck { probeAllowed:boolean;lifeScene?:boolean;existing:ChatObservation[] }
 export interface MemoryDraftCheck extends FieldCheck { memoryEnabled:boolean;origin:'chat'|'progress_card' }
 export interface ProgressDraftInput { sessionId:string;episode:LearningEpisode|null;studentTexts:string[];candidate:unknown }
 export interface EndConversationInput { operationId:string;sessionId:string;trigger:'student_end'|'farewell';history:ChatMessage[] }

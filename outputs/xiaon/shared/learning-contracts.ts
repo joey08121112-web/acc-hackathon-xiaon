@@ -119,7 +119,10 @@ const MemoryOffer = z.strictObject({...base,...operation,sessionId:id,turn:versi
 const Greeting = z.strictObject({text:z.string().min(1).max(300),memoryId:id.nullable(),summaryId:id.nullable(),memoryOff:z.boolean()});
 // What the model may output in an allowed probe turn; the program adds id/session/status/time.
 const ObservationDraft = z.strictObject({dimension:z.enum(['理解','逻辑']),signal:z.enum(['clear','partial','confused']),quote:shortText,note:shortText});
-const ChatObservation = z.strictObject({...base,...ObservationDraft.shape,sessionId:id,status:z.literal('unverified'),at:utc});
+// sceneId: null = 学习话题观察（probe）；'gugong' 等生活场景 id = 生活话题观察。default(null) 让旧的 parse 调用不必改。
+const ChatObservation = z.strictObject({...base,...ObservationDraft.shape,sceneId:id.nullable().default(null),sessionId:id,status:z.literal('unverified'),at:utc});
+// 生活话题观察（2026-10-24）：一次场景 = companion 轮触发开始，逐问推进，done/aborted 终态。追加式，每步一条新记录。
+const LifeSceneState = z.strictObject({...base,...operation,sessionId:id,sceneId:id,step:z.number().int().nonnegative(),status:z.enum(['active','done','aborted']),at:utc});
 const ConversationSummary = z.strictObject({...base,...operation,sessionId:id,trigger:z.enum(['student_end','farewell']),topics:z.array(z.string().min(1).max(100)).max(5),observationIds:ids,comparedWithSummaryId:id.nullable(),changes:z.array(shortText).max(5),planSuggestions:z.array(z.string().min(1).max(100)).min(1).max(3),suggestProfessionalMode:z.boolean(),progressCardId:id.nullable(),mode:z.enum(['model','local_rules']),createdAt:utc});
 // One home-flow turn as decided by the stage machine. No student text is stored. dropped = fields the program discarded.
 const ChatTurn = z.strictObject({...base,...operation,sessionId:id,turn:version,stage:ChatStage,intent:chatIntent.nullable(),problemId:id.nullable(),episodeId:id.nullable(),
@@ -231,7 +234,7 @@ export const schemas = {
   ToolArguments:tools,
   // G0 首页改版
   ModeSuggestion,ProblemDraft,ProblemRecord,ProblemSecret,LearningEpisode,ProgressCardDraft,ProgressCard,MemoryDraft,MemoryMention,MemoryOffer,Greeting,
-  ObservationDraft,ChatObservation,ConversationSummary,ChatTurn,ChatReply,RecognizeResult,
+  ObservationDraft,ChatObservation,ConversationSummary,ChatTurn,ChatReply,RecognizeResult,LifeSceneState,
   ConfirmProblem:z.strictObject({...operation,sessionId:id.nullable(),draft:ProblemDraft,referenceAnswer:z.string().min(1).max(500).nullable()}),
   Recognize:z.strictObject({...operation,sessionId:id.nullable(),mimeType:z.literal('image/jpeg'),image:z.string().min(4).max(RECOGNIZE_MAX_BASE64).regex(/^[A-Za-z0-9+/]+={0,2}$/),maskConfirmed:z.literal(true)}),
   ConfirmProgressCard:z.strictObject({...operation,sessionId:id,episodeId:id.nullable(),aiDraft:ProgressCardDraft.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable(),confidence:confidence.nullable()}),
@@ -301,6 +304,7 @@ export type MemoryOffer = z.infer<typeof MemoryOffer>;
 export type Greeting = z.infer<typeof Greeting>;
 export type ObservationDraft = z.infer<typeof ObservationDraft>;
 export type ChatObservation = z.infer<typeof ChatObservation>;
+export type LifeSceneState = z.infer<typeof LifeSceneState>;
 export type ConversationSummary = z.infer<typeof ConversationSummary>;
 export type ChatTurn = z.infer<typeof ChatTurn>;
 export type ChatReply = z.infer<typeof ChatReply>;
@@ -349,6 +353,8 @@ export interface EntityMap {
   /** G0 首页改版. problemSecrets never leaves the server; observations/summaries are learning records independent of the memory switch. All cleared by reset. */
   problems:ProblemRecord; problemSecrets:ProblemSecret; episodes:LearningEpisode; progressCards:ProgressCard; memoryMentions:MemoryMention; memoryOffers:MemoryOffer;
   observations:ChatObservation; summaries:ConversationSummary; chatTurns:ChatTurn;
+  /** 生活话题观察（2026-10-24）：场景推进记录。学习记录，不受记忆开关影响，重置演示时清除。 */
+  lifeScenes:LifeSceneState;
   /** G2 第二期. Necessary learning records independent of the memory switch; cleared by reset. interviews/monthStages are revisioned (key id:r<revision>).
    * TrendPoint is derived from professionalReports and has no collection. */
   interviews:InterviewSession; interviewTurns:InterviewTurn; professionalReports:ProfessionalReport; monthStages:MonthStage;

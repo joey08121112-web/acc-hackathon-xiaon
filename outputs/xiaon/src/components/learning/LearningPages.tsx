@@ -60,7 +60,7 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false,s
  </section>}
  {v.summaries.length>0&&<section className="info-paper conversation-summaries"><h2>对话小结</h2><p className="small muted">聊天观察，待专业模式确认，不是评分。</p>
   {[...v.summaries].reverse().map(s=><details key={s.id}><summary>{date(s.createdAt)} · {s.topics.join('、')||'聊了聊'}</summary>
-   {s.observationIds.map(oid=>v.observations.find(o=>o.id===oid)).flatMap(o=>o?[o]:[]).map(o=><p key={o.id}><span className="tag">{o.dimension} · 待核实</span>「{o.quote}」{o.note}</p>)}
+   {s.observationIds.map(oid=>v.observations.find(o=>o.id===oid)).flatMap(o=>o?[o]:[]).map(o=><p key={o.id}><span className="tag">{o.dimension} · {o.sceneId?'生活话题 · ':''}待核实</span>「{o.quote}」{o.note}</p>)}
    {s.changes.length>0&&<><h3>和上次比</h3>{s.changes.map((c,i)=><p key={i}>{c}</p>)}</>}
    <h3>可以试试</h3>{s.planSuggestions.map((c,i)=><p key={i}>{c}</p>)}
   </details>)}

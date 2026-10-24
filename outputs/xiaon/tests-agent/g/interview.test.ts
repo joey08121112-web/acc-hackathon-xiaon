@@ -45,7 +45,7 @@ test('order is fixed: 理解 then 逻辑 then 计算 → 建模 → 空间想象
  const t=setup();try{
   let step=await t.d.interviewStart({operationId:id()});
   assert.equal(step.interview!.currentModule,'理解');assert.equal(step.interview!.pending!.kind,'question');assert.ok(step.task&&!('answer' in step.task));
-  assert.equal(step.interview!.pending!.mode,'local_rules');assert.match(step.interview!.pending!.prompt,/比 x 的 2 倍少 3/,'local rules: fixed lead + the catalog question');
+  assert.equal(step.interview!.pending!.mode,'local_rules');assert.match(step.interview!.pending!.prompt,/2 倍少 3/,'local rules: fixed lead + the catalog question');
   assert.equal(t.r.events.sessions().find(s=>s.id===step.interview!.learningSessionId)!.mode,'exploration');
   await assert.rejects(t.report(step),/理解和逻辑/);
   const seen:string[]=[];
@@ -126,7 +126,7 @@ test('rest words pause; safety words store nothing and leave the interview as it
 test('report: comparison cites only real observations; a second interview compares with the last report; a re-report supersedes',async()=>{
  const t=setup();try{
   const at=t.clock.now();
-  for(const [oid,dimension,signal] of [['obs-u','理解','partial'],['obs-l','逻辑','clear']] as const)t.r.repository.append('observations',{schemaVersion:SCHEMA_VERSION,id:oid,sessionId:'chat-1',dimension,signal,quote:'这句话的条件是哪几个',note:'合成',status:'unverified',at});
+  for(const [oid,dimension,signal] of [['obs-u','理解','partial'],['obs-l','逻辑','clear']] as const)t.r.repository.append('observations',{schemaVersion:SCHEMA_VERSION,id:oid,sessionId:'chat-1',dimension,signal,quote:'这句话的条件是哪几个',note:'合成',sceneId:null,status:'unverified',at});
   let step=await t.d.interviewStart({operationId:id()});step=await t.pass(step,{wrong:true});step=await t.pass(step,{wrong:true});step=await t.pass(step);
   const first=await t.report(step);
   assert.deepEqual(first.observationChecks,[{observationId:'obs-u',dimension:'理解',result:'confirmed'},{observationId:'obs-l',dimension:'逻辑',result:'not_seen'}],'理解: struggling seen in chat and here; 逻辑: clear in chat, only partial here');
@@ -165,7 +165,7 @@ class Script implements ModelProvider {
 test('with a model: questions are phrased by the model, the program keeps the level, a stated reason makes 理解 good',async()=>{
  const p=new Script(),t=setup(p);try{
   let step=await t.d.interviewStart({operationId:id()});
-  assert.equal(step.interview!.pending!.mode,'model');assert.match(step.interview!.pending!.prompt,/^来闯这一关吧/);assert.match(step.interview!.pending!.prompt,/比 x 的 2 倍少 3/,'the catalog question itself is never rewritten');
+  assert.equal(step.interview!.pending!.mode,'model');assert.match(step.interview!.pending!.prompt,/^来闯这一关吧/);assert.match(step.interview!.pending!.prompt,/2 倍少 3/,'the catalog question itself is never rewritten');
   step=await t.pass(step);step=await t.pass(step);
   const rep=await t.report(step);
   assert.deepEqual([level(rep,'理解').level,level(rep,'理解').basis],['good','correct_with_reason'],'the model tried needs_work; the program basis wins');

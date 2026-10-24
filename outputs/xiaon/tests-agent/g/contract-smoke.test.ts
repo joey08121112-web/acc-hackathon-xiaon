@@ -12,7 +12,7 @@ const at='2026-10-21T08:00:00.000Z';
 test('G0 Claude-lane schemas parse synthetic records and reject extra or out-of-scope fields',()=>{
  const card={schemaVersion:SCHEMA_VERSION,id:'card-1',operationId:'op-card-1',sessionId:'chat-1',episodeId:null,aiDraft:{episodeId:null,breakthrough:'先把括号前的负号看清楚',method:null,nextTry:null},breakthrough:'我看清了负号',method:null,nextTry:null,skipped:['method','nextTry'],confidence:'more_sure',confirmedAt:at};
  assert.ok(schemas.ProgressCard.safeParse(card).success);assert.equal(schemas.ProgressCard.safeParse({...card,score:90}).success,false);
- const obs={schemaVersion:SCHEMA_VERSION,id:'obs-1',sessionId:'chat-1',dimension:'理解',signal:'partial',quote:'负号管后面所有的项吗',note:'合成观察',status:'unverified',at};
+ const obs={schemaVersion:SCHEMA_VERSION,id:'obs-1',sessionId:'chat-1',dimension:'理解',signal:'partial',quote:'负号管后面所有的项吗',note:'合成观察',sceneId:null,status:'unverified',at};
  assert.ok(schemas.ChatObservation.safeParse(obs).success);
  assert.equal(schemas.ChatObservation.safeParse({...obs,dimension:'计算'}).success,false,'only 理解/逻辑 are observed in chat');
  assert.equal(schemas.ChatObservation.safeParse({...obs,status:'verified'}).success,false);

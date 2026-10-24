@@ -12,6 +12,7 @@ import { REFLECT_PROMPT,PROGRESS_CARD_FIELD } from './prompts/reflect';
 import { OBSERVE_PROMPT,OBSERVE_ANSWER_PROMPT } from './prompts/observe';
 import { PROBLEM_DRAFT_PROMPT } from './prompts/problem-draft';
 import { MEMORY_DRAFT_PROMPT } from './prompts/memory-draft';
+import { lifeAskBlock,lifeObserveBlock,type LifeSceneObserve } from '../plugins/life-scenes';
 import { containsAnswer,fitReply,replyLength } from './stages';
 const REPLY_REWRITE='上一条回复的message超过'+TUTOR_REPLY_MAX_CHARS+'字。请保持原意改写到'+TUTOR_REPLY_MAX_CHARS+'字以内、最多2句，其他字段不变，仍只输出JSON。';
 const JSON_REPAIR='上一条回复不是严格JSON。请把刚才想说的话放进message重新输出，只输出严格JSON {"message":"...","taskIds":[]}，不要任何其他文字。';
@@ -78,12 +79,17 @@ export const TOOLLESS_HOME_STAGES:ReadonlySet<ChatStage>=new Set(['listen','comp
 /** G0 home-flow Tutor prompt. The stage machine decides stage and allowed fields; the model only sees the blocks it may use this turn. */
 /** answerTurn: observation is allowed only to record the answer to last turn's probe (OBSERVE_ANSWER_PROMPT instead of OBSERVE_PROMPT). */
 /** growth: the program passes professional-mode background this turn (see GROWTH_BLOCK). */
-export function homeTutorPrompt(decision:{stage:ChatStage;allowed:StageField[];answerTurn?:boolean;growth?:boolean}){
+/** life: the program matched a life-topic scene this turn — ask the authored question, or (observe) judge the answer by the authored rubric. */
+export function homeTutorPrompt(decision:{stage:ChatStage;allowed:StageField[];answerTurn?:boolean;growth?:boolean;life?:{ask:string|null;observe:LifeSceneObserve|null}}){
  const extra=decision.allowed.length?'，可以另外输出这些字段（没有就不输出）：'+decision.allowed.join('、'):'';
  const rule8='8. 输出严格JSON {"message":"...","taskIds":[]}'+extra+'。没列出的字段不要输出，不要任何其他文字。';
  const field=(f:StageField)=>f==='observation'&&decision.answerTurn?OBSERVE_ANSWER_PROMPT.text:FIELD_BLOCK[f];
- const blocks=[tutorBase(RULE6[decision.stage],rule8),STAGE_BLOCK[decision.stage],...(decision.growth?[GROWTH_BLOCK]:[]),...decision.allowed.flatMap(f=>field(f)?[field(f)!]:[])];
- return {version:'tutor-g0-'+decision.stage+(decision.allowed.includes('observation')?decision.answerTurn?'-observe-answer':'-observe':'')+(decision.growth?'-growth':''),text:blocks.filter(Boolean).join('\n')};
+ const life=decision.life;
+ const lifeOn=!!(life&&(life.ask||life.observe));
+ const blocks=[tutorBase(RULE6[decision.stage],rule8),STAGE_BLOCK[decision.stage],...(decision.growth?[GROWTH_BLOCK]:[]),
+  ...(life?.ask?[lifeAskBlock(life.ask)]:[]),...(life?.observe?[lifeObserveBlock(life.observe,life.ask)]:[]),
+  ...decision.allowed.flatMap(f=>field(f)?[field(f)!]:[])];
+ return {version:'tutor-g0-'+decision.stage+(lifeOn?'-life':'')+(decision.allowed.includes('observation')?decision.answerTurn?'-observe-answer':'-observe':'')+(decision.growth?'-growth':''),text:blocks.filter(Boolean).join('\n')};
 }
 export const PROMPTS={
  tutor:{version:'tutor-d3',text:TUTOR_BASE},

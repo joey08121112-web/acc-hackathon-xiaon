@@ -12,6 +12,7 @@ import { useMic } from '../../voice/mic';
 import { useVoiceConversation } from '../../voice/conversation';
 import { usePetReactions, type PetBusy } from '../../voice/pet';
 import { HomeChat } from './home/HomeChat';
+import { ChatHistory } from './home/ChatHistory';
 import { NeedsCheckCard } from './home/NeedsCheckCard';
 import { ModeSwitchCard } from './home/ModeSwitchCard';
 import { ConversationSummaryView, summaryBubbleText } from './home/ConversationSummaryView';
@@ -158,6 +159,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
   {/* 记忆已关是如实告知的一行状态，不是选择卡：首页空闲时（只剩学习片段入口）照样显示 */}
   {(slot==='memoryOff'||slot==='loopEntry')&&<MemoryOffNotice memoryEnabled={memoryEnabled} where="home" navigate={navigate}/>}
   <ConversationSummaryView key={`${shownSummary?.id}`} summary={blocked?null:shownSummary} l={l} navigate={startProfessional}/>
+  <ChatHistory l={l} navigate={navigate} excludeSummaryId={shownSummary?.id??null}/>
   <div className="home-composer-wrap">
    <div className="home-card-actions"><button className="secondary" disabled={disabled||blocked||!sessionId||!!shownSummary} onClick={end}>今天先聊到这</button><button className="text-button" disabled={disabled} onClick={()=>void pause()}>今天先休息</button></div>
   </div>

@@ -84,7 +84,7 @@ export function structureKey(items:Item[]):string{
  return JSON.stringify(keyed.sort());
 }
 export const fingerprint=(knowledgePointId:string,items:Item[])=>createHash('sha256').update(knowledgePointId+'|'+structureKey(items)).digest('hex');
-/** Extract the expression of a bank question such as "化简：7a − (3a − 2)。…"; null when not this form. */
+/** Extract the expression of a bank question such as "…故事…，请化简：7a − (3a − 2)。…"; null when not this form. */
 export function questionExpression(question:string):string|null{
- const m=question.match(/^化简：([^。]+)/);return m?m[1].trim():null;
+ const m=question.match(/化简：([^。]+)/);return m?m[1].trim():null;
 }

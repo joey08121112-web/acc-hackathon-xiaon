@@ -34,7 +34,7 @@ test('G2 interview and report schemas: fixed module order, four levels, 「本�
 });
 
 test('report gate: levels follow the program basis, untested stays untested, citations must exist',()=>{
- const facts={interview:interview({completedModules:['理解','逻辑'],currentModule:'计算'}),observations:[{schemaVersion:SCHEMA_VERSION,id:'obs-1',sessionId:'chat-1',dimension:'理解' as const,signal:'partial' as const,quote:'条件是哪几个',note:'合成',status:'unverified' as const,at}],
+ const facts={interview:interview({completedModules:['理解','逻辑'],currentModule:'计算'}),observations:[{schemaVersion:SCHEMA_VERSION,id:'obs-1',sessionId:'chat-1',dimension:'理解' as const,signal:'partial' as const,quote:'条件是哪几个',note:'合成',sceneId:null,status:'unverified' as const,at}],
   reportIds:new Set<string>(),supersedes:null,attemptIds:new Set(['att-1','att-2']),evidenceIds:new Set(['ev-1']),turnIds:new Set(['turn-1'])};
  assert.deepEqual(reportProblems(report(),facts),[]);
  const modules=report().modules;

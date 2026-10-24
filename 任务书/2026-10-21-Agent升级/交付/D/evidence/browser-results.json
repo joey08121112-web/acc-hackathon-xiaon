@@ -104,7 +104,7 @@
       "specs": [
         {
           "title": "student choice → attempts → evidence → report/plan → later reviews → state/history, refresh and screenshots",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -117,28 +117,55 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3341,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45051,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=()=>new URL(test.info().project.use.baseURL!).port==='5196'?'18936':process.env.XIAON_D_API_PORT??'18931';\n   7 | const control=async(page:Page,path:string)=>(await page.request.get(`http://127.0.0.1:${api()}/__test/${path}`,{headers:{'X-Xiaon-Test':'synthetic-d-only'}})).json();\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | const tab=async(page:Page,name:string)=>page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name,exact:true}).click();\n  10 | async function select(page:Page,title:string){\n  11 |  const places:Record<string,string>={'去括号负号处理':'计算工坊','一次费用与随数量变化费用':'生活集市','合并同类项':'计算工坊'};\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:26:74"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:46:48.956Z",
+                  "startTime": "2026-10-24T07:46:55.225Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-student-choice-→-a-73d62-ory-refresh-and-screenshots/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-student-choice-→-a-73d62-ory-refresh-and-screenshots/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "fbeac1b2decfba2c3acd-0df829cd9393361be1e6",
           "file": "browser.spec.ts",
-          "line": 16,
+          "line": 25,
           "column": 1
         },
         {
           "title": "optional memory changes are checked in the next actual synthetic-provider outbound context; pause and reset survive refresh",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -149,30 +176,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2801,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45049,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=()=>new URL(test.info().project.use.baseURL!).port==='5196'?'18936':process.env.XIAON_D_API_PORT??'18931';\n   7 | const control=async(page:Page,path:string)=>(await page.request.get(`http://127.0.0.1:${api()}/__test/${path}`,{headers:{'X-Xiaon-Test':'synthetic-d-only'}})).json();\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | const tab=async(page:Page,name:string)=>page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name,exact:true}).click();\n  10 | async function select(page:Page,title:string){\n  11 |  const places:Record<string,string>={'去括号负号处理':'计算工坊','一次费用与随数量变化费用':'生活集市','合并同类项':'计算工坊'};\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:39:2"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:46:52.471Z",
+                  "startTime": "2026-10-24T07:47:40.667Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-optional-memory-ch-82e4e-e-and-reset-survive-refresh/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-optional-memory-ch-82e4e-e-and-reset-survive-refresh/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "fbeac1b2decfba2c3acd-4c4f4f8c83e79602b50c",
           "file": "browser.spec.ts",
-          "line": 29,
+          "line": 38,
           "column": 1
         },
         {
           "title": "browser legacy import backs up, previews, deduplicates and keeps unknown dates; 320/390/430 pages fit",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -183,30 +237,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1934,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45059,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=()=>new URL(test.info().project.use.baseURL!).port==='5196'?'18936':process.env.XIAON_D_API_PORT??'18931';\n   7 | const control=async(page:Page,path:string)=>(await page.request.get(`http://127.0.0.1:${api()}/__test/${path}`,{headers:{'X-Xiaon-Test':'synthetic-d-only'}})).json();\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | const tab=async(page:Page,name:string)=>page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name,exact:true}).click();\n  10 | async function select(page:Page,title:string){\n  11 |  const places:Record<string,string>={'去括号负号处理':'计算工坊','一次费用与随数量变化费用':'生活集市','合并同类项':'计算工坊'};\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:50:2"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:46:55.278Z",
+                  "startTime": "2026-10-24T07:48:26.038Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-browser-legacy-imp-e24a1-dates-320-390-430-pages-fit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-browser-legacy-imp-e24a1-dates-320-390-430-pages-fit/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "fbeac1b2decfba2c3acd-1862011765bd5174a071",
           "file": "browser.spec.ts",
-          "line": 40,
+          "line": 49,
           "column": 1
         },
         {
           "title": "network retry, model timeout, explicit reanalysis and cancelled late response preserve one saved attempt and draft",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -217,30 +298,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 3,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3135,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45047,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=()=>new URL(test.info().project.use.baseURL!).port==='5196'?'18936':process.env.XIAON_D_API_PORT??'18931';\n   7 | const control=async(page:Page,path:string)=>(await page.request.get(`http://127.0.0.1:${api()}/__test/${path}`,{headers:{'X-Xiaon-Test':'synthetic-d-only'}})).json();\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | const tab=async(page:Page,name:string)=>page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name,exact:true}).click();\n  10 | async function select(page:Page,title:string){\n  11 |  const places:Record<string,string>={'去括号负号处理':'计算工坊','一次费用与随数量变化费用':'生活集市','合并同类项':'计算工坊'};\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:56:2"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:46:57.216Z",
+                  "startTime": "2026-10-24T07:49:11.405Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-network-retry-mode-0d99e-one-saved-attempt-and-draft/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-network-retry-mode-0d99e-one-saved-attempt-and-draft/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "fbeac1b2decfba2c3acd-45dd6cfb3877d5d870bd",
           "file": "browser.spec.ts",
-          "line": 46,
+          "line": 55,
           "column": 1
         },
         {
           "title": "connected main pages retain automated accessibility and reduced-motion support",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -251,25 +359,52 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 4,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1346,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45034,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=()=>new URL(test.info().project.use.baseURL!).port==='5196'?'18936':process.env.XIAON_D_API_PORT??'18931';\n   7 | const control=async(page:Page,path:string)=>(await page.request.get(`http://127.0.0.1:${api()}/__test/${path}`,{headers:{'X-Xiaon-Test':'synthetic-d-only'}})).json();\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | const tab=async(page:Page,name:string)=>page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name,exact:true}).click();\n  10 | async function select(page:Page,title:string){\n  11 |  const places:Record<string,string>={'去括号负号处理':'计算工坊','一次费用与随数量变化费用':'生活集市','合并同类项':'计算工坊'};\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/browser.spec.ts:67:52"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:00.355Z",
+                  "startTime": "2026-10-24T07:49:56.752Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-connected-main-pag-0e571--and-reduced-motion-support/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/browser-connected-main-pag-0e571--and-reduced-motion-support/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "fbeac1b2decfba2c3acd-d310a4fa991a60f6e872",
           "file": "browser.spec.ts",
-          "line": 57,
+          "line": 66,
           "column": 1
         }
       ]
@@ -282,7 +417,7 @@
       "specs": [
         {
           "title": "四个主页面的 WCAG A/AA 自动检查",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -293,20 +428,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 5,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1223,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45048,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts",
+                        "column": 6,
+                        "line": 16
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  14 |   await page\n  15 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 16 |     .click();\n     |      ^\n  17 |   for (const tab of [\"小N\", \"探索\", \"今日\", \"成长\"]) {\n  18 |     await page.getByRole(\"button\", { name: tab, exact: true }).click();\n  19 |     const report = await new AxeBuilder({ page })\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-accessibility.spec.ts:16:6"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:01.710Z",
+                  "startTime": "2026-10-24T07:50:42.054Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-accessibility-四个主页面的-WCAG-A-AA-自动检查/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-accessibility-四个主页面的-WCAG-A-AA-自动检查/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "3b7be9d48d53390dc734-94dd8e505bbe5479b7a1",
@@ -324,7 +486,7 @@
       "specs": [
         {
           "title": "01 首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -335,20 +497,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 6,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 621,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45057,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 69
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  67 |   await page\n  68 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 69 |     .click();\n     |      ^\n  70 |   await expect(\n  71 |     page.getByRole(\"heading\", { name: \"今天，按你的节奏来。\", exact: true }),\n  72 |   ).toBeVisible();\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:69:6"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:02.943Z",
+                  "startTime": "2026-10-24T07:51:27.372Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-01-首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-01-首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-ad57fa0278a87032a811",
@@ -358,7 +547,7 @@
         },
         {
           "title": "02 选择休息、刷新与今日页都停止任务催促",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -369,20 +558,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 7,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 672,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45047,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:77:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:03.568Z",
+                  "startTime": "2026-10-24T07:52:12.725Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-02-选择休息、刷新与今日页都停止任务催促/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-02-选择休息、刷新与今日页都停止任务催促/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-3251ebd835a1b60d75d2",
@@ -392,7 +608,7 @@
         },
         {
           "title": "03 错误、提示、暂停、刷新、修正、新题独立完成改变报告",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -403,20 +619,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 8,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3958,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45051,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:94:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:04.244Z",
+                  "startTime": "2026-10-24T07:52:58.068Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-03-错误、提示、暂停、刷新、修正、新题独立完成改变报告/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-a859251de1ecdb3bb3d7",
@@ -426,7 +669,7 @@
         },
         {
           "title": "04 断网提交保留草稿，失败重试、重复点击与刷新不重复计题",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -437,20 +680,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 9,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2581,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45041,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:143:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:08.206Z",
+                  "startTime": "2026-10-24T07:53:43.406Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-04-断网提交保留草稿，失败重试、重复点击与刷新不重复计题/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-04-断网提交保留草稿，失败重试、重复点击与刷新不重复计题/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-1b78ed7a74dc975d3a7f",
@@ -460,7 +730,7 @@
         },
         {
           "title": "05 五维地图和列表完整任务、空间视觉选择与报告证据",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -471,20 +741,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 10,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 5945,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45052,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:161:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:10.792Z",
+                  "startTime": "2026-10-24T07:54:28.738Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-05-五维地图和列表完整任务、空间视觉选择与报告证据/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-05-五维地图和列表完整任务、空间视觉选择与报告证据/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-b924d40a121af21d1d25",
@@ -494,7 +791,7 @@
         },
         {
           "title": "06 周计划接受、减量、改期、暂不开始与今日接续",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -505,20 +802,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 11,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 14600,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45053,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:197:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:16.741Z",
+                  "startTime": "2026-10-24T07:55:14.088Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-06-周计划接受、减量、改期、暂不开始与今日接续/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-06-周计划接受、减量、改期、暂不开始与今日接续/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-1ab31ccd669b87002abe",
@@ -528,7 +852,7 @@
         },
         {
           "title": "07 记忆开启、主动保存、更正、停止、删除；关闭不新增长期记忆",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -539,20 +863,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 12,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2485,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45050,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:230:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:31.345Z",
+                  "startTime": "2026-10-24T07:55:59.413Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-07-记忆开启、主动保存、更正、停止、删除；关闭不新增长期记忆/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-07-记忆开启、主动保存、更正、停止、删除；关闭不新增长期记忆/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-e7503399b7fa9d673e33",
@@ -562,7 +913,7 @@
         },
         {
           "title": "08 示例图片真实裁剪、像素遮挡、刷新恢复、手动核对与移除清理",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -573,20 +924,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 13,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1324,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45053,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:274:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:33.835Z",
+                  "startTime": "2026-10-24T07:56:44.727Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-08-示例图片真实裁剪、像素遮挡、刷新恢复、手动核对与移除清理/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-08-示例图片真实裁剪、像素遮挡、刷新恢复、手动核对与移除清理/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-0195c04d49744f1a0ada",
@@ -596,7 +974,7 @@
         },
         {
           "title": "09 求助失败、取消、安全联系人替代、模拟成功并非已读",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -607,20 +985,47 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 14,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3467,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45050,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:336:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:35.163Z",
+                  "startTime": "2026-10-24T07:57:30.041Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-09-求助失败、取消、安全联系人替代、模拟成功并非已读/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-09-求助失败、取消、安全联系人替代、模拟成功并非已读/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-cd9b8f8a3308faa1f122",
@@ -630,7 +1035,7 @@
         },
         {
           "title": "10 聊天等待、暂停、恢复、断网失败、重试不重复消息",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -641,30 +1046,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 15,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3383,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45052,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:379:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:38.635Z",
+                  "startTime": "2026-10-24T07:58:15.367Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-10-聊天等待、暂停、恢复、断网失败、重试不重复消息/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-10-聊天等待、暂停、恢复、断网失败、重试不重复消息/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-164669fa313bdae23ae4",
           "file": "legacy-experience.spec.ts",
-          "line": 373,
+          "line": 378,
           "column": 1
         },
         {
           "title": "11 监护人信息申请范围、必要核验、处理中、结果",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -675,30 +1107,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 16,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1851,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45050,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:405:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:42.025Z",
+                  "startTime": "2026-10-24T07:59:00.702Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-11-监护人信息申请范围、必要核验、处理中、结果/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-11-监护人信息申请范围、必要核验、处理中、结果/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-b2bea1caacad0a3f435d",
           "file": "legacy-experience.spec.ts",
-          "line": 399,
+          "line": 404,
           "column": 1
         },
         {
           "title": "12 常见手机宽度、长文本、大字体与减少动效，无横向溢出",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -709,30 +1168,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 17,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1588,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45056,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:422:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:43.881Z",
+                  "startTime": "2026-10-24T07:59:46.048Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-12-常见手机宽度、长文本、大字体与减少动效，无横向溢出/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-12-常见手机宽度、长文本、大字体与减少动效，无横向溢出/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-ad7529ace4347c258309",
           "file": "legacy-experience.spec.ts",
-          "line": 414,
+          "line": 419,
           "column": 1
         },
         {
           "title": "13 错误后的补充题分支与10题上限经刷新仍生效",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -743,30 +1229,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 18,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 9779,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45050,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:459:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:45.474Z",
+                  "startTime": "2026-10-24T08:00:31.391Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-13-错误后的补充题分支与10题上限经刷新仍生效/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-13-错误后的补充题分支与10题上限经刷新仍生效/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-a20d24019183250de9d4",
           "file": "legacy-experience.spec.ts",
-          "line": 453,
+          "line": 458,
           "column": 1
         },
         {
           "title": "14 提交等待期间关闭长期记忆，迟到结果不追加长期条目",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -777,30 +1290,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 19,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1710,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45048,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:488:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:55.257Z",
+                  "startTime": "2026-10-24T08:01:16.712Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-14-提交等待期间关闭长期记忆，迟到结果不追加长期条目/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-14-提交等待期间关闭长期记忆，迟到结果不追加长期条目/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-eaaea011cf39f29ad2a8",
           "file": "legacy-experience.spec.ts",
-          "line": 480,
+          "line": 485,
           "column": 1
         },
         {
           "title": "15 聊天中明确选择休息，后续回应和入口停止学习邀请",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -811,30 +1351,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 20,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3703,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45049,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:514:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:47:56.973Z",
+                  "startTime": "2026-10-24T08:02:02.027Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-15-聊天中明确选择休息，后续回应和入口停止学习邀请/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-15-聊天中明确选择休息，后续回应和入口停止学习邀请/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-c9c33c2193532f7de7e9",
           "file": "legacy-experience.spec.ts",
-          "line": 508,
+          "line": 513,
           "column": 1
         },
         {
           "title": "16 重新首次介绍保留进度，重置演示清空进度与图片",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -845,25 +1412,182 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 21,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2269,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 45056,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts",
+                        "column": 6,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验', exact: true })\u001b[22m\n\n\n  17 |   await p\n  18 |     .getByRole(\"button\", { name: \"关闭可选功能，进入基本体验\", exact: true })\n> 19 |     .click();\n     |      ^\n  20 | }\n  21 | async function settings(p: Page) {\n  22 |   await p.getByRole(\"button\", { name: \"我的与设置\", exact: true }).click();\n    at basic (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:19:6)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/legacy-experience.spec.ts:532:3"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:48:00.683Z",
+                  "startTime": "2026-10-24T08:02:47.342Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-16-重新首次介绍保留进度，重置演示清空进度与图片/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/legacy-experience-16-重新首次介绍保留进度，重置演示清空进度与图片/trace.zip"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "46ff3f31cadf724ffbc4-c57e9704d2a3d3f01432",
           "file": "legacy-experience.spec.ts",
-          "line": 526,
+          "line": 531,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "map-restoration.spec.ts",
+      "file": "map-restoration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "connected exploration restores the original map, five places and list switch at phone widths",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 22,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45054,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/map-restoration.spec.ts",
+                        "column": 351,
+                        "line": 5
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n  3 | const evidence='../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence';\n  4 | test.beforeEach(async({page,baseURL})=>{const api=new URL(baseURL!).port==='5196'?'18936':process.env.XIAON_D_API_PORT??'18931';await page.request.get(`http://127.0.0.1:${api}/__test/reset`,{headers:{'X-Xiaon-Test':'synthetic-d-only'}});});\n> 5 | async function start(page:import('@playwright/test').Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N',exact:true}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'探索',exact:true}).click();}\n    |                                                                                                                                                                                                                                                                                                                                                               ^\n  6 | test('connected exploration restores the original map, five places and list switch at phone widths',async({page})=>{\n  7 |  await start(page);await expect(page.locator('.exploration-map .map-art')).toBeVisible();\n  8 |  for(const width of [320,390,430]){await page.setViewportSize({width,height:844});await expect(page.locator('.map-node')).toHaveCount(5);for(const place of ['理解花园','逻辑小桥','计算工坊','生活集市','空间山丘'])await expect(page.locator('.map-node').filter({hasText:place})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`${evidence}/map-${width}.png`,fullPage:true});}\n    at start (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/map-restoration.spec.ts:5:351)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/map-restoration.spec.ts:7:2"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:03:32.683Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/map-restoration-connected--77298-list-switch-at-phone-widths/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/map-restoration-connected--77298-list-switch-at-phone-widths/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ac5fb9efa76ec44c4e15-90139f46b2bf25033331",
+          "file": "map-restoration.spec.ts",
+          "line": 6,
+          "column": 1
+        },
+        {
+          "title": "map enters the original confirmation, respects exploration order and reflects SQLite attempts after refresh",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 23,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45054,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/map-restoration.spec.ts",
+                        "column": 351,
+                        "line": 5
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n  3 | const evidence='../../任务书/2026-10-21-Agent升级/交付/D/地图恢复-20261021/evidence';\n  4 | test.beforeEach(async({page,baseURL})=>{const api=new URL(baseURL!).port==='5196'?'18936':process.env.XIAON_D_API_PORT??'18931';await page.request.get(`http://127.0.0.1:${api}/__test/reset`,{headers:{'X-Xiaon-Test':'synthetic-d-only'}});});\n> 5 | async function start(page:import('@playwright/test').Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N',exact:true}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'探索',exact:true}).click();}\n    |                                                                                                                                                                                                                                                                                                                                                               ^\n  6 | test('connected exploration restores the original map, five places and list switch at phone widths',async({page})=>{\n  7 |  await start(page);await expect(page.locator('.exploration-map .map-art')).toBeVisible();\n  8 |  for(const width of [320,390,430]){await page.setViewportSize({width,height:844});await expect(page.locator('.map-node')).toHaveCount(5);for(const place of ['理解花园','逻辑小桥','计算工坊','生活集市','空间山丘'])await expect(page.locator('.map-node').filter({hasText:place})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`${evidence}/map-${width}.png`,fullPage:true});}\n    at start (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/map-restoration.spec.ts:5:351)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/map-restoration.spec.ts:13:2"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:04:18.033Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/map-restoration-map-enters-37c51-Lite-attempts-after-refresh/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/map-restoration-map-enters-37c51-Lite-attempts-after-refresh/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ac5fb9efa76ec44c4e15-a94dc7962a6fa569302f",
+          "file": "map-restoration.spec.ts",
+          "line": 12,
           "column": 1
         }
       ]
@@ -887,15 +1611,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 24,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1677,
+                  "duration": 1711,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-21T00:48:02.963Z",
+                  "startTime": "2026-10-24T08:05:03.360Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -909,15 +1633,715 @@
           "column": 1
         }
       ]
+    },
+    {
+      "title": "pet-voice.spec.ts",
+      "file": "pet-voice.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "home pet: each part answers differently; poking many times makes it dizzy; hold/stroke is a pat",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 24,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45057,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=process.env.XIAON_F_API_PORT??'18963';\n   7 | const voiceLog=async(page:Page)=>(await page.request.get(`http://127.0.0.1:${api}/__test/voice-log`,{headers:{'X-Xiaon-Test':'synthetic-f-only'}})).json() as Promise<{spoken:string[];heard:{bytes:number;wav:boolean}[]}>;\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | /** Viewport centre of a spot that really belongs to the zone (curved arms and leaves are not their bounding-box centre). */\n  10 | async function point(page:Page,scope:string,zone:string){\n  11 |  return page.evaluate(([s,z])=>{const svg=document.querySelector(`${s} .mascot`)!,r=svg.querySelector(`[data-zone=\"${z}\"]`)!.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best:[number,number]|null=null,bd=1e9;\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:24:2"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:05:05.167Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-home-pet-each-pa-10072--dizzy-hold-stroke-is-a-pat/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-home-pet-each-pa-10072--dizzy-hold-stroke-is-a-pat/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "425a6468af8f0667a0e6-d68b127edc7abd081a9b",
+          "file": "pet-voice.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "chat page: big pet, mic and keyboard side by side; quick replies; typing is optional; history sits below and can be collapsed",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 25,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45049,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=process.env.XIAON_F_API_PORT??'18963';\n   7 | const voiceLog=async(page:Page)=>(await page.request.get(`http://127.0.0.1:${api}/__test/voice-log`,{headers:{'X-Xiaon-Test':'synthetic-f-only'}})).json() as Promise<{spoken:string[];heard:{bytes:number;wav:boolean}[]}>;\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | /** Viewport centre of a spot that really belongs to the zone (curved arms and leaves are not their bounding-box centre). */\n  10 | async function point(page:Page,scope:string,zone:string){\n  11 |  return page.evaluate(([s,z])=>{const svg=document.querySelector(`${s} .mascot`)!,r=svg.querySelector(`[data-zone=\"${z}\"]`)!.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best:[number,number]|null=null,bd=1e9;\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:45:2"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:05:50.464Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-chat-page-big-pe-6ee3d--below-and-can-be-collapsed/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-chat-page-big-pe-6ee3d--below-and-can-be-collapsed/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "425a6468af8f0667a0e6-18a76df3d9ee03793fe4",
+          "file": "pet-voice.spec.ts",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "microphone: one tap records, stops by itself after a pause, sends a WAV to the server, shows what was heard and the pet answers aloud",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 26,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45050,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=process.env.XIAON_F_API_PORT??'18963';\n   7 | const voiceLog=async(page:Page)=>(await page.request.get(`http://127.0.0.1:${api}/__test/voice-log`,{headers:{'X-Xiaon-Test':'synthetic-f-only'}})).json() as Promise<{spoken:string[];heard:{bytes:number;wav:boolean}[]}>;\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | /** Viewport centre of a spot that really belongs to the zone (curved arms and leaves are not their bounding-box centre). */\n  10 | async function point(page:Page,scope:string,zone:string){\n  11 |  return page.evaluate(([s,z])=>{const svg=document.querySelector(`${s} .mascot`)!,r=svg.querySelector(`[data-zone=\"${z}\"]`)!.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best:[number,number]|null=null,bd=1e9;\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:64:2"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:06:35.796Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-microphone-one-t-24e17-d-and-the-pet-answers-aloud/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-microphone-one-t-24e17-d-and-the-pet-answers-aloud/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "425a6468af8f0667a0e6-7c92ab1e940970481c28",
+          "file": "pet-voice.spec.ts",
+          "line": 63,
+          "column": 1
+        },
+        {
+          "title": "microphone can be cancelled by tapping again, and a refused permission leaves typing available",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 27,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45049,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=process.env.XIAON_F_API_PORT??'18963';\n   7 | const voiceLog=async(page:Page)=>(await page.request.get(`http://127.0.0.1:${api}/__test/voice-log`,{headers:{'X-Xiaon-Test':'synthetic-f-only'}})).json() as Promise<{spoken:string[];heard:{bytes:number;wav:boolean}[]}>;\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | /** Viewport centre of a spot that really belongs to the zone (curved arms and leaves are not their bounding-box centre). */\n  10 | async function point(page:Page,scope:string,zone:string){\n  11 |  return page.evaluate(([s,z])=>{const svg=document.querySelector(`${s} .mascot`)!,r=svg.querySelector(`[data-zone=\"${z}\"]`)!.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best:[number,number]|null=null,bd=1e9;\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:79:2"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:07:21.129Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-microphone-can-b-29c8d-ion-leaves-typing-available/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-microphone-can-b-29c8d-ion-leaves-typing-available/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "425a6468af8f0667a0e6-70f183d0af256b52223e",
+          "file": "pet-voice.spec.ts",
+          "line": 78,
+          "column": 1
+        },
+        {
+          "title": "the microphone is never requested by loading, refreshing, switching pages or touching the pet; only the mic button asks",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 28,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45049,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts",
+                        "column": 329,
+                        "line": 8
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭可选功能，进入基本体验' })\u001b[22m\n\n\n   6 | const api=process.env.XIAON_F_API_PORT??'18963';\n   7 | const voiceLog=async(page:Page)=>(await page.request.get(`http://127.0.0.1:${api}/__test/voice-log`,{headers:{'X-Xiaon-Test':'synthetic-f-only'}})).json() as Promise<{spoken:string[];heard:{bytes:number;wav:boolean}[]}>;\n>  8 | async function onboard(page:Page){await page.goto('/');await page.getByRole('button',{name:'认识一下小N'}).click();await page.getByLabel('年龄段').selectOption('adult');await page.getByRole('checkbox',{name:'我看懂了'}).check();await page.getByRole('button',{name:'继续，选择可选功能'}).click();await page.getByRole('button',{name:'关闭可选功能，进入基本体验'}).click();await expect(page.getByRole('heading',{name:'今天，按你的节奏来。'})).toBeVisible();await expect(page.getByText('模拟模型 · 真实工具 / SQLite',{exact:true})).toBeVisible();}\n     |                                                                                                                                                                                                                                                                                                                                         ^\n   9 | /** Viewport centre of a spot that really belongs to the zone (curved arms and leaves are not their bounding-box centre). */\n  10 | async function point(page:Page,scope:string,zone:string){\n  11 |  return page.evaluate(([s,z])=>{const svg=document.querySelector(`${s} .mascot`)!,r=svg.querySelector(`[data-zone=\"${z}\"]`)!.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best:[number,number]|null=null,bd=1e9;\n    at onboard (/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:8:329)\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/pet-voice.spec.ts:95:2"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:08:06.460Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-the-microphone-i-4f079-et-only-the-mic-button-asks/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/pet-voice-the-microphone-i-4f079-et-only-the-mic-button-asks/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "425a6468af8f0667a0e6-3adbe7f2e361f3c92386",
+          "file": "pet-voice.spec.ts",
+          "line": 88,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "voice-conversation.spec.ts",
+      "file": "voice-conversation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "one click starts a conversation; after ASR, chat and spoken reply it listens again; second click ends it",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 29,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5357,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"\u001b[7mlisten\u001b[27ming\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrequest\u001b[27ming\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"\u001b[7mlisten\u001b[27ming\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrequest\u001b[27ming\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:15:43",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                      "column": 43,
+                      "line": 15
+                    },
+                    "snippet": "  13 |  await ready(page);\n  14 |  await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 15 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','listening');\n     |                                           ^\n  16 |  const end=page.getByRole('button',{name:'结束语音对话',exact:true});await expect(end).toBeEnabled();\n  17 |  await expect.poll(()=>chats,{timeout:20000}).toBe(1);\n  18 |  await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false',{timeout:15000});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                        "column": 43,
+                        "line": 15
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"\u001b[7mlisten\u001b[27ming\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrequest\u001b[27ming\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n\n\n  13 |  await ready(page);\n  14 |  await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 15 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','listening');\n     |                                           ^\n  16 |  const end=page.getByRole('button',{name:'结束语音对话',exact:true});await expect(end).toBeEnabled();\n  17 |  await expect.poll(()=>chats,{timeout:20000}).toBe(1);\n  18 |  await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false',{timeout:15000});\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:15:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:08:51.771Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-one-cli-566ce--again-second-click-ends-it/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-one-cli-566ce--again-second-click-ends-it/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                    "column": 43,
+                    "line": 15
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4c5eb3b5056d2438895d-b2d2d05f7968ae942690",
+          "file": "voice-conversation.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "ending during recognition cancels the upload and never sends a late transcript as a chat",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 30,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 15408,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"transcribing\"\u001b[39m\nReceived: \u001b[31m\"idle\"\u001b[39m\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    20 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" data-phase=\"idle\" aria-label=\"开始语音对话\" aria-pressed=\"false\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"idle\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"transcribing\"\u001b[39m\nReceived: \u001b[31m\"idle\"\u001b[39m\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    20 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" data-phase=\"idle\" aria-label=\"开始语音对话\" aria-pressed=\"false\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"idle\"\u001b[22m\n\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:32:43",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                      "column": 43,
+                      "line": 32
+                    },
+                    "snippet": "  30 |  await page.route('**/api/voice/asr',async route=>{await gate;await route.fulfill({json:{text:'这句话不应该发送'}}).catch(()=>{});});\n  31 |  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 32 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','transcribing',{timeout:15000});\n     |                                           ^\n  33 |  await page.getByRole('button',{name:'结束语音对话',exact:true}).click();release();\n  34 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','idle');await page.waitForTimeout(1000);expect(chats).toBe(0);\n  35 | });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                        "column": 43,
+                        "line": 32
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"transcribing\"\u001b[39m\nReceived: \u001b[31m\"idle\"\u001b[39m\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    20 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" data-phase=\"idle\" aria-label=\"开始语音对话\" aria-pressed=\"false\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"idle\"\u001b[22m\n\n\n  30 |  await page.route('**/api/voice/asr',async route=>{await gate;await route.fulfill({json:{text:'这句话不应该发送'}}).catch(()=>{});});\n  31 |  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 32 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','transcribing',{timeout:15000});\n     |                                           ^\n  33 |  await page.getByRole('button',{name:'结束语音对话',exact:true}).click();release();\n  34 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','idle');await page.waitForTimeout(1000);expect(chats).toBe(0);\n  35 | });\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:32:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:08:57.411Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-ending--ff84e-a-late-transcript-as-a-chat/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-ending--ff84e-a-late-transcript-as-a-chat/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                    "column": 43,
+                    "line": 32
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4c5eb3b5056d2438895d-c2707190ccb868763029",
+          "file": "voice-conversation.spec.ts",
+          "line": 26,
+          "column": 1
+        },
+        {
+          "title": "switching to typing or leaving home closes the microphone session",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 31,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5341,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"\u001b[7mlisten\u001b[27ming\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrequest\u001b[27ming\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"\u001b[7mlisten\u001b[27ming\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrequest\u001b[27ming\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:39:43",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                      "column": 43,
+                      "line": 39
+                    },
+                    "snippet": "  37 | test('switching to typing or leaving home closes the microphone session',async({page})=>{\n  38 |  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 39 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','listening');\n     |                                           ^\n  40 |  await page.getByRole('button',{name:'切换到打字'}).click();\n  41 |  await expect(page.getByRole('textbox',{name:'对小N说',exact:true})).toBeVisible();\n  42 |  await page.getByRole('button',{name:'切换到语音'}).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                        "column": 43,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.talk-hold')\nExpected: \u001b[32m\"\u001b[7mlisten\u001b[27ming\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrequest\u001b[27ming\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.talk-hold') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.talk-hold')\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"talk-hold\" aria-pressed=\"true\" aria-label=\"结束语音对话\" data-phase=\"requesting\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"requesting\"\u001b[22m\n\n\n  37 | test('switching to typing or leaving home closes the microphone session',async({page})=>{\n  38 |  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 39 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','listening');\n     |                                           ^\n  40 |  await page.getByRole('button',{name:'切换到打字'}).click();\n  41 |  await expect(page.getByRole('textbox',{name:'对小N说',exact:true})).toBeVisible();\n  42 |  await page.getByRole('button',{name:'切换到语音'}).click();\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:39:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:09:13.128Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-switchi-e4181-oses-the-microphone-session/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-switchi-e4181-oses-the-microphone-session/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                    "column": 43,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4c5eb3b5056d2438895d-1f66c3cbac7631ebb75a",
+          "file": "voice-conversation.spec.ts",
+          "line": 37,
+          "column": 1
+        },
+        {
+          "title": "browser speech fallback also continues after playback and stops without restarting",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 32,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 456,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:09:18.749Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4c5eb3b5056d2438895d-6147d00e0ff5af3e68be",
+          "file": "voice-conversation.spec.ts",
+          "line": 51,
+          "column": 1
+        },
+        {
+          "title": "ending while the model is replying keeps its text but suppresses late speech and microphone restart",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 32,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 15397,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.home-chat')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.home-chat') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.home-chat')\u001b[22m\n\u001b[2m    34 × locator resolved to <div class=\"home-chat\" aria-busy=\"false\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.home-chat')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.home-chat') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.home-chat')\u001b[22m\n\u001b[2m    34 × locator resolved to <div class=\"home-chat\" aria-busy=\"false\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:77:43",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                      "column": 43,
+                      "line": 77
+                    },
+                    "snippet": "  75 |  page.on('request',r=>{if(r.url().endsWith('/voice/tts'))tts++;if(/\\/voice\\/(think|long)-/.test(r.url()))thinkingClips++;});\n  76 |  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 77 |  await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','true',{timeout:15000});\n     |                                           ^\n  78 |  await page.getByRole('button',{name:'结束语音对话',exact:true}).click();\n  79 |  await page.waitForTimeout(2200);expect(thinkingClips).toBe(0);release();\n  80 |  await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                        "column": 43,
+                        "line": 77
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.home-chat')\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('.home-chat') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.home-chat')\u001b[22m\n\u001b[2m    34 × locator resolved to <div class=\"home-chat\" aria-busy=\"false\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  75 |  page.on('request',r=>{if(r.url().endsWith('/voice/tts'))tts++;if(/\\/voice\\/(think|long)-/.test(r.url()))thinkingClips++;});\n  76 |  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 77 |  await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','true',{timeout:15000});\n     |                                           ^\n  78 |  await page.getByRole('button',{name:'结束语音对话',exact:true}).click();\n  79 |  await page.waitForTimeout(2200);expect(thinkingClips).toBe(0);release();\n  80 |  await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:77:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:09:19.263Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-ending--02012-eech-and-microphone-restart/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-ending--02012-eech-and-microphone-restart/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                    "column": 43,
+                    "line": 77
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4c5eb3b5056d2438895d-eac260015ccefd9d4c25",
+          "file": "voice-conversation.spec.ts",
+          "line": 71,
+          "column": 1
+        },
+        {
+          "title": "a thinking clip ending must not reopen the microphone while reply audio is still being generated",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 33,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 20429,
+                  "error": {
+                    "message": "TimeoutError: page.waitForRequest: Timeout 20000ms exceeded while waiting for event \"request\"",
+                    "stack": "TimeoutError: page.waitForRequest: Timeout 20000ms exceeded while waiting for event \"request\"\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:90:13",
+                    "location": {
+                      "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                      "column": 13,
+                      "line": 90
+                    },
+                    "snippet": "  88 |  await page.route('**/api/voice/tts',async route=>{await gate;await route.continue();});\n  89 |  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 90 |  await page.waitForRequest(r=>r.url().endsWith('/voice/tts'),{timeout:20000});\n     |             ^\n  91 |  await page.waitForTimeout(3500); // let the short thinking clip finish while TTS is deliberately held\n  92 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','idle');\n  93 |  release();await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','listening',{timeout:15000});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                        "column": 13,
+                        "line": 90
+                      },
+                      "message": "TimeoutError: page.waitForRequest: Timeout 20000ms exceeded while waiting for event \"request\"\n\n  88 |  await page.route('**/api/voice/tts',async route=>{await gate;await route.continue();});\n  89 |  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();\n> 90 |  await page.waitForRequest(r=>r.url().endsWith('/voice/tts'),{timeout:20000});\n     |             ^\n  91 |  await page.waitForTimeout(3500); // let the short thinking clip finish while TTS is deliberately held\n  92 |  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','idle');\n  93 |  release();await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','listening',{timeout:15000});\n    at /Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts:90:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:09:34.913Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-a-think-fb25b-io-is-still-being-generated/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/ami/Documents/个人/ACC黑客松/任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/voice-conversation-a-think-fb25b-io-is-still-being-generated/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon/tests-agent/d/voice-conversation.spec.ts",
+                    "column": 13,
+                    "line": 90
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4c5eb3b5056d2438895d-5cc0cb541739a7e976b0",
+          "file": "voice-conversation.spec.ts",
+          "line": 84,
+          "column": 1
+        }
+      ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-21T00:46:47.991Z",
-    "duration": 76767.64600000001,
-    "expected": 23,
+    "startTime": "2026-10-24T07:46:54.243Z",
+    "duration": 1381276.4710000001,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 34,
     "flaky": 0
   }
 }

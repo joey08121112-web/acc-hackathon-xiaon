@@ -34,7 +34,7 @@ test('validateObservation: only 理解/逻辑, only on an allowed probe turn, ve
  assert.equal(validateObservation(obs('我完全不懂分数'),check).ok,false,'not something the student said');
  assert.equal(validateObservation(obs('每份是什么意思'),{...check,probeAllowed:false}).ok,false);
  assert.equal(validateObservation(obs('每份是什么意思'),{...check,stage:'listen'}).ok,false);
- const three=[1,2,3].map(n=>({schemaVersion:SCHEMA_VERSION,id:'o'+n,sessionId:'chat-1',...obs('每份'),status:'unverified' as const,at}));
+ const three=[1,2,3].map(n=>({schemaVersion:SCHEMA_VERSION,id:'o'+n,sessionId:'chat-1',...obs('每份'),sceneId:null,status:'unverified' as const,at}));
  assert.equal(validateObservation(obs('每份是什么意思'),{...check,existing:three}).ok,false,'4th 理解 observation in a session');
  assert.equal(validateObservation(obs('每份是什么意思','逻辑'),{...check,existing:three}).ok,true);
  assert.equal(validateObservation({...obs('每份'),extra:1},check).ok,false);

@@ -7,7 +7,7 @@ import { createHttpServer } from '../../server/http/server';
 import type { ModelProvider } from '../../shared/learning-contracts';
 const port=Number(process.env.XIAON_G_API_PORT??18951),ui=Number(process.env.XIAON_G_UI_PORT??5211);
 type Data={history?:{role:string;content:string}[];helpLevel?:number;kind?:string};
-const BRACKET='化简：3x − (2x − 5)。可写一次式或以等号相连的完整等价步骤。';
+const BRACKET='小林攒了 3x 张卡片，送给同桌的张数比 2x 少 5 张，也就是 (2x − 5) 张。小林还剩多少张？算式已经列好，请化简：3x − (2x − 5)。可写一次式或以等号相连的完整等价步骤。';
 /** Scripted synthetic model. It reads only the program-chosen prompt version and the data the coordinator sends. */
 class Walkthrough implements ModelProvider {
  readonly kind='synthetic' as const;readonly supportsTools=true;

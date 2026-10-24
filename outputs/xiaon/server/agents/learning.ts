@@ -2,7 +2,7 @@ import { loopRequest,runLoop,loopView,recordLoopDialogue } from '../plugins/lear
 import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { z } from 'zod';
-import { schemas,SCHEMA_VERSION,retentionWindow,MODULE_LEVEL_LABELS,MEMORY_CONTEXT_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,type ChatReply,type MemoryItem,type ChatStage,type ChatTurn,type LearningEpisode,type ModelProvider,type StageField,type TaskPublicView,type Validation,type InterviewSession,type InterviewStep,type MonthStage,type ProfessionalReport,type RetestReminder } from '../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,retentionWindow,MODULE_LEVEL_LABELS,MEMORY_CONTEXT_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,type ChatReply,type MemoryItem,type ChatStage,type ChatTurn,type LearningEpisode,type LifeSceneState,type ModelProvider,type StageField,type TaskPublicView,type Validation,type InterviewSession,type InterviewStep,type MonthStage,type ProfessionalReport,type RetestReminder } from '../../shared/learning-contracts';
 import type { LearningRuntime } from '../bootstrap';
 import { RubricAssessment,createModelAnalyzer,classifyAttempt } from '../plugins/assessment';
 import { PlanningEngine } from '../plugins/planning';
@@ -19,6 +19,7 @@ import { validateProblemDraft,confirmProblem,recognize } from '../plugins/proble
 import { validateMemoryDraft,confirmMemoryDraft,greeting,shouldOfferMemory,recordMemoryOffer,selectMemoriesForContext } from '../plugins/memory-flow';
 import { draftProgressCard,confirmProgressCard } from '../plugins/progress';
 import { validateObservation,endConversation } from '../plugins/conversation';
+import { LIFE_SCENES,matchLifeScene,LIFE_REFUSAL,type LifeSceneObserve } from '../plugins/life-scenes';
 import { hash } from '../storage/repository';
 import { latestFeedback } from '../tools/registry';
 import { RuntimeError } from '../core/errors';
@@ -265,13 +266,38 @@ export class LearningCoordinator {
    let memoryGate:'memory_off'|'stage_not_allowed'|'not_implemented'|null=memoryEnabled?null:'memory_off';
    if(decision.allowed.includes('memoryDraft')){try{if(!shouldOfferMemory({sessionId,stage,turn:s.turn},ctx))memoryGate='stage_not_allowed';}catch(e){if(!notImplementedError(e))throw e;memoryGate='not_implemented';}}
    // The card is drafted only after the student had a turn to reflect, so not on the turn that enters reflect.
+   // 生活话题观察（2026-10-24，场景库）：companion 轮按触发词开始，每个聊天场次最多一次；追问与观察点都
+   // 写死在 server/plugins/life-scenes 里，模型只措辞。学生拒绝、换阶段或告别即中止，不追问。
+   const sceneRows=repo.list('lifeScenes');
+   // 追加式记录：一场次最后一条才是当前状态（旧 active 行不再代表进行中）。
+   const sceneLast=sceneRows.filter(x=>x.sessionId===sessionId).at(-1)??null;
+   const sceneActive=sceneLast?.status==='active'?sceneLast:null;
+   const sceneUsed=!!sceneLast;
+   const life:{ask:string|null;observe:LifeSceneObserve|null}={ask:null,observe:null};
+   let lifeSceneId:string|null=null;
+   if(sceneActive){
+    const spec=LIFE_SCENES.find(s=>s.id===sceneActive!.sceneId)??null;
+    if(spec&&stage==='companion'&&!decision.end&&!LIFE_REFUSAL.test(last)){
+     const currentTurn=spec.turns[sceneActive.step];
+     if(currentTurn?.observe){life.observe=currentTurn.observe;lifeSceneId=spec.id;}
+     const next=spec.turns[sceneActive.step+1];
+     if(next)life.ask=next.ask;
+     repo.append('lifeScenes',{schemaVersion:SCHEMA_VERSION,id:'life-'+p.operationId+'-next',operationId:p.operationId,sessionId,sceneId:spec.id,step:sceneActive.step+1,status:next?'active':'done',at:now});
+    }else repo.append('lifeScenes',{schemaVersion:SCHEMA_VERSION,id:'life-'+p.operationId+'-stop',operationId:p.operationId,sessionId,sceneId:sceneActive.sceneId,step:sceneActive.step,status:'aborted',at:now});
+   }else if(!sceneUsed&&stage==='companion'&&!decision.needsCheck&&!decision.askStudy&&!decision.end&&!decision.intense&&this.r.provider.kind!=='offline'){
+    const spec=matchLifeScene(last);
+    if(spec){life.ask=spec.turns[0].ask;
+     repo.append('lifeScenes',{schemaVersion:SCHEMA_VERSION,id:'life-'+p.operationId+'-open',operationId:p.operationId,sessionId,sceneId:spec.id,step:0,status:'active',at:now});}
+   }
+   const sceneBusy=!!(life.ask||life.observe);
    const allowed=decision.allowed.filter(f=>(f!=='memoryDraft'||!memoryGate)&&(f!=='progressCardDraft'||fromStage==='reflect'));
+   if(life.observe)allowed.push('observation'); // 场景回答轮允许一条观察；validateObservation 的 lifeScene 门另行把关
    const context=this.tutorContext(p.history,sessionId,stage),ectx=this.r.engineContext();
    const stuckPoints=this.recentStuckPoints();
-   const signals={needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem};
+   const signals={needsCheck:decision.needsCheck,askStudy:decision.askStudy&&!sceneBusy,askProblem:decision.askProblem};
    // Growth background only on study stages; listen/companion stay away from levels and plans.
    const growth=stage==='probe'||stage==='think'||stage==='reflect'?this.growthSnapshot():null;
-   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals,helpLevel,helpLevelsUsed:live?.helpLevelsUsed??[],...(growth?{growth}:{})},signal,{prompt:homeTutorPrompt({stage,allowed,answerTurn:decision.answerTurn,growth:!!growth}),secrets,releasedAnswers});
+   const result=await this.roles.invoke('tutor',p.operationId,{stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context,task,problem:problem??null,paused:!session,latestFeedback:latestFeedback(ectx),stuckPoints,signals,helpLevel,helpLevelsUsed:live?.helpLevelsUsed??[],...(growth?{growth}:{})},signal,{prompt:homeTutorPrompt({stage,allowed,answerTurn:decision.answerTurn,growth:!!growth,life}),secrets,releasedAnswers});
    if(exposed&&session&&result.run.status==='completed')this.r.events.expose({operationId:p.operationId+'-help',sessionId:session.id,taskId:exposed.taskId,taskVersion:exposed.taskVersion,kind:'chat_help',hintId:null});
    const out=homeTutorOutput.safeParse(result.value);const value=out.success?out.data:{message:result.run.error?.code==='forbidden'?ANSWER_HELD_TEXT:result.run.error?.message??'我在这里，按你的节奏来。',taskIds:[]};
    const proposed:Partial<Record<StageField,unknown>>=out.success?{problemDraft:out.data.problemDraft,observation:out.data.observation,progressCardDraft:out.data.progressCardDraft,memoryDraft:out.data.memoryDraft}:{};
@@ -291,8 +317,11 @@ export class LearningCoordinator {
    if(memoryDraft)recordMemoryOffer({operationId:p.operationId,sessionId,stage,turn:s.turn},ctx);
    const observation=gated('observation',schemas.ObservationDraft,()=>validateObservation(kept.observation,{...check,
     // G2 (REPORT-1): on the turn after a probe only this message is the answer, so only it may be quoted.
-    ...(decision.answerTurn?{studentTexts:[last]}:{}),probeAllowed:decision.probeAllowed||decision.answerTurn,existing:repo.list('observations').filter(o=>o.sessionId===sessionId)}));
-   if(observation)repo.append('observations',{schemaVersion:SCHEMA_VERSION,id:'obs-'+p.operationId,...observation,sessionId,status:'unverified',at:now});
+    // 生活场景的回答轮同理：只能引用学生这一句。
+    ...((decision.answerTurn||life.observe)?{studentTexts:[last]}:{}),
+    probeAllowed:decision.probeAllowed||decision.answerTurn,lifeScene:!!life.observe,
+    existing:repo.list('observations').filter(o=>o.sessionId===sessionId)}));
+   if(observation)repo.append('observations',{schemaVersion:SCHEMA_VERSION,id:'obs-'+p.operationId,...observation,sceneId:lifeSceneId,sessionId,status:'unverified',at:now});
    let progressCardDraft=null;
    if(stage==='reflect'&&fromStage==='reflect'&&episodeId){
     // Only this episode's words count as quotable process: the turns since the episode started, plus this one.
@@ -306,7 +335,7 @@ export class LearningCoordinator {
    if(decision.end){try{summary=schemas.ConversationSummary.parse(await endConversation({operationId:p.operationId+'-end',sessionId,trigger:'farewell',history:p.history},ctx,signal));}catch(e){if(!(e instanceof RuntimeError))throw e;}}
    repo.append('chatTurns',turn(log,result.replyFit));
    const suggestions:TaskPublicView[]=session?value.taskIds.flatMap(id=>{const t=this.r.catalog.publicTask(id,2);return t?[t]:[];}):[];
-   return chatReply({text:value.message,stage,sessionId,run:result.run,suggestions,quickReplies:suggestions.length?[]:HOME_QUICK_REPLIES[stage],askStudy:decision.askStudy,needsCheck:decision.needsCheck,askProblem:decision.askProblem,
+   return chatReply({text:value.message,stage,sessionId,run:result.run,suggestions,quickReplies:suggestions.length?[]:HOME_QUICK_REPLIES[stage],askStudy:decision.askStudy&&!sceneBusy,needsCheck:decision.needsCheck,askProblem:decision.askProblem,
     modeSuggestion:decision.modeSuggestion?{mode:'professional',reason:'想看清楚自己现在的情况，可以做一次正式测试。'}:null,problemDraft,progressCardDraft,memoryDraft,summary});
   },signal);
  }
@@ -413,7 +442,7 @@ export class LearningCoordinator {
   // G0: learning records for the home revamp. problemSecrets is deliberately absent; chatTurns carry no student text.
   learningLoops:latestRevisions(this.r.repository.list('episodes')).filter(e=>e.loop).map(e=>loopView(e,this.r)),
   problems:this.r.repository.list('problems'),episodes:this.r.repository.list('episodes'),progressCards:this.r.repository.list('progressCards'),memoryMentions:this.r.repository.list('memoryMentions'),
-  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),
+  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),lifeScenes:this.r.repository.list('lifeScenes'),
   // G2: professional-mode learning records, shown whatever the memory switch says. interviews/monthStages are the latest revision of each.
   interviews:latestRevisions(this.r.repository.list('interviews')),interviewTurns:this.r.repository.list('interviewTurns'),professionalReports:this.r.repository.list('professionalReports'),
   monthStages:latestRevisions(this.r.repository.list('monthStages')),retestReminder:this.currentRetestReminder()};

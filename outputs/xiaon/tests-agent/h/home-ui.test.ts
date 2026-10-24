@@ -28,7 +28,7 @@ test('小结引用当前场次观察和已确认进步卡，不混入其他场�
  try{
   const summary:ConversationSummary={schemaVersion:'1.0.0',id:'summary-h',operationId:'end-h',sessionId:'chat-h',trigger:'student_end',topics:['合成应用题'],observationIds:['obs-h','obs-other'],comparedWithSummaryId:null,changes:[],planSuggestions:['明天圈出题目条件'],suggestProfessionalMode:true,progressCardId:'card-h',mode:'model',createdAt:f.clock.now()};
   const view=await d.view();
-  view.observations=[{schemaVersion:'1.0.0',id:'obs-h',sessionId:'chat-h',dimension:'理解',signal:'partial',quote:'这里的每本是什么意思',note:'可以再核对单位',status:'unverified',at:f.clock.now()},{schemaVersion:'1.0.0',id:'obs-other',sessionId:'chat-other',dimension:'逻辑',signal:'clear',quote:'另一个场次原话',note:'不应出现',status:'unverified',at:f.clock.now()}];
+  view.observations=[{schemaVersion:'1.0.0',id:'obs-h',sessionId:'chat-h',dimension:'理解',signal:'partial',quote:'这里的每本是什么意思',note:'可以再核对单位',sceneId:null,status:'unverified',at:f.clock.now()},{schemaVersion:'1.0.0',id:'obs-other',sessionId:'chat-other',dimension:'逻辑',signal:'clear',quote:'另一个场次原话',note:'不应出现',sceneId:null,status:'unverified',at:f.clock.now()}];
   view.progressCards=[{schemaVersion:'1.0.0',id:'card-h',operationId:'card-op',sessionId:'chat-h',episodeId:null,aiDraft:null,breakthrough:'找到了条件',method:'圈出单位',nextTry:null,skipped:['nextTry'],confidence:'prefer_not',confirmedAt:f.clock.now()}];
   const html=renderToStaticMarkup(createElement(ConversationSummaryView,{summary,l:{view,busy:false} as LearningUI,navigate}));
   for(const text of ['聊了什么','对话观察','待专业模式确认','这里的每本是什么意思','和上次比','计划建议','转成正式计划','今天的小突破','圈出单位'])assert.ok(html.includes(text),text);

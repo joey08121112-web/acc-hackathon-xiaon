@@ -14,7 +14,7 @@ const SIGNAL_RANK={confused:0,partial:1,clear:2} as const;
 export function validateObservation(candidate:unknown,check:ObservationCheck):Validation<ObservationDraft>{
  const parsed=schemas.ObservationDraft.safeParse(candidate);if(!parsed.success)return {ok:false,reasons:['schema_invalid']};
  const o=parsed.data,reasons:string[]=[];
- if(check.stage!=='probe'||!check.probeAllowed)reasons.push('probe_not_allowed');
+ if(!((check.stage==='probe'&&check.probeAllowed)||check.lifeScene))reasons.push('probe_not_allowed');
  const quote=o.quote.trim();if(!quote||!check.studentTexts.some(t=>t.includes(quote)))reasons.push('quote_not_from_student');
  if(check.existing.filter(e=>e.sessionId===check.sessionId&&e.dimension===o.dimension).length>=OBSERVATIONS_PER_DIMENSION)reasons.push('dimension_limit');
  return reasons.length?{ok:false,reasons}:{ok:true,value:{...o,quote}};
@@ -39,11 +39,13 @@ export async function endConversation(input:EndConversationInput,ctx:RevampConte
  const reachedStudy=turns.some(t=>['probe','think','reflect'].includes(t.stage));
  // Program fallback (no model, or a draft that does not survive the checks): topics and plan only.
  const points=[...new Set([...problems.map(p=>p.knowledgePointId),...stuck.map(s=>s.knowledgePointId)])];
+ // 学习计划建议只看学习话题观察；生活话题观察（sceneId）不引导做题。
+ const studyObservations=observations.filter(o=>!o.sceneId);
  const localTopics=[...(reachedStudy?['聊了学习上遇到的事']:['聊了聊最近的事']),...points.map(k=>'说到了'+POINT_NAMES[k])];
  const localPlan=[
-  ...points.slice(0,2).map(k=>'找一道'+POINT_NAMES[k]+'的小题，先说说第一步'),
-  ...(observations.some(o=>o.dimension==='理解'&&o.signal!=='clear')?['读题时把条件一条条圈出来，再说说每个条件的意思']:[]),
-  ...(observations.some(o=>o.dimension==='逻辑'&&o.signal!=='clear')?['做完一步问问自己：为什么可以这样']:[]),
+  ...points.slice(0,2).map(k=>'找一道'+POINT_NAMES[k]+'小题，先说说第一步'),
+  ...(studyObservations.some(o=>o.dimension==='理解'&&o.signal!=='clear')?['读题时把条件一条条圈出来，再说说每个条件的意思']:[]),
+  ...(studyObservations.some(o=>o.dimension==='逻辑'&&o.signal!=='clear')?['做完一步问问自己：为什么可以这样']:[]),
   ...(card?.nextTry?[card.nextTry.slice(0,100)]:[]),
   '花5分钟回顾今天聊到的一件事'];
  let topics=clean(localTopics,5,100),plan=clean(localPlan,3,100),mode:ConversationSummary['mode']='local_rules';
