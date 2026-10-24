@@ -69,13 +69,14 @@ test('browser speech fallback also continues after playback and stops without re
 });
 
 test('ending while the model is replying keeps its text but suppresses late speech and microphone restart',async({page})=>{
- let release!:()=>void,tts=0;
+ let release!:()=>void,tts=0,thinkingClips=0;
  const gate=new Promise<void>(r=>{release=r;});
  await page.route('**/api/learning/chat',async route=>{const response=await route.fetch();await gate;await route.fulfill({response});});
- page.on('request',r=>{if(r.url().endsWith('/voice/tts'))tts++;});
+ page.on('request',r=>{if(r.url().endsWith('/voice/tts'))tts++;if(/\/voice\/(think|long)-/.test(r.url()))thinkingClips++;});
  await ready(page);await page.getByRole('button',{name:'开始语音对话',exact:true}).click();
  await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','true',{timeout:15000});
- await page.getByRole('button',{name:'结束语音对话',exact:true}).click();release();
+ await page.getByRole('button',{name:'结束语音对话',exact:true}).click();
+ await page.waitForTimeout(2200);expect(thinkingClips).toBe(0);release();
  await expect(page.locator('.home-chat')).toHaveAttribute('aria-busy','false');
  await expect(page.locator('.talk-hold')).toHaveAttribute('data-phase','idle');expect(tts).toBe(0);
 });

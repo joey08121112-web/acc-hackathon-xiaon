@@ -44,7 +44,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  const [message,setMessage]=useState(''),[reply,setReply]=useState<ChatReply|null>(null),[awaiting,setAwaiting]=useState(false),[typing,setTyping]=useState(readTyping);
  const [greeting,setGreeting]=useState(OPENER),[notice,setNotice]=useState(''),[summary,setSummary]=useState<ConversationSummary|null>(null),[manualSuggestion,setManualSuggestion]=useState<ModeSuggestion|null>(null);
  const [needsSeen,setNeedsSeen]=useState(false),[keyboard,setKeyboard]=useState(false),[memoryDraft,setMemoryDraft]=useState<MemoryDraft|null>(null);
- const requestLock=useRef(false),sent=useRef(false),greetingAbort=useRef<AbortController|null>(null),composer=useRef<HTMLFormElement>(null),heldMemory=useRef<MemoryDraft|null>(null);
+ const requestLock=useRef(false),sent=useRef(false),voiceTurnRef=useRef(false),greetingAbort=useRef<AbortController|null>(null),composer=useRef<HTMLFormElement>(null),heldMemory=useRef<MemoryDraft|null>(null);
  const v=useVoice(),mic=useMic(),chat=l.cache.chat;
  const activeRef=useRef(active);activeRef.current=active;
  useEffect(()=>{if(!active){v.actions.stop();mic.actions.cancel();}},[active]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -56,7 +56,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  const blocked=safety||!!reply?.safety||SAFETY_PATTERN.test([...chat].reverse().find(m=>m.role==='user')?.content??'');
  const memoryEnabled=l.view?.optionalMemory??false;
  const busy:PetBusy=mic.phase==='listening'?'listening':v.phase==='playing'?'speaking':awaiting||v.phase==='loading'||mic.phase==='transcribing'?'thinking':null;
- const pet=usePetReactions({busy,resting:paused}),thinkingText=useThinkingText(awaiting&&active);
+ const pet=usePetReactions({busy,resting:paused}),thinkingText=useThinkingText(awaiting&&active,!voiceTurnRef.current);
  useEffect(()=>{
   if(!l.connected)return;
   if(chat.length&&l.cache.chatAt&&Date.now()-l.cache.chatAt>STALE_MS)l.update({chat:[],chatAt:0});
@@ -78,7 +78,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  const bubble=pet.line||(mic.phase==='listening'?mic.interim||'我在听，你慢慢说…':mic.phase==='transcribing'?'我听一听你说了什么…':mic.phase==='requesting'?'请允许使用麦克风…':awaiting?thinkingText:(summary??reply?.summary)?summaryBubbleText((summary??reply?.summary)!):reply?.text??greeting);
  const send=(raw:string,extra:{intent?:ChatIntent;problemId?:string}={},voiceTurn=false)=>{
   const text=raw.trim();if(!text||l.busy||requestLock.current||!l.connected)return;
-  requestLock.current=true;sent.current=true;greetingAbort.current?.abort();v.actions.unlock();v.actions.stop();
+  requestLock.current=true;sent.current=true;voiceTurnRef.current=voiceTurn;greetingAbort.current?.abort();v.actions.unlock();v.actions.stop();
   // Ending a conversation is immutable. The next student turn starts a fresh history.
   const history=[...(shownSummary||latestTurn?.ended?[]:chat),{role:'user' as const,content:text}].slice(-20);
   l.update({chat:history,chatAt:Date.now()});setMessage('');setNotice('');setSummary(null);setManualSuggestion(null);setAwaiting(true);

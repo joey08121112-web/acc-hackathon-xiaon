@@ -12,7 +12,7 @@ export const THINKING: readonly (readonly string[])[] = [
  ['比平时慢了一些，可能是网络在排队…', '还没好的话，过一会儿再发一次也行，你的话不会丢。'],
 ];
 const THINKING_AT = [2500, 6000, 11000, 20000];
-export function useThinkingText(active: boolean): string {
+export function useThinkingText(active: boolean, sound = true): string {
  const [step, setStep] = useState(0), [pick, setPick] = useState(0);
  useEffect(() => {
   setStep(0);setPick(Math.floor(Math.random()*THINKING[0].length));
@@ -20,10 +20,10 @@ export function useThinkingText(active: boolean): string {
   const timers = [
    ...THINKING_AT.map((ms, i) => setTimeout(() => { setStep(i + 1); setPick(Math.floor(Math.random()*THINKING[i + 1].length)); }, ms)),
    // Sound only if the student has it on; a reply that arrives sooner cancels these.
-   setTimeout(() => void voice.playClipIfEnabled('think'), 1500), setTimeout(() => void voice.playClipIfEnabled('long'), 6500),
+   ...(sound ? [setTimeout(() => void voice.playClipIfEnabled('think'), 1500), setTimeout(() => void voice.playClipIfEnabled('long'), 6500)] : []),
   ];
   return () => timers.forEach(clearTimeout);
- }, [active]);
+ }, [active, sound]);
  return THINKING[step][pick % THINKING[step].length];
 }
 /** The big main pet: a speech bubble (the pet's own words as subtitles) above a touchable, eye-following Mascot. */
