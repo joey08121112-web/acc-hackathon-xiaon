@@ -1,7 +1,7 @@
 /** 所有者：Claude（第二期：专业模式面试引擎）。由 server/agents/learning.ts 委托调用。
  * 安全拦截、休息、面试是否存在、状态与 expectedRevision 由协调器先查；插件返回值出服务端前再按 schema 解析，报告另过 server/agents/professional.ts 的程序门控。
  * 每题流程：小N出题（打开题目，记 task 暴露）→ 学生作答 → 追问一次「你是怎么想的」→ 合成一次作答走 ctx.submitAttempt 照常判分 → 答错且是第一题时加问同类题 → 下一模块。
- * 题目只来自现有题库（不含模型生成的 gen- 题）；先修规则、每场次计算题上限和探索顺序由现有的打开题目事件把关。 */
+ * 题目只来自题库里的生活故事题（life-*，不含旧题和模型生成的 gen- 题）；先修规则、每场次计算题上限和探索顺序由现有的打开题目事件把关。 */
 import { z } from 'zod';
 import { schemas,SCHEMA_VERSION,INTERVIEW_MODULE_ORDER,MODULE_LEVEL_LABELS,type ChatObservation,type GradingResult,type InterviewModule,type InterviewPending,type InterviewSession,type InterviewStep,type InterviewTurn,type InterviewTurnKind,type ModuleLevel,type ProfessionalReport,type TaskDefinition } from '../../../shared/learning-contracts';
 import { RuntimeError } from '../../core/errors';
@@ -10,13 +10,17 @@ import { INTERVIEWER_PROMPT,REPORT_WORDING_PROMPT } from '../../agents/prompts/i
 import type { InterviewAnswerInput,InterviewPauseInput,InterviewResumeInput,InterviewStartInput,ProfessionalContext,ReportInput } from '../context';
 import { LOCAL_WORDING,levelOf,moduleBasis,statedReason,suggestionsFor,type AttemptFact } from './levels';
 export { moduleBasis,levelOf,statedReason,REASON_MIN_CHARS,NO_REASON_PATTERN,SUGGESTIONS } from './levels';
-const LEAD:Record<InterviewModule,string>={'理解':'第一关「理解」：','逻辑':'第二关「逻辑」：','计算':'下一关「计算」：','建模':'下一关「建模」：','空间想象':'最后一关「空间想象」：'};
-const TRANSFER_LEAD='我们再看一道类似的题，慢慢来：';
+const LEAD:Record<InterviewModule,string>={'理解':'第一站，理解花园。先听我讲件小事——\n','逻辑':'第二站，逻辑小桥。又是一件身边的小事——\n','计算':'第三站，计算工坊。这回帮家里算笔小账——\n','建模':'第四站，生活集市。帮家里想个算钱的办法——\n','空间想象':'最后一站，空间山丘。在脑子里转一转——\n'};
+const TRANSFER_LEAD='我们再看一件类似的小事，慢慢来：\n';
 /** Fixed follow-ups (no model, or the model's phrasing failed the program check). */
 export const FOLLOW_UPS:Record<'question'|'transfer',string>={question:'你是怎么想的？想到哪说到哪就好，说不会也没关系。',transfer:'这道你又是怎么想的呢？用自己的话说说。'};
-const BANK_SHORT='这类题你以前见过，题库里暂时没有新的同类题（题库不足），这次就当回顾。';
+/** A choice in a life story: ask why this choice, not "how did you solve it". */
+export const CHOICE_FOLLOW_UPS:Record<'question'|'transfer',string>={question:'你为什么这么选？想到哪说到哪就好，说不清也没关系。',transfer:'这次你又为什么这么选呢？用自己的话说说。'};
+const BANK_SHORT='这个小故事你以前听过，新的故事暂时用完了（题库不足），这次就当回顾。';
 const MODEL_INTRO_MAX=120;
-const isBankTask=(t:{id:string})=>!t.id.startsWith('gen-');
+const MODEL_LEAD_MAX=40;
+/** 专业模式只出生活故事题（catalog 里的 life-*）：见过一组还有下一组，全见过时回顾一道故事题，不退回旧的做题式题目。 */
+export const isStoryTask=(t:{id:string})=>t.id.startsWith('life-');
 const hasReasonPoint=(t:TaskDefinition)=>t.rubric.some(r=>r.requiresExplanation);
 const turnsOf=(ctx:ProfessionalContext,interviewId:string)=>ctx.repository.list('interviewTurns').filter(t=>t.interviewId===interviewId);
 /** Ever opened or answered (any session): such a task is not unseen. */
@@ -27,7 +31,7 @@ interface Picked { task:TaskDefinition;bankShort:boolean }
  * The existing expose event enforces the per-session calculation cap and the exploration order; a refusal there moves on to the next candidate. */
 function openTask(ctx:ProfessionalContext,input:{operationId:string;sessionId:string;module:InterviewModule;purpose:'question'|'transfer';familyId?:string;exclude:string[]}):Picked|null{
  const kinds=input.purpose==='question'?['observation','delayed','transfer']:['transfer','delayed'];
- const all=ctx.catalog.candidates({sessionId:input.sessionId,dimension:input.module,excludeTaskIds:input.exclude,limit:100}).filter(isBankTask)
+ const all=ctx.catalog.candidates({sessionId:input.sessionId,dimension:input.module,excludeTaskIds:input.exclude,limit:100}).filter(isStoryTask)
   .map(t=>ctx.catalog.definition(t.id,t.version)!).filter(t=>t&&(!input.familyId||t.familyId===input.familyId)&&kinds.includes(t.variantKind)&&prerequisitesMet(ctx,t));
  const byKind=(list:TaskDefinition[])=>kinds.flatMap(k=>list.filter(t=>t.variantKind===k));
  const unseen=byKind(all.filter(t=>!seenTask(ctx,t.id))).map(task=>({task,bankShort:false}));
@@ -43,7 +47,7 @@ const promptOutput=z.object({prompt:z.string().min(1).max(MODEL_INTRO_MAX)});
  * Offline, a failed call or a line that could reveal the answer → the fixed wording. */
 async function ask(ctx:ProfessionalContext,input:{operationId:string;module:InterviewModule;task:TaskDefinition;kind:InterviewTurnKind;followUpOf?:'question'|'transfer';previousAnswer?:string},signal?:AbortSignal):Promise<{pending:InterviewPending;run:InterviewStep['run']}>{
  const {module,task,kind}=input,now=ctx.clock.now();
- const fixed=kind==='follow_up'?FOLLOW_UPS[input.followUpOf??'question']:'';
+ const fixed=kind==='follow_up'?(task.choices.length?CHOICE_FOLLOW_UPS:FOLLOW_UPS)[input.followUpOf??'question']:'';
  const compose=(line:string)=>kind==='follow_up'?line:`${line}${task.question}`.slice(0,300);
  const local={module,task:{taskId:task.id,taskVersion:task.version},kind,prompt:compose(kind==='follow_up'?fixed:kind==='transfer'?TRANSFER_LEAD:LEAD[module]),mode:'local_rules' as const,askedAt:now};
  if(ctx.providerKind==='offline')return {pending:local,run:null};
@@ -52,6 +56,8 @@ async function ask(ctx:ProfessionalContext,input:{operationId:string;module:Inte
   const parsed=promptOutput.safeParse(JSON.parse(content));
   const line=parsed.success?parsed.data.prompt.trim():'';
   if(!line||task.answer.some(a=>containsAnswer(line,a))||/答案/.test(line))return {pending:local,run};
+  // An opening only sets the scene: a question in it ("为什么这么选？") or a retold story would come before the student has chosen.
+  if(kind!=='follow_up'&&(/为什么|[？?]/.test(line)||Array.from(line).length>MODEL_LEAD_MAX))return {pending:local,run};
   return {pending:{...local,prompt:compose(kind==='follow_up'?line:line+'\n'),mode:'model'},run};
  }catch(e){if(e instanceof RuntimeError||e instanceof SyntaxError)return {pending:local,run:null};throw e;}
 }

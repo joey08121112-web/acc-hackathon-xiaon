@@ -33,13 +33,14 @@ export function ProfessionalModeView({l,navigate,safety,onPractice,station,onSta
  },[open,interview?.status,interview?.currentModule,latest?.completedModules.length]);
  // 一张地图两种用法：点地点出卡片，里面是「测评这一站」和「在这里自由练习」。测评没做完时自由练习锁住，测评题才算没见过。
  useEffect(()=>{if(card)cardRef.current?.scrollIntoView?.({block:'nearest'});},[card]);
- const focusStart=()=>{setCard(null);startRef.current?.scrollIntoView({block:'center'});startRef.current?.focus();};
- function onNode(m:MapModule){setNotice('');setCard(m);}
+ // 点亮着的这一站直接进对话（没开始就开始，暂停了就接着来）；其他地点出卡片，说明顺序或自由练习。
+ function onNode(m:MapModule){setNotice('');const a=assessAction(m);if(stateOf(m)==='current'&&a.go){if(!disabled)a.go();return;}setCard(m);}
  function assessAction(m:MapModule):{text:string;go?:()=>void}{
   const state=stateOf(m),place=placeOf(m);
+  if(state==='done'&&!interview&&latest?.status==='completed'&&m===INTERVIEW_MODULE_ORDER[0])return {text:'五站都点亮啦。想再测一次，就从这里出发，会换上新的小故事。',go:()=>{setCard(null);void act('start');}};
   if(state==='done')return {text:`${place}已经点亮了。`+(current&&interview?`测评接着去${placeOf(current)}。`:'')};
-  if(state==='waiting')return {text:interview&&current?`测评按顺序来，先去${placeOf(current)}。`:latest?.status==='completed'?'这次测评已经走完，想再测一次点下面的「开始」。':`测评从${placeOf(INTERVIEW_MODULE_ORDER[0])}出发。`};
-  if(!interview)return {text:'测评从这里出发：大约 10–15 分钟，五站依次走，可以随时暂停，不打总分。',go:focusStart};
+  if(state==='waiting')return {text:interview&&current?`测评按顺序来，先去${placeOf(current)}。`:latest?.status==='completed'?'这次测评已经走完，想再测一次就点理解花园。':`测评从${placeOf(INTERVIEW_MODULE_ORDER[0])}出发。`};
+  if(!interview)return {text:'测评从这里出发：大约 10–15 分钟，五站依次走，可以随时暂停，不打总分。',go:()=>{setCard(null);void act('start');}};
   if(interview.status==='paused')return {text:'上次停在这一站，已答的不会重问。',go:()=>{setCard(null);void act('resume');}};
   return {text:'小N在这一站等你。',go:()=>{setCard(null);setNotice('');setOpen(stop(interview));}};
  }
@@ -74,6 +75,9 @@ export function ProfessionalModeView({l,navigate,safety,onPractice,station,onSta
    return false;
   }finally{lock.current=false;if(mounted.current)setWorking(false);}
  }
+ // A story choice is stored as its letter; the history shows what was chosen.
+ const chosen=(t:typeof turns[number])=>t.kind==='follow_up'?t.answer:l.view?.tasks.find(x=>x.id===t.task.taskId&&x.version===t.task.taskVersion)?.choices.find(c=>c.split(':')[0]===t.answer.trim())??t.answer;
+ const said=pending?(step?.interview?.revision===interview?.revision&&step?.text?step.text:pending.prompt):'';
  const inConvo=!blocked&&!!open&&interview?.status==='in_progress',place=open?placeOf(open):'',stopNo=INTERVIEW_MODULE_ORDER.indexOf(open as MapModule)+1;
  const pauseBar=interview&&<div className="professional-controls"><button className="secondary" disabled={!l.connected} onClick={pause}>先暂停</button><span className="small">不用赶进度，想休息就停一停。</span></div>;
  return <section className="professional professional-mode" aria-label="专业模式测评" aria-busy={working}>
@@ -81,9 +85,9 @@ export function ProfessionalModeView({l,navigate,safety,onPractice,station,onSta
   :inConvo?<>
    <div className="professional-convo-bar"><button className="text-button" onClick={()=>setOpen(false)}>← 回到地图</button><span className="tag">{stopNo>0?`第 ${stopNo} 站 · `:''}{place}</span></div>
    {pauseBar}
-   {turns.length>0&&<details className="professional-history"><summary>回看刚才的对话（{turns.length}）</summary>{turns.map(t=><div key={t.id}><p className="professional-bubble">小N：{t.prompt}</p><p className="professional-bubble student">我：{t.answer}</p></div>)}</details>}
-   {pending?<div className="professional-question"><span className="tag">{pending.module} · {pending.kind==='follow_up'?'再说说你的想法':pending.kind==='transfer'?'换个同类的小问题':'这一站的小问题'}</span><p className="professional-bubble" aria-live="polite">{step?.interview?.revision===interview.revision&&step.text?step.text:pending.prompt}</p>
-    {task&&pending.kind!=='follow_up'&&task.question!==pending.prompt&&<p className="professional-task">{task.question}</p>}
+   {turns.length>0&&<details className="professional-history"><summary>回看刚才的对话（{turns.length}）</summary>{turns.map(t=><div key={t.id}><p className="professional-bubble">小N：{t.prompt}</p><p className="professional-bubble student">我：{chosen(t)}</p></div>)}</details>}
+   {pending?<div className="professional-question"><span className="tag">{pending.module} · {pending.kind==='follow_up'?'再说说你的想法':pending.kind==='transfer'?'再来一件类似的小事':task?.choices.length?'你会怎么选':'这一站的小问题'}</span><p className="professional-bubble" aria-live="polite">{said}</p>
+    {task&&pending.kind!=='follow_up'&&!said.includes(task.question)&&<p className="professional-task">{task.question}</p>}
     <ProfessionalAnswer key={interview.id+':'+pending.askedAt+':'+pending.kind} l={l} interview={interview} task={task??null} disabled={disabled} onAnswer={text=>act('answer',text)} onHint={()=>void act('hint')}/>
    </div>:<p className="notice">这一站暂时没有待答的问题。<button disabled={disabled} onClick={()=>void act('resume')}>接着看看</button></p>}
   </>:<>
@@ -92,11 +96,12 @@ export function ProfessionalModeView({l,navigate,safety,onPractice,station,onSta
    {card&&(()=>{const index=INTERVIEW_MODULE_ORDER.indexOf(card),a=assessAction(card),locked=!!interview,status=l.view?explorationStatus(l.view,card):'未开始';
     return <div className="professional-place" role="region" aria-label={placeOf(card)} ref={cardRef}>
      <div className="professional-place-head"><strong>{placeOf(card)}</strong><button className="text-button" onClick={()=>setCard(null)}>收起</button></div>
-     <div className="professional-place-row"><h4>测评</h4><p className="small">{a.text}</p>{a.go&&<button className="primary" disabled={disabled} onClick={a.go}>测评这一站</button>}</div>
+     <div className="professional-place-row"><h4>测评</h4><p className="small">{a.text}</p>{a.go&&<button className="primary" disabled={disabled} onClick={a.go}>{interview?'测评这一站':'从这里开始测评'}</button>}</div>
      <div className="professional-place-row"><h4>自由练习</h4><p className="small">{locked?'测评做完就能在这里自由练习。':`做一道这里的小任务，按自己的节奏来。练习记录：${status}。`}</p>
       {!locked&&l.view?.paused&&<p className="small">学习已暂停。<button className="text-button" disabled={l.busy||safety} onClick={()=>void l.run('learning/start',{mode:'exploration'}).catch(()=>{})}>主动恢复本次学习</button></p>}
       <button className="secondary" disabled={locked||!onPractice||disabled} onClick={()=>{setCard(null);onPractice?.(index);}}>在这里自由练习</button></div>
     </div>;})()}
+   {working&&<p className="notice" role="status">小N正在准备这一站…</p>}
    {notice&&<p className="notice" role="status">{notice}</p>}
    {!interview&&latest?.status==='completed'&&<p className="notice">这次五个模块都走过了，辛苦啦。</p>}
    {!interview&&<div className="professional-intro"><p>先用约 10–15 分钟试试，实际时间按你的节奏。理解 → 逻辑 → 计算 → 建模 → 空间想象，五个地点依次点亮，可以随时暂停。</p><p>先走完理解和逻辑，就能看看本次报告。还没测的模块会如实标记。</p><div className="home-card-actions"><button ref={startRef} className="primary" disabled={disabled} onClick={()=>void act('start')}>开始</button><button className="secondary" disabled={disabled} onClick={()=>navigate('home','小N')}>先回首页</button></div></div>}

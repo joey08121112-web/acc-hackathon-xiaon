@@ -67,6 +67,9 @@
 .professional-history[open] { max-height: 36dvh; overflow-y: auto; overscroll-behavior: contain; }
 .professional-choices { display: grid; gap: 8px; margin: 16px 0; }
 .professional-choices button { text-align: left; }
+.professional-choice { display: flex; gap: 12px; align-items: flex-start; justify-content: flex-start; padding: 14px 16px; line-height: 1.5; }
+.professional-choice b { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #e3e9d6; color: #3e624c; font-size: 14px; }
+.professional-choice[aria-pressed="true"] b { background: #486744; color: #fff; }
 .professional-choices [aria-pressed="true"] { outline: 2px solid #486744; background: #e8eedf; }
 .professional-composer { padding: 10px 0; scroll-margin-block: 90px; }
 .professional-composer .field { margin-top: 0; }

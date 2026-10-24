@@ -7,7 +7,7 @@ import { icons } from '../learning/ExplorationMap';
 export type MapModule=typeof INTERVIEW_MODULE_ORDER[number];
 export type MapNodeState='done'|'current'|'waiting';
 export const placeOf=(m:string)=>dimensionDetails.find(d=>d.name===m)?.place??m;
-const labels:Record<MapNodeState,string>={done:'已点亮',current:'在这里',waiting:'待探索'};
+const labels:Record<MapNodeState,string>={done:'已点亮',current:'点这里进入',waiting:'待探索'};
 export function ProfessionalMap({stateOf,onNode}:{stateOf:(m:MapModule)=>MapNodeState;onNode:(m:MapModule)=>void}){
  return <div className="exploration-map professional-map" role="group" aria-label="五维地图">
   <MapArt/>

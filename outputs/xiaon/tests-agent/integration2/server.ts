@@ -16,7 +16,7 @@ class Synthetic implements ModelProvider{
    const {task,value}=data as {task:{rubric:{id:string}[]};value:string};const start=value.indexOf('\n')+1;
    return out({points:task.rubric.map(p=>({pointId:p.id,status:'supported',quote:p.id==='result'?value.split('\n')[0]:value.slice(start),location:p.id==='result'?{start:0,end:value.split('\n')[0].length}:{start,end:value.length},explanation:'合成模型核对理由；结果仍由程序核对'}))});
   }
-  if(version==='interviewer-g2')return out({prompt:'慢慢想，说说你的做法。'});
+  if(version==='interviewer-g3')return out({prompt:'慢慢想，说说你的做法。'});
   if(version==='report-wording-g2')return out({wordings:{理解:'这次把条件读清楚了。'},levels:{理解:'needs_work'}});
   if(version.startsWith('summary-'))return out({topics:['应用题里的条件'],planSuggestions:['先圈出题目里的条件']});
   if(version.startsWith('greeting-'))return out({text:'又见面了，今天想聊什么？'});

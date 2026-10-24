@@ -19,7 +19,7 @@ test('B01 production interview report: no reason rubric never upgrades unrelated
  const f=temporaryRepository(new TestClock('2026-10-22T01:00:00.000Z')),r=createRuntime(f),d=installLearning(r);
  try{
  let step=await d.interviewStart({operationId:id()});
- for(const result of ['2x-3','A','5x-4']){
+ for(const result of ['B','A','B']){
  step=await d.interviewAnswer({operationId:id(),interviewId:step.interview!.id,expectedRevision:step.interview!.revision,text:result});
  step=await d.interviewAnswer({operationId:id(),interviewId:step.interview!.id,expectedRevision:step.interview!.revision,text:reason});
  }

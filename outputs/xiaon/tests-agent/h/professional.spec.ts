@@ -9,12 +9,16 @@ async function ready(page:Page){
  await expect(page.getByRole('region',{name:'专业模式测评'})).toBeVisible();
 }
 const mode=(page:Page)=>page.getByRole('region',{name:'专业模式测评'});
-/** 地图为主：一站走完回到地图，点亮着的当前地点再进入对话。 */
-async function enter(page:Page){await expect(mode(page)).toHaveAttribute('aria-busy','false');const box=mode(page).getByRole('textbox',{name:'我的回答'});if(!await box.isVisible())await mode(page).getByRole('group',{name:'五维地图'}).locator('[aria-current="step"]').click(),await mode(page).getByRole('button',{name:'测评这一站',exact:true}).click();await expect(box).toBeVisible();}
+/** 地图为主：一站走完回到地图，点亮着的当前地点直接进入对话。故事题点选作答，追问和文字题用输入框。 */
+const composer=(page:Page)=>mode(page).locator('.professional-composer textarea, .professional-choices').first();
+async function enter(page:Page){await expect(mode(page)).toHaveAttribute('aria-busy','false');if(!await composer(page).isVisible())await mode(page).getByRole('group',{name:'五维地图'}).locator('[aria-current="step"]').click();await expect(composer(page)).toBeVisible();}
+async function reply(page:Page,text:string){const choices=mode(page).locator('.professional-choices');
+ if(await choices.isVisible()){const label=/^[A-C]$/.test(text)?text:'A';await choices.locator('.professional-choice').filter({has:page.locator('b',{hasText:new RegExp('^'+label+'$')})}).click();await mode(page).getByRole('button',{name:'就选这个',exact:true}).click();}
+ else{await mode(page).getByRole('textbox',{name:'我的回答'}).fill(text);await mode(page).getByRole('button',{name:'告诉小N',exact:true}).click();}}
 async function answer(page:Page,text='每本是一本的价格'){
  await enter(page);
  const response=page.waitForResponse(r=>r.url().endsWith('/interview/answer'));
- await mode(page).getByRole('textbox',{name:'我的回答'}).fill(text);await mode(page).getByRole('button',{name:'告诉小N',exact:true}).click();
+ await reply(page,text);
  const res=await response;if(!res.ok())console.log('H2 answer status',res.status(),await res.text());const body=await res.json();if(body.interview?.status==='paused')await expect(page).toHaveURL(/#home$/);else await expect(mode(page)).toHaveAttribute('aria-busy','false');return res;
 }
 test.beforeEach(async({request})=>{expect((await request.post(`http://127.0.0.1:${api}/__h2/reset`,{headers:{'X-Xiaon-Test':'synthetic-h2-only'}})).ok()).toBeTruthy();});
@@ -22,9 +26,10 @@ test('390宽：显式开始、五模块追问、暂停刷新续测、报告历�
  let starts=0;page.on('request',r=>{if(r.url().endsWith('/interview/start'))starts++;});await ready(page);expect(starts).toBe(0);
  const map=mode(page).getByRole('group',{name:'五维地图'});await expect(map.getByRole('button')).toHaveCount(5);
  // One map, two uses: a place card offers the assessment and free practice; the fixture's earlier assessment is finished, so practice is open.
- await map.getByRole('button',{name:/理解花园/}).click();const first=mode(page).getByRole('region',{name:'理解花园'});await expect(first.getByRole('button',{name:'在这里自由练习'})).toBeEnabled();expect(starts).toBe(0);await first.getByRole('button',{name:'收起'}).click();
- await mode(page).getByRole('button',{name:'开始',exact:true}).click();await expect(mode(page).getByText('第 1 站 · 理解花园')).toBeVisible();await expect(mode(page).getByRole('textbox',{name:'我的回答'})).toBeVisible();
- await mode(page).getByRole('button',{name:'← 回到地图'}).click();await expect(map.locator('[aria-current="step"]')).toContainText('理解花园在这里');await expect(map.locator('[data-state="waiting"]')).toHaveCount(4);await page.screenshot({path:info.outputPath('map-390.png'),fullPage:true});
+ await map.getByRole('button',{name:/逻辑小桥/}).click();const first=mode(page).getByRole('region',{name:'逻辑小桥'});await expect(first).toContainText('已经点亮了');await expect(first.getByRole('button',{name:'从这里开始测评'})).toHaveCount(0);await expect(first.getByRole('button',{name:'在这里自由练习'})).toBeEnabled();expect(starts).toBe(0);await first.getByRole('button',{name:'收起'}).click();
+ // All lit from the earlier assessment: 理解花园's card starts a retest (a deliberate tap, practice still offered); a lit current station is entered directly.
+ await map.getByRole('button',{name:/理解花园/}).click();const garden=mode(page).getByRole('region',{name:'理解花园'});await expect(garden.getByRole('button',{name:'在这里自由练习'})).toBeEnabled();expect(starts).toBe(0);await garden.getByRole('button',{name:'从这里开始测评'}).click();await expect(mode(page).getByText('第 1 站 · 理解花园')).toBeVisible();await expect(composer(page)).toBeVisible();expect(starts).toBe(1);
+ await mode(page).getByRole('button',{name:'← 回到地图'}).click();await expect(map.locator('[aria-current="step"]')).toContainText('理解花园点这里进入');await expect(map.locator('[data-state="waiting"]')).toHaveCount(4);await page.screenshot({path:info.outputPath('map-390.png'),fullPage:true});
  for(let i=0;i<2;i++)expect((await answer(page)).ok()).toBeTruthy();
  await expect(mode(page).getByRole('textbox')).toHaveCount(0);await expect(mode(page)).toContainText('理解花园点亮啦！下一站：逻辑小桥');await expect(map.locator('[data-state="done"]')).toContainText('理解花园');
  await map.getByRole('button',{name:/空间山丘/}).click();const later=mode(page).getByRole('region',{name:'空间山丘'});await expect(later).toContainText('先去逻辑小桥');await expect(later.getByRole('button',{name:'测评这一站'})).toHaveCount(0);
@@ -33,7 +38,7 @@ test('390宽：显式开始、五模块追问、暂停刷新续测、报告历�
  await expect(map.locator('[aria-current="step"]')).toContainText('计算');
  await mode(page).getByRole('button',{name:'先暂停',exact:true}).click();await expect(page).toHaveURL(/#home$/);await page.reload();
  await page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name:'专业模式',exact:true}).click();await expect(mode(page).getByText('上次停在：计算')).toBeVisible();
- await mode(page).getByRole('group',{name:'五维地图'}).locator('[aria-current="step"]').click();await mode(page).getByRole('region',{name:'计算工坊'}).getByRole('button',{name:'测评这一站'}).click();await expect(mode(page).getByText('第 3 站 · 计算工坊')).toBeVisible();expect(starts).toBe(1);
+ await mode(page).getByRole('group',{name:'五维地图'}).locator('[aria-current="step"]').click();await expect(mode(page).getByText('第 3 站 · 计算工坊')).toBeVisible();expect(starts).toBe(1);
  const hintResponse=page.waitForResponse(r=>r.url().endsWith('/learning/hint'));await mode(page).getByRole('button',{name:'给一点小提示'}).click();const hint=await(await hintResponse).json();expect(hint.ok).toBe(true);await expect(mode(page)).toContainText(hint.data.hint);await expect(mode(page)).not.toContainText('undefined');
  await page.setViewportSize({width:390,height:420});const textbox=mode(page).getByRole('textbox',{name:'我的回答'});await textbox.fill('先写草稿');await textbox.focus();await expect(mode(page).getByRole('button',{name:'告诉小N'})).toBeInViewport();await page.screenshot({path:info.outputPath('composer-390x420.png')});await page.setViewportSize({width:390,height:844});
  for(let i=0;i<6;i++)expect((await answer(page,'先看条件，再说明理由')).ok()).toBeTruthy();

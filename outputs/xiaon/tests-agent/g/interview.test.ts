@@ -4,12 +4,12 @@ import assert from 'node:assert/strict';
 import { createRuntime } from '../../server/bootstrap';
 import { installLearning } from '../../server/agents/learning';
 import { moduleBasis,levelOf,statedReason } from '../../server/plugins/interview/levels';
-import { ASSESSOR_PROMPT } from '../../server/plugins/assessment';
+import { ASSESSOR_PROMPT,AssessmentCatalog } from '../../server/plugins/assessment';
 import { temporaryRepository,TestClock } from '../../server/storage/testing';
 import { SCHEMA_VERSION,INTERVIEW_MODULE_ORDER,type InterviewStep,type ModelProvider,type ModuleLevelBasis } from '../../shared/learning-contracts';
 const id=()=>crypto.randomUUID();
-const RIGHT:Record<string,string>={understand:'2x-3',logic:'A','b-like-observation':'5x-4','b-like-transfer':'3a+7',bracket:'x+5',model:'3x+2',space:'B','b-language-transfer':'3a+6','b-logic-transfer':'C','b-cost-transfer':'5a+8','b-space-transfer':'A','b-language-delayed':'2x-8','b-logic-delayed':'B'};
-const WRONG:Record<string,string>={understand:'2x-6',logic:'C','b-like-observation':'x','b-like-transfer':'3a-3',bracket:'x-5',model:'3x+6',space:'A','b-language-transfer':'3a+2','b-logic-transfer':'A','b-cost-transfer':'13a','b-space-transfer':'B'};
+const RIGHT:Record<string,string>={'life-understand-charger':'B','life-understand-ticket':'A','life-understand-recipe':'B','life-logic-plant':'A','life-logic-snack':'B','life-logic-glasses':'C','life-calc-stationery':'C','life-calc-fridge':'B','life-calc-steps':'A','life-model-powerbank':'B','life-model-photo':'A','life-model-milktea':'C','life-space-clock':'B','life-space-facing':'A','life-space-picture':'B','life-calc-coins':'B','life-calc-fruit':'C','life-calc-buscard':'A','life-model-bike':'B','life-model-swim':'A','life-model-parking':'C','life-space-turn':'B','life-space-phone':'A','life-space-cookie':'C','life-understand-yogurt':'B','life-understand-takeout':'B','life-understand-fishfood':'B','life-logic-umbrella':'A','life-logic-fridge':'C','life-logic-cloud':'C',understand:'2x-3',logic:'A','b-like-observation':'5x-4','b-like-transfer':'3a+7',bracket:'x+5',model:'3x+2',space:'B','b-language-transfer':'3a+6','b-logic-transfer':'C','b-cost-transfer':'5a+8','b-space-transfer':'A','b-language-delayed':'2x-8','b-logic-delayed':'B'};
+const WRONG:Record<string,string>={'life-understand-charger':'A','life-understand-ticket':'B','life-understand-recipe':'A','life-logic-plant':'B','life-logic-snack':'A','life-logic-glasses':'A','life-calc-stationery':'A','life-calc-fridge':'A','life-calc-steps':'B','life-model-powerbank':'A','life-model-photo':'B','life-model-milktea':'A','life-space-clock':'A','life-space-facing':'B','life-space-picture':'A','life-calc-coins':'A','life-calc-fruit':'A','life-calc-buscard':'B','life-model-bike':'A','life-model-swim':'B','life-model-parking':'B','life-space-turn':'A','life-space-phone':'B','life-space-cookie':'B','life-understand-yogurt':'A','life-understand-takeout':'A','life-understand-fishfood':'A','life-logic-umbrella':'B','life-logic-fridge':'B','life-logic-cloud':'B',understand:'2x-6',logic:'C','b-like-observation':'x','b-like-transfer':'3a-3',bracket:'x-5',model:'3x+6',space:'A','b-language-transfer':'3a+2','b-logic-transfer':'A','b-cost-transfer':'13a','b-space-transfer':'B'};
 const REASON='因为要先算两倍，再减去三，顺序不能反过来';
 function setup(provider?:ModelProvider){
  const clock=new TestClock('2026-10-21T01:00:00.000Z'),f=temporaryRepository(clock),r=createRuntime({...f,...(provider?{provider}:{})}),d=installLearning(r,{timeoutMs:2000});
@@ -56,8 +56,8 @@ test('order is fixed: 理解 then 逻辑 then 计算 → 建模 → 空间想象
   assert.deepEqual(turns.map(x=>x.kind),Array(5).fill(['question','follow_up']).flat());
   for(const turn of turns)assert.equal(turn.attemptId===null,turn.kind!=='follow_up','the follow-up answer completes the graded attempt');
   const attempts=t.r.repository.list('attempts');assert.equal(attempts.length,5);
-  assert.equal(attempts.find(a=>a.taskId==='understand')!.value,'2x-3\n'+REASON,'reason tasks: the follow-up goes to the Assessor as the explanation line');
-  assert.equal(attempts.find(a=>a.taskId==='b-like-observation')!.value,'5x-4','calculation keeps only the answer lines');
+  assert.equal(attempts.find(a=>a.taskId==='life-understand-yogurt')!.value,'B\n'+REASON,'reason tasks: the follow-up goes to the Assessor as the explanation line');
+  assert.equal(attempts.find(a=>a.taskId==='life-calc-coins')!.value,'B\n'+REASON,'life-story calculation also takes the follow-up as its reason line');
   assert.ok(t.r.repository.list('exposures').filter(e=>e.kind==='task').length>=5,'every question opened as a task exposure');
  }finally{t.dispose();}
 });
@@ -67,7 +67,7 @@ test('a transfer question is asked only after a wrong first answer, from the sam
   let step=await t.d.interviewStart({operationId:id()});
   step=await t.pass(step);assert.equal(step.interview!.currentModule,'逻辑','right answer: no transfer');
   step=await t.pass(step,{wrong:true});
-  assert.equal(step.interview!.currentModule,'逻辑');assert.equal(step.interview!.pending!.kind,'transfer');assert.equal(step.interview!.pending!.task.taskId,'b-logic-transfer');
+  assert.equal(step.interview!.currentModule,'逻辑');assert.equal(step.interview!.pending!.kind,'transfer');assert.equal(step.interview!.pending!.task.taskId,'life-logic-fridge');
   assert.match(step.text,/类似/);
   step=await t.pass(step);assert.equal(step.interview!.currentModule,'计算');
   const rep=await t.report(step);
@@ -84,12 +84,12 @@ test('calculation without reason rubric: related but unverified prose → partia
  for(const [label,run,basis] of [
   ['unverified related reason',async(t:ReturnType<typeof setup>,s:InterviewStep)=>t.pass(s,{reason:'先把x项合起来，再写常数'}),'correct_reason_incomplete'],
   ['no reason',async(t:ReturnType<typeof setup>,s:InterviewStep)=>t.pass(s,{reason:'不知道'}),'correct_reason_incomplete'],
-  ['hint',async(t:ReturnType<typeof setup>,s:InterviewStep)=>{const hinted=await t.answer(s,'给我一点提示');assert.match(hinted.text,/系数相加/);assert.equal(hinted.interview!.revision,s.interview!.revision,'a hint asks nothing new');return t.pass(hinted,{reason:'先把x项合起来，再写常数'});},'completed_with_hint'],
-  ['both wrong',async(t:ReturnType<typeof setup>,s:InterviewStep)=>{const a=await t.pass(s,{wrong:true});assert.equal(a.interview!.pending!.task.taskId,'b-like-transfer');return t.pass(a,{wrong:true});},'incorrect_on_both'],
+  ['hint',async(t:ReturnType<typeof setup>,s:InterviewStep)=>{const hinted=await t.answer(s,'给我一点提示');assert.match(hinted.text,/归一堆/);assert.equal(hinted.interview!.revision,s.interview!.revision,'a hint asks nothing new');return t.pass(hinted,{reason:'先把x项合起来，再写常数'});},'completed_with_hint'],
+  ['both wrong',async(t:ReturnType<typeof setup>,s:InterviewStep)=>{const a=await t.pass(s,{wrong:true});assert.equal(a.interview!.pending!.task.taskId,'life-calc-fruit');return t.pass(a,{wrong:true});},'incorrect_on_both'],
  ] as const){
   const t=setup();try{
    let step=await t.d.interviewStart({operationId:id()});step=await t.pass(step);step=await t.pass(step);
-   assert.equal(step.interview!.pending!.task.taskId,'b-like-observation','bracket needs like-terms first (existing prerequisite rule)');
+   assert.equal(step.interview!.pending!.task.taskId,'life-calc-coins','the like-terms life story (no prerequisite) opens 计算');
    step=await run(t,step);const rep=await t.report(step);assert.equal(level(rep,'计算').basis,basis,label);
    assert.ok(level(rep,'计算').suggestions.length>0);
   }finally{t.dispose();}
@@ -155,7 +155,7 @@ class Script implements ModelProvider {
  readonly kind='synthetic' as const;readonly supportsTools=true;systems:string[]=[];
  async complete(input:Parameters<ModelProvider['complete']>[0]):ReturnType<ModelProvider['complete']>{
   const system=input.messages.find(m=>m.role==='system')!.content;this.systems.push(system.split('\n')[0]);
-  if(system.startsWith('interviewer-g2'))return{content:JSON.stringify({prompt:'来闯这一关吧，慢慢想！'}),toolCalls:[]};
+  if(system.startsWith('interviewer-g3'))return{content:JSON.stringify({prompt:'来闯这一关吧，慢慢想！'}),toolCalls:[]};
   if(system.startsWith('report-wording-g2'))return{content:JSON.stringify({wordings:{'理解':'读题很仔细，理由也说清了。'},levels:{'理解':'needs_work'}}),toolCalls:[]};
   if(input.messages.some(m=>m.role==='system'&&m.content===ASSESSOR_PROMPT)){const {task,value}=JSON.parse(input.messages.find(m=>m.role==='user')!.content) as {task:{rubric:{id:string}[]};value:string};const nl=value.indexOf('\n'),first=value.slice(0,nl<0?value.length:nl);
    return{content:JSON.stringify({points:task.rubric.map(r=>r.id==='result'?{pointId:r.id,status:'supported',quote:first,location:{start:0,end:first.length},explanation:'合成'}:{pointId:r.id,status:'supported',quote:value.slice(nl+1),location:{start:nl+1,end:value.length},explanation:'合成'})}),toolCalls:[]};}
@@ -170,6 +170,41 @@ test('with a model: questions are phrased by the model, the program keeps the le
   const rep=await t.report(step);
   assert.deepEqual([level(rep,'理解').level,level(rep,'理解').basis],['good','correct_with_reason'],'the model tried needs_work; the program basis wins');
   assert.equal(rep.modules[0].wording,'读题很仔细，理由也说清了。');assert.equal(rep.mode,'model');
-  assert.ok(p.systems.includes('interviewer-g2')&&p.systems.includes('report-wording-g2'));
+  assert.ok(p.systems.includes('interviewer-g3')&&p.systems.includes('report-wording-g2'));
+ }finally{t.dispose();}
+});
+
+test('retests stay on life stories: two story sets per station, then a review of a seen story, never an old-style question',async()=>{
+ const t=setup();try{
+  const firsts:string[][]=[];let last:InterviewStep|null=null;
+  for(let round=0;round<7;round++){
+   let step=await t.d.interviewStart({operationId:id()});last=step;const opened:string[]=[];
+   while(step.interview!.status!=='completed'){opened.push(step.interview!.pending!.task.taskId);step=await t.pass(step);}
+   firsts.push(opened);
+  }
+  const all=t.turns().map(x=>x.task.taskId);
+  assert.ok(all.every(x=>x.startsWith('life-')),'professional mode only opens life-story tasks: '+all.filter(x=>!x.startsWith('life-')).join(','));
+  assert.deepEqual(firsts[0].slice(0,2),['life-understand-yogurt','life-logic-umbrella']);
+  assert.deepEqual(firsts[1].slice(0,2),['life-understand-charger','life-logic-plant'],'the second interview uses the second story set');
+  assert.equal(new Set(firsts.slice(0,6).flat()).size,30,'six rounds use all 30 stories once');
+  assert.match(last!.text,/回顾/,'with every story seen, a seen story is reviewed and says so');
+  assert.ok(firsts[6].every(x=>t.r.catalog.definition(x,2)!.variantKind==='observation'));
+ }finally{t.dispose();}
+});
+
+test('life stories: answers and typical errors are distinct choice labels; free practice gets them last',async()=>{
+ const t=setup();try{
+  const story=new AssessmentCatalog().all().filter(x=>x.id.startsWith('life-'));assert.equal(story.length,30);
+  for(const task of story){
+   const labels=task.choices.map(c=>c.split(':')[0]);
+   assert.deepEqual(labels,['A','B','C'],task.id);assert.ok(labels.includes(task.answer[0]),task.id);
+   assert.ok(labels.includes(task.commonErrors[0].indicator)&&task.commonErrors[0].indicator!==task.answer[0],task.id);
+   assert.ok(task.rubric.some(r=>r.requiresExplanation),task.id+' asks why after the choice');
+   assert.doesNotMatch(task.question,/第一行|另起一行|化简|写出/,task.id);
+  }
+  for(const m of INTERVIEW_MODULE_ORDER){const fams=new Set(story.filter(x=>x.primaryDimension===m).map(x=>x.familyId));assert.equal(fams.size,2,m);
+   for(const f of fams)assert.deepEqual(story.filter(x=>x.familyId===f).map(x=>x.variantKind).sort(),['delayed','observation','transfer'],f);}
+  const pool=t.r.catalog.candidates({sessionId:'s',excludeTaskIds:[],limit:100});
+  const firstStory=pool.findIndex(x=>x.id.startsWith('life-'));assert.ok(firstStory>0&&pool.slice(firstStory).every(x=>x.id.startsWith('life-')));
  }finally{t.dispose();}
 });

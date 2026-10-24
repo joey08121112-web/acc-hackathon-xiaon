@@ -47,7 +47,7 @@ test('GET /api/learning/trend sits behind the local session and derives monthly 
   const get=()=>fetch(base+'/api/learning/trend',{headers:{Cookie:cookie}});
   const empty=await get();assert.equal(empty.status,200);assert.deepEqual(await empty.json(),{latest:[],history:[]});
   let step=await d.interviewStart({operationId:crypto.randomUUID()});
-  for(const text of ['2x-3','先翻倍再减三','A','先检查前提和反例'])step=await d.interviewAnswer({operationId:crypto.randomUUID(),interviewId:step.interview!.id,expectedRevision:step.interview!.revision,text});
+  for(const text of ['B','先翻倍再减三','A','先检查前提和反例'])step=await d.interviewAnswer({operationId:crypto.randomUUID(),interviewId:step.interview!.id,expectedRevision:step.interview!.revision,text});
   const report=await d.interviewReport({operationId:crypto.randomUUID(),interviewId:step.interview!.id});
   const res=await get();assert.equal(res.status,200);
   const body=schemas.TrendQuery.parse(await res.json());assert.equal(body.history.length,5);assert.deepEqual(body.latest,body.history);

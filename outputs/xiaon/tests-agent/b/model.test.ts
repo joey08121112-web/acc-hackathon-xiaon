@@ -17,12 +17,27 @@ test('choice correct alone does not prove reasoning; validated explanation has e
  }finally{f2.dispose();}
 });
 
-test('no quote, foreign quote, malformed JSON, unknown points, wrong offsets, extra keys and program/model conflict all defer',async()=>{
+test('the program locates verbatim quotes itself: model offsets are ignored, wrapping quotes and edge punctuation are tolerated',async()=>{
+ const variants=[
+  points().map(p=>({...p,location:{start:999,end:1000}})),
+  points().map(({location:_,...p})=>p),
+  [points()[0],{...points()[1],quote:'“'+value.slice(2)+'”',location:undefined}],
+  [points()[0],{...points()[1],quote:'相加等于负五，'}],
+  [{...points()[0],explanation:''},points()[1]],
+ ];
+ for(const v of variants){
+  const f=fixture({analyzer:createModelAnalyzer(modelResponse(v))});try{
+   f.open('logic');const a=f.submit('logic',value);const g=await f.grade(a);assert.equal(g.verdict,'correct',JSON.stringify(v[1]));
+   for(const e of f.repository.list('evidence')){assert.equal(a.value.slice(e.location.start,e.location.end),e.quote);if(e.pointId==='reason')assert.ok(e.location.start>value.indexOf('\n'));}
+  }finally{f.dispose();}
+ }
+});
+
+test('no quote, foreign quote, malformed JSON, unknown points, extra keys and program/model conflict all defer',async()=>{
  const variants:unknown[]=[
   {points:points().map(p=>({...p,quote:''}))},
   {points:points().map(p=>({...p,quote:'不是这次作答的原文'}))},
   {points:[...points(),{...points()[0],pointId:'fake'}]},
-  {points:points().map(p=>({...p,location:{start:999,end:1000}}))},
   {points:points(),verdict:'correct'},
   {points:[{...points()[0],status:'unsupported'},points()[1]]},
   {points:[points()[0],{...points()[1],quote:'A',location:{start:0,end:1}}]},
