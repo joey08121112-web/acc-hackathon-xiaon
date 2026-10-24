@@ -27,6 +27,8 @@ export function pickEngine(): MicEngine {
  return speechApi() ? 'browser' : 'none';
 }
 const fail = (message: string) => { emitLevel(0); session = null; set({ phase: 'idle', interim: '', error: message }); };
+/** A manual stop sends the recording only if it lasted this long; a tap-tap is not an answer. */
+const MANUAL_MIN_MS = 600;
 const NO_PERMISSION = '没有麦克风权限。可以在浏览器地址栏旁允许，或者直接打字。';
 function describe(e: unknown): string {
  const name = (e as { name?: string })?.name;
@@ -45,14 +47,16 @@ async function startServer(onText: (t: string) => void, onEmpty: () => void, sig
  const buf = new Float32Array(analyser.fftSize), chunks: Blob[] = [], recorder = new MediaRecorder(stream), detector = new EndpointDetector();
  recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
  let finished = false, timer = 0;
- const finish = async (send: boolean, note = '') => {
+ const began = performance.now();
+ // manual = the student pressed 说完了: they say they spoke, so a soft voice the detector missed is still sent (after a short minimum).
+ const finish = async (send: boolean, note = '', manual = false) => {
   if (finished) return; finished = true; window.clearInterval(timer);
   if (recorder.state !== 'inactive') {
    const stopped = new Promise<void>(r => { recorder.onstop = () => r(); }); recorder.stop(); await stopped;
   }
   stream.getTracks().forEach(t => t.stop()); emitLevel(0);
   if (signal.aborted) { void ctx.close(); return; }
-  if (!send || !detector.hasSpeech) { void ctx.close(); session = null; set({ phase: 'idle', interim: '', error: note }); if (send) onEmpty(); return; }
+  if (!send || (!detector.hasSpeech && !(manual && performance.now() - began >= MANUAL_MIN_MS))) { void ctx.close(); session = null; set({ phase: 'idle', interim: '', error: note }); if (send) onEmpty(); return; }
   set({ phase: 'transcribing' });
   try {
    const wav = await toWav16k(new Blob(chunks, { type: recorder.mimeType }), ctx); void ctx.close();
@@ -72,7 +76,7 @@ async function startServer(onText: (t: string) => void, onEmpty: () => void, sig
   if (r === 'end' || r === 'max') void finish(true);
   else if (r === 'no-speech') void finish(false, '没听到声音，再点一下话筒试试。');
  }, 50);
- return { stop: () => void finish(true), cancel: () => void finish(false) };
+ return { stop: () => void finish(true, '', true), cancel: () => void finish(false) };
 }
 function startBrowser(onText: (t: string) => void, onEmpty: () => void, signal: AbortSignal): Session {
  const Api = speechApi()!, rec = new Api();

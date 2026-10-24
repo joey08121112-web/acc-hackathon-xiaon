@@ -1,10 +1,10 @@
 /** 所有者：ChatGPT。复用已有语音输入；识别后先填草稿，学生点击才提交。 */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { InterviewSession, TaskPublicView } from '../../../shared/learning-contracts';
 import type { LearningUI } from '../../agents/useLearning';
 import { useMic } from '../../voice/mic';
 export function ProfessionalAnswer({l,interview,task,disabled,onAnswer,onHint}:{l:LearningUI;interview:InterviewSession;task:TaskPublicView|null;disabled:boolean;onAnswer:(text:string)=>Promise<boolean>;onHint:()=>void}){
- const mic=useMic(),form=useRef<HTMLFormElement>(null),mounted=useRef(true),pending=interview.pending!;
+ const mic=useMic(),form=useRef<HTMLFormElement>(null),mounted=useRef(true),pending=interview.pending!,[heard,setHeard]=useState('');
  const key='interview:'+interview.id+':'+pending.askedAt+':'+pending.kind;
  const draft=l.cache.drafts[key]??'';
  const setDraft=(text:string)=>l.update({drafts:{...l.cache.drafts,[key]:text.slice(0,2000)}});
@@ -26,10 +26,10 @@ export function ProfessionalAnswer({l,interview,task,disabled,onAnswer,onHint}:{
    <div className="home-card-actions"><button className="primary" disabled={disabled||!draft}>{draft?'就选这个':'先选一个'}</button></div>
    <p className="small muted">选完小N会问问你为什么这么选，想到什么说什么就好。</p>
   </form>:<form className="professional-composer" ref={form} onSubmit={e=>{e.preventDefault();if(!disabled&&!recording&&draft.trim())void onAnswer(draft.trim()).then(ok=>{if(ok&&mounted.current)setDraft('');});}}>
-   <label className="field">我的回答<textarea rows={3} maxLength={2000} value={draft} disabled={disabled||recording} onChange={e=>setDraft(e.target.value)} onFocus={()=>requestAnimationFrame(()=>form.current?.scrollIntoView({block:'nearest'}))} placeholder={pending.kind==='follow_up'?(task?.choices.length?'说说你为什么这么选…':'慢慢说说你是怎么想的…'):'写下你的想法，也可以另起一行说说理由…'}/></label>
-   <div className="home-card-actions"><button className="primary" disabled={disabled||recording||!draft.trim()}>告诉小N</button><button className="secondary" type="button" disabled={mic.engine==='none'||(disabled&&!recording)} onClick={()=>{if(mic.phase==='listening')mic.actions.stop();else if(recording)mic.actions.cancel();else void mic.actions.start(text=>{if(mounted.current)setDraft(text);});}}>{mic.phase==='listening'?'说完了':recording?'取消识别':'用话筒回答'}</button></div>
+   <label className="field">我的回答<textarea rows={3} maxLength={2000} value={draft} disabled={disabled||recording} onChange={e=>{setDraft(e.target.value);setHeard('');}} onFocus={()=>requestAnimationFrame(()=>form.current?.scrollIntoView({block:'nearest'}))} placeholder={pending.kind==='follow_up'?(task?.choices.length?'说说你为什么这么选…':'慢慢说说你是怎么想的…'):'写下你的想法，也可以另起一行说说理由…'}/></label>
+   <div className="home-card-actions"><button className="primary" disabled={disabled||recording||!draft.trim()}>告诉小N</button><button className="secondary" type="button" disabled={mic.engine==='none'||(disabled&&!recording)} onClick={()=>{if(mic.phase==='listening')mic.actions.stop();else if(recording)mic.actions.cancel();else{setHeard('');void mic.actions.start(text=>{if(!mounted.current)return;setDraft(text);setHeard('识别好了，看一眼没问题就点「告诉小N」，也可以先改一改。');requestAnimationFrame(()=>form.current?.scrollIntoView({block:'nearest'}));},()=>{if(mounted.current)setHeard('这次没听清。可以再点「用话筒回答」说一次，或者直接打字。');});}}}>{mic.phase==='listening'?'说完了':recording?'取消识别':'用话筒回答'}</button></div>
    {mic.engine==='none'?<p className="small muted">这个浏览器暂不支持语音，打字也一样。</p>:<p className="small muted">{mic.engine==='server'?'声音会发送给火山引擎豆包转成文字，服务端不保存录音。':'声音由浏览器的识别服务转成文字，可能由浏览器厂商处理。'}识别后可以修改，再点「告诉小N」。</p>}
-   {(mic.interim||mic.error)&&<p role="status">{mic.interim||mic.error}</p>}
+   {mic.phase==='transcribing'?<p className="small" role="status">正在把你说的话变成文字…</p>:(mic.interim||mic.error||heard)&&<p className="small" role="status">{mic.interim||mic.error||heard}</p>}
   </form>}
   {task?.hintAvailable&&pending.kind!=='follow_up'&&<button className="text-button" disabled={disabled||recording} onClick={onHint}>给一点小提示</button>}
   {hint&&<p className="notice">小提示：{hint.contentSnapshot}（会如实记录提示后完成）</p>}
