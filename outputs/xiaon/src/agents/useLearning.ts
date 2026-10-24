@@ -28,7 +28,10 @@ export function useLearning(){
   if(lock.current)throw new Error('请先等待或取消当前操作');lock.current=true;setBusy(true);setError('');const controller=new AbortController();abort.current=controller;
   const request=options.retry&&cacheRef.current.pending?cacheRef.current.pending:{path,body:path==='import/preview'?body:{operationId:newOperationId(),...body}};
   if(options.persist!==false)update({pending:request});
-  try{const result=await apiRequest<T>(request.path,request.body,controller.signal);if(options.persist!==false)update({pending:null});await reload();return result;}
+  try{const result=await apiRequest<T>(request.path,request.body,controller.signal);if(options.persist!==false)update({pending:null});
+   // chat 的回复和语音朗读不等整页视图刷新：先交给调用方，视图在后台补齐；刷新失败则保留当前视图。
+   if(request.path==='learning/chat'){void reload().catch(()=>{/* keep last view */});return result;}
+   await reload();return result;}
   catch(e){setError(controller.signal.aborted?'已取消等待。已经保存的作答仍在，可用原请求重试核对。':(e as Error).message);try{await reload();}catch{/* keep last view and local draft */}throw e;}
   finally{setBusy(false);lock.current=false;abort.current=null;}
  }

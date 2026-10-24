@@ -1,6 +1,7 @@
 import { useEffect, useSyncExternalStore } from 'react';
 import { apiBlob } from '../agent-client';
 import { CLIPS, clipsOf, clipUrl, type ClipGroup } from './clips';
+import { splitSentences } from './sentences';
 /**
  * One shared audio player for the whole app. `phase` reflects the real <audio> element, so the pet only
  * "speaks" while sound is actually playing. Text is always shown; sound is an optional extra.
@@ -13,17 +14,19 @@ const readEnabled = () => { try { return localStorage.getItem(KEY) !== 'false'; 
 let state: VoiceState = { available: false, asr: false, enabled: readEnabled(), phase: 'idle', error: '' };
 const listeners = new Set<() => void>();
 const set = (patch: Partial<VoiceState>) => { state = { ...state, ...patch }; listeners.forEach(l => l()); };
-let audio: HTMLAudioElement | null = null, generation = 0, controller: AbortController | null = null, objectUrl = '', kind: 'filler' | 'speech' | null = null, unlocked = false, probed = false;
+let audio: HTMLAudioElement | null = null, generation = 0, controller: AbortController | null = null, objectUrl = '', kind: 'filler' | 'speech' | null = null, unlocked = false, probed = false, speakOwner = 0;
 const lastClip: Partial<Record<ClipGroup, string>> = {};
 // Short reactions can be cut off by the next touch; only real replies (and the greeting/error lines) are never talked over.
 const INTERRUPTIBLE = new Set<ClipGroup>(['think', 'long', 'poke', 'belly', 'leaf', 'hand', 'pat', 'dizzy', 'sleepy', 'retry']);
+// While a speak() pipeline owns this generation, the gap between two sentences is not "playback ended".
+const speakIdle = () => { if (speakOwner === generation) return; kind = null; set({ phase: 'idle' }); };
 
 function player() {
  if (audio) return audio;
  audio = new Audio();
  audio.preload = 'auto';
  audio.addEventListener('playing', () => { if (audio && audio.src.startsWith('data:')) return; set({ phase: 'playing', error: '' }); });
- const idle = () => { if (audio && audio.src.startsWith('data:')) return; kind = null; set({ phase: 'idle' }); };
+ const idle = () => { if (audio && audio.src.startsWith('data:')) return; speakIdle(); };
  audio.addEventListener('ended', idle); audio.addEventListener('pause', idle);
  audio.addEventListener('error', () => { if (audio && audio.src.startsWith('data:')) return; kind = null; set({ phase: 'idle', error: '声音没能播放，文字还在。' }); });
  return audio;
@@ -34,11 +37,16 @@ async function waitForFiller() {
  if (kind !== 'filler' || a.paused) return;
  await new Promise<void>(resolve => { const done = () => { clearTimeout(t); a.removeEventListener('ended', done); a.removeEventListener('pause', done); resolve(); }; const t = setTimeout(done, 3000); a.addEventListener('ended', done); a.addEventListener('pause', done); });
 }
-async function play(url: string, gen: number, as: 'filler' | 'speech') {
+async function play(url: string, gen: number, as: 'filler' | 'speech'): Promise<boolean> {
  const a = player();
- if (gen !== generation) return;
+ if (gen !== generation) return false;
  a.src = url; kind = as;
- try { await a.play(); } catch { kind = null; set({ phase: 'idle', error: '浏览器没有允许自动发声，点一下「朗读」或小N即可。文字都在。' }); }
+ try { await a.play(); return true; } catch { kind = null; set({ phase: 'idle', error: '浏览器没有允许自动发声，点一下「朗读」或小N即可。文字都在。' }); return false; }
+}
+/** Resolves when the sentence that is playing now is over (finished, paused or broken), so the queue can go on. */
+function waitEnded(): Promise<void> {
+ const a = player();
+ return new Promise<void>(resolve => { const done = () => { clearTimeout(t); a.removeEventListener('ended', done); a.removeEventListener('pause', done); a.removeEventListener('error', done); resolve(); }; const t = setTimeout(done, 90000); a.addEventListener('ended', done); a.addEventListener('pause', done); a.addEventListener('error', done); });
 }
 export const voice = {
  /** Call inside a click handler so later automatic playback is allowed by the browser. */
@@ -62,24 +70,35 @@ export const voice = {
   return play(clipUrl(pick.id), gen, INTERRUPTIBLE.has(group) ? 'filler' : 'speech');
  },
  playClipIfEnabled(group: ClipGroup | string) { if (state.enabled) return voice.playClip(group); },
- /** Synthesize and play reply text. A pre-recorded "let me think" line that is already playing finishes first. */
+ /** Synthesize and play reply text sentence by sentence: the first words are heard as soon as sentence one is
+  *  synthesized, the next sentence is prefetched while the current one plays, and the queue stays strictly ordered.
+  *  A pre-recorded "let me think" line that is already playing finishes first. */
  async speak(text: string) {
   if (!state.available || !text.trim()) return;
   voice.unlock();
   if (kind === 'speech') { audio?.pause(); }
   const gen = ++generation; controller?.abort(); const c = new AbortController(); controller = c;
+  const parts = splitSentences(text); if (!parts.length) return;
+  speakOwner = gen;
   set({ phase: state.phase === 'playing' ? 'playing' : 'loading', error: '' });
+  const fail = (e: unknown) => { if (gen !== generation || c.signal.aborted) return; kind = null; set({ phase: 'idle', error: (e as Error).message || '声音暂时不可用，文字还在。' }); };
   try {
-   const blob = await apiBlob('voice/tts', { text: text.slice(0, 300) }, c.signal);
-   if (gen !== generation) return;
-   await waitForFiller();
-   if (gen !== generation) return;
-   release(); objectUrl = URL.createObjectURL(blob);
-   await play(objectUrl, gen, 'speech');
-  } catch (e) {
-   if (gen !== generation || c.signal.aborted) return;
-   kind = null; set({ phase: 'idle', error: (e as Error).message || '声音暂时不可用，文字还在。' });
-  }
+   const fetched: Promise<Blob>[] = [], fetchOne = (i: number) => { const p = apiBlob('voice/tts', { text: parts[i] }, c.signal); p.catch(() => {}); fetched[i] = p; }; // pre-attach: an unprefetched rejection must not surface as unhandled
+   fetchOne(0);
+   for (let i = 0; i < parts.length; i++) {
+    let blob: Blob;
+    try { blob = await fetched[i]; } catch (e) { fail(e); return; } // sentence one failing keeps today's behaviour; later ones play what is already there, then stop
+    if (gen !== generation) return;
+    if (!i) { await waitForFiller(); if (gen !== generation) return; }
+    release(); objectUrl = URL.createObjectURL(blob);
+    if (i + 1 < parts.length) fetchOne(i + 1); // prefetch the next sentence as this one starts: at most one request in flight
+    const ended = waitEnded();
+    if (!await play(objectUrl, gen, 'speech')) return; // autoplay refused: play() has already shown the message
+    await ended;
+    if (gen !== generation) return;
+   }
+   kind = null; set({ phase: 'idle' });
+  } catch (e) { fail(e); } finally { if (speakOwner === gen) speakOwner = 0; }
  },
  async probe() {
   if (probed) return; probed = true;
