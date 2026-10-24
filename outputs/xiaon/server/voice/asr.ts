@@ -1,4 +1,5 @@
 import { RuntimeError } from '../core/errors';
+import { DoubaoStreamingAsr } from './asr-stream';
 
 /**
  * Doubao recording-file recognition, "flash" edition: one request in, text out (resource volc.bigasr.auc_turbo).
@@ -7,7 +8,7 @@ import { RuntimeError } from '../core/errors';
  */
 export const ASR_ENDPOINT = 'https://openspeech.bytedance.com/api/v3/auc/bigmodel/recognize/flash';
 export const ASR_MAX_WAV_BYTES = 1_600_000; // about 50 s of 16 kHz mono 16-bit
-export interface AsrConfig { apiKey: string; resourceId: string; timeoutMs: number }
+export interface AsrConfig { apiKey: string; resourceId: string; timeoutMs: number; mode?: 'flash'|'stream' }
 export interface AsrProvider { readonly configured: boolean; available(): Promise<boolean>; transcribe(wav: Buffer, signal: AbortSignal): Promise<string> }
 
 export function readAsrConfig(env: Readonly<Record<string, string | undefined>> = process.env): AsrConfig | null {
@@ -15,9 +16,11 @@ export function readAsrConfig(env: Readonly<Record<string, string | undefined>> 
  // The new-console API key can be authorized for several speech products, so it may be shared with TTS.
  const apiKey = (env.XIAON_DOUBAO_ASR_API_KEY?.trim() || env.XIAON_DOUBAO_TTS_API_KEY?.trim()) ?? '';
  if (!apiKey) return null;
- const resourceId = env.XIAON_DOUBAO_ASR_RESOURCE_ID?.trim() || 'volc.bigasr.auc_turbo';
+ const mode=env.XIAON_ASR_MODE?.trim()||'flash';
+ if(mode!=='flash'&&mode!=='stream')throw new RuntimeError('invalid_params','ASR 模式需为 flash 或 stream');
+ const resourceId = env.XIAON_DOUBAO_ASR_RESOURCE_ID?.trim() || (mode==='stream'?'volc.seedasr.sauc.duration':'volc.bigasr.auc_turbo');
  if (!/^[A-Za-z0-9_.-]{1,64}$/.test(resourceId)) throw new RuntimeError('invalid_params', 'ASR 资源ID格式无效');
- return { apiKey, resourceId, timeoutMs: 20_000 };
+ return { apiKey, resourceId, timeoutMs: 20_000, mode };
 }
 /** A short block of silence, used only to ask the vendor whether this account may use the product. */
 export function silentWav(seconds = 0.4, rate = 16000): Buffer {
@@ -74,4 +77,4 @@ export class NoAsr implements AsrProvider {
  async available() { return false; }
  async transcribe(): Promise<string> { throw new RuntimeError('unavailable', '尚未配置语音识别'); }
 }
-export const asrFromEnvironment = (): AsrProvider => { const c = readAsrConfig(); return c ? new DoubaoAsr(c) : new NoAsr(); };
+export const asrFromEnvironment = (): AsrProvider => { const c = readAsrConfig(); return c ? c.mode==='stream'?new DoubaoStreamingAsr(c):new DoubaoAsr(c) : new NoAsr(); };
