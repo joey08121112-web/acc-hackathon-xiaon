@@ -311,7 +311,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
       <div>
         <p class="eyebrow">七年级数学 · AI 学习伙伴</p>
         <h1 style="margin-top:16px">陪你把卡住的<br><span class="step">那一步</span>，想明白。</h1>
-        <p class="lede">数学题卡住的时候，最难的常常是说清自己卡在哪。<strong>学伴小N先听你说，再陪你试一小步</strong>，最后换一道没见过的同类题，看看这一次自己能走到哪里。</p>
+        <p class="lede">数学题卡住的时候，最难的常常是说清自己卡在哪。<strong>学伴小N先听你说，再一步步问你</strong>，让你自己把那一步想通；想核对时，再做一道没见过的题，看看这一次自己能走到哪里。</p>
         <div class="actions">
           <a class="btn" href="https://committees-fibre-trend-forever.trycloudflare.com" target="_blank" rel="noopener" data-try>在手机上打开小N</a>
           <a class="btn ghost" href="#film">看 60 秒演示</a>
@@ -359,7 +359,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
       <div class="head">
         <p class="eyebrow">一次学习是怎么走的</p>
         <h2>从「我不会」，到说清卡在哪一步</h2>
-        <p>下面是一段演示用的学习过程，学生的话和作答都是合成的。题目来自七年级「去括号的负号」。</p>
+        <p>下面是一段演示用的学习过程，学生的话都是合成的。从聊天里说出一道错题开始，题目来自七年级「去括号的负号」。</p>
       </div>
 
       <div class="notebook">
@@ -367,37 +367,39 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
           <div class="sheet-title"><span>去括号 · 负号处理</span><span>功能演示 · 合成学生输入</span></div>
 
           <div class="turn">
-            <div class="who"><i>说</i>学生先用自己的话讲困难</div>
-            <p class="said">「我去括号的时候，第二项总忘记变号。」</p>
-            <div class="n-says">小N：我猜你卡在<b>括号前是减号时，括号里每一项都要变号</b>。是这一步吗？</div>
-            <span class="stamp soft">学生确认：是这一步</span>
+            <div class="who"><i>说</i>学生在聊天里说出错题</div>
+            <p class="said">「有一道是化简 3-(x-2)，我写的 3-x-2，答案是 1-x，被打了叉。」</p>
+            <p class="math"><span class="q">3 − (x − 2)</span> = 3 − x − 2 = <span class="wrong">1 − x</span></p>
+            <p class="pen">↑ −2 没变号</p>
+            <div class="n-says">小N把它整理成一张记题卡：题目、我的作答、<b>卡在哪一步</b>、属于哪个环节。</div>
+            <span class="stamp soft">学生确认后才记下</span>
           </div>
 
           <div class="turn">
-            <div class="who"><i>试</i>先自己做，再决定要不要提示</div>
-            <p class="math"><span class="q">3x − (2x − 5)</span> = <span class="wrong">x − 5</span></p>
-            <p class="pen">↑ 第二项没变号</p>
-            <div class="n-says">一级提示：先看括号前是加号还是减号，再分别指出括号里的每一项。</div>
-            <p class="math"><span class="q">3x − (2x − 5)</span> = x + 5 <span class="tick">✓</span></p>
-            <span class="stamp">记为：提示后做对</span>
+            <div class="who"><i>想</i>小N不给答案，一次只追问一步</div>
+            <div class="n-says">小N：括号前面这个负号，它管着括号里的谁？</div>
+            <p class="said">「x 要变成 −x。」</p>
+            <div class="n-says">小N：说得对。那括号里的 2，跟着负号要怎么变呢？</div>
+            <p class="math"><span class="q">3 − (x − 2)</span> = 3 − x + 2 = 5 − x <span class="tick">✓</span></p>
+            <span class="stamp">学生自己改对了这一步</span>
           </div>
 
           <div class="turn">
-            <div class="who"><i>核</i>学生自己选：换一道没见过的同类题</div>
-            <p class="math"><span class="q">7a − (3a − 2)</span> = 4a + 2 <span class="tick">✓</span></p>
-            <span class="stamp">记为：新题独立做对</span>
-            <p class="sheet-foot">这次没有请求帮助，也没有改答案。结论只写到这一道题，不会推成「已经掌握」。</p>
+            <div class="who"><i>悟</i>规律由学生自己说出来</div>
+            <p class="said">「原来负号要管括号里的每一项。」</p>
+            <span class="stamp soft">聊完整理成一份对话小结</span>
+            <p class="sheet-foot">聊天里的观察只作参考，标为「待专业模式确认」，不会推成「已经掌握」。</p>
           </div>
         </article>
 
         <aside class="side">
           <figure style="margin:0;display:grid;gap:10px">
-            <span class="phone"><img src="screen-start.jpg" width="476" height="960" alt="小N首页：一起看看去括号的负号，输入你卡在哪一步" loading="lazy"></span>
-            <figcaption>首页入口：先写下你卡在哪一步</figcaption>
+            <span class="phone"><img src="screen-start.jpg" width="476" height="960" alt="记题卡：题目化简 3-(x-2)、我的作答、卡在哪一步、属于哪个环节，下面是记下、改一下、不用了三个按钮" loading="lazy"></span>
+            <figcaption>记题卡：你确认了，才记下</figcaption>
           </figure>
           <figure style="margin:0;display:grid;gap:10px">
-            <span class="phone"><img src="screen-record.jpg" width="476" height="960" alt="作答后：这道题在提示后改对了，可以用一道未见同类题核对" loading="lazy"></span>
-            <figcaption>做完之后：要不要换题核对，由你决定</figcaption>
+            <span class="phone"><img src="screen-record.jpg" width="476" height="960" alt="小N追问：说得对，负号管到x了。那括号里的2，跟着负号要怎么变呢？学生正在输入 3-x+2=5-x" loading="lazy"></span>
+            <figcaption>一次只问一步，答案由你自己说出</figcaption>
           </figure>
         </aside>
       </div>
@@ -414,21 +416,21 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
         <div>
           <span class="n">一</span>
           <h3>卡在哪里？</h3>
-          <p>学生先说，小N提出一个卡点猜想。猜得不对，学生可以直接改成更准确的说法。</p>
+          <p>学生先说，小N先接住情绪，再问是哪一步出的错。说到具体的题，小N整理成一张记题卡，学生确认了才记下。</p>
         </div>
         <div>
           <span class="n">二</span>
           <h3>这一小步怎么走？</h3>
-          <p>先留下自己的尝试，需要时再要提示。提示一级一级给，三级之后换一种讲法，随时可以暂停。</p>
+          <p>小N不直接给答案，一次只追问一步，让学生自己把这一步想通、把规律说出来。想停，随时说「今天先聊到这」。</p>
         </div>
         <div>
           <span class="n">三</span>
           <h3>换一道题，还能自己做吗？</h3>
-          <p>学生可以选一道没见过的同类题再试。系统确认这道题之前没出现过，再如实记下这次的表现。</p>
+          <p>正式做题时，学生可以选一道没见过的题再试，复习也先找没做过的。程序判对错，再如实记下这次的表现。</p>
         </div>
       </div>
       <div class="records" aria-label="三种做对，分开记录">
-        <div><b>提示后做对</b><span>看了提示才做出来，记下用到了哪一级提示。</span></div>
+        <div><b>提示后做对</b><span>看了提示才做出来，记下提交前看过几条提示。</span></div>
         <div><b>原题改对</b><span>同一道题第一次错了，后来自己改对。</span></div>
         <div><b>新题独立做对</b><span>没见过的同类题，没求助、没改答案就做对了。</span></div>
       </div>
@@ -528,7 +530,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
         <p>手机网页前端，Node 和 SQLite 保存每一次尝试。四个角色各有自己的输入、权限和输出校验，彼此不传全部聊天。</p>
       </div>
       <div class="roles">
-        <div><code>Tutor</code><b>陪你聊</b><span>首页交流、卡点猜想和逐级提示。</span></div>
+        <div><code>Tutor</code><b>陪你聊</b><span>首页聊天：先听再问，起草记题卡，一次只追问一步，答案不进聊天。</span></div>
         <div><code>Assessor</code><b>看作答</b><span>对照题面和评分要点分析作答，模型不能自己加分。</span></div>
         <div><code>PlannerReporter</code><b>写报告与计划</b><span>只用程序整理好的事实，写出报告和计划草案。</span></div>
         <div><code>Generator</code><b>受控出题</b><span>只在两个知识点的白名单模板里出变式题。</span></div>
@@ -548,10 +550,11 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
           <thead><tr><th scope="col">方面</th><th scope="col">现在</th><th scope="col">之后</th></tr></thead>
           <tbody>
             <tr><th scope="row">学段</th><td>七年级数学，有限题库和具体子技能</td><td class="later">更多学段与学科</td></tr>
-            <tr><th scope="row">完整教学</th><td>「去括号负号」的卡点核实、逐级帮助、新题核对与回顾</td><td class="later">更多知识点用同样的流程</td></tr>
+            <tr><th scope="row">首页陪学</th><td>聊天里说出错题、记题卡确认、一步步追问，聊完有对话小结和对话记录</td><td class="later">拍照识题</td></tr>
+            <tr><th scope="row">专业模式</th><td>五站生活小故事：先选做法，再说理由；报告附原话，月底可复测</td><td class="later">更多故事题与年级</td></tr>
             <tr><th scope="row">自动出题</th><td>去括号、合并同类项两个知识点，模板约束、程序验算</td><td class="later">更多题型</td></tr>
             <tr><th scope="row">学习效果</th><td>如实展示在小N里记录到的变化</td><td class="later">真实学生体验与长期效果研究</td></tr>
-            <tr><th scope="row">家长与隐私</th><td>小结只用结构化学习记录，可选记忆可关闭、更正和删除</td><td class="later">真实监护核验、多账号隔离</td></tr>
+            <tr><th scope="row">家长与隐私</th><td>小结只用结构化学习记录；每个浏览器一个匿名身份，记录彼此分开；可选记忆可关闭、更正和删除</td><td class="later">真实监护核验与正式账号</td></tr>
           </tbody>
         </table>
       </div>
