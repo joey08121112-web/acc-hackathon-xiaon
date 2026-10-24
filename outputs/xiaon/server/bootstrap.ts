@@ -1,4 +1,3 @@
-import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { Clock,LearningRepository,ModelProvider,EngineRegistration,EngineContext,AssessmentEnginePort,PlanningEnginePort } from '../shared/learning-contracts';
 import { SqliteRepository } from './storage/repository';
@@ -25,8 +24,9 @@ export function createRuntime(options:{repository?:LearningRepository;databasePa
  };
 }
 export type LearningRuntime=ReturnType<typeof createRuntime>;
-export function runtimeFromEnvironment(){
- const path=resolve(process.env.XIAON_DB_PATH??'.local/learning.sqlite');mkdirSync(resolve(path,'..'),{recursive:true,mode:0o700});
+/** One provider shared by every user's runtime; it holds no learning data. */
+export function providerFromEnvironment(){
  const config=readGlmConfig();
- return createRuntime({databasePath:path,provider:config.apiKey?new HedgedProvider(new GlmProvider(config.apiKey,config.model,fetch,config),config.hedgeMs):new OfflineProvider(),modelTimeoutMs:config.timeoutMs});
+ const provider:ModelProvider=config.apiKey?new HedgedProvider(new GlmProvider(config.apiKey,config.model,fetch,config),config.hedgeMs):new OfflineProvider();
+ return{provider,modelTimeoutMs:config.timeoutMs};
 }

@@ -8,6 +8,7 @@ import { MODEL_DISCLOSURE } from '../core/agent';
 import { createStaticHandler } from './static';
 import { NoTts,TTS_MAX_CHARS,type TtsProvider } from '../voice/tts';
 import { NoAsr,ASR_MAX_WAV_BYTES,isWav,type AsrProvider } from '../voice/asr';
+import { UserRuntimes } from '../storage/users';
 // G0: masked JPEG as base64 inside JSON; only this route gets a larger body, like /api/voice/asr.
 const RECOGNIZE_BODY_LIMIT=Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES*4/3)+2000;
 const statusCodes:Record<string,number>={invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,not_implemented:501,unavailable:503};
@@ -24,12 +25,17 @@ export interface HttpServerConfig {
  /** Server-side speech recognition; the client falls back to the browser's own when this is unavailable. */
  asr?:AsrProvider;
 }
-export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig){
+/** A single runtime is one shared student (local tools and tests); UserRuntimes gives every anonymous identity its own database. */
+export function createHttpServer(source:LearningRuntime|UserRuntimes,config:HttpServerConfig){
+ const users=source instanceof UserRuntimes?source:undefined;const single=users?undefined:source as LearningRuntime;
  const publicOrigins=config.publicOrigins??[];const publicMode=publicOrigins.length>0;
  const allowed=new Set([...config.allowedOrigins,...publicOrigins]);const hosts=new Set([config.host,...(config.extraHosts??[]),...[...allowed].map(s=>new URL(s).host)]);
  const serveStatic=config.staticDir?createStaticHandler(config.staticDir):undefined;
- const localSessions=new Map<string,{csrf:string;expires:number}>();let activeChat=false;
- const tts=config.tts??new NoTts();let ttsInFlight=0;const ttsStarts:number[]=[];const asr=config.asr??new NoAsr();let asrInFlight=false;const asrStarts:number[]=[];
+ const localSessions=new Map<string,{csrf:string;expires:number;userId:string}>();let activeChat=false;
+ // Voice limits are per user; the global caps protect the shared upstream services.
+ const tts=config.tts??new NoTts();let ttsInFlight=0;const asr=config.asr??new NoAsr();let asrInFlight=0;
+ const voice=new Map<string,{tts:number;ttsStarts:number[];asr:boolean;asrStarts:number[]}>();
+ const voiceOf=(userId:string)=>{let v=voice.get(userId);if(!v){v={tts:0,ttsStarts:[],asr:false,asrStarts:[]};voice.set(userId,v);}return v;};
  const server=createServer(async(req,res)=>{
   res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Content-Type','application/json; charset=utf-8');
   const send=(body:unknown,status=200)=>{res.writeHead(status);res.end(JSON.stringify(body));};
@@ -41,7 +47,7 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
    const hostOk=hosts.has(rawHost)||(publicMode&&rawHost.endsWith(':443')&&hosts.has(rawHost.slice(0,-4)));
    if(!hostOk&&!(publicMode&&req.method==='GET'&&path==='/api/health'))throw new RuntimeError('forbidden','不接受此 Host');
    if(serveStatic&&path!=='/api'&&!path.startsWith('/api/')){if(!serveStatic(req,res,path))throw new RuntimeError('not_found');return;}
-   if(req.method==='GET'&&path==='/api/health'){send({schemaVersion:SCHEMA_VERSION,status:'ok',voice:{tts:tts.enabled,asr:await asr.available()},mode:runtime.provider.kind==='offline'?'local_rules':'model',providerKind:runtime.provider.kind,learning:!!learningFor(runtime),disclosure:MODEL_DISCLOSURE});return;}
+   if(req.method==='GET'&&path==='/api/health'){const kind=(users??single!).provider.kind;send({schemaVersion:SCHEMA_VERSION,status:'ok',voice:{tts:tts.enabled,asr:await asr.available()},mode:kind==='offline'?'local_rules':'model',providerKind:kind,learning:users?users.learning:!!learningFor(single!),disclosure:MODEL_DISCLOSURE});return;}
    if(req.method==='POST'){
     if(!allowed.has(req.headers.origin??'')||req.headers['sec-fetch-site']==='cross-site')throw new RuntimeError('forbidden','写操作需要允许的 Origin');
     if(!req.headers['content-type']?.startsWith('application/json'))throw new RuntimeError('invalid_params','需要 application/json');
@@ -49,14 +55,25 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
    if(req.method==='POST'&&path==='/api/local-session'){
     const body=await readBody(req);if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(body).length)throw new RuntimeError('invalid_params');
     for(const[k,v]of localSessions)if(v.expires<Date.now())localSessions.delete(k);
-    if(localSessions.size>=128)throw new RuntimeError('unavailable','本机临时会话过多');
-    const sid=randomBytes(32).toString('hex');const csrf=randomBytes(32).toString('hex');localSessions.set(sid,{csrf,expires:Date.now()+8*3600000});
-    res.setHeader('Set-Cookie',`xiaon_session=${sid}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=28800${publicMode?'; Secure':''}`);send({schemaVersion:SCHEMA_VERSION,csrfToken:csrf});return;
+    if(localSessions.size>=4096)throw new RuntimeError('unavailable','临时会话过多');
+    // The long-lived identity cookie is the user boundary; an unknown or forged one gets a new, empty identity.
+    const cookies:string[]=[];let userId='local';
+    if(users){
+     const known=users.identities.resolve(cookieValue(req,'xiaon_user')??'');
+     if(known)userId=known;else{const created=users.identities.create();userId=created.userId;cookies.push(`xiaon_user=${created.token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=31536000${publicMode?'; Secure':''}`);}
+     const own=[...localSessions].filter(([,v])=>v.userId===userId);for(const[k]of own.slice(0,Math.max(0,own.length-7)))localSessions.delete(k);
+    }
+    const sid=randomBytes(32).toString('hex');const csrf=randomBytes(32).toString('hex');localSessions.set(sid,{csrf,expires:Date.now()+8*3600000,userId});
+    cookies.unshift(`xiaon_session=${sid}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=28800${publicMode?'; Secure':''}`);
+    res.setHeader('Set-Cookie',cookies);send({schemaVersion:SCHEMA_VERSION,csrfToken:csrf});return;
    }
-   const cookie=req.headers.cookie?.split(';').map(s=>s.trim()).find(s=>s.startsWith('xiaon_session='))?.slice(14);
+   const cookie=cookieValue(req,'xiaon_session');
    const session=cookie?localSessions.get(cookie):undefined;
    if(!session||session.expires<Date.now())throw new RuntimeError('forbidden','本机会话缺失或已过期');
    if(req.method==='POST'&&!equalToken(String(req.headers['x-xiaon-csrf']??''),session.csrf))throw new RuntimeError('forbidden','缺少本地会话防护令牌');
+   // Everything below runs against this user's own runtime and database only.
+   const lease=users?users.acquire(session.userId):{runtime:single!,release(){}};res.once('close',lease.release);
+   const runtime=lease.runtime;const limits=voiceOf(session.userId);
    if(req.method==='GET'){
     if(path==='/api/learning'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.view());return;}
     if(path==='/api/context'){send(runtime.context());return;}
@@ -72,9 +89,9 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
     const body=raw as {audio?:unknown};if(!body||typeof body!=='object'||Object.keys(body).some(k=>k!=='audio')||typeof body.audio!=='string'||!/^[A-Za-z0-9+/]+={0,2}$/.test(body.audio))throw new RuntimeError('invalid_params','需要 {audio: base64 WAV}');
     const wav=Buffer.from(body.audio,'base64');if(!isWav(wav)||wav.length>ASR_MAX_WAV_BYTES)throw new RuntimeError('invalid_params','需要不超过约50秒的 WAV 音频');
     if(!asr.configured)throw new RuntimeError('unavailable','尚未配置语音识别');
-    const now=Date.now();while(asrStarts.length&&now-asrStarts[0]>60000)asrStarts.shift();
-    if(asrInFlight||asrStarts.length>=20)throw new RuntimeError('invalid_state','语音识别请求太频繁，请稍后再试');
-    asrStarts.push(now);asrInFlight=true;
+    const now=Date.now();while(limits.asrStarts.length&&now-limits.asrStarts[0]>60000)limits.asrStarts.shift();
+    if(limits.asr||limits.asrStarts.length>=20||asrInFlight>=6)throw new RuntimeError('invalid_state','语音识别请求太频繁，请稍后再试');
+    limits.asrStarts.push(now);limits.asr=true;asrInFlight++;
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
     const requestId=randomUUID(),started=performance.now();res.setHeader('X-Xiaon-Voice-Request-Id',requestId);
     // Metadata only: neither audio nor recognized text is written to logs.
@@ -85,19 +102,19 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
      console.info('[voice/asr]',JSON.stringify({requestId,stage:'completed',ms,hasText:!!text.trim()}));
     }catch(e){
      console.info('[voice/asr]',JSON.stringify({requestId,stage:c.signal.aborted?'cancelled':'failed',ms:Math.round(performance.now()-started),code:e instanceof RuntimeError?e.code:'unknown'}));throw e;
-    }finally{asrInFlight=false;res.off('close',cancel);}
+    }finally{limits.asr=false;asrInFlight--;res.off('close',cancel);}
     return;
    }
    if(path==='/api/voice/tts'){
     // Browser sends text only. Speaker/resource/key are server configuration; at most 2 concurrent and 30 per minute.
     const body=raw as {text?:unknown};if(!body||typeof body!=='object'||Object.keys(body).some(k=>k!=='text')||typeof body.text!=='string')throw new RuntimeError('invalid_params','需要 {text}');
     if(!tts.enabled)throw new RuntimeError('unavailable','尚未配置语音合成');
-    const now=Date.now();while(ttsStarts.length&&now-ttsStarts[0]>60000)ttsStarts.shift();
-    if(ttsInFlight>=2||ttsStarts.length>=30)throw new RuntimeError('invalid_state','朗读请求太频繁，请稍后再试');
-    ttsStarts.push(now);ttsInFlight++;
+    const now=Date.now();while(limits.ttsStarts.length&&now-limits.ttsStarts[0]>60000)limits.ttsStarts.shift();
+    if(limits.tts>=2||limits.ttsStarts.length>=30||ttsInFlight>=8)throw new RuntimeError('invalid_state','朗读请求太频繁，请稍后再试');
+    limits.ttsStarts.push(now);limits.tts++;ttsInFlight++;
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
     try{const audio=await tts.synthesize(body.text.slice(0,TTS_MAX_CHARS+1),c.signal);res.setHeader('Content-Type','audio/mpeg');res.setHeader('Content-Length',String(audio.length));res.writeHead(200);res.end(audio);}
-    finally{ttsInFlight--;res.off('close',cancel);}
+    finally{limits.tts--;ttsInFlight--;res.off('close',cancel);}
     return;
    }
    const d=learningFor(runtime);
@@ -164,5 +181,6 @@ export function createHttpServer(runtime:LearningRuntime,config:HttpServerConfig
  server.requestTimeout=30000;server.headersTimeout=10000;
  return server;
 }
+function cookieValue(req:IncomingMessage,name:string){return req.headers.cookie?.split(';').map(s=>s.trim()).find(s=>s.startsWith(name+'='))?.slice(name.length+1);}
 function equalToken(actual:string,expected:string){const a=Buffer.from(actual),b=Buffer.from(expected);return a.length===b.length&&timingSafeEqual(a,b);}
 async function readBody(req:IncomingMessage,limit=550000):Promise<unknown>{let size=0;const chunks:Buffer[]=[];for await(const chunk of req){size+=Buffer.byteLength(chunk);if(size>limit)throw new RuntimeError('invalid_params','请求超出大小限制');chunks.push(Buffer.from(chunk));}try{return JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw new RuntimeError('invalid_params','无效JSON');}}

@@ -24,7 +24,7 @@ XIAON_API_TARGET=http://127.0.0.1:18931 npm run dev -- --host 127.0.0.1 --port 5
 
 ## 公网部署与现场演示
 
-比赛提交链接与现场演示的完整步骤见 [DEPLOY.md](DEPLOY.md)：仓库自带 `Dockerfile`，可一键部署到 Zeabur / Railway；`./demo-tunnel.sh` 用 Cloudflare 临时隧道给本机应用一个 HTTPS 地址。公网能力由 `XIAON_STATIC_DIR` / `XIAON_PUBLIC_ORIGIN` / `XIAON_API_HOST` 三个可选变量打开，不设置时服务仍只认本机。后端仍是单用户设计，评委体验前先「重置整个演示」。
+比赛提交链接与现场演示的完整步骤见 [DEPLOY.md](DEPLOY.md)：仓库自带 `Dockerfile`，可一键部署到 Zeabur / Railway；`./demo-tunnel.sh` 用 Cloudflare 临时隧道给本机应用一个 HTTPS 地址。公网能力由 `XIAON_STATIC_DIR` / `XIAON_PUBLIC_ORIGIN` / `XIAON_API_HOST` 三个可选变量打开，不设置时服务仍只认本机。后端按匿名身份隔离：每个浏览器一个独立数据库，互不可见，重置只清自己的（见 DEPLOY.md 第 7 节）。
 
 ## 模型与数据用途
 

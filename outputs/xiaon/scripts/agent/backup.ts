@@ -10,8 +10,9 @@ export function validateDatabase(path:string){
  try{
   const check=db.prepare('PRAGMA quick_check').all();
   if(check.length!==1||Object.values(check[0])[0]!=='ok')throw new Error('备份完整性检查失败');
-  db.prepare('SELECT version FROM migrations LIMIT 1').all();
-  db.prepare('SELECT revision FROM meta WHERE id=1').get();
+  // The identity registry (users/identities.sqlite) has its own single table; learning databases have migrations/meta.
+  if(db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='identities'").get())db.prepare('SELECT user_id FROM identities LIMIT 1').all();
+  else{db.prepare('SELECT version FROM migrations LIMIT 1').all();db.prepare('SELECT revision FROM meta WHERE id=1').get();}
  }finally{db.close();}
 }
 export async function backupDatabase({databasePath,directory=join(dirname(databasePath),'backups'),keep=7}:{databasePath:string;directory?:string;keep?:number}):Promise<string>{

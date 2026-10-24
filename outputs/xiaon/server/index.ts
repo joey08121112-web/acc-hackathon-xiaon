@@ -1,7 +1,8 @@
 import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname,join,resolve } from 'node:path';
 import { installLearning } from './agents/learning';
-import { runtimeFromEnvironment } from './bootstrap';
+import { createRuntime,providerFromEnvironment } from './bootstrap';
+import { UserRuntimes } from './storage/users';
 import { readGenerationConfig } from './plugins/generation';
 import { createHttpServer } from './http/server';
 import { ttsFromEnvironment } from './voice/tts';
@@ -19,11 +20,16 @@ const publicOrigins=(process.env.XIAON_PUBLIC_ORIGIN??'').split(',').map(s=>s.tr
 for(const s of publicOrigins){const u=new URL(s);if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash||u.origin!==s)throw new Error('XIAON_PUBLIC_ORIGIN entries must be exact HTTPS origins');}
 const staticEnv=process.env.XIAON_STATIC_DIR?.trim();const staticDir=staticEnv?resolve(staticEnv):undefined;
 if(staticDir&&!existsSync(resolve(staticDir,'index.html')))throw new Error(`XIAON_STATIC_DIR has no index.html (run npm run build first): ${staticDir}`);
-const runtime=runtimeFromEnvironment();installLearning(runtime,{generation:readGenerationConfig()});
+// 每个匿名身份一个独立库：<XIAON_DB_PATH 所在目录>/users/<id>.sqlite。旧的共享库不再被读取。
+const databasePath=resolve(process.env.XIAON_DB_PATH??'.local/learning.sqlite');
+const usersDir=resolve(process.env.XIAON_USERS_DIR?.trim()||join(dirname(databasePath),'users'));
+const {provider,modelTimeoutMs}=providerFromEnvironment();const generation=readGenerationConfig();
+const maxUsers=Number(process.env.XIAON_MAX_USERS??1000);if(!Number.isInteger(maxUsers)||maxUsers<1)throw new Error('Invalid XIAON_MAX_USERS');
+const runtime=new UserRuntimes({directory:usersDir,provider,learning:true,maxUsers,create:path=>{const r=createRuntime({databasePath:path,provider,modelTimeoutMs});installLearning(r,{generation});return r;}});
 const server=createHttpServer(runtime,{allowedOrigins:origins,host:`127.0.0.1:${port}`,extraHosts:wildcard?[`localhost:${port}`,`0.0.0.0:${port}`]:[],publicOrigins,staticDir,tts:ttsFromEnvironment(),asr:asrFromEnvironment()});
 const mode=runtime.provider.kind==='offline'?'local_rules':'model';
 server.listen(port,bindHost,()=>console.log(publicOrigins.length
- ?`学伴小N ${staticDir?'静态站+API':'API'} ${bindHost}:${port} → ${publicOrigins.join(', ')} (${mode})；合成材料、单用户演示`
- :`学伴小N 本地 API http://127.0.0.1:${port} (${mode}); 合成材料模式，仅本机使用`));
-function shutdown(){server.close(()=>{runtime.repository.close();process.exit(0);});server.closeAllConnections();}
+ ?`学伴小N ${staticDir?'静态站+API':'API'} ${bindHost}:${port} → ${publicOrigins.join(', ')} (${mode})；匿名身份，每人独立数据 ${usersDir}`
+ :`学伴小N 本地 API http://127.0.0.1:${port} (${mode}); 匿名身份，每人独立数据 ${usersDir}`));
+function shutdown(){server.close(()=>{runtime.close();process.exit(0);});server.closeAllConnections();}
 process.once('SIGINT',shutdown);process.once('SIGTERM',shutdown);

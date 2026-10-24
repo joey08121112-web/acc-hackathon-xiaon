@@ -108,8 +108,8 @@ cd outputs/xiaon
 
 ## 7. 已知边界与注意事项
 
-- **单用户产品**：后端没有账号概念，整个 SQLite 就是「一个学生」的记录，同一时刻只处理一个模型请求。**多个人同时用同一个链接会看到彼此的记录、互相排队。** 评委体验前在「我的与设置」里点「重置整个演示」，或者一次只让一个人用；现场演示由操作者一人完成即可。真正的多用户是 App 阶段的工作。
-- **数据库必须挂卷**：镜像默认写 `/data/learning.sqlite`。没有实际挂载时，镜像启动命令会输出丢失记录的警告；平台重新部署不能代替「重置整个演示」。按第 9 节配置，并验证重启后记录仍在。
+- **匿名身份，每人独立数据**：不用登录。第一次打开时服务端发一个只属于这个浏览器的随机身份（HttpOnly cookie，一年有效），并为它单独建一个库 `<XIAON_DB_PATH 所在目录>/users/<身份>.sqlite`（可用 `XIAON_USERS_DIR` 改位置）。不同的人互相看不到、改不了、清不掉对方的记录；「我的与设置」里的重置只清空自己的。身份只登记在服务端的 `users/identities.sqlite`，伪造或过期的 cookie 只会得到一个新的空身份。代价：清除浏览器数据或换手机，原来的记录就找不回了；也拦不住拿到链接的陌生人进来（身份总数默认上限 1000，用 `XIAON_MAX_USERS` 调整；每分钟最多新建 30 个）。语音识别/朗读的频率限制按人计算。旧版本的共享库 `learning.sqlite` 不再被读取，留在原处，确认无用后可自行删除。
+- **数据库必须挂卷**：镜像默认写 `/data/learning.sqlite`。没有实际挂载时，镜像启动命令会输出丢失记录的警告；整个卷（含 `users/`）都要在持久卷上。按第 9 节配置，并验证重启后记录仍在。
 - **Coding Plan Key**：这个套餐面向个人编程工具，限流按一个人设计。几位评委体验没问题；若要长期对外开放，先核实套餐条款，或换标准 API Key（基址改为 `https://open.bigmodel.cn/api/paas/v4`）。
 - **HTTPS 是硬要求**：前端用到的 `crypto.randomUUID()` 只在 HTTPS 或 localhost 下可用，裸 IP 的 http 地址会直接报错。上面三种方式都自带 HTTPS。
 - `.env.server`、`.local/`、`dist/` 已被 `.gitignore` 和 `.dockerignore` 排除，不会进仓库或镜像。
@@ -147,6 +147,14 @@ Zeabur 已宣布关停、共享集群不再接收新项目（见第 4 节），�
 # 本机 H 路；容器内改为 --db /data/learning.sqlite --out /data/backups
 node --import tsx scripts/agent/backup.ts --db .local/h.sqlite --out .local/h-backups --keep 7
 ```
+
+多用户部署时每个身份一个库，`users/` 下逐个备份（含身份登记表 `identities.sqlite`，丢了它所有人都会变成新用户）：
+
+```sh
+for db in /data/users/*.sqlite; do node --import tsx scripts/agent/backup.ts --db "$db" --out /data/backups --keep 7; done
+```
+
+恢复同理：只恢复某一个人时停服务后对那一个文件执行下面的恢复命令。
 
 成功时打印备份绝对路径。文件名含源库标识、UTC 时间和随机标识，权限为仅当前用户可读写；完整性检查通过后，只轮换同一源库的最近 7 份，其他文件不会删除。备份是独立单文件，包含当时所有学习集合与幂等回执。还应把至少一份下载到卷以外的位置，防止整卷丢失。
 

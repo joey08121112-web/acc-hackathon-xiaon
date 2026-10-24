@@ -891,7 +891,7 @@ function App() {
             )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
             <LearningStatus l={learning} />
-            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在本地服务里；真实模型会向智谱发送本次需要的学习内容和获准记忆。你可以查看记录、管理记忆或重置整个演示。{devMode && <p>SQLite 保存学习事实，浏览器缓存草稿；单用户演示。</p>}</div>}
+            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
             <main className={`page page-${s.page}`}>
               {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>openModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
               {/* 新版首页离开时只隐藏不卸载：聊天里弹出的卡片、改到一半的草稿和还在等的回复，回来都还在。 */}
