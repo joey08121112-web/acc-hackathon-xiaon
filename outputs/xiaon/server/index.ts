@@ -25,8 +25,10 @@ const databasePath=resolve(process.env.XIAON_DB_PATH??'.local/learning.sqlite');
 const usersDir=resolve(process.env.XIAON_USERS_DIR?.trim()||join(dirname(databasePath),'users'));
 const {provider,modelTimeoutMs}=providerFromEnvironment();const generation=readGenerationConfig();
 const maxUsers=Number(process.env.XIAON_MAX_USERS??1000);if(!Number.isInteger(maxUsers)||maxUsers<1)throw new Error('Invalid XIAON_MAX_USERS');
+// 体验时限：每个匿名身份自首次到访起 XIAON_TRIAL_MINUTES 分钟，0（默认）为不限时。
+const trialMinutes=Number(process.env.XIAON_TRIAL_MINUTES??0);if(!Number.isInteger(trialMinutes)||trialMinutes<0)throw new Error('Invalid XIAON_TRIAL_MINUTES');
 const runtime=new UserRuntimes({directory:usersDir,provider,learning:true,maxUsers,create:path=>{const r=createRuntime({databasePath:path,provider,modelTimeoutMs});installLearning(r,{generation});return r;}});
-const server=createHttpServer(runtime,{allowedOrigins:origins,host:`127.0.0.1:${port}`,extraHosts:wildcard?[`localhost:${port}`,`0.0.0.0:${port}`]:[],publicOrigins,staticDir,tts:ttsFromEnvironment(),asr:asrFromEnvironment()});
+const server=createHttpServer(runtime,{allowedOrigins:origins,host:`127.0.0.1:${port}`,extraHosts:wildcard?[`localhost:${port}`,`0.0.0.0:${port}`]:[],publicOrigins,staticDir,tts:ttsFromEnvironment(),asr:asrFromEnvironment(),trialMs:trialMinutes*60000});
 const mode=runtime.provider.kind==='offline'?'local_rules':'model';
 server.listen(port,bindHost,()=>console.log(publicOrigins.length
  ?`学伴小N ${staticDir?'静态站+API':'API'} ${bindHost}:${port} → ${publicOrigins.join(', ')} (${mode})；匿名身份，每人独立数据 ${usersDir}`

@@ -3,7 +3,7 @@ import { SCHEMA_VERSION,type ChatRequest,type AgentReply,type SubmitAttempt,type
 let csrfToken='';let opening:Promise<void>|undefined;
 export async function localSession(signal?:AbortSignal){
  if(csrfToken)return;if(opening)return opening;
- opening=(async()=>{const res=await fetch('/api/local-session',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}',signal});if(!res.ok)throw new Error('本地API会话不可用');const data=await res.json();if(data.schemaVersion!==SCHEMA_VERSION)throw new Error('API契约版本不一致');csrfToken=data.csrfToken;})();
+ opening=(async()=>{const res=await fetch('/api/local-session',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}',signal});if(!res.ok){const e=await res.json().catch(()=>null);throw new Error(e?.error?.message??'本地API会话不可用');}const data=await res.json();if(data.schemaVersion!==SCHEMA_VERSION)throw new Error('API契约版本不一致');csrfToken=data.csrfToken;})();
  try{await opening;}finally{opening=undefined;}
 }
 export async function apiRequest<T>(path:string,body?:unknown,signal?:AbortSignal):Promise<T>{
