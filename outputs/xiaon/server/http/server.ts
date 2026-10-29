@@ -9,7 +9,8 @@ import { createStaticHandler } from './static';
 import { NoTts,TTS_MAX_CHARS,type TtsProvider } from '../voice/tts';
 import { NoAsr,ASR_MAX_WAV_BYTES,isWav,type AsrProvider } from '../voice/asr';
 import { UserRuntimes } from '../storage/users';
-import { freeChat } from '../free-chat';
+import { freeChat } from '../free-chat/chat';
+import { profilePost } from '../free-chat/profile';
 // G0: masked JPEG as base64 inside JSON; only this route gets a larger body, like /api/voice/asr.
 const RECOGNIZE_BODY_LIMIT=Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES*4/3)+2000;
 const statusCodes:Record<string,number>={invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,not_implemented:501,unavailable:503};
@@ -83,6 +84,7 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
    if(req.method==='GET'){
     if(path==='/api/learning'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.view());return;}
     if(path==='/api/context'){send(runtime.context());return;}
+    if(path==='/api/free-chat/profile'){send(runtime.freeChat.profile());return;}
     // G2: long-term trend (tracking plugin, zCode), derived from stored professional reports.
     if(path==='/api/learning/trend'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.trend());return;}
     const match=path.match(/^\/api\/tasks\/([A-Za-z0-9_.:-]+)\/([1-9]\d*)$/);
@@ -131,6 +133,7 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     try{send(await freeChat(runtime.provider,raw,c.signal));}finally{freeChatting.delete(session.userId);res.off('close',cancel);}
     return;
    }
+   if(path.startsWith('/api/free-chat/')){const profile=profilePost(runtime.freeChat,path,raw);if(!profile)throw new RuntimeError('not_found');send(profile);return;}
    const d=learningFor(runtime);
    if(path.startsWith('/api/learning/')){
     if(!d)throw new RuntimeError('not_implemented');
@@ -149,7 +152,7 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
      case '/api/learning/preference':send(await d.preference(raw as never));break;
      case '/api/learning/chat':send(await d.chat(raw as never,c.signal));break;
      case '/api/learning/memory-correct':send(await d.memoryCorrect(raw as never));break;
-     case '/api/learning/reset':send(await d.reset(raw as never));break;
+     case '/api/learning/reset':{const cleared=await d.reset(raw as never);runtime.freeChat.reset();send(cleared);break;}
      // G0 首页改版: thin delegations; the coordinator validates and calls the owning plugin. The image is never logged.
      case '/api/learning/problem/confirm':send(await d.confirmProblem(raw as never));break;
      case '/api/learning/recognize':send(await d.recognize(raw as never,c.signal));break;

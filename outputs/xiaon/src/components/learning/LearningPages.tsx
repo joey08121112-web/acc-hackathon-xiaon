@@ -8,6 +8,7 @@ import { GenerationPanel } from '../../learning/generation/GenerationPanel';
 import { isGenerationKnowledgePoint } from '../../learning/generation';
 import { useDevMode } from '../../agents/devMode';
 import { ProblemList } from './home/ProblemList';
+import { ProfileView } from '../free-chat/ProfileView';
 // G2 第二期挂载位：professional/* 归 ChatGPT，plan/* 归 zCode（见 交付/claude/CONTRACT-PHASE2.md）。
 import { ProfessionalModeView } from '../professional/ProfessionalModeView';
 import { ProfessionalReportView } from '../professional/ProfessionalReportView';
@@ -48,6 +49,7 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false,s
  {v.paused&&page==='growth'&&!unfinishedInterview&&<div className="notice">学习已暂停，由你决定何时继续。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}
  {/* One map for both: the assessment lights the places up, and each place card also offers free practice (locked until the assessment is finished). */}
  {page==='explore'?<ProfessionalModeView l={l} navigate={navigate} safety={safety} onPractice={onExploreDimension} station={station} onStation={onStation}/>:<>
+ <ProfileView/>
  {['理解','逻辑','计算','建模','空间想象'].map(dim=><section className="info-paper" key={dim}><h2>{dim}</h2>{v.assessment.skills.filter(s=>s.dimension===dim).map(s=><div className="learning-skill" key={s.id}><strong>{names[s.knowledgePointId]}</strong><span className="tag">{skillStatusLabels[s.status]}</span><p>{s.coverage}</p>{s.recentDifficulty&&<p>最近一次仍有困难，此前成功继续保留。</p>}{isGenerationKnowledgePoint(s.knowledgePointId)&&<details><summary>针对这个环节出一道新题</summary><GenerationPanel l={l} knowledgePointId={s.knowledgePointId} purpose="practice" navigate={navigate} safety={safety}/></details>}<details><summary>观察范围与待了解</summary>{s.unknowns.map((u,i)=><p className="small" key={i}>{u}</p>)}</details></div>)}</section>)}
  <ProblemList l={l} navigate={navigate}/>
  <GrowthArchive l={l} navigate={navigate}/>

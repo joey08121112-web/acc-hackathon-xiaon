@@ -58,7 +58,7 @@ export class UserRuntimes {
  private evict(){
   const max=this.options.maxOpen??200,idle=this.options.idleMs??30*60000;if(this.open.size<max)return;
   const now=Date.now();
-  for(const[id,e]of[...this.open].sort((a,b)=>a[1].used-b[1].used)){if(this.open.size<max)break;if(e.inflight===0&&now-e.used>idle){this.open.delete(id);e.runtime.repository.close();}}
+  for(const[id,e]of[...this.open].sort((a,b)=>a[1].used-b[1].used)){if(this.open.size<max)break;if(e.inflight===0&&now-e.used>idle){this.open.delete(id);e.runtime.repository.close();e.runtime.freeChat.close();}}
  }
- close(){for(const e of this.open.values())e.runtime.repository.close();this.open.clear();this.identities.close();}
+ close(){for(const e of this.open.values()){e.runtime.repository.close();e.runtime.freeChat.close();}this.open.clear();this.identities.close();}
 }

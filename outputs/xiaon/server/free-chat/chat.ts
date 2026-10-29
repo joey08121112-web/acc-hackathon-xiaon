@@ -1,7 +1,7 @@
 /** 自由聊：底栏「自由聊」的纯文字对话。只有下面这一段提示词，不走 learning 协调器、Agent 角色、工具或程序分配。 */
 import { z } from 'zod';
-import type { ModelProvider } from '../shared/learning-contracts';
-import { RuntimeError } from './core/errors';
+import type { ModelProvider } from '../../shared/learning-contracts';
+import { RuntimeError } from '../core/errors';
 export const FREE_CHAT_PROMPT=`你是小N，一个陪初中生聊天的 AI 学伴。
 
 怎么聊：
