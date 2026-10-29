@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { apiRequest } from '../../agent-client';
-import { ITEM_TEXT_MAX, type Profile, type ProfileItem, type ProfileKind } from '../../../shared/free-chat';
+import { useDevMode } from '../../agents/devMode';
+import { ITEM_TEXT_MAX, type ConsolidateResult, type Profile, type ProfileItem, type ProfileKind } from '../../../shared/free-chat';
 const GROUPS: { kind: ProfileKind; title: string; example: string }[] = [
  { kind: 'about', title: '关于我', example: '比如：有个妹妹、养了一只猫' },
  { kind: 'interest', title: '兴趣爱好', example: '比如：打篮球、画画' },
@@ -18,6 +19,16 @@ export function ProfileView() {
  const [selected, setSelected] = useState<string | null>(null), [editText, setEditText] = useState('');
  const [adding, setAdding] = useState<ProfileKind | null>(null), [addText, setAddText] = useState('');
  const [basicDraft, setBasicDraft] = useState<{ nickname: string; grade: string } | null>(null);
+ const dev = useDevMode(), [runNote, setRunNote] = useState('');
+ // 开发者模式：不等空闲，马上把还没整理的自由聊对话整理一次（演示用）。
+ const consolidateNow = () => {
+  if (busy) return; setBusy(true); setRunNote('正在整理…');
+  apiRequest<ConsolidateResult>('free-chat/consolidate', {}).then(r => {
+   setProfile(r.profile);
+   const added = r.changes.filter(c => c.op === 'add').length, others = r.changes.length - added;
+   setRunNote({ ok: `整理完了：新记下 ${added} 条，更新或又提到 ${others} 条。`, empty: '没有新的对话要整理。', off: '自动记忆是关着的。', failed: '模型这次的回答看不懂，下次再试。', skipped: '连续几次没整理成功，这批对话先跳过了。' }[r.status]);
+  }).catch(e => setRunNote((e instanceof Error && e.message) || '整理失败了')).finally(() => setBusy(false));
+ };
  useEffect(() => { apiRequest<Profile>('free-chat/profile').then(setProfile).catch(() => setError('档案暂时打不开，请稍后再试。')); }, []);
  const act = (path: string, body: unknown, after?: () => void) => {
   if (busy) return; setBusy(true); setError('');
@@ -62,6 +73,7 @@ export function ProfileView() {
    </div>;
   })}
   {error && <p className="notice" role="status">{error}</p>}
+  {dev && <p className="small muted profile-dev"><button className="secondary" disabled={busy} onClick={consolidateNow}>现在整理</button>{runNote}</p>}
   <label className="check-row profile-switch"><input type="checkbox" checked={profile.autoRemember} disabled={busy} onChange={() => act('free-chat/settings', { autoRemember: !profile.autoRemember })} /><span>让小N 从聊天里记住我<small>关掉后小N 不再记新的东西；已经记下的还在，你可以自己删。</small></span></label>
  </section>;
 }

@@ -3208,3 +3208,11 @@ button.talk-hold[data-phase="listening"], button.talk-hold[data-phase="listening
 .profile-switch small { display: block; margin-top: 2px; font-size: 0.74rem; color: var(--muted); }
 .profile-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .profile-actions button, .profile-add button { min-height: 38px; margin: 0; padding: 0 14px; font-size: 0.84rem; }
+.free-digest { padding: 12px 14px; border-radius: 14px; background: #f4f7ec; border: 1px solid #dce6c9; font-size: 0.86rem; }
+.free-digest p { margin: 0; }
+.free-digest ul { margin: 8px 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.free-digest li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 10px; }
+.free-digest .text-button { display: inline-flex; min-height: 0; padding: 2px 0; font-size: 0.78rem; }
+.free-digest .small .text-button { margin-left: 8px; }
+.profile-dev { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; }
+.profile-dev .secondary { min-height: 38px; padding: 0 14px; font-size: 0.84rem; }

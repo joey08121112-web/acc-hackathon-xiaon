@@ -11,7 +11,8 @@ import { NoAsr,ASR_MAX_WAV_BYTES,isWav,type AsrProvider } from '../voice/asr';
 import { UserRuntimes } from '../storage/users';
 import { freeChat } from '../free-chat/chat';
 import { profilePost } from '../free-chat/profile';
-import { chatRequests } from '../../shared/free-chat';
+import { consolidate,idleMsFromEnv,shouldConsolidate } from '../free-chat/consolidate';
+import { chatRequests,type DigestResponse } from '../../shared/free-chat';
 // G0: masked JPEG as base64 inside JSON; only this route gets a larger body, like /api/voice/asr.
 const RECOGNIZE_BODY_LIMIT=Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES*4/3)+2000;
 const statusCodes:Record<string,number>={invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,not_implemented:501,unavailable:503};
@@ -29,6 +30,8 @@ export interface HttpServerConfig {
  asr?:AsrProvider;
  /** Per-identity trial window counted server-side from first visit; 0 or absent disables the limit. */
  trialMs?:number;
+ /** 自由聊空闲多久后在后台整理记忆；不给就读 XIAON_FC_IDLE_MIN（默认 3 小时）。 */
+ freeChatIdleMs?:number;
 }
 /** A single runtime is one shared student (local tools and tests); UserRuntimes gives every anonymous identity its own database. */
 export function createHttpServer(source:LearningRuntime|UserRuntimes,config:HttpServerConfig){
@@ -36,7 +39,7 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
  const publicOrigins=config.publicOrigins??[];const publicMode=publicOrigins.length>0;
  const allowed=new Set([...config.allowedOrigins,...publicOrigins]);const hosts=new Set([config.host,...(config.extraHosts??[]),...[...allowed].map(s=>new URL(s).host)]);
  const serveStatic=config.staticDir?createStaticHandler(config.staticDir):undefined;
- const localSessions=new Map<string,{csrf:string;expires:number;userId:string}>();let activeChat=false;const freeChatting=new Set<string>();
+ const localSessions=new Map<string,{csrf:string;expires:number;userId:string}>();let activeChat=false;const freeChatting=new Set<string>(),consolidating=new Set<string>();const freeChatIdleMs=config.freeChatIdleMs??idleMsFromEnv();
  // Voice limits are per user; the global caps protect the shared upstream services.
  const tts=config.tts??new NoTts();let ttsInFlight=0;const asr=config.asr??new NoAsr();let asrInFlight=0;
  const voice=new Map<string,{tts:number;ttsStarts:number[];asr:boolean;asrStarts:number[]}>();
@@ -82,10 +85,20 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
    // Everything below runs against this user's own runtime and database only.
    const lease=users?users.acquire(session.userId):{runtime:single!,release(){}};res.once('close',lease.release);
    const runtime=lease.runtime;const limits=voiceOf(session.userId);
+   // 自由聊的记忆整理在后台跑：自己持有一份运行时租约，请求结束也不会被回收；每人同一时间只跑一次。日志只记状态和数量。
+   const kickConsolidation=()=>{
+    const userId=session.userId;if(consolidating.has(userId)||!shouldConsolidate(runtime.freeChat,runtime.clock.now(),freeChatIdleMs))return;
+    const bg=users?users.acquire(userId):{runtime,release(){}};consolidating.add(userId);const started=Date.now();
+    consolidate(bg.runtime.freeChat,bg.runtime.provider,()=>bg.runtime.clock.now(),AbortSignal.timeout(180000))
+     .then(r=>console.info('[free-chat/consolidate]',JSON.stringify({stage:r.status,changes:r.changes.length,ms:Date.now()-started})))
+     .catch(e=>console.info('[free-chat/consolidate]',JSON.stringify({stage:'error',code:e instanceof RuntimeError?e.code:'unknown',ms:Date.now()-started})))
+     .finally(()=>{consolidating.delete(userId);bg.release();});
+   };
    if(req.method==='GET'){
     if(path==='/api/learning'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.view());return;}
     if(path==='/api/context'){send(runtime.context());return;}
-    if(path==='/api/free-chat/profile'){send(runtime.freeChat.profile());return;}
+    if(path==='/api/free-chat/profile'){kickConsolidation();send(runtime.freeChat.profile());return;}
+    if(path==='/api/free-chat/digest'){kickConsolidation();send({digest:runtime.freeChat.digest(),consolidating:consolidating.has(session.userId)} satisfies DigestResponse);return;}
     if(path==='/api/free-chat/history'){send(runtime.freeChat.history());return;}
     // G2: long-term trend (tracking plugin, zCode), derived from stored professional reports.
     if(path==='/api/learning/trend'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.trend());return;}
@@ -133,6 +146,17 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     freeChatting.add(session.userId);
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
     try{send(await freeChat(runtime.freeChat,runtime.provider,raw,c.signal));}finally{freeChatting.delete(session.userId);res.off('close',cancel);}
+    return;
+   }
+   if(path==='/api/free-chat/digest/seen'){const p=chatRequests.digestSeen.safeParse(raw);if(!p.success)throw new RuntimeError('invalid_params');runtime.freeChat.markDigestSeen(p.data.runId);send({digest:runtime.freeChat.digest(),consolidating:consolidating.has(session.userId)} satisfies DigestResponse);return;}
+   if(path==='/api/free-chat/consolidate'){
+    // 「现在整理」（开发者模式里的按钮）：不等空闲，立刻整理一次。
+    if(!chatRequests.consolidate.safeParse(raw).success)throw new RuntimeError('invalid_params');
+    if(consolidating.has(session.userId))throw new RuntimeError('invalid_state','正在整理，请稍等');
+    consolidating.add(session.userId);
+    const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
+    try{const r=await consolidate(runtime.freeChat,runtime.provider,()=>runtime.clock.now(),c.signal);send({...r,profile:runtime.freeChat.profile()});}
+    finally{consolidating.delete(session.userId);res.off('close',cancel);}
     return;
    }
    if(path==='/api/free-chat/new-thread'){if(!chatRequests.newThread.safeParse(raw).success)throw new RuntimeError('invalid_params');send(runtime.freeChat.newThread());return;}

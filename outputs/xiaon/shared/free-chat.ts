@@ -33,4 +33,13 @@ export type FreeChatExchange={threadId:string;user:FreeChatMessage;reply:FreeCha
 export const chatRequests={
  send:z.strictObject({text:z.string().trim().min(1).max(MESSAGE_TEXT_MAX)}),
  newThread:z.strictObject({}),
+ digestSeen:z.strictObject({runId:itemId}),
+ consolidate:z.strictObject({}),
 };
+/** 记忆整理：空闲时把还没整理的对话交给模型，按操作更新档案。原始对话整理后保留 MESSAGE_KEEP_DAYS 天。 */
+export const MESSAGE_KEEP_DAYS=30;
+export type ConsolidationChange={op:'add'|'mention'|'update'|'past';itemId:string;kind:ProfileKind;text:string};
+/** 最近一次整理里学生还没看过的结果（只含新增和更新）。 */
+export type Digest={runId:string;changes:ConsolidationChange[]};
+export type DigestResponse={digest:Digest|null;consolidating:boolean};
+export type ConsolidateResult={status:'ok'|'failed'|'skipped'|'empty'|'off';changes:ConsolidationChange[];profile:Profile};
