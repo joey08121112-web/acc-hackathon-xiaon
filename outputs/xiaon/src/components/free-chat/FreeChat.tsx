@@ -33,7 +33,7 @@ export function FreeChat({ active }: { active: boolean }) {
   <div className="talk-dock">
    <form className="talk-bar" onSubmit={e => { e.preventDefault(); send(draft); }}>
     <textarea className="talk-input" aria-label="对小N说" rows={1} value={draft} maxLength={2000} onChange={e => setDraft(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); e.currentTarget.form?.requestSubmit(); } }} placeholder="想到什么就说什么…" enterKeyHint="send" />
-    {draft.trim() && <button className="talk-send" disabled={waiting}>发送</button>}
+    <button className="talk-send" disabled={waiting || !draft.trim()}>发送</button>
    </form>
   </div>
  </div>;
