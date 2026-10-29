@@ -25,3 +25,12 @@ export const profileRequests={
  settings:z.strictObject({autoRemember:z.boolean()}),
 };
 export type ProfileItemRequest=z.infer<typeof profileRequests.item>;
+/** 对话：存在服务器上，一段对话（thread）从「重新开始」算起。 */
+export const MESSAGE_TEXT_MAX=2000;
+export type FreeChatMessage={id:string;role:'user'|'assistant';content:string;createdAt:string};
+export type FreeChatHistory={threadId:string|null;messages:FreeChatMessage[]};
+export type FreeChatExchange={threadId:string;user:FreeChatMessage;reply:FreeChatMessage};
+export const chatRequests={
+ send:z.strictObject({text:z.string().trim().min(1).max(MESSAGE_TEXT_MAX)}),
+ newThread:z.strictObject({}),
+};

@@ -1,7 +1,8 @@
 /** 自由聊：底栏「自由聊」的纯文字对话。只有下面这一段提示词，不走 learning 协调器、Agent 角色、工具或程序分配。 */
-import { z } from 'zod';
 import type { ModelProvider } from '../../shared/learning-contracts';
+import { chatRequests,type FreeChatExchange } from '../../shared/free-chat';
 import { RuntimeError } from '../core/errors';
+import type { FreeChatStore } from './store';
 export const FREE_CHAT_PROMPT=`你是小N，一个陪初中生聊天的 AI 学伴。
 
 怎么聊：
@@ -14,11 +15,12 @@ export const FREE_CHAT_PROMPT=`你是小N，一个陪初中生聊天的 AI 学�
 
 如果学生提到想伤害自己或别人、被欺负、或者遇到危险，认真关心他，建议他告诉信任的大人，或拨打 12355 青少年服务热线。`;
 const MAX_TURNS=20;
-const requestSchema=z.object({messages:z.array(z.object({role:z.enum(['user','assistant']),content:z.string().trim().min(1).max(2000)}).strict()).min(1).max(60)}).strict();
-export async function freeChat(provider:ModelProvider,raw:unknown,signal:AbortSignal):Promise<{text:string}>{
- const p=requestSchema.safeParse(raw);if(!p.success||p.data.messages.at(-1)!.role!=='user')throw new RuntimeError('invalid_params','需要 {messages}，最后一条是学生的话');
+/** 带上当前这段对话的最近 MAX_TURNS 条去问模型；回复成功才把这一问一答存进学生自己的库。 */
+export async function freeChat(store:FreeChatStore,provider:ModelProvider,raw:unknown,signal:AbortSignal):Promise<FreeChatExchange>{
+ const p=chatRequests.send.safeParse(raw);if(!p.success)throw new RuntimeError('invalid_params','需要 {text}');
  if(provider.kind==='offline')throw new RuntimeError('unavailable','还没有连接模型，暂时聊不了');
- const out=await provider.complete({messages:[{role:'system',content:FREE_CHAT_PROMPT},...p.data.messages.slice(-MAX_TURNS)],tools:[],signal});
+ const{threadId,messages}=store.history(MAX_TURNS);
+ const out=await provider.complete({messages:[{role:'system',content:FREE_CHAT_PROMPT},...messages.map(m=>({role:m.role,content:m.content})),{role:'user',content:p.data.text}],tools:[],signal});
  const text=out.content.trim();if(!text)throw new RuntimeError('provider_error','模型这次没有回话，请再发一次');
- return{text};
+ return store.appendExchange(threadId,p.data.text,text);
 }

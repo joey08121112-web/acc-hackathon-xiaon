@@ -1,13 +1,15 @@
 /** 自由聊的存储：放在这个学生自己的 SQLite 文件里，表名都以 fc_ 开头，跟 learning 的追加式集合互不相干。
- * 档案条目可改可删（学生说了算），删掉的内容进 fc_forgotten，整理时不再自动加回。 */
+ * 档案条目可改可删（学生说了算），删掉的内容进 fc_forgotten，整理时不再自动加回。
+ * 对话按段（thread）存：点「重新开始」新开一段；consolidated_at 留给第 4 步的记忆整理。 */
 import { DatabaseSync } from 'node:sqlite';
 import { randomBytes } from 'node:crypto';
 import type { Clock } from '../../shared/learning-contracts';
-import { FORGOTTEN_DAYS,INTEREST_COOL_DAYS,ITEMS_PER_KIND_MAX,RECENT_DAYS,type Profile,type ProfileItem,type ProfileItemRequest,type ProfileKind } from '../../shared/free-chat';
+import { FORGOTTEN_DAYS,INTEREST_COOL_DAYS,ITEMS_PER_KIND_MAX,RECENT_DAYS,type FreeChatExchange,type FreeChatHistory,type FreeChatMessage,type Profile,type ProfileItem,type ProfileItemRequest,type ProfileKind } from '../../shared/free-chat';
 import { RuntimeError } from '../core/errors';
 const DAY=86400000;
 type ItemRow={id:string;kind:ProfileKind;text:string;status:'active'|'past';source:'chat'|'student';first_mentioned_at:string;last_mentioned_at:string;mention_count:number;expires_at:string|null;edited_by_student:number;created_at:string;updated_at:string};
 const toItem=(r:ItemRow):ProfileItem=>({id:r.id,kind:r.kind,text:r.text,status:r.status,source:r.source,firstMentionedAt:r.first_mentioned_at,lastMentionedAt:r.last_mentioned_at,mentionCount:r.mention_count,expiresAt:r.expires_at,editedByStudent:!!r.edited_by_student,createdAt:r.created_at,updatedAt:r.updated_at});
+const newId=()=>randomBytes(9).toString('base64url');
 const plusDays=(at:string,days:number)=>new Date(Date.parse(at)+days*DAY).toISOString();
 export class FreeChatStore {
  private db:DatabaseSync;
@@ -20,7 +22,11 @@ export class FreeChatStore {
     status TEXT NOT NULL CHECK(status IN ('active','past')),source TEXT NOT NULL CHECK(source IN ('chat','student')),
     first_mentioned_at TEXT NOT NULL,last_mentioned_at TEXT NOT NULL,mention_count INTEGER NOT NULL,expires_at TEXT,
     edited_by_student INTEGER NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL);
-   CREATE TABLE IF NOT EXISTS fc_forgotten(id TEXT PRIMARY KEY,kind TEXT NOT NULL,text TEXT NOT NULL,deleted_at TEXT NOT NULL);`);
+   CREATE TABLE IF NOT EXISTS fc_forgotten(id TEXT PRIMARY KEY,kind TEXT NOT NULL,text TEXT NOT NULL,deleted_at TEXT NOT NULL);
+   CREATE TABLE IF NOT EXISTS fc_threads(id TEXT PRIMARY KEY,started_at TEXT NOT NULL);
+   CREATE TABLE IF NOT EXISTS fc_messages(id TEXT PRIMARY KEY,thread_id TEXT NOT NULL REFERENCES fc_threads(id),role TEXT NOT NULL CHECK(role IN ('user','assistant')),
+    content TEXT NOT NULL,created_at TEXT NOT NULL,consolidated_at TEXT);
+   CREATE INDEX IF NOT EXISTS fc_messages_thread ON fc_messages(thread_id);`);
  }
  /** 固定规则，不用模型：近况到期删除；聊天里记下的兴趣久没提到就转为“以前喜欢”；删掉的内容过期后彻底清掉。 */
  applyRules(){
@@ -53,18 +59,44 @@ export class FreeChatStore {
   else if(req.action==='status')this.db.prepare('UPDATE fc_items SET status=?,edited_by_student=1,updated_at=? WHERE id=?').run(req.status,now,req.id);
   else{
    this.db.prepare('DELETE FROM fc_items WHERE id=?').run(req.id);
-   this.db.prepare('INSERT INTO fc_forgotten VALUES(?,?,?,?)').run(randomBytes(9).toString('base64url'),row.kind,row.text,now);
+   this.db.prepare('INSERT INTO fc_forgotten VALUES(?,?,?,?)').run(newId(),row.kind,row.text,now);
   }
  }
  /** 新增一条。近况默认 RECENT_DAYS 天后自动删除。整理（第 4 步）也走这里，source 为 chat。 */
  insert(input:{kind:ProfileKind;text:string;source:'chat'|'student';editedByStudent:boolean;expiresAt?:string|null}){
-  const now=this.clock.now(),id=randomBytes(9).toString('base64url');
+  const now=this.clock.now(),id=newId();
   const expiresAt=input.kind==='recent'?input.expiresAt??plusDays(now,RECENT_DAYS):null;
   this.db.prepare('INSERT INTO fc_items VALUES(?,?,?,?,?,?,?,?,?,?,?,?)').run(id,input.kind,input.text,'active',input.source,now,now,1,expiresAt,input.editedByStudent?1:0,now,now);
   return id;
  }
  forgotten(){return this.db.prepare('SELECT kind,text,deleted_at AS deletedAt FROM fc_forgotten ORDER BY deleted_at DESC').all() as {kind:ProfileKind;text:string;deletedAt:string}[];}
+ currentThread(){return (this.db.prepare('SELECT id FROM fc_threads ORDER BY rowid DESC LIMIT 1').get() as {id:string}|undefined)?.id??null;}
+ /** 当前这段对话（最近 limit 条，按时间先后）。 */
+ history(limit=200):FreeChatHistory{
+  const threadId=this.currentThread();if(!threadId)return{threadId,messages:[]};
+  const rows=this.db.prepare('SELECT id,role,content,created_at AS createdAt FROM fc_messages WHERE thread_id=? ORDER BY rowid DESC LIMIT ?').all(threadId,limit) as FreeChatMessage[];
+  return{threadId,messages:rows.reverse().map(r=>({id:r.id,role:r.role,content:r.content,createdAt:r.createdAt}))};
+ }
+ /** 重新开始：当前这段已经是空的就不再新开。 */
+ newThread():FreeChatHistory{
+  const current=this.currentThread();
+  if(current&&!this.db.prepare('SELECT 1 FROM fc_messages WHERE thread_id=? LIMIT 1').get(current))return{threadId:current,messages:[]};
+  const id=newId();this.db.prepare('INSERT INTO fc_threads VALUES(?,?)').run(id,this.clock.now());return{threadId:id,messages:[]};
+ }
+ /** 一问一答一起存：回复失败时什么都不存，学生的话留在前端重发。threadId 是发问时的那一段，等待中点了重新开始也不会串到新的一段。 */
+ appendExchange(threadId:string|null,userText:string,replyText:string):FreeChatExchange{
+  const now=this.clock.now();
+  this.db.exec('BEGIN IMMEDIATE');
+  try{
+   let thread=threadId&&this.db.prepare('SELECT 1 FROM fc_threads WHERE id=?').get(threadId)?threadId:null;
+   if(!thread){thread=newId();this.db.prepare('INSERT INTO fc_threads VALUES(?,?)').run(thread,now);}
+   const user={id:newId(),role:'user' as const,content:userText,createdAt:now},reply={id:newId(),role:'assistant' as const,content:replyText,createdAt:now};
+   const insert=this.db.prepare('INSERT INTO fc_messages(id,thread_id,role,content,created_at) VALUES(?,?,?,?,?)');
+   for(const m of [user,reply])insert.run(m.id,thread,m.role,m.content,m.createdAt);
+   this.db.exec('COMMIT');return{threadId:thread,user,reply};
+  }catch(e){this.db.exec('ROLLBACK');throw e;}
+ }
  /** 「重置整个演示」：清空自由聊的全部数据。 */
- reset(){this.db.exec('DELETE FROM fc_items; DELETE FROM fc_forgotten; DELETE FROM fc_basic; DELETE FROM fc_settings;');}
+ reset(){this.db.exec('DELETE FROM fc_items; DELETE FROM fc_forgotten; DELETE FROM fc_basic; DELETE FROM fc_settings; DELETE FROM fc_messages; DELETE FROM fc_threads;');}
  close(){if(this.db.isOpen)this.db.close();}
 }
