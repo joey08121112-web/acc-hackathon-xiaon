@@ -894,7 +894,7 @@ function App() {
             )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
             <LearningStatus l={learning} />
-            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
+            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。底部「自由聊」的对话也存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
             <main className={`page page-${s.page}`}>
               {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>openModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
               {/* 新版首页离开时只隐藏不卸载：聊天里弹出的卡片、改到一半的草稿和还在等的回复，回来都还在。 */}
@@ -2493,6 +2493,16 @@ function App() {
                         管理记忆与开关 <ArrowRight size={15} />
                       </button>
                     </div>
+                    {learning.enabled && (
+                      <div>
+                        <strong>自由聊与我的档案 · 可选</strong>
+                        <Tag>在「我的档案」里开关</Tag>
+                        <p>底部「自由聊」的对话保存在服务器上只属于你的空间里。聊完一段时间后，小N 会从里面整理出关于你的小事、兴趣、最近的事和有用的学习方法，放进「成长 · 我的档案」，回话时当作背景。心事和情绪、身体健康、家庭矛盾、住址电话这类不会记。你可以随时改、删，或者关掉「让小N 从聊天里记住我」：关掉后不再记新的，关着时说的话以后也不会补记。整理过的对话 30 天后删除。</p>
+                        <button onClick={() => navigate("growth")}>
+                          去我的档案 <ArrowRight size={15} />
+                        </button>
+                      </div>
+                    )}
                     <div>
                       <strong>学习研究 · 可选</strong>
                       <Tag>{s.research ? "已选演示授权" : "关闭"}</Tag>
@@ -2507,7 +2517,7 @@ function App() {
                   <div className="info-paper">
                     <h3>第三方服务与生成来源</h3>
                     <p>
-                      {learning.enabled ? "真实模型模式会向智谱发送当前对话、必要题目和作答、用于整理观察或小结的相关内容，以及你允许使用的记忆。记忆关闭后不发送可选记忆。学习记录由程序保存，学生确认由你的点击或输入决定。" : "当前为离线规则原型，聊天来自本地预设，观察来自本机作答。"} OCR、身份核验、通知和研究平台仍未接入，插画为原创矢量绘制，未宣称安全认证。
+                      {learning.enabled ? "真实模型模式会向智谱发送当前对话、必要题目和作答、用于整理观察或小结的相关内容，以及你允许使用的记忆。记忆关闭后不发送可选记忆。学习记录由程序保存，学生确认由你的点击或输入决定。自由聊会发送当前这段对话最近的内容和档案摘要；整理档案时会发送还没整理过的自由聊对话和现有档案。" : "当前为离线规则原型，聊天来自本地预设，观察来自本机作答。"} OCR、身份核验、通知和研究平台仍未接入，插画为原创矢量绘制，未宣称安全认证。
                     </p>
                     <h3>保存与删除</h3>
                     <p>
