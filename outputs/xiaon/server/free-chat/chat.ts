@@ -3,6 +3,7 @@ import type { ModelProvider } from '../../shared/learning-contracts';
 import { chatRequests,type FreeChatExchange } from '../../shared/free-chat';
 import { RuntimeError } from '../core/errors';
 import type { FreeChatStore } from './store';
+import { profileBrief } from './brief';
 export const FREE_CHAT_PROMPT=`你是小N，一个陪初中生聊天的 AI 学伴。
 
 怎么聊：
@@ -15,12 +16,13 @@ export const FREE_CHAT_PROMPT=`你是小N，一个陪初中生聊天的 AI 学�
 
 如果学生提到想伤害自己或别人、被欺负、或者遇到危险，认真关心他，建议他告诉信任的大人，或拨打 12355 青少年服务热线。`;
 const MAX_TURNS=20;
-/** 带上当前这段对话的最近 MAX_TURNS 条去问模型；回复成功才把这一问一答存进学生自己的库。 */
+/** 提示词后面附上档案摘要，再带上当前这段对话的最近 MAX_TURNS 条去问模型；回复成功才把这一问一答存进学生自己的库。 */
 export async function freeChat(store:FreeChatStore,provider:ModelProvider,raw:unknown,signal:AbortSignal):Promise<FreeChatExchange>{
  const p=chatRequests.send.safeParse(raw);if(!p.success)throw new RuntimeError('invalid_params','需要 {text}');
  if(provider.kind==='offline')throw new RuntimeError('unavailable','还没有连接模型，暂时聊不了');
  const{threadId,messages}=store.history(MAX_TURNS);
- const out=await provider.complete({messages:[{role:'system',content:FREE_CHAT_PROMPT},...messages.map(m=>({role:m.role,content:m.content})),{role:'user',content:p.data.text}],tools:[],signal});
+ const brief=profileBrief(store.profile());
+ const out=await provider.complete({messages:[{role:'system',content:brief?FREE_CHAT_PROMPT+'\n\n'+brief:FREE_CHAT_PROMPT},...messages.map(m=>({role:m.role,content:m.content})),{role:'user',content:p.data.text}],tools:[],signal});
  const text=out.content.trim();if(!text)throw new RuntimeError('provider_error','模型这次没有回话，请再发一次');
  return store.appendExchange(threadId,p.data.text,text);
 }
