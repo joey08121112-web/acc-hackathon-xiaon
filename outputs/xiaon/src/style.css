@@ -3178,3 +3178,12 @@ button.talk-hold[data-phase="listening"], button.talk-hold[data-phase="listening
 .loop-saved { white-space:pre-wrap; overflow-wrap:anywhere; padding:8px 0; }
 .app-shell:has(.loop-answer textarea:focus) .bottom-nav { visibility:hidden; pointer-events:none; }
 .learning-loop textarea { scroll-margin-bottom:180px; }
+/* 底栏「自由聊」：纯文字气泡对话 */
+.free-chat-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; padding-top: 9px; margin-bottom: 14px; }
+.free-chat-head h1 { margin: 2px 0 0; font-size: 1.5rem; }
+.free-chat-list { display: flex; flex-direction: column; gap: 10px; }
+.free-bubble { max-width: 86%; margin: 0; padding: 10px 14px; border-radius: 16px; line-height: 1.65; white-space: pre-wrap; }
+.free-bubble.assistant { align-self: flex-start; background: #fffdf7; border: 1px solid #e1e5d7; border-bottom-left-radius: 6px; color: #2f3a2b; }
+.free-bubble.user { align-self: flex-end; background: #e8eedc; border-bottom-right-radius: 6px; color: #2f3a2b; }
+.free-bubble.thinking { color: #7a866b; }
+.free-chat-list .notice .text-button { margin-left: 8px; }

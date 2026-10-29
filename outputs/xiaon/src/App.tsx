@@ -20,6 +20,7 @@ import {
   LoaderCircle,
   Map,
   MessageCircle,
+  MessagesSquare,
   Minus,
   Pause,
   Play,
@@ -45,6 +46,7 @@ import { placeOf } from "./components/professional/ProfessionalMap";
 import { useLearning } from "./agents/useLearning";
 import { useDevMode, setDevMode } from "./agents/devMode";
 import { ChatPanel } from "./components/learning/ChatPanel";
+import { FreeChat } from "./components/free-chat/FreeChat";
 import { LearningPages, LearningStatus } from "./components/learning/LearningPages";
 import { GuardianOverview } from "./components/guardian/GuardianOverview";
 import { guardianDigest } from "./components/guardian/digest";
@@ -79,6 +81,7 @@ const uid = () =>
 const icons = [Flower2, BookOpen, Plus, ShoppingBagIcon, Compass];
 const PAGE_OF_TAB: Record<string, string> = {
   小N: "home",
+  自由聊: "freechat",
   探索: "explore",
   今日: "today",
   成长: "growth",
@@ -903,6 +906,8 @@ function App() {
                   <div className="home-foot"><ShieldCheck size={13}/>你的选择会被尊重。<button onClick={() => navigate("privacy")}>我说的话会去哪里？</button></div>
                 </div>
               )}
+              {/* 自由聊离开时也只隐藏：还在等的回复回来照样接上。 */}
+              <div hidden={s.page !== "freechat"}><FreeChat active={s.page === "freechat"} /></div>
               {s.page === "home" && !learning.enabled && (
                 <>
                   <div className="home-heading">
@@ -2870,6 +2875,7 @@ function App() {
             <nav className="bottom-nav" aria-label="主导航">
               {[
                 { name: "小N", icon: MessageCircle },
+                { name: "自由聊", icon: MessagesSquare },
                 { name: "探索", icon: Compass },
                 { name: "今日", icon: BookOpen },
                 { name: "成长", icon: Sprout },

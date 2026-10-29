@@ -9,6 +9,7 @@ import { createStaticHandler } from './static';
 import { NoTts,TTS_MAX_CHARS,type TtsProvider } from '../voice/tts';
 import { NoAsr,ASR_MAX_WAV_BYTES,isWav,type AsrProvider } from '../voice/asr';
 import { UserRuntimes } from '../storage/users';
+import { freeChat } from '../free-chat';
 // G0: masked JPEG as base64 inside JSON; only this route gets a larger body, like /api/voice/asr.
 const RECOGNIZE_BODY_LIMIT=Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES*4/3)+2000;
 const statusCodes:Record<string,number>={invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,not_implemented:501,unavailable:503};
@@ -33,7 +34,7 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
  const publicOrigins=config.publicOrigins??[];const publicMode=publicOrigins.length>0;
  const allowed=new Set([...config.allowedOrigins,...publicOrigins]);const hosts=new Set([config.host,...(config.extraHosts??[]),...[...allowed].map(s=>new URL(s).host)]);
  const serveStatic=config.staticDir?createStaticHandler(config.staticDir):undefined;
- const localSessions=new Map<string,{csrf:string;expires:number;userId:string}>();let activeChat=false;
+ const localSessions=new Map<string,{csrf:string;expires:number;userId:string}>();let activeChat=false;const freeChatting=new Set<string>();
  // Voice limits are per user; the global caps protect the shared upstream services.
  const tts=config.tts??new NoTts();let ttsInFlight=0;const asr=config.asr??new NoAsr();let asrInFlight=0;
  const voice=new Map<string,{tts:number;ttsStarts:number[];asr:boolean;asrStarts:number[]}>();
@@ -120,6 +121,14 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
     try{const audio=await tts.synthesize(body.text.slice(0,TTS_MAX_CHARS+1),c.signal);res.setHeader('Content-Type','audio/mpeg');res.setHeader('Content-Length',String(audio.length));res.writeHead(200);res.end(audio);}
     finally{limits.tts--;ttsInFlight--;res.off('close',cancel);}
+    return;
+   }
+   if(path==='/api/free-chat'){
+    // 自由聊：一段提示词直连模型，不进学习记录；每人同一时间一条请求。
+    if(freeChatting.has(session.userId))throw new RuntimeError('invalid_state','上一句还在回复中，请稍等');
+    freeChatting.add(session.userId);
+    const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
+    try{send(await freeChat(runtime.provider,raw,c.signal));}finally{freeChatting.delete(session.userId);res.off('close',cancel);}
     return;
    }
    const d=learningFor(runtime);
