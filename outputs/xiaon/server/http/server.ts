@@ -28,8 +28,6 @@ export interface HttpServerConfig {
  tts?:TtsProvider;
  /** Server-side speech recognition; the client falls back to the browser's own when this is unavailable. */
  asr?:AsrProvider;
- /** Per-identity trial window counted server-side from first visit; 0 or absent disables the limit. */
- trialMs?:number;
  /** 自由聊空闲多久后在后台整理记忆；不给就读 XIAON_FC_IDLE_MIN（默认 3 小时）。 */
  freeChatIdleMs?:number;
 }
@@ -44,8 +42,6 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
  const tts=config.tts??new NoTts();let ttsInFlight=0;const asr=config.asr??new NoAsr();let asrInFlight=0;
  const voice=new Map<string,{tts:number;ttsStarts:number[];asr:boolean;asrStarts:number[]}>();
  const voiceOf=(userId:string)=>{let v=voice.get(userId);if(!v){v={tts:0,ttsStarts:[],asr:false,asrStarts:[]};voice.set(userId,v);}return v;};
- // The trial window is server-side state tied to the identity itself, so refreshing or a new session cookie cannot extend it.
- const trialMs=config.trialMs??0;const trialGuard=(userId:string)=>{if(!users||!trialMs)return;const created=users.identities.createdAtOf(userId);if(!created||Date.parse(created)+trialMs<Date.now())throw new RuntimeError('unavailable','本轮体验时长已用完，感谢试用学伴小N！');};
  const server=createServer(async(req,res)=>{
   res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Content-Type','application/json; charset=utf-8');
   const send=(body:unknown,status=200)=>{res.writeHead(status);res.end(JSON.stringify(body));};
@@ -70,7 +66,7 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     const cookies:string[]=[];let userId='local';
     if(users){
      const known=users.identities.resolve(cookieValue(req,'xiaon_user')??'');
-     if(known){trialGuard(known);userId=known;}else{const created=users.identities.create();userId=created.userId;cookies.push(`xiaon_user=${created.token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=31536000${publicMode?'; Secure':''}`);}
+     if(known){userId=known;}else{const created=users.identities.create();userId=created.userId;cookies.push(`xiaon_user=${created.token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=31536000${publicMode?'; Secure':''}`);}
      const own=[...localSessions].filter(([,v])=>v.userId===userId);for(const[k]of own.slice(0,Math.max(0,own.length-7)))localSessions.delete(k);
     }
     const sid=randomBytes(32).toString('hex');const csrf=randomBytes(32).toString('hex');localSessions.set(sid,{csrf,expires:Date.now()+8*3600000,userId});
@@ -81,7 +77,6 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
    const session=cookie?localSessions.get(cookie):undefined;
    if(!session||session.expires<Date.now())throw new RuntimeError('forbidden','本机会话缺失或已过期');
    if(req.method==='POST'&&!equalToken(String(req.headers['x-xiaon-csrf']??''),session.csrf))throw new RuntimeError('forbidden','缺少本地会话防护令牌');
-   trialGuard(session.userId);
    // Everything below runs against this user's own runtime and database only.
    const lease=users?users.acquire(session.userId):{runtime:single!,release(){}};res.once('close',lease.release);
    const runtime=lease.runtime;const limits=voiceOf(session.userId);

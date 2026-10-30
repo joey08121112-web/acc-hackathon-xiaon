@@ -31,11 +31,6 @@ export class IdentityStore {
   this.db.prepare('INSERT INTO identities VALUES(?,?,?,?)').run(digest(token),userId,at,at);return{token,userId};
  }
  count(){return (this.db.prepare('SELECT count(*) AS n FROM identities').get() as {n:number}).n;}
- /** First-seen time for trial limits; unknown ids read as undefined and callers fail closed. */
- createdAtOf(userId:string):string|undefined {
-  if(!USER_ID.test(userId))return undefined;
-  return (this.db.prepare('SELECT created_at FROM identities WHERE user_id=?').get(userId) as {created_at:string}|undefined)?.created_at;
- }
  close(){this.db.close();}
 }
 type Entry={runtime:LearningRuntime;inflight:number;used:number};
