@@ -26,7 +26,6 @@ import {
   Play,
   Plus,
   RotateCcw,
-  Send,
   Settings,
   ShieldCheck,
   Sparkles,
@@ -40,17 +39,14 @@ import {
   X,
 } from "lucide-react";
 import { HeroArt, MapArt, Mascot, SpaceShape } from "./Art";
-import { HomeHero } from "./voice/HomeHero";
 import { explorationStatus } from "./components/learning/ExplorationMap";
 import { placeOf } from "./components/professional/ProfessionalMap";
 import { useLearning } from "./agents/useLearning";
 import { useDevMode, setDevMode } from "./agents/devMode";
-import { ChatPanel } from "./components/learning/ChatPanel";
 import { FreeChat } from "./components/free-chat/FreeChat";
 import { LearningPages, LearningStatus } from "./components/learning/LearningPages";
 import { GuardianOverview } from "./components/guardian/GuardianOverview";
 import { guardianDigest } from "./components/guardian/digest";
-import { aiConfigured, chatWithAI } from "./ai";
 import {
   correct,
   dimensionDetails,
@@ -68,7 +64,6 @@ import {
   planDraft,
   PROGRESS_KEY,
   reducer,
-  replyFor,
   taskStatus,
   timeLabel,
   type Memory,
@@ -147,7 +142,10 @@ function App() {
   const learningPages = ["chat","explore","task","growth","report","plan","today","review","memory"];
   const [s, dispatch] = useReducer(reducer, null, () => {
     try {
-      return hydrate(localStorage.getItem(PROGRESS_KEY));
+      const restored = hydrate(localStorage.getItem(PROGRESS_KEY));
+      return restored.page === "chat" || window.location.hash === "#chat"
+        ? { ...restored, page: "home", tab: "小N" }
+        : restored;
     } catch {
       return {
         ...initial(),
@@ -174,12 +172,11 @@ function App() {
     [editing, setEditing] = useState<string | null>(null),
     [editText, setEditText] = useState("");
   const submitLock = useRef(false),
-    chatEnd = useRef<HTMLDivElement>(null),
     taskTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const patch = (p: Partial<State>) => dispatch({ type: "patch", patch: p });
-  // 首页范围：已有 chat 导航统一回到综合模式；离线规则入口继续保留。
+  // 历史 chat 链接统一回到新的自由聊首页。
   useEffect(() => {
-    if (learning.enabled && s.page === "chat") {
+    if (s.page === "chat") {
       patch({ page: "home", tab: "小N" });
       window.history.replaceState(
         { ...window.history.state, page: "home", tab: "小N" },
@@ -187,7 +184,7 @@ function App() {
         "#home",
       );
     }
-  }, [learning.enabled, s.page]);
+  }, [s.page]);
   const contact = s.helpContact;
   const setContact = (value: string) =>
     patch({ helpContact: value, helpStatus: "none" });
@@ -221,6 +218,7 @@ function App() {
     if (window.history.state?.modal) window.history.back();
   };
   const navigate = (page: string, _tab?: string) => {
+    if (page === "chat") page = "home";
     // 只有四个 Tab 首页才切换 Tab；子页面沿用来处的 Tab，底栏高亮和兜底返回都回到原来的地方。
     const tab = TAB_OF_PAGE[page] ?? stateRef.current.tab;
     setStation(false);
@@ -275,6 +273,11 @@ function App() {
     const pop = (e: PopStateEvent) => {
       if (!e.state?.modal) setModal(null);
       if (!e.state?.page) return;
+      if (e.state.page === "chat") {
+        patch({ page: "home", tab: "小N" });
+        window.history.replaceState({ ...e.state, page: "home", tab: "小N" }, "", "#home");
+        return;
+      }
       setStation(e.state.page === "explore" && e.state.station ? e.state.station : false);
       if (e.state.page === "task" && e.state.taskId) {
         const known = stateRef.current.records[e.state.taskId];
@@ -335,40 +338,6 @@ function App() {
     return () => clearTimeout(t);
   }, [toast]);
   useEffect(() => {
-    if (learning.enabled || s.chatStatus !== "waiting") return;
-    let cancelled = false;
-    const replyLocally = () =>
-      dispatch({
-        type: "chat-reply",
-        text: replyFor(s.pendingChat, s.rest, s.questionInvitePaused),
-      });
-    const timer = setTimeout(async () => {
-      if (offline || !navigator.onLine) {
-        patch({ chatStatus: "failed" });
-        return;
-      }
-      if (!aiConfigured()) {
-        replyLocally();
-        return;
-      }
-      try {
-        const reply = await chatWithAI(
-          s.chat.map((m) => ({
-            role: m.role === "ai" ? ("assistant" as const) : ("user" as const),
-            content: m.text,
-          })),
-        );
-        if (!cancelled) dispatch({ type: "chat-reply", text: reply });
-      } catch {
-        if (!cancelled) replyLocally();
-      }
-    }, 1000);
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-    };
-  }, [s.chatStatus, s.chat, offline, s.rest, s.questionInvitePaused]);
-  useEffect(() => {
     if (s.rights !== "processing") return;
     const timer = setTimeout(() => patch({ rights: "result" }), 1000);
     return () => clearTimeout(timer);
@@ -381,9 +350,6 @@ function App() {
     );
     return () => clearTimeout(timer);
   }, [s.helpStatus, helpFail, offline]);
-  useEffect(() => {
-    chatEnd.current?.scrollIntoView({ behavior: "instant", block: "nearest" });
-  }, [s.chat.length, s.chatStatus]);
   useEffect(
     () => () => {
       if (taskTimer.current) clearTimeout(taskTimer.current);
@@ -408,22 +374,6 @@ function App() {
     }
     dispatch({ type: "open-task", id });
     pushEntry({ page: "task", tab: s.tab, taskId: id }, "#task");
-  };
-  const chatSend = (text: string) => {
-    if (!text.trim() || s.chatStatus === "waiting" || s.chatStatus === "paused")
-      return;
-    dispatch({ type: "chat-send", id: uid(), text: text.trim() });
-    if (/^(我想休息|今天先休息|我先休息|先休息)[。！! ]*$/.test(text.trim()))
-      patch({ rest: true });
-    if (/记住我/.test(text) && !/(难过|懒|笨|差|焦虑)/.test(text))
-      remember({
-        id: uid(),
-        category: "你告诉小N的",
-        text: text.replace("记住", ""),
-        source: "你主动告诉小N · 本地示例对话",
-        time: timeLabel(),
-        active: true,
-      });
   };
   const rest = () => {
     if (learning.enabled) void learning.pause().catch(()=>{});
@@ -883,7 +833,7 @@ function App() {
                 </button>
               </div>
             )}
-            {!s.safety && learning.enabled && (s.rest || !!learning.view?.paused) && (
+            {!s.safety && s.page !== "home" && s.page !== "freechat" && learning.enabled && (s.rest || !!learning.view?.paused) && (
               <div className="safety-bar rest-bar" role="status">
                 <Leaf size={16} />
                 今天先休息，任务提醒已暂停
@@ -894,291 +844,13 @@ function App() {
             )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
             <LearningStatus l={learning} />
-            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。底部「自由聊」的对话也存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
+            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。首页小N和底部「自由聊」共用的对话存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
             <main className={`page page-${s.page}`}>
               {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>openModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
-              {/* 新版首页离开时只隐藏不卸载：聊天里弹出的卡片、改到一半的草稿和还在等的回复，回来都还在。 */}
-              {learning.enabled && (
-                <div className="home-learning" hidden={s.page !== "home"}>
-                  <div className="home-heading"><div><span className="eyebrow">HI, 很高兴见到你</span><h1>心事有人听，进步有人记。</h1></div></div>
-                  <ChatPanel l={learning} paused={s.rest || !!learning.view?.paused} safety={s.safety} navigate={navigate} trace={null} active={s.page === "home"} />
-                  {learning.cache.activeTaskId && <div className="resume-strip"><Pause size={17}/><div><strong>上次停在这里</strong><small>你的作答草稿还在</small></div><button onClick={() => navigate("task")}>继续 <ArrowRight size={15}/></button></div>}
-                  <div className="home-foot"><ShieldCheck size={13}/>你的选择会被尊重。<button onClick={() => navigate("privacy")}>我说的话会去哪里？</button></div>
-                </div>
-              )}
-              {/* 自由聊离开时也只隐藏：还在等的回复回来照样接上。 */}
-              <div hidden={s.page !== "freechat"}><FreeChat active={s.page === "freechat"} /></div>
-              {s.page === "home" && !learning.enabled && (
-                <>
-                  <div className="home-heading">
-                    <div>
-                      <span className="eyebrow">HI, 很高兴见到你</span>
-                      <h1>
-                        {s.rest ? "今天，先好好休息。" : "今天，按你的节奏来。"}
-                      </h1>
-                    </div>
-                    <button className="ai-pill" onClick={() => openModal("ai")}>
-                      AI 学伴 <CircleHelp size={12} />
-                    </button>
-                  </div>
-                  <HomeHero sleeping={s.rest} />
-                  <div className="home-dialogue">
-                    <div className="little-label">
-                      <span className="green-dot" /> 小N 轻轻说
-                    </div>
-                    <h2>
-                      {s.rest
-                        ? "不用赶路，歇一歇也很好。"
-                        : "这次数学考试之后，\n你现在最想做什么？"}
-                    </h2>
-                    <p>
-                      {s.rest
-                        ? "任务提醒已暂停。你不需要完成什么来证明自己。"
-                        : "不用马上振作，也不用一下子想清楚。"}
-                    </p>
-                  </div>
-                  {s.rest ? (
-                    <div className="home-choices">
-                      <button
-                        className="primary wide"
-                        onClick={() => {
-                          patch({ rest: false, questionInvitePaused: true });
-                          navigate("chat");
-                        }}
-                      >
-                        我想继续聊聊 <MessageCircle size={19} />
-                      </button>
-                      <p className="center small muted">
-                        由你决定什么时候再开始。
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="home-choices">
-                      <button
-                        className="primary choice-main"
-                        onClick={() => navigate("chat")}
-                      >
-                        <span className="choice-icon">
-                          <MessageCircle size={22} />
-                        </span>
-                        <span>
-                          先聊聊<small>我想先说说现在的心情</small>
-                        </span>
-                        <ArrowRight size={20} />
-                      </button>
-                      <div className="choice-pair">
-                        <button onClick={() => openModal("start-question")}>
-                          <BookOpen size={20} />
-                          <span>一起看一道题</span>
-                          <ChevronRight size={16} />
-                        </button>
-                        <button onClick={rest}>
-                          <Leaf size={20} />
-                          <span>今天先休息</span>
-                          <ChevronRight size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  {!s.rest &&
-                    s.activeTask &&
-                    s.records[s.activeTask]?.paused && (
-                      <div className="resume-strip">
-                        <Pause size={17} />
-                        <div>
-                          <strong>上次停在这里</strong>
-                          <small>
-                            {getTask(s.activeTask).title} · 草稿已保留
-                          </small>
-                        </div>
-                        <button onClick={() => openTask(s.activeTask!)}>
-                          继续 <ArrowRight size={15} />
-                        </button>
-                      </div>
-                    )}
-                  {!s.rest && (
-                    <div className="home-explore">
-                      <div className="home-explore-illustration">
-                        <Compass size={28} />
-                        <i />
-                        <i />
-                      </div>
-                      <div>
-                        <span className="eyebrow">还有一个小小的世界</span>
-                        <h3>去探索，你的解题方式</h3>
-                        <p>五个地点，没有排名，只有发现。</p>
-                      </div>
-                      <button
-                        className="icon-button"
-                        aria-label="进入五维探索"
-                        onClick={() => goTab("探索")}
-                      >
-                        <ArrowRight size={21} />
-                      </button>
-                    </div>
-                  )}
-                  <div className="home-foot">
-                    <ShieldCheck size={13} />
-                    你的选择会被尊重。{" "}
-                    <button onClick={() => navigate("privacy")}>
-                      我说的话会去哪里？
-                    </button>
-                  </div>
-                </>
-              )}
-              {!learning.enabled && s.page === "chat" && (
-                <div className="chat-page">
-                  <div className="chat-identity">
-                    <Mascot small />
-                    <div>
-                      <strong>小N在这里</strong>
-                      <span>AI · 现在没连上 AI，先用准备好的回复</span>
-                    </div>
-                    <button
-                      className="text-button"
-                      onClick={() => openModal("ai")}
-                    >
-                      能力说明
-                    </button>
-                  </div>
-                  <div className="chat-date">此刻，只聊你想聊的</div>
-                  <div className="messages">
-                    {s.chat.map((m) => (
-                      <div className={`message ${m.role}`} key={m.id}>
-                        {m.role === "ai" && (
-                          <span className="message-label">小N · AI</span>
-                        )}
-                        <div>{m.text}</div>
-                      </div>
-                    ))}
-                    {s.chatStatus === "waiting" && (
-                      <div className="message ai">
-                        <div className="typing">
-                          <i />
-                          <i />
-                          <i />
-                          <span>小N正在整理回应…</span>
-                        </div>
-                        <button
-                          className="text-button"
-                          onClick={() => patch({ chatStatus: "paused" })}
-                        >
-                          <Pause size={14} />
-                          暂停回应
-                        </button>
-                      </div>
-                    )}
-                    {s.chatStatus === "failed" && (
-                      <div className="notice error">
-                        回复没有成功，上一条消息已保留。
-                        <button
-                          className="secondary"
-                          onClick={() => patch({ chatStatus: "waiting" })}
-                        >
-                          重试回复
-                        </button>
-                      </div>
-                    )}
-                    {s.chatStatus === "paused" && (
-                      <div className="notice">
-                        回应已暂停。
-                        <button
-                          className="secondary"
-                          onClick={() => patch({ chatStatus: "waiting" })}
-                        >
-                          <Play size={15} />
-                          恢复回应
-                        </button>
-                      </div>
-                    )}
-                    <div ref={chatEnd} />
-                  </div>
-                  {!s.rest && !s.questionInvitePaused && (
-                    <div className="chat-invitation">
-                      <Leaf size={17} />
-                      <p>如果愿意，我们可以只看一道题。</p>
-                      <button onClick={() => openModal("start-question")}>
-                        我愿意 <ArrowRight size={15} />
-                      </button>
-                    </div>
-                  )}
-                  {!s.rest && s.questionInvitePaused && (
-                    <div className="notice">
-                      先聊聊，暂不邀请看题。想开始时，由你决定。
-                      <button
-                        className="text-button"
-                        onClick={() => openModal("start-question")}
-                      >
-                        我想开始看题
-                      </button>
-                    </div>
-                  )}
-                  {s.rest ? (
-                    <div className="notice">
-                      今天的任务提醒已暂停。你可以继续说说，不必开始任务。
-                    </div>
-                  ) : (
-                    <div className="quick-replies">
-                      {(s.questionInvitePaused
-                        ? ["这次考砸了，有点难过", "我想说说"]
-                        : ["这次考砸了，有点难过", "我想说说", "我愿意试试"]).map(
-                        (t) => (
-                          <button
-                            key={t}
-                            onClick={() => chatSend(t)}
-                            disabled={
-                              s.chatStatus === "waiting" ||
-                              s.chatStatus === "paused"
-                            }
-                          >
-                            {t}
-                          </button>
-                        ),
-                      )}
-                      <button onClick={rest}>今天先休息</button>
-                    </div>
-                  )}
-                  <form
-                    className="composer"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      chatSend(s.chatDraft);
-                    }}
-                  >
-                    <textarea
-                      aria-label="对小N说"
-                      placeholder="想说什么都可以，慢慢说…"
-                      rows={1}
-                      value={s.chatDraft}
-                      onChange={(e) => patch({ chatDraft: e.target.value })}
-                      onKeyDown={(e) => {
-                        if (
-                          e.key === "Enter" &&
-                          !e.shiftKey &&
-                          !e.nativeEvent.isComposing
-                        ) {
-                          e.preventDefault();
-                          chatSend(s.chatDraft);
-                        }
-                      }}
-                    />
-                    <button
-                      className="send-button"
-                      aria-label="发送"
-                      disabled={
-                        !s.chatDraft.trim() ||
-                        ["waiting", "paused"].includes(s.chatStatus)
-                      }
-                    >
-                      <Send size={19} />
-                    </button>
-                  </form>
-                  <p className="composer-caption">
-                    AI 回答可能有误。需要现实中的支持？{" "}
-                    <button onClick={help}>点这里</button>
-                  </p>
-                </div>
-              )}
+              {/* 两个入口共用同一会话实例，切页只隐藏；首页不再挂载旧多智能体 ChatPanel。 */}
+              <div hidden={s.page !== "home" && s.page !== "freechat"}>
+                <FreeChat active={s.page === "home" || s.page === "freechat"} home={s.page === "home"} legacy={learning} navigate={navigate} safety={s.safety}/>
+              </div>
               {!learning.enabled && s.page === "explore" && (
                 <>
                   <SectionHeading
@@ -2497,7 +2169,7 @@ function App() {
                       <div>
                         <strong>自由聊与我的档案 · 可选</strong>
                         <Tag>在「我的档案」里开关</Tag>
-                        <p>底部「自由聊」的对话保存在服务器上只属于你的空间里。聊完一段时间后，小N 会从里面整理出关于你的小事、兴趣、最近的事和有用的学习方法，放进「成长 · 我的档案」，回话时当作背景。心事和情绪、身体健康、家庭矛盾、住址电话这类不会记。你可以随时改、删，或者关掉「让小N 从聊天里记住我」：关掉后不再记新的，关着时说的话以后也不会补记。整理过的对话 30 天后删除。</p>
+                        <p>首页小N和底部「自由聊」共用同一段对话，保存在服务器上只属于你的空间里。聊完一段时间后，小N 会从里面整理出关于你的小事、兴趣、最近的事和有用的学习方法，放进「成长 · 我的档案」，回话时当作背景。心事和情绪、身体健康、家庭矛盾、住址电话这类不会记。你可以随时改、删，或者关掉「让小N 从聊天里记住我」：关掉后不再记新的，关着时说的话以后也不会补记。整理过的对话 30 天后删除。</p>
                         <button onClick={() => navigate("growth")}>
                           去我的档案 <ArrowRight size={15} />
                         </button>
@@ -2937,7 +2609,7 @@ function App() {
                     陪你做日常数学学习，不评判智力或人格，不诊断心理疾病，不承诺治疗或保证提高成绩。
                   </p>
                   <p>
-                    服务未连接时使用离线规则；连接后运行受控Tutor、Assessor与PlannerReporter。真实模型会收到当前消息、必要题目/作答/rubric和获准偏好；模型可能出错，数学步骤与观察请一起核对。
+                    首页使用自由聊，连接后会把当前这段对话最近的内容和个人档案摘要发给模型；未连接时会提示重试。专业测评按需使用题目、作答和评分依据。模型可能出错，数学步骤与观察请一起核对。
                   </p>
                   <p>
                     你可以随时暂停、休息、关闭可选记忆；需要现实中的帮助时，去找值得信任的人。

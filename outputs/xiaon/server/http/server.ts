@@ -1,6 +1,7 @@
 import { createServer,type IncomingMessage } from 'node:http';
 import { randomBytes,randomUUID,timingSafeEqual } from 'node:crypto';
-import { schemas,SCHEMA_VERSION,RECOGNIZE_MAX_IMAGE_BYTES } from '../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION } from '../../shared/learning-contracts';
+import { isLegacyHomePath,LEGACY_HOME_DISABLED_MESSAGE } from '../../shared/legacy-home';
 import type { LearningRuntime } from '../bootstrap';
 import { failure,RuntimeError } from '../core/errors';
 import { learningFor } from '../agents/learning';
@@ -13,8 +14,6 @@ import { freeChat } from '../free-chat/chat';
 import { profilePost } from '../free-chat/profile';
 import { consolidate,idleMsFromEnv,shouldConsolidate } from '../free-chat/consolidate';
 import { chatRequests,type DigestResponse } from '../../shared/free-chat';
-// G0: masked JPEG as base64 inside JSON; only this route gets a larger body, like /api/voice/asr.
-const RECOGNIZE_BODY_LIMIT=Math.ceil(RECOGNIZE_MAX_IMAGE_BYTES*4/3)+2000;
 const statusCodes:Record<string,number>={invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,not_implemented:501,unavailable:503};
 export interface HttpServerConfig {
  allowedOrigins:string[];host:string;
@@ -37,7 +36,7 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
  const publicOrigins=config.publicOrigins??[];const publicMode=publicOrigins.length>0;
  const allowed=new Set([...config.allowedOrigins,...publicOrigins]);const hosts=new Set([config.host,...(config.extraHosts??[]),...[...allowed].map(s=>new URL(s).host)]);
  const serveStatic=config.staticDir?createStaticHandler(config.staticDir):undefined;
- const localSessions=new Map<string,{csrf:string;expires:number;userId:string}>();let activeChat=false;const freeChatting=new Set<string>(),consolidating=new Set<string>();const freeChatIdleMs=config.freeChatIdleMs??idleMsFromEnv();
+ const localSessions=new Map<string,{csrf:string;expires:number;userId:string}>();const freeChatting=new Set<string>(),consolidating=new Set<string>();const freeChatIdleMs=config.freeChatIdleMs??idleMsFromEnv();
  // Voice limits are per user; the global caps protect the shared upstream services.
  const tts=config.tts??new NoTts();let ttsInFlight=0;const asr=config.asr??new NoAsr();let asrInFlight=0;
  const voice=new Map<string,{tts:number;ttsStarts:number[];asr:boolean;asrStarts:number[]}>();
@@ -77,6 +76,8 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
    const session=cookie?localSessions.get(cookie):undefined;
    if(!session||session.expires<Date.now())throw new RuntimeError('forbidden','本机会话缺失或已过期');
    if(req.method==='POST'&&!equalToken(String(req.headers['x-xiaon-csrf']??''),session.csrf))throw new RuntimeError('forbidden','缺少本地会话防护令牌');
+   // 服务端封住旧链接、旧客户端和遗留重试；在获取运行时及任何模型/工具执行之前拒绝。
+   if(isLegacyHomePath(path))throw new RuntimeError('invalid_state',LEGACY_HOME_DISABLED_MESSAGE);
    // Everything below runs against this user's own runtime and database only.
    const lease=users?users.acquire(session.userId):{runtime:single!,release(){}};res.once('close',lease.release);
    const runtime=lease.runtime;const limits=voiceOf(session.userId);
@@ -95,13 +96,19 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     if(path==='/api/free-chat/profile'){kickConsolidation();send(runtime.freeChat.profile());return;}
     if(path==='/api/free-chat/digest'){kickConsolidation();send({digest:runtime.freeChat.digest(),consolidating:consolidating.has(session.userId)} satisfies DigestResponse);return;}
     if(path==='/api/free-chat/history'){send(runtime.freeChat.history());return;}
+    if(path==='/api/free-chat/threads'){send({threads:runtime.freeChat.threads()});return;}
+    if(path==='/api/free-chat/messages'){
+     const query=Object.fromEntries(new URL(req.url!,'http://127.0.0.1').searchParams),p=chatRequests.history.safeParse(query);
+     if(!p.success)throw new RuntimeError('invalid_params','无效的对话分页');
+     send(runtime.freeChat.historyPage(p.data.threadId,p.data.before));return;
+    }
     // G2: long-term trend (tracking plugin, zCode), derived from stored professional reports.
     if(path==='/api/learning/trend'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.trend());return;}
     const match=path.match(/^\/api\/tasks\/([A-Za-z0-9_.:-]+)\/([1-9]\d*)$/);
     if(match){const task=runtime.catalog.publicTask(match[1],Number(match[2]));if(!task)throw new RuntimeError('not_found');send(task);return;}
     throw new RuntimeError('not_found');
    }
-   const raw=await readBody(req,path==='/api/voice/asr'?Math.ceil(ASR_MAX_WAV_BYTES*4/3)+2000:path==='/api/learning/recognize'?RECOGNIZE_BODY_LIMIT:550000);
+   const raw=await readBody(req,path==='/api/voice/asr'?Math.ceil(ASR_MAX_WAV_BYTES*4/3)+2000:550000);
    if(path==='/api/voice/asr'){
     // Audio arrives as base64 WAV in JSON, is forwarded once, and is never stored or logged.
     const body=raw as {audio?:unknown};if(!body||typeof body!=='object'||Object.keys(body).some(k=>k!=='audio')||typeof body.audio!=='string'||!/^[A-Za-z0-9+/]+={0,2}$/.test(body.audio))throw new RuntimeError('invalid_params','需要 {audio: base64 WAV}');
@@ -162,7 +169,6 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
     try{switch(path){
      case '/api/learning/activate':send(await d.activate(raw as never));break;
-     case '/api/learning/loop':send(await d.loopEvent(raw as never,c.signal));break;
      case '/api/learning/start':send(await d.start(raw as never));break;
      case '/api/learning/open':send(await d.open(raw as never));break;
      case '/api/learning/hint':send(await d.hint(raw as never));break;
@@ -172,16 +178,8 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
      case '/api/learning/generate-task':send(await d.generateTask(raw as never,c.signal));break;
      case '/api/learning/confirm':send(await d.confirm(raw as never));break;
      case '/api/learning/preference':send(await d.preference(raw as never));break;
-     case '/api/learning/chat':send(await d.chat(raw as never,c.signal));break;
      case '/api/learning/memory-correct':send(await d.memoryCorrect(raw as never));break;
      case '/api/learning/reset':{const cleared=await d.reset(raw as never);runtime.freeChat.reset();send(cleared);break;}
-     // G0 首页改版: thin delegations; the coordinator validates and calls the owning plugin. The image is never logged.
-     case '/api/learning/problem/confirm':send(await d.confirmProblem(raw as never));break;
-     case '/api/learning/recognize':send(await d.recognize(raw as never,c.signal));break;
-     case '/api/learning/progress-card/confirm':send(await d.confirmProgressCard(raw as never));break;
-     case '/api/learning/memory/confirm-draft':send(await d.confirmMemoryDraft(raw as never));break;
-     case '/api/learning/greeting':send(await d.greeting(raw as never,c.signal));break;
-     case '/api/learning/conversation/end':send(await d.endConversation(raw as never,c.signal));break;
      // G2 第二期：专业模式（interview 归 Claude；stage 归 zCode）。
      case '/api/learning/interview/start':send(await d.interviewStart(raw as never,c.signal));break;
      case '/api/learning/interview/answer':send(await d.interviewAnswer(raw as never,c.signal));break;
@@ -206,12 +204,6 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     case '/api/memories/state':send(runtime.events.memoryState(raw as never));break;
     case '/api/import/preview':{const p=schemas.ImportPreviewRequest.safeParse(raw);if(!p.success)throw new RuntimeError('invalid_params');send(runtime.importer.preview(p.data.source));break;}
     case '/api/import':send(runtime.importer.import(raw as never));break;
-    case '/api/chat':{
-     const p=schemas.ChatRequest.safeParse(raw);if(!p.success)throw new RuntimeError('invalid_params');
-     if(activeChat)throw new RuntimeError('invalid_state','已有模型请求正在执行，请先取消或等待');activeChat=true;
-     const controller=new AbortController();const cancel=()=>{if(!res.writableEnded)controller.abort();};res.once('close',cancel);
-     try{send(await runtime.agent.reply(p.data,{signal:controller.signal}));}finally{activeChat=false;res.off('close',cancel);}break;
-    }
     case '/api/planning/due':if(!d)throw new RuntimeError('not_implemented');send(await runtime.planning().due({at:runtime.clock.now(),includePaused:true},runtime.engineContext()));break;
     default:throw new RuntimeError('not_found');
    }

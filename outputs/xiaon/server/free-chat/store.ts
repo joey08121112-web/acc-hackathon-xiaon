@@ -28,7 +28,8 @@ export class FreeChatStore {
     content TEXT NOT NULL,created_at TEXT NOT NULL,consolidated_at TEXT);
    CREATE INDEX IF NOT EXISTS fc_messages_thread ON fc_messages(thread_id);
    CREATE TABLE IF NOT EXISTS fc_runs(id TEXT PRIMARY KEY,ran_at TEXT NOT NULL,status TEXT NOT NULL CHECK(status IN ('ok','failed','skipped')),
-    up_to_rowid INTEGER NOT NULL,changes TEXT NOT NULL,seen_at TEXT);`);
+    up_to_rowid INTEGER NOT NULL,changes TEXT NOT NULL,seen_at TEXT);
+   CREATE TABLE IF NOT EXISTS fc_epoch(id INTEGER PRIMARY KEY CHECK(id IN (1,2)),value INTEGER NOT NULL);`);
  }
  /** 固定规则，不用模型：近况到期删除；聊天里记下的兴趣久没提到就转为“以前喜欢”；删掉的内容过期后彻底清掉。 */
  applyRules(){
@@ -45,7 +46,14 @@ export class FreeChatStore {
   return{basic:{nickname:basic?.nickname??'',grade:basic?.grade??''},items,autoRemember:this.autoRemember(),now:this.clock.now()};
  }
  autoRemember(){return ((this.db.prepare('SELECT auto_remember FROM fc_settings WHERE id=1').get() as {auto_remember:number}|undefined)?.auto_remember??1)===1;}
- setAutoRemember(on:boolean){this.db.prepare('INSERT INTO fc_settings VALUES(1,?) ON CONFLICT(id) DO UPDATE SET auto_remember=excluded.auto_remember').run(on?1:0);}
+ /** 开关一变就换一个记忆代次：正在等模型的整理结果整体作废，关掉后马上再打开也救不回来（R2）。 */
+ setAutoRemember(on:boolean){this.db.prepare('INSERT INTO fc_settings VALUES(1,?) ON CONFLICT(id) DO UPDATE SET auto_remember=excluded.auto_remember').run(on?1:0);this.bumpEpoch(2);}
+ /** 数据代次（id=1）：重置演示时 +1。聊天和整理在调模型前记下代次，落库前核对——晚到的结果不写回已清空的库（R1）。 */
+ epoch(){return this.epochValue(1);}
+ /** 记忆代次（id=2）：自动记忆开关每变一次 +1。 */
+ memoryEpoch(){return this.epochValue(2);}
+ private epochValue(id:1|2){return (this.db.prepare('SELECT value FROM fc_epoch WHERE id=?').get(id) as {value:number}|undefined)?.value??0;}
+ private bumpEpoch(id:1|2){this.db.prepare('INSERT INTO fc_epoch VALUES(?,1) ON CONFLICT(id) DO UPDATE SET value=value+1').run(id);}
  setBasic(nickname:string,grade:string){this.db.prepare('INSERT INTO fc_basic VALUES(1,?,?,?) ON CONFLICT(id) DO UPDATE SET nickname=excluded.nickname,grade=excluded.grade,updated_at=excluded.updated_at').run(nickname,grade,this.clock.now());}
  /** 学生在档案页的操作。学生加的、改过的条目都标记 editedByStudent，整理时只能给它记一次“又提到了”。 */
  studentEdit(req:ProfileItemRequest){
@@ -80,16 +88,34 @@ export class FreeChatStore {
   return{threadId,messages:rows.reverse().map(r=>({id:r.id,role:r.role,content:r.content,createdAt:r.createdAt}))};
  }
  /** 重新开始：当前这段已经是空的就不再新开。 */
+ threads(){
+  return this.db.prepare(`SELECT t.id AS threadId,t.started_at AS startedAt,
+   (SELECT content FROM fc_messages WHERE thread_id=t.id AND role='user' ORDER BY rowid LIMIT 1) AS preview,
+   (SELECT count(*) FROM fc_messages WHERE thread_id=t.id) AS messageCount
+   FROM fc_threads t WHERE EXISTS(SELECT 1 FROM fc_messages WHERE thread_id=t.id) ORDER BY t.rowid DESC`).all();
+ }
+ /** 按消息游标回看任意一段，只读这个学生自己的库；不会切换正在聊的线程。 */
+ historyPage(threadId=this.currentThread(),before?:string){
+  if(!threadId)return{threadId:null,messages:[],hasMore:false,before:null};
+  const cursor=before?(this.db.prepare('SELECT rowid FROM fc_messages WHERE id=? AND thread_id=?').get(before,threadId) as {rowid:number}|undefined)?.rowid:undefined;
+  if(before&&cursor===undefined)throw new RuntimeError('invalid_params','这页对话已经不在了，请刷新');
+  const rows=this.db.prepare(`SELECT id,role,content,created_at AS createdAt FROM fc_messages WHERE thread_id=? ${cursor===undefined?'':'AND rowid<?'} ORDER BY rowid DESC LIMIT 201`).all(...(cursor===undefined?[threadId]:[threadId,cursor])) as FreeChatMessage[];
+  const hasMore=rows.length>200,messages=rows.slice(0,200).reverse();
+  return{threadId,messages,hasMore,before:messages[0]?.id??null};
+ }
+ /** 重新开始：当前这段已经是空的就不再新开。 */
  newThread():FreeChatHistory{
   const current=this.currentThread();
   if(current&&!this.db.prepare('SELECT 1 FROM fc_messages WHERE thread_id=? LIMIT 1').get(current))return{threadId:current,messages:[]};
   const id=newId();this.db.prepare('INSERT INTO fc_threads VALUES(?,?)').run(id,this.clock.now());return{threadId:id,messages:[]};
  }
- /** 一问一答一起存：回复失败时什么都不存，学生的话留在前端重发。threadId 是发问时的那一段，等待中点了重新开始也不会串到新的一段。 */
- appendExchange(threadId:string|null,userText:string,replyText:string):FreeChatExchange{
+ /** 一问一答一起存：回复失败时什么都不存，学生的话留在前端重发。threadId 是发问时的那一段，等待中点了重新开始也不会串到新的一段。
+  * sinceEpoch 是发问时记下的数据代次：等待回复期间发生重置的话，这一问一答不再写回（R1）。 */
+ appendExchange(threadId:string|null,userText:string,replyText:string,sinceEpoch?:number):FreeChatExchange{
   const now=this.clock.now();
   this.db.exec('BEGIN IMMEDIATE');
   try{
+   if(sinceEpoch!==undefined&&sinceEpoch!==this.epoch())throw new RuntimeError('invalid_state','数据刚刚重置过，这句没有保存');
    let thread=threadId&&this.db.prepare('SELECT 1 FROM fc_threads WHERE id=?').get(threadId)?threadId:null;
    if(!thread){thread=newId();this.db.prepare('INSERT INTO fc_threads VALUES(?,?)').run(thread,now);}
    const user={id:newId(),role:'user' as const,content:userText,createdAt:now},reply={id:newId(),role:'assistant' as const,content:replyText,createdAt:now};
@@ -128,7 +154,7 @@ export class FreeChatStore {
   return changes.length?{runId:run.id,changes}:null;
  }
  markDigestSeen(runId:string){this.db.prepare('UPDATE fc_runs SET seen_at=? WHERE id=? AND seen_at IS NULL').run(this.clock.now(),runId);}
- /** 「重置整个演示」：清空自由聊的全部数据。 */
- reset(){this.db.exec('DELETE FROM fc_items; DELETE FROM fc_forgotten; DELETE FROM fc_basic; DELETE FROM fc_settings; DELETE FROM fc_messages; DELETE FROM fc_threads; DELETE FROM fc_runs;');}
+ /** 「重置整个演示」：清空自由聊的全部数据，并换一个数据代次——在途的聊天回复和整理结果全部作废，不会写回新库（R1）。 */
+ reset(){this.db.exec('DELETE FROM fc_items; DELETE FROM fc_forgotten; DELETE FROM fc_basic; DELETE FROM fc_settings; DELETE FROM fc_messages; DELETE FROM fc_threads; DELETE FROM fc_runs;');this.bumpEpoch(1);}
  close(){if(this.db.isOpen)this.db.close();}
 }

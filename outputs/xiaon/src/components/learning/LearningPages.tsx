@@ -3,11 +3,11 @@ import { ArrowRight,Leaf,Pause,Send } from 'lucide-react';
 import type { LearningUI } from '../../agents/useLearning';
 import { retentionWindow,type MemoryRetention,type TaskPublicView } from '../../../shared/learning-contracts';
 import { skillStatusLabels,evidenceKindLabels } from '../../learning/assessment';
-import { ChatPanel } from './ChatPanel';
 import { GenerationPanel } from '../../learning/generation/GenerationPanel';
 import { isGenerationKnowledgePoint } from '../../learning/generation';
 import { useDevMode } from '../../agents/devMode';
 import { ProblemList } from './home/ProblemList';
+import { ChatHistory } from './home/ChatHistory';
 import { ProfileView } from '../free-chat/ProfileView';
 // G2 第二期挂载位：professional/* 归 ChatGPT，plan/* 归 zCode（见 交付/claude/CONTRACT-PHASE2.md）。
 import { ProfessionalModeView } from '../professional/ProfessionalModeView';
@@ -43,7 +43,6 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false,s
  {l.busy&&<div className="notice" role="status">正在处理，草稿已保留。<button onClick={l.cancel}>取消等待</button></div>}
  {l.error&&<div className="notice error" role="alert">{dev?l.error:'这一步暂时没完成，已有记录和草稿还在，请稍后重试。'}</div>}
  {l.cache.pending&&!l.busy&&<div className="notice">保留了上次请求，重试不会重复记录。<button className="secondary" onClick={()=>swallow(l.retry())}>重试上次请求</button><button className="text-button" onClick={()=>l.update({pending:null})}>结束重试，保留已有记录</button></div>}
- {page==='chat'&&<ChatPanel l={l} paused={v.paused} safety={safety} navigate={navigate} trace={trace}/>}
  {(page==='explore'||page==='growth')&&<>
  {headline(page==='explore'?'A SMALL WORLD TO EXPLORE':'GROW AT YOUR OWN PACE',page==='explore'?'每一种思考，都值得发现。':'每一点变化，都有来处。',page==='explore'?'不用证明什么。去几个地方，看看你怎样理解和解决问题。':'结果仅限已观察的子技能；待观察不代表能力弱。可以随时暂停。')}
  {v.paused&&page==='growth'&&!unfinishedInterview&&<div className="notice">学习已暂停，由你决定何时继续。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}
@@ -62,11 +61,14 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false,s
  </section>}
  {v.summaries.length>0&&<section className="info-paper conversation-summaries"><h2>对话小结</h2><p className="small muted">聊天观察，待专业模式确认，不是评分。</p>
   {[...v.summaries].reverse().map(s=><details key={s.id}><summary>{date(s.createdAt)} · {s.topics.join('、')||'聊了聊'}</summary>
+   {/* 当时说了什么：对话回放（2026-10-24），原文按轮成对保存在本地服务的 chatLog 里 */}
+   {v.chatLog.filter(m=>m.sessionId===s.sessionId).map(m=><p className="chat-line" key={m.id}><strong>{m.role==='user'?'我':'小N'}</strong>{m.content}</p>)}
    {s.observationIds.map(oid=>v.observations.find(o=>o.id===oid)).flatMap(o=>o?[o]:[]).map(o=><p key={o.id}><span className="tag">{o.dimension} · {o.sceneId?'生活话题 · ':''}待核实</span>「{o.quote}」{o.note}</p>)}
    {s.changes.length>0&&<><h3>和上次比</h3>{s.changes.map((c,i)=><p key={i}>{c}</p>)}</>}
    <h3>可以试试</h3>{s.planSuggestions.map((c,i)=><p key={i}>{c}</p>)}
   </details>)}
  </section>}
+ <ChatHistory l={l} navigate={navigate} includeCurrent={false} onlyWithoutSummary/>
  <div className="quick-replies"><button onClick={()=>navigate('report','成长')}>学习观察报告</button><button onClick={()=>navigate('plan','成长')}>查看我的计划</button><button onClick={()=>navigate('review','成长')}>阶段回顾</button><button onClick={()=>navigate('memory')}>我的学习记忆</button></div>
  </>}
  </>}

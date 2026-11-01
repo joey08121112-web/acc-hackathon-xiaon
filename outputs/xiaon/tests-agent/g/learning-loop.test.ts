@@ -155,7 +155,7 @@ test('E03 safety stores nothing, pause rejects new tasks/help, resumed fragment 
  await f.d.start({operationId:id(),mode:'support'});await f.act('continue');assert.equal(f.current().task!.id,e.loop!.practice.taskId);
  }finally{f.dispose();}
 });
-test('HTTP loop uses authentication, CSRF, strict schema, revision and operation receipts',async()=>{
+test('旧首页 HTTP loop 在会话及 CSRF 检查后停止，不修改已有学习片段',async()=>{
  const {createHttpServer}=await import('../../server/http/server');const {freePort}=await import('../../server/storage/testing');const f=await loopFixture();const port=await freePort(),base=`http://127.0.0.1:${port}`,origin='http://127.0.0.1:5318';
  const server=createHttpServer(f.r,{host:`127.0.0.1:${port}`,allowedOrigins:[origin]});await new Promise<void>(resolve=>server.listen(port,'127.0.0.1',resolve));
  try{
@@ -163,9 +163,10 @@ test('HTTP loop uses authentication, CSRF, strict schema, revision and operation
  const unauth=await fetch(base+'/api/learning/loop',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify(req)});assert.equal(unauth.status,403);
  const auth=await fetch(base+'/api/local-session',{method:'POST',headers:{origin,'content-type':'application/json'},body:'{}'});const csrf=(await auth.json()).csrfToken,cookie=auth.headers.get('set-cookie')!.split(';')[0];
  const post=(body:unknown,token=csrf)=>fetch(base+'/api/learning/loop',{method:'POST',headers:{origin,cookie,'x-xiaon-csrf':token,'content-type':'application/json'},body:JSON.stringify(body)});
- assert.equal((await post(req,'wrong')).status,403);assert.equal((await post({...req,mastered:true})).status,400);
- const response=await post(req);assert.equal(response.status,200);const data=await response.json();const n=f.r.repository.list('exposures').length;
- assert.deepEqual(await(await post(req)).json(),data);assert.equal(f.r.repository.list('exposures').length,n);
+ const n=f.r.repository.revision();
+ assert.equal((await post(req,'wrong')).status,403);assert.equal((await post({...req,mastered:true})).status,409);
+ const response=await post(req);assert.equal(response.status,409);assert.equal((await response.json()).error.code,'invalid_state');
+ assert.equal((await post(req)).status,409);assert.equal(f.r.repository.revision(),n);
  assert.equal((await post({...req,operationId:id()})).status,409);
  }finally{await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}
 });

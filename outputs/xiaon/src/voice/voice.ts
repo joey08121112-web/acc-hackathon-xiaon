@@ -2,6 +2,7 @@ import { useEffect, useSyncExternalStore } from 'react';
 import { apiBlob } from '../agent-client';
 import { CLIPS, clipsOf, clipUrl, type ClipGroup } from './clips';
 import { splitSentences } from './sentences';
+import { audioEnvelope } from './envelope';
 /**
  * One shared audio player for the whole app. `phase` reflects the real <audio> element, so the pet only
  * "speaks" while sound is actually playing. Text is always shown; sound is an optional extra.
@@ -21,14 +22,35 @@ const INTERRUPTIBLE = new Set<ClipGroup>(['think', 'long', 'poke', 'belly', 'lea
 // While a speak() pipeline owns this generation, the gap between two sentences is not "playback ended".
 const speakIdle = () => { if (speakOwner === generation) return; kind = null; set({ phase: 'idle' }); };
 
+/** Decode a copy for animation without rerouting, delaying, or changing audio playback. */
+const levelListeners=new Set<(v:number)=>void>();
+let envelope:Float32Array|null=null,meterTicket=0,meterFrame=0;
+const emitLevel=(v:number)=>levelListeners.forEach(fn=>fn(v));
+export const onVoiceLevel=(fn:(v:number)=>void)=>{levelListeners.add(fn);return()=>{levelListeners.delete(fn);};};
+function stopMeter(){if(meterFrame)cancelAnimationFrame(meterFrame);meterFrame=0;emitLevel(0);}
+function startMeter(){
+ stopMeter();if(typeof requestAnimationFrame!=='function')return;
+ const tick=()=>{if(!audio||audio.paused)return;emitLevel(envelope?.[Math.floor(audio.currentTime*40)]??0);meterFrame=requestAnimationFrame(tick);};
+ meterFrame=requestAnimationFrame(tick);
+}
+function prepareMeter(blob:Blob,gen:number){
+ const ticket=++meterTicket;envelope=null;
+ if(typeof window==='undefined')return;
+ const Offline=window.OfflineAudioContext??(window as unknown as {webkitOfflineAudioContext?:typeof OfflineAudioContext}).webkitOfflineAudioContext;
+ if(!Offline)return;
+ void blob.arrayBuffer().then(bytes=>new Offline(1,1,24000).decodeAudioData(bytes)).then(buffer=>{
+  if(ticket===meterTicket&&gen===generation)envelope=audioEnvelope(buffer.getChannelData(0),buffer.sampleRate);
+ }).catch(()=>{/* Animation can be unavailable without failing speech. */});
+}
+
 function player() {
  if (audio) return audio;
  audio = new Audio();
  audio.preload = 'auto';
- audio.addEventListener('playing', () => { if (audio && audio.src.startsWith('data:')) return; set({ phase: 'playing', error: '' }); });
- const idle = () => { if (audio && audio.src.startsWith('data:')) return; speakIdle(); };
+ audio.addEventListener('playing', () => { if (audio && audio.src.startsWith('data:')) return; set({ phase: 'playing', error: '' }); startMeter(); });
+ const idle = () => { if (audio && audio.src.startsWith('data:')) return; stopMeter(); speakIdle(); };
  audio.addEventListener('ended', idle); audio.addEventListener('pause', idle);
- audio.addEventListener('error', () => { if (audio && audio.src.startsWith('data:')) return; kind = null; set({ phase: 'idle', error: '声音没能播放，文字还在。' }); });
+ audio.addEventListener('error', () => { if (kind===null || (audio && audio.src.startsWith('data:'))) return; kind = null; stopMeter(); set({ phase: 'idle', error: '声音没能播放，文字还在。' }); });
  return audio;
 }
 const release = () => { if (objectUrl) { URL.revokeObjectURL(objectUrl); objectUrl = ''; } };
@@ -55,7 +77,7 @@ export const voice = {
   const a = player();
   if (a.paused && !a.src) { a.src = SILENT; a.play().then(() => { if (a.src === SILENT) a.pause(); }).catch(() => { unlocked = false; }); }
  },
- stop() { generation++; controller?.abort(); controller = null; kind = null; if (audio) audio.pause(); release(); set({ phase: 'idle', error: '' }); },
+ stop() { meterTicket++;envelope=null;stopMeter();generation++; controller?.abort(); controller = null; kind = null; if (audio) audio.pause(); release(); set({ phase: 'idle', error: '' }); },
  setEnabled(on: boolean) { try { localStorage.setItem(KEY, String(on)); } catch { /* storage unavailable */ } set({ enabled: on }); if (!on) voice.stop(); },
  /** A fixed pre-recorded line, instant (no network synthesis). */
  playClip(target: ClipGroup | string) {
@@ -66,7 +88,7 @@ export const voice = {
   if (!pick) return; lastClip[group] = pick.id;
   voice.unlock();
   if (kind === 'speech') return; // never talk over a reply
-  const gen = ++generation; controller?.abort(); controller = null; release();
+  const gen = ++generation; meterTicket++;envelope=null;stopMeter();controller?.abort(); controller = null; release();
   return play(clipUrl(pick.id), gen, INTERRUPTIBLE.has(group) ? 'filler' : 'speech');
  },
  playClipIfEnabled(group: ClipGroup | string) { if (state.enabled) return voice.playClip(group); },
@@ -90,7 +112,7 @@ export const voice = {
     try { blob = await fetched[i]; } catch (e) { fail(e); return; } // sentence one failing keeps today's behaviour; later ones play what is already there, then stop
     if (gen !== generation) return;
     if (!i) { await waitForFiller(); if (gen !== generation) return; }
-    release(); objectUrl = URL.createObjectURL(blob);
+    release(); objectUrl = URL.createObjectURL(blob); prepareMeter(blob,gen);
     if (i + 1 < parts.length) fetchOne(i + 1); // prefetch the next sentence as this one starts: at most one request in flight
     const ended = waitEnded();
     if (!await play(objectUrl, gen, 'speech')) return; // autoplay refused: play() has already shown the message

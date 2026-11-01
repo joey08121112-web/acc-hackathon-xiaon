@@ -6,7 +6,7 @@ import { createRuntime } from '../../server/bootstrap';
 import { temporaryRepository } from '../../server/storage/testing';
 import { SyntheticProvider } from '../../server/providers/synthetic';
 
-test('HTTP local session, strict origin/host, CSRF, request validation and native tool chain',async()=>{
+test('HTTP local session, strict origin/host, CSRF, request validation and retired chat gate',async()=>{
  const f=temporaryRepository();const runtime=createRuntime({...f,provider:new SyntheticProvider()});
  const port=Number(process.env.XIAON_A_TEST_PORT??18921);const origin=`http://127.0.0.1:${port}`;
  const server=createHttpServer(runtime,{allowedOrigins:[origin],host:`127.0.0.1:${port}`});await new Promise<void>(resolve=>server.listen(port,'127.0.0.1',resolve));
@@ -28,9 +28,10 @@ test('HTTP local session, strict origin/host, CSRF, request validation and nativ
   const a=await request('/api/attempts',submission,auth);assert.equal(a.status,200);
   assert.equal((await request('/api/attempts',{...submission,operationId:'a2',answer:'forged'},auth)).status,400);
   const publicTask=await fetch(origin+'/api/tasks/bracket/1',{headers:{Cookie:cookie}});const t=await publicTask.json();assert.equal('answer'in t,false);assert.equal('rubric'in t,false);
-  const chat=await request('/api/chat',{operationId:'chat',history:[{role:'user',content:'合成测试'}]},auth);const reply=await chat.json();assert.equal(reply.run.status,'completed');assert.equal(reply.run.providerKind,'synthetic');
-  assert.equal((await request('/api/chat',{operationId:'chat',history:[{role:'user',content:'合成测试'}]},auth)).status,200);
+  const chat=await request('/api/chat',{operationId:'chat',history:[{role:'user',content:'合成测试'}]},auth);assert.equal(chat.status,409);assert.equal((await chat.json()).error.code,'invalid_state');
+  assert.equal((await request('/api/chat',{operationId:'chat',history:[{role:'user',content:'合成测试'}]},auth)).status,409);
   assert.equal((await request('/api/chat',{operationId:'chat',history:[{role:'user',content:'different'}]},auth)).status,409);
+  assert.equal(runtime.repository.list('runs').length,0);
   assert.equal((await request('/api/planning/due',{},auth)).status,501);
  }finally{await new Promise<void>((resolve,reject)=>server.close(e=>e?reject(e):resolve()));f.dispose();}
 });

@@ -3135,7 +3135,11 @@ input[type="range"] {
 .chat-history-messages .message-label { margin-bottom: 3px; }
 .chat-history-item { border: 1px solid #e4e7da; background: #fffef7; padding: 10px 12px; margin-bottom: 8px; }
 .chat-history-item summary { cursor: pointer; font-size: 0.84rem; line-height: 1.6; color: #42533c; }
+.chat-history-item .chat-history-messages { margin: 8px 0 2px; }
 .chat-history-item p { margin: 6px 0 0; font-size: 0.8rem; line-height: 1.7; }
+/* 成长页“对话小结”里的回放行：说话人 + 原文 */
+.chat-line { margin: 6px 0 0; font-size: 0.8rem; line-height: 1.7; }
+.chat-line strong { margin-right: 6px; color: #6c7f5d; }
 .chat-history .text-button { min-height: 0; padding: 2px 0; font-size: 0.78rem; }
 /* 微信式输入栏：[语音/键盘切换] [输入框 或 按住说话] [声音开关] */
 /* 固定在底部导航（.bottom-nav，高 76px + 安全区）正上方，宽度跟导航一致 */
@@ -3146,8 +3150,8 @@ html:has(.talk-dock) { scroll-padding-bottom: calc(160px + env(safe-area-inset-b
 .talk-dock-line .text-button { min-height: 0; padding: 0; font-size: .78rem; }
 @media (min-width: 650px) { .talk-dock { left: auto; right: auto; width: 458px; margin-left: -24px; } }
 /* 打字时键盘弹起：底部导航先让开，输入栏贴底 */
-.app-shell:has(.talk-input:focus) .bottom-nav { visibility: hidden; pointer-events: none; }
-.talk-dock:has(.talk-input:focus) { bottom: 0; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
+.app-shell:has(.talk-dock:focus-within):has(.talk-input) .bottom-nav { visibility: hidden; pointer-events: none; }
+.talk-dock:has(.talk-input):focus-within { bottom: 0; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
 .talk-bar { display: flex; align-items: flex-end; gap: 8px; margin: 0; }
 .talk-icon { flex: none; width: 42px; height: 42px; margin-bottom: 1px; border-radius: 50%; border: 1.8px solid #2f4a3a; display: grid; place-items: center; color: #2f4a3a; }
 .talk-icon[aria-pressed="false"] { color: #7d8a74; border-color: #9aa690; }
@@ -3216,3 +3220,9 @@ button.talk-hold[data-phase="listening"], button.talk-hold[data-phase="listening
 .free-digest .small .text-button { margin-left: 8px; }
 .profile-dev { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; }
 .profile-dev .secondary { min-height: 38px; padding: 0 14px; font-size: 0.84rem; }
+
+/* Free-chat archive shares the existing transcript styles. */
+.free-chat-head h2 { margin: 2px 0; font-size: 1rem; }
+.free-chat .chat-history-item .free-chat-list { padding-top: 12px; }
+.free-chat .chat-history-item .free-bubble { font-size: .85rem; }
+.free-chat .free-bubble.interim { opacity: .75; }

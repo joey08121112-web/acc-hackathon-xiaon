@@ -82,8 +82,9 @@ function startBrowser(onText: (t: string) => void, onEmpty: () => void, signal: 
  const Api = speechApi()!, rec = new Api();
  rec.lang = 'zh-CN'; rec.interimResults = true; rec.continuous = false;
  let text = '', finished = false;
- const pulse = window.setInterval(() => emitLevel(0.25 + 0.35 * Math.abs(Math.sin(performance.now() / 260))), 80);
- const cleanup = () => { window.clearInterval(pulse); window.clearTimeout(startTimer); window.clearTimeout(maxTimer); emitLevel(0); };
+ // Browser SpeechRecognition exposes no amplitude; keep the listening state without inventing volume.
+ emitLevel(0);
+ const cleanup = () => { window.clearTimeout(startTimer); window.clearTimeout(maxTimer); emitLevel(0); };
  const reject = (message: string) => {
   if (finished || signal.aborted) return;
   finished = true; cleanup(); try { rec.abort(); } catch { /* already stopped */ } fail(message);

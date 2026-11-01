@@ -54,3 +54,11 @@ test('重置清空对话', ()=>{
  const store=setup();store.appendExchange(null,'问','答');store.reset();
  assert.deepEqual(store.history(),{threadId:null,messages:[]});
 });
+test('R1：等回复的时候重置演示，晚到的回答不写回已清空的库', async()=>{
+ const store=setup();let release!:()=>void;
+ const provider:ModelProvider={kind:'synthetic',supportsTools:false,async complete(){await new Promise<void>(r=>release=r);return{content:'晚到的回答',toolCalls:[]};}};
+ const running=freeChat(store,provider,{text:'旧消息'},signal);
+ store.reset();release();
+ await assert.rejects(running,/重置/);
+ assert.deepEqual(store.history(),{threadId:null,messages:[]});
+});

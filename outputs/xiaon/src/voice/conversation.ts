@@ -3,7 +3,7 @@ import { useMic } from './mic';
 import { useVoice } from './voice';
 
 /** A user-started session: listen → recognize → reply → finish playback → listen again. */
-export function useVoiceConversation(options:{allowed:boolean;busy:boolean;onText:(text:string)=>Promise<unknown>|undefined;onNotice:(text:string)=>void}){
+export function useVoiceConversation(options:{allowed:boolean;busy:boolean;muted?:boolean;onText:(text:string)=>Promise<unknown>|undefined;onNotice:(text:string)=>void}){
  const mic=useMic(),v=useVoice();
  const [running,setRunning]=useState(false),[turn,setTurn]=useState(0);
  const current=useRef(options);current.current=options;
@@ -13,9 +13,10 @@ export function useVoiceConversation(options:{allowed:boolean;busy:boolean;onTex
   mic.actions.cancel();v.actions.stop();
  },[mic.actions,v.actions]);
  const listen=()=>{
+  if(current.current.muted)return;
   const gen=generation.current;
   void mic.actions.start(text=>{
-   if(!enabled.current||gen!==generation.current)return;
+   if(!enabled.current||gen!==generation.current||current.current.muted)return;
    pending.current=true;
    void Promise.resolve(current.current.onText(text)).catch(()=>stop()).finally(()=>{
     if(gen!==generation.current)return;
@@ -34,8 +35,9 @@ export function useVoiceConversation(options:{allowed:boolean;busy:boolean;onTex
  useEffect(()=>{
   if(!running)return;
   if(!options.allowed||mic.error||v.error){if(mic.error||v.error)current.current.onNotice(mic.error||v.error);stop();return;}
+  if(options.muted){if(mic.phase!=='idle')mic.actions.cancel();return;}
   if(!options.busy&&!pending.current&&mic.phase==='idle'&&v.phase==='idle')listen();
- },[running,options.allowed,options.busy,mic.phase,mic.error,v.phase,v.error,turn]); // eslint-disable-line react-hooks/exhaustive-deps
+ },[running,options.allowed,options.busy,options.muted,mic.phase,mic.error,v.phase,v.error,turn]); // eslint-disable-line react-hooks/exhaustive-deps
  useEffect(()=>{
   const hidden=()=>{if(document.hidden)stop();};document.addEventListener('visibilitychange',hidden);
   return()=>{document.removeEventListener('visibilitychange',hidden);stop();};

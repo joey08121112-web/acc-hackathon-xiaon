@@ -1,4 +1,5 @@
 import { SCHEMA_VERSION,type ChatRequest,type AgentReply,type SubmitAttempt,type TaskPublicView } from '../../shared/learning-contracts';
+import { isLegacyHomePath,LEGACY_HOME_DISABLED_MESSAGE } from '../../shared/legacy-home';
 /** Same origin only; credentials never live in VITE_ variables or browser storage. */
 let csrfToken='';let opening:Promise<void>|undefined;
 export async function localSession(signal?:AbortSignal){
@@ -7,6 +8,7 @@ export async function localSession(signal?:AbortSignal){
  try{await opening;}finally{opening=undefined;}
 }
 export async function apiRequest<T>(path:string,body?:unknown,signal?:AbortSignal):Promise<T>{
+ if(isLegacyHomePath(path))throw new Error(LEGACY_HOME_DISABLED_MESSAGE);
  await localSession(signal);const res=await fetch('/api/'+path,{method:body===undefined?'GET':'POST',credentials:'same-origin',headers:body===undefined?{}:{'Content-Type':'application/json','X-Xiaon-CSRF':csrfToken},...(body===undefined?{}:{body:JSON.stringify(body)}),signal});
  if(!res.ok){if(res.status===403){csrfToken='';await localSession(signal);const retry=await fetch('/api/'+path,{method:body===undefined?'GET':'POST',credentials:'same-origin',headers:body===undefined?{}:{'Content-Type':'application/json','X-Xiaon-CSRF':csrfToken},...(body===undefined?{}:{body:JSON.stringify(body)}),signal});if(retry.ok)return retry.json() as Promise<T>;const error=await retry.json();throw new Error(error.error?.message??`本地 API ${retry.status}`);}const error=await res.json();throw new Error(error.error?.message??`本地 API ${res.status}`);}return res.json() as Promise<T>;
 }

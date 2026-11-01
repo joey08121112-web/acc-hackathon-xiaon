@@ -25,19 +25,19 @@ test('G0 Claude-lane schemas parse synthetic records and reject extra or out-of-
  assert.ok(schemas.EndConversation.safeParse({operationId:'op-end',sessionId:'chat-1',history:[]}).success);
 });
 
-test('Claude-lane routes sit behind the same session and CSRF gate and validate before acting',async()=>{
+test('旧小N卡片及小结路由保留会话防护，授权后也统一拒绝执行',async()=>{
  const f=temporaryRepository(),r=createRuntime(f);installLearning(r);const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[origin]});await new Promise<void>(resolve=>server.listen(port,'127.0.0.1',resolve));
  try{
   assert.equal((await fetch(base+'/api/learning/conversation/end',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'})).status,403);
   const login=await fetch(base+'/api/local-session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});const token=(await login.json()).csrfToken,cookie=login.headers.get('set-cookie')!.split(';')[0];
   const post=(path:string,body:unknown)=>fetch(base+'/api/'+path,{method:'POST',headers:{Origin:origin,Cookie:cookie,'X-Xiaon-CSRF':token,'Content-Type':'application/json'},body:JSON.stringify(body)});
-  // Phase 1: both routes are implemented; an unknown chat session is not found, unknown keys are rejected first.
+  // 首页已由自由聊替代：旧请求无论正文是否有效，都不能再执行旧卡片/小结逻辑。
   for(const [path,body] of [
    ['learning/progress-card/confirm',{operationId:id(),sessionId:'chat-1',episodeId:null,aiDraft:null,breakthrough:'我自己想到了',method:null,nextTry:null,confidence:null}],
    ['learning/conversation/end',{operationId:id(),sessionId:'chat-1',history:[{role:'user',content:'今天先聊到这'}]}],
   ] as const){
-   const res=await post(path,body);assert.equal(res.status,404,path);assert.equal((await res.json()).error.code,'not_found');
-   assert.equal((await post(path,{...body,extra:true})).status,400,path+' rejects unknown keys');
+   const res=await post(path,body);assert.equal(res.status,409,path);assert.equal((await res.json()).error.code,'invalid_state');
+   assert.equal((await post(path,{...body,extra:true})).status,409,path+' stays disabled for malformed old requests');
   }
   assert.equal(r.repository.list('progressCards').length+r.repository.list('summaries').length,0);
  }finally{await new Promise<void>(resolve=>server.close(()=>resolve()));f.dispose();}

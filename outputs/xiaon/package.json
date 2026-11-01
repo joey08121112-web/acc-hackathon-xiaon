@@ -30,7 +30,8 @@
     "test:agent:d:browser": "playwright test -c playwright.d.config.ts",
     "test:agent:d:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/d-real-smoke.ts",
     "test:agent:e:browser": "playwright test -c playwright.e.config.ts",
-    "test:agent:e:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/e-real-generation.ts"
+    "test:agent:e:real": "node --env-file-if-exists=.env.server --import tsx scripts/agent/e-real-generation.ts",
+    "test:home": "playwright test -c playwright.home.config.ts"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

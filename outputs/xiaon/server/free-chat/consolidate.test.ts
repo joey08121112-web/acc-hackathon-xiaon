@@ -15,7 +15,7 @@ function model(...replies:(unknown|Error)[]){
 const signal=new AbortController().signal;
 const chat=(store:FreeChatStore,...pairs:[string,string][])=>{for(const[u,a]of pairs)store.appendExchange(store.currentThread(),u,a);};
 test('从对话里记下新条目，消息标为整理过，结果出现在 digest 里，看过就收起', async()=>{
- const{store,now}=setup();chat(store,['我最近超喜欢打篮球','哇，打什么位置？'],['下周还有比赛','加油！']);
+ const{store,now}=setup();chat(store,['我最近超喜欢打篮球','哇，打什么位置？'],['下周有篮球赛','加油！']);
  const{provider,calls}=model({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'},{op:'add',kind:'recent',text:'下周有篮球赛',expiresInDays:10}]});
  const r=await consolidate(store,provider,now,signal);
  assert.equal(r.status,'ok');assert.deepEqual(r.changes.map(c=>c.op+':'+c.text),['add:喜欢打篮球','add:下周有篮球赛']);
@@ -42,7 +42,7 @@ test('学生改过的条目：只能记提到，不能改写、不能转以前�
  const{store,now}=setup();
  store.studentEdit({action:'add',kind:'interest',text:'画画'});const id=store.profile().items[0].id;
  store.studentEdit({action:'status',id,status:'past'});
- chat(store,['今天画了一幅画','真棒']);
+ chat(store,['今天画画了','真棒']);
  const r=await consolidate(store,model({ops:[{op:'update',id,text:'喜欢画水彩'},{op:'past',id},{op:'mention',id}]}).provider,now,signal);
  assert.deepEqual(r.changes.map(c=>c.op),['mention']);
  const item=store.item(id)!;assert.deepEqual([item.text,item.status,item.mentionCount],['画画','past',2]);
@@ -60,11 +60,67 @@ test('学生删掉的不再加回，除非删掉之后又聊起', async()=>{
  assert.deepEqual(r.changes.map(c=>c.op+':'+c.text),['add:跳绳']);
 });
 test('敏感内容、编造的 id、格式不对的单条操作都被丢掉；最多 10 条', async()=>{
- const{store,now}=setup();chat(store,['随便聊聊','好']);
+ const{store,now}=setup();chat(store,['最近在忙事实0、事实1、事实2和事实3这些事','好']);
  const ops=[{op:'add',kind:'about',text:'最近有点抑郁'},{op:'add',kind:'about',text:'住在阳光小区'},{op:'add',kind:'about',text:'电话13812345678'},{op:'mention',id:'nope'},{op:'add',kind:'secret',text:'x'},{op:'add',kind:'about',text:''},
   ...Array.from({length:8},(_,i)=>({op:'add',kind:'about',text:'事实'+i}))];
  const r=await consolidate(store,model({ops}).provider,now,signal);
  assert.deepEqual(r.changes.map(c=>c.text),['事实0','事实1','事实2','事实3']);
+});
+test('R3：删掉之后只聊别的，模型硬要加回旧兴趣也不行（要有“重新聊起”的证据）', async()=>{
+ const{clock,store,now}=setup();
+ chat(store,['我喜欢打篮球','好']);
+ const id=store.insert({kind:'interest',text:'喜欢打篮球',source:'chat',editedByStudent:false});
+ clock.advance(HOUR);store.studentEdit({action:'delete',id});
+ clock.advance(HOUR);chat(store,['今天的数学题怎么做','先看看题目']);
+ const r=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}).provider,now,signal);
+ assert.deepEqual([r.status,r.changes.length],['ok',0]);
+ assert.deepEqual(store.profile().items,[]);
+});
+test('R5：身体健康换说法也进不了档案；条目干净但原话带健康内容，一样拦下', async()=>{
+ const{store,now}=setup();
+ chat(store,['我有哮喘，跑步老是喘不上气','听起来不容易'],['对了我在看《三体》','好看吗？']);
+ const ops={ops:[{op:'add',kind:'about',text:'有哮喘'},{op:'add',kind:'about',text:'跑步喘不上气'},{op:'add',kind:'interest',text:'在看三体'}]};
+ const r=await consolidate(store,model(ops).provider,now,signal);
+ assert.deepEqual(r.changes.map(c=>c.text),['在看三体']);
+});
+test('R5/R3：没有学生原话做证据的 add/update/mention 都不生效（只记学生自己明确说过的）', async()=>{
+ const{store,now}=setup();
+ chat(store,['我在看《三体》','好看吗']);
+ const id=store.insert({kind:'interest',text:'下棋',source:'chat',editedByStudent:false});
+ const ops={ops:[{op:'add',kind:'about',text:'养了一只猫'},{op:'update',id,text:'最近在学游泳'},{op:'mention',id}]};
+ const r=await consolidate(store,model(ops).provider,now,signal);
+ assert.deepEqual(r.changes,[]);
+ assert.equal(store.item(id)!.text,'下棋');
+});
+test('R1：整理等模型的时候重置演示，回来的结果作废——不写档案、不记 run', async()=>{
+ const{store,now}=setup();chat(store,['我喜欢打篮球','好']);
+ let release!:()=>void;
+ const provider:ModelProvider={kind:'synthetic',supportsTools:false,async complete(){await new Promise<void>(r=>release=r);return{content:JSON.stringify({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}),toolCalls:[]};}};
+ const running=consolidate(store,provider,now,signal);
+ store.reset();release();
+ assert.deepEqual(await running,{status:'stale',changes:[]});
+ assert.deepEqual(store.profile().items,[]);
+ assert.equal(store.digest(),null);
+});
+test('R2：整理等模型的时候动了自动记忆开关（关掉、或关了又开），结果作废，对话留到下次', async()=>{
+ const{store,now}=setup();chat(store,['我喜欢打篮球','好']);
+ let release!:()=>void;
+ const hold:ModelProvider={kind:'synthetic',supportsTools:false,async complete(){await new Promise<void>(r=>release=r);return{content:JSON.stringify({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}),toolCalls:[]};}};
+ // 关掉
+ let running=consolidate(store,hold,now,signal);
+ store.setAutoRemember(false);release();
+ assert.deepEqual(await running,{status:'stale',changes:[]});
+ assert.deepEqual(store.profile().items,[]);
+ assert.equal(store.pendingMessages().length,2);
+ // 重新打开后再来一次，这次等模型时“关了又马上打开”，同样作废
+ store.setAutoRemember(true);
+ running=consolidate(store,hold,now,signal);
+ store.setAutoRemember(false);store.setAutoRemember(true);release();
+ assert.deepEqual(await running,{status:'stale',changes:[]});
+ assert.deepEqual(store.profile().items,[]);
+ // 之后一次正常整理，把留下的对话处理掉
+ const ok=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}).provider,now,signal);
+ assert.deepEqual(ok.changes.map(c=>c.op),['add']);
 });
 test('解析：能剥掉 ```json 包装；整段不是 JSON 返回 null', ()=>{
  assert.deepEqual(parseOps('好的：\n```json\n{"ops":[{"op":"past","id":"a"}]}\n```'),[{op:'past',id:'a'}]);
@@ -109,4 +165,33 @@ test('整理过的原始对话 30 天后删掉，没整理的留着', async()=>{
 test('XIAON_FC_IDLE_MIN', ()=>{
  assert.equal(idleMsFromEnv({}),3*HOUR);assert.equal(idleMsFromEnv({XIAON_FC_IDLE_MIN:'0'}),0);
  assert.throws(()=>idleMsFromEnv({XIAON_FC_IDLE_MIN:'abc'}),/XIAON_FC_IDLE_MIN/);
+});
+
+test('完整原话证据：不能用通用的“喜欢”编造兴趣或恢复已删除兴趣', async()=>{
+ const{clock,store,now}=setup();
+ chat(store,['我喜欢打篮球','好呀']);
+ let r=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢养猫'}]}).provider,now,signal);
+ assert.deepEqual(r.changes,[]);
+ const id=store.insert({kind:'interest',text:'喜欢打篮球',source:'chat',editedByStudent:false});
+ clock.advance(HOUR);store.studentEdit({action:'delete',id});
+ clock.advance(HOUR);chat(store,['我喜欢看三体','好呀']);
+ r=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}).provider,now,signal);
+ assert.deepEqual(r.changes,[]);assert.deepEqual(store.profile().items,[]);
+ clock.advance(HOUR);chat(store,['我不喜欢打篮球了','知道了']);
+ r=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}).provider,now,signal);
+ assert.deepEqual(r.changes,[]);
+});
+test('更新和提到也检查证据原话的敏感类别', async()=>{
+ const{store,now}=setup();
+ const id=store.insert({kind:'about',text:'跑步喘不上气',source:'chat',editedByStudent:false});
+ const other=store.insert({kind:'about',text:'爱跑步',source:'chat',editedByStudent:false});
+ chat(store,['我有哮喘，跑步老是喘不上气','听起来不容易']);
+ const r=await consolidate(store,model({ops:[{op:'update',id:other,text:'跑步喘不上气'},{op:'mention',id}]}).provider,now,signal);
+ assert.deepEqual(r.changes,[]);assert.equal(store.item(other)!.text,'爱跑步');assert.equal(store.item(id)!.mentionCount,1);
+});
+
+test('不删除内容词来凑证据：喜欢人文不能证明喜欢超人；同义改写暂不自动记',async()=>{
+ const{store,now}=setup();chat(store,['我喜欢人文','好呀'],['今天画了一幅画','不错']);
+ const r=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢超人'},{op:'add',kind:'interest',text:'画画'}]}).provider,now,signal);
+ assert.deepEqual(r.changes,[]);
 });

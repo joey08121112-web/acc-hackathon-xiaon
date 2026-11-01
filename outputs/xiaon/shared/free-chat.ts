@@ -29,12 +29,15 @@ export type ProfileItemRequest=z.infer<typeof profileRequests.item>;
 export const MESSAGE_TEXT_MAX=2000;
 export type FreeChatMessage={id:string;role:'user'|'assistant';content:string;createdAt:string};
 export type FreeChatHistory={threadId:string|null;messages:FreeChatMessage[]};
+export type FreeChatPage=FreeChatHistory&{hasMore:boolean;before:string|null};
+export type FreeChatThread={threadId:string;startedAt:string;preview:string;messageCount:number};
 export type FreeChatExchange={threadId:string;user:FreeChatMessage;reply:FreeChatMessage};
 export const chatRequests={
  send:z.strictObject({text:z.string().trim().min(1).max(MESSAGE_TEXT_MAX)}),
  newThread:z.strictObject({}),
  digestSeen:z.strictObject({runId:itemId}),
  consolidate:z.strictObject({}),
+ history:z.strictObject({threadId:itemId.optional(),before:itemId.optional()}),
 };
 /** 记忆整理：空闲时把还没整理的对话交给模型，按操作更新档案。原始对话整理后保留 MESSAGE_KEEP_DAYS 天。 */
 export const MESSAGE_KEEP_DAYS=30;
@@ -42,4 +45,5 @@ export type ConsolidationChange={op:'add'|'mention'|'update'|'past';itemId:strin
 /** 最近一次整理里学生还没看过的结果（只含新增和更新）。 */
 export type Digest={runId:string;changes:ConsolidationChange[]};
 export type DigestResponse={digest:Digest|null;consolidating:boolean};
-export type ConsolidateResult={status:'ok'|'failed'|'skipped'|'empty'|'off';changes:ConsolidationChange[];profile:Profile};
+/** stale：整理等模型的时候数据变了（重置演示、动过开关），这次的结果作废，对话留到下次再整理。 */
+export type ConsolidateResult={status:'ok'|'failed'|'skipped'|'empty'|'off'|'stale';changes:ConsolidationChange[];profile:Profile};

@@ -6,9 +6,16 @@ import { installLearning } from '../../server/agents/learning';
 import { createHttpServer } from '../../server/http/server';
 import { ScenarioProvider } from '../../tests-agent/d/provider';
 import type { TtsProvider } from '../../server/voice/tts';
+import type { ModelProvider } from '../../shared/learning-contracts';
+import { FREE_CHAT_PROMPT } from '../../server/free-chat/chat';
 import { isWav,type AsrProvider } from '../../server/voice/asr';
 const port=Number(process.env.XIAON_F_API_PORT??18963),ui=Number(process.env.XIAON_F_UI_PORT??5199);
-const f=temporaryRepository(new TestClock()),r=createRuntime({...f,provider:new ScenarioProvider()});installLearning(r,{timeoutMs:800});
+const scenario=new ScenarioProvider();
+const provider:ModelProvider={kind:'synthetic',supportsTools:true,complete(input){
+ if(input.messages[0]?.content.startsWith(FREE_CHAT_PROMPT))return Promise.resolve({content:'我在听。你想从哪里开始聊？',toolCalls:[]});
+ return scenario.complete(input);
+}};
+const f=temporaryRepository(new TestClock()),r=createRuntime({...f,provider});installLearning(r,{timeoutMs:800});
 const clip=readFileSync('public/voice/greet-1.mp3');
 const spoken:string[]=[],heard:{bytes:number;wav:boolean}[]=[];
 const tts:TtsProvider={enabled:true,async synthesize(text){spoken.push(text);return clip;}};

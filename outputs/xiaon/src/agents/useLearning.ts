@@ -2,6 +2,7 @@ import { useCallback,useEffect,useRef,useState } from 'react';
 import { apiRequest,serviceStatus,newOperationId } from '../agent-client';
 import type { LearningView } from '../../server/agents/learning';
 import type { TaskPublicView } from '../../shared/learning-contracts';
+import { isLegacyHomePath,LEGACY_HOME_DISABLED_MESSAGE } from '../../shared/legacy-home';
 // G0: typed reply of learning/chat (legacy fields plus the home-flow signals and drafts). Behaviour is unchanged.
 export type { ChatReply,ChatIntent,ChatStage } from '../../shared/learning-contracts';
 export const WORKSPACE_KEY='xiaon-workspace-v2';
@@ -12,7 +13,7 @@ export const isOfflineArtifact=()=>!!document.querySelector('meta[name="xiaon-of
 type Cache={reviewLink:{id:string;revision:number}|null;activeTaskId:string|null;drafts:Record<string,string>;chat:{role:'user'|'assistant';content:string}[];chatAt:number;pending:{path:string;body:Record<string,unknown>}|null};
 const fresh=():Cache=>({reviewLink:null,activeTaskId:null,drafts:{},chat:[],chatAt:0,pending:null});
 export function useLearning(){
- const [cache,setCache]=useState<Cache>(()=>{try{return {...fresh(),...JSON.parse(localStorage.getItem(WORKSPACE_KEY)||'{}')};}catch{return fresh();}});
+ const [cache,setCache]=useState<Cache>(()=>{try{const saved={...fresh(),...JSON.parse(localStorage.getItem(WORKSPACE_KEY)||'{}')};if(saved.pending&&isLegacyHomePath(saved.pending.path))saved.pending=null;return saved;}catch{return fresh();}});
  const cacheRef=useRef(cache);cacheRef.current=cache;
  const [view,setView]=useState<LearningView|null>(null),[connected,setConnected]=useState(false),[mode,setMode]=useState('连接本地服务中'),[error,setError]=useState(''),[busy,setBusy]=useState(false),[candidate,setCandidate]=useState<TaskPublicView|null>(null),[candidateMode,setCandidateMode]=useState<'support'|'exploration'|'review'>('support');
  const [activated,setActivated]=useState(()=>!isOfflineArtifact()&&localStorage.getItem(ACTIVATED)==='true');
@@ -25,12 +26,11 @@ export function useLearning(){
  },[reload]);
  useEffect(()=>{void connect();return()=>abort.current?.abort();},[connect]);
  async function run<T=unknown>(path:string,body:Record<string,unknown>={},options:{retry?:boolean;persist?:boolean}={}):Promise<T>{
-  if(lock.current)throw new Error('请先等待或取消当前操作');lock.current=true;setBusy(true);setError('');const controller=new AbortController();abort.current=controller;
   const request=options.retry&&cacheRef.current.pending?cacheRef.current.pending:{path,body:path==='import/preview'?body:{operationId:newOperationId(),...body}};
+  if(isLegacyHomePath(request.path))throw new Error(LEGACY_HOME_DISABLED_MESSAGE);
+  if(lock.current)throw new Error('请先等待或取消当前操作');lock.current=true;setBusy(true);setError('');const controller=new AbortController();abort.current=controller;
   if(options.persist!==false)update({pending:request});
   try{const result=await apiRequest<T>(request.path,request.body,controller.signal);if(options.persist!==false)update({pending:null});
-   // chat 的回复和语音朗读不等整页视图刷新：先交给调用方，视图在后台补齐；刷新失败则保留当前视图。
-   if(request.path==='learning/chat'){void reload().catch(()=>{/* keep last view */});return result;}
    await reload();return result;}
   catch(e){setError(controller.signal.aborted?'已取消等待。已经保存的作答仍在，可用原请求重试核对。':(e as Error).message);try{await reload();}catch{/* keep last view and local draft */}throw e;}
   finally{setBusy(false);lock.current=false;abort.current=null;}

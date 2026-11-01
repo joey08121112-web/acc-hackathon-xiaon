@@ -11,6 +11,8 @@ export const entitySchemas = {
  problems:schemas.ProblemRecord,problemSecrets:schemas.ProblemSecret,episodes:schemas.LearningEpisode,progressCards:schemas.ProgressCard,memoryMentions:schemas.MemoryMention,memoryOffers:schemas.MemoryOffer,observations:schemas.ChatObservation,summaries:schemas.ConversationSummary,chatTurns:schemas.ChatTurn,
  // 生活话题观察（2026-10-24）：场景推进记录
  lifeScenes:schemas.LifeSceneState,
+ // 对话回放（2026-10-24）：每轮两条的聊天原文（学生 + 小N）；安全轮永不写入。
+ chatLog:schemas.ChatLog,
  // G2 第二期：专业模式. Learning records (not subject to the memory switch); interviews and monthStages are revisioned like episodes.
  interviews:schemas.InterviewSession,interviewTurns:schemas.InterviewTurn,professionalReports:schemas.ProfessionalReport,monthStages:schemas.MonthStage,
 } satisfies {[K in keyof EntityMap]:z.ZodType<EntityMap[K]>};
@@ -48,7 +50,9 @@ export class SqliteRepository implements LearningRepository {
    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(6);');
    // v7 (2026-10-24): additive lifeScenes table, created by the same additive loop.
    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(7);');
-   for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans','problems','episodes','progressCards','observations','summaries','chatTurns','lifeScenes'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
+   // v8 (2026-10-24): additive chatLog table (对话回放), created by the same additive loop.
+   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(8);');
+   for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans','problems','episodes','progressCards','observations','summaries','chatTurns','lifeScenes','chatLog'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
   });
  }
  private table<K extends keyof EntityMap>(name:K){if(!Object.hasOwn(entitySchemas,name))throw new RuntimeError('invalid_params');return name;}

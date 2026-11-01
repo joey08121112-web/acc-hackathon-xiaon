@@ -36,7 +36,9 @@ export async function freeChat(store:FreeChatStore,provider:ModelProvider,raw:un
  if(provider.kind==='offline')throw new RuntimeError('unavailable','还没有连接模型，暂时聊不了');
  const{threadId,messages}=store.history(MAX_TURNS);
  const brief=profileBrief(store.profile());
+ // R1：发问时记下数据代次。等回复期间学生重置了演示的话，晚到的回复不再写回已清空的库。
+ const epoch=store.epoch();
  const out=await provider.complete({messages:[{role:'system',content:brief?FREE_CHAT_PROMPT+'\n\n'+brief:FREE_CHAT_PROMPT},...messages.map(m=>({role:m.role,content:m.content})),{role:'user',content:p.data.text}],tools:[],signal});
  const text=out.content.trim();if(!text)throw new RuntimeError('provider_error','模型这次没有回话，请再发一次');
- return store.appendExchange(threadId,p.data.text,text);
+ return store.appendExchange(threadId,p.data.text,text,epoch);
 }

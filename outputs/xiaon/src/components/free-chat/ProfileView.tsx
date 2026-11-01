@@ -26,7 +26,7 @@ export function ProfileView() {
   apiRequest<ConsolidateResult>('free-chat/consolidate', {}).then(r => {
    setProfile(r.profile);
    const added = r.changes.filter(c => c.op === 'add').length, others = r.changes.length - added;
-   setRunNote({ ok: `整理完了：新记下 ${added} 条，更新或又提到 ${others} 条。`, empty: '没有新的对话要整理。', off: '自动记忆是关着的。', failed: '模型这次的回答看不懂，下次再试。', skipped: '连续几次没整理成功，这批对话先跳过了。' }[r.status]);
+   setRunNote({ ok: `整理完了：新记下 ${added} 条，更新或又提到 ${others} 条。`, empty: '没有新的对话要整理。', off: '自动记忆是关着的。', failed: '模型这次的回答看不懂，下次再试。', skipped: '连续几次没整理成功，这批对话先跳过了。', stale: '整理的时候数据变了（重置演示或动了开关），这次的结果没有保存。' }[r.status]);
   }).catch(e => setRunNote((e instanceof Error && e.message) || '整理失败了')).finally(() => setBusy(false));
  };
  useEffect(() => { apiRequest<Profile>('free-chat/profile').then(setProfile).catch(() => setError('档案暂时打不开，请稍后再试。')); }, []);

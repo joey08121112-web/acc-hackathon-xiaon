@@ -157,22 +157,28 @@ export class LearningCoordinator {
   if(p.flow==='home'&&activeLoop){
    if(p.intent==='decline_study'||p.intent==='life'||DECLINE_PATTERN.test(last)||FAREWELL_PATTERN.test(last)){
     const ended=await this.loopEvent({operationId:p.operationId+'-leave-loop',action:'leave',episodeId:activeLoop.id,expectedRevision:activeLoop.revision},signal);
-    return chatReply({text:'好，先收好这次的记录，想聊什么由你决定。'+ended.summary,stage:'companion',sessionId:activeLoop.sessionId});
+    const farewell='好，先收好这次的记录，想聊什么由你决定。'+ended.summary;
+    this.replayLog(p.operationId,activeLoop.sessionId,this.r.clock.now(),last,farewell);
+    return chatReply({text:farewell,stage:'companion',sessionId:activeLoop.sessionId});
    }
-   if(REST_PATTERN.test(last)){await this.preference({operationId:p.operationId+'-pause',rest:true,questionInvitePaused:true});return chatReply({text:REST_TEXT,stage:'rest',sessionId:activeLoop.sessionId});}
+   if(REST_PATTERN.test(last)){await this.preference({operationId:p.operationId+'-pause',rest:true,questionInvitePaused:true});this.replayLog(p.operationId,activeLoop.sessionId,this.r.clock.now(),last,REST_TEXT);return chatReply({text:REST_TEXT,stage:'rest',sessionId:activeLoop.sessionId});}
    return this.perform(p.operationId,p,async()=>{
     this.r.events.requireSession(activeLoop.loop!.learningSessionId);
     let live=activeLoop;
     if(HELP_PATTERN.test(last)||STOP_THINK_PATTERN.test(last)){
      const out=await runLoop({operationId:p.operationId+'-loop',action:STOP_THINK_PATTERN.test(last)?'end':'help',episodeId:live.id,expectedRevision:live.revision},this.r,{context:this.revamp(),assess:(a,op,signal)=>this.assess(a,op,signal),generate:(op,signal)=>this.generator.generate({operationId:op,knowledgePointId:'negative-brackets',purpose:'practice',reviewItemId:null,timeBudgetMinutes:5},signal,()=>true)},signal);
      live=out.episode;
-     return chatReply({text:STOP_THINK_PATTERN.test(last)?out.summary:out.help.at(-1)?.text??'可以先回顾，或换种方法继续。',stage:live.stage,sessionId:live.sessionId});
+     const loopHelp=STOP_THINK_PATTERN.test(last)?out.summary:out.help.at(-1)?.text??'可以先回顾，或换种方法继续。';
+     this.replayLog(p.operationId,live.sessionId,this.r.clock.now(),last,loopHelp);
+     return chatReply({text:loopHelp,stage:live.stage,sessionId:live.sessionId});
     }
     const current=loopView(live,this.r),hypothesis=live.loop!.hypotheses.at(-1)!;
     const result=await this.roles.invoke('tutor',p.operationId,{stage:live.stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context:this.tutorContext(p.history,live.sessionId,live.stage),task:current.task,confirmedStuckPoint:hypothesis.status==='proposed'?null:hypothesis,unconfirmedHypothesis:hypothesis.status==='proposed'?hypothesis:null,latestFeedback:current.currentGrade,signals:{},helpLevel:0,helpLevelsUsed:live.helpLevelsUsed},signal,{prompt:homeTutorPrompt({stage:live.stage,allowed:[]}),secrets:current.task?this.r.catalog.definition(current.task.id,current.task.version)?.answer:[]});
     const out=homeTutorOutput.safeParse(result.value);
     if(out.success&&result.run.status==='completed')recordLoopDialogue(live,this.r,p.operationId,out.data.message);
-    return chatReply({text:out.success?out.data.message:'我们还在这一步。可以在题目下保存尝试，也可以选择一点提示。',stage:live.stage,sessionId:live.sessionId,run:result.run});
+    const loopReply=out.success?out.data.message:'我们还在这一步。可以在题目下保存尝试，也可以选择一点提示。';
+    this.replayLog(p.operationId,live.sessionId,this.r.clock.now(),last,loopReply);
+    return chatReply({text:loopReply,stage:live.stage,sessionId:live.sessionId,run:result.run});
    },signal);
   }
   // G0: the home flow runs the stage machine; the legacy D two-step flow below is unchanged.
@@ -197,6 +203,13 @@ export class LearningCoordinator {
  }
  /** Stuck-point confirmation is derived from a student event: a confirmed ProblemRecord that links the stuck point. */
  private stuckConfirmed(stuckPointId:string){return this.r.repository.list('problems').some(p=>p.stuckPointId===stuckPointId);}
+ /** 对话回放（2026-10-24 需求）：把这一轮原文按消息追加进 chatLog，首页“对话记录”可回看当时说了什么。
+  * 学习记录，重置演示时清除。安全轮在 chat() 顶部已被拦截，永远不会走到这里。 */
+ private replayLog(operationId:string,sessionId:string,at:string,user:string,assistant:string){
+  const repo=this.r.repository;
+  repo.append('chatLog',{schemaVersion:SCHEMA_VERSION,id:`log-${operationId}-user`,operationId,sessionId,role:'user',content:user,at});
+  repo.append('chatLog',{schemaVersion:SCHEMA_VERSION,id:`log-${operationId}-assistant`,operationId,sessionId,role:'assistant',content:assistant,at});
+ }
  private recentStuckPoints(){return this.r.repository.list('stuckPoints').slice(-3).map(({id,knowledgePointId,kind,summary,createdAt})=>({knowledgePointId,kind,summary,studentConfirmed:this.stuckConfirmed(id),createdAt}));}
  /** Professional-mode background for the home Tutor: the latest report's tested modules (level labels only, no evidence or quotes)
   * and this Shanghai month's student-confirmed goal. Learning records, so the memory switch does not apply. null when there is neither. */
@@ -261,7 +274,7 @@ export class LearningCoordinator {
     ...(live?.task&&!live.studentSolvedAt?this.r.catalog.definition(live.task.taskId,live.task.taskVersion)?.answer??[]:[])];
    const releasedAnswers=solvedEpisodes.flatMap(e=>e.task?this.r.catalog.definition(e.task.taskId,e.task.taskVersion)?.answer??[]:[]);
    const turn=(dropped:ChatTurn['dropped'],replyFit:ChatTurn['replyFit']='ok'):ChatTurn=>({schemaVersion:SCHEMA_VERSION,id:'turn-'+p.operationId,operationId:p.operationId,sessionId,turn:s.turn,stage,intent:p.intent??null,problemId:problem?.id??null,episodeId,listenTurns:s.listenTurns,companionStreak:s.companionStreak,thinkTurns:s.thinkTurns,lastProbeTurn:s.lastProbeTurn,needsCheckAsked:s.needsCheckAsked,askStudyAsked:s.askStudyAsked,studyDeclined:s.studyDeclined,ended:s.ended,signals:{needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem,probeAllowed:decision.probeAllowed,modeSuggestion:decision.modeSuggestion},dropped:dropped.slice(0,8),replyFit,at:now});
-   if(stage==='rest'){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});repo.append('chatTurns',turn([]));return chatReply({text:REST_TEXT,stage,sessionId});}
+   if(stage==='rest'){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});repo.append('chatTurns',turn([]));this.replayLog(p.operationId,sessionId,now,last,REST_TEXT);return chatReply({text:REST_TEXT,stage,sessionId});}
    // memoryDraft: the stage machine already removed it when memory is off; memory-flow may narrow it further.
    let memoryGate:'memory_off'|'stage_not_allowed'|'not_implemented'|null=memoryEnabled?null:'memory_off';
    if(decision.allowed.includes('memoryDraft')){try{if(!shouldOfferMemory({sessionId,stage,turn:s.turn},ctx))memoryGate='stage_not_allowed';}catch(e){if(!notImplementedError(e))throw e;memoryGate='not_implemented';}}
@@ -334,6 +347,7 @@ export class LearningCoordinator {
    let summary=null;
    if(decision.end){try{summary=schemas.ConversationSummary.parse(await endConversation({operationId:p.operationId+'-end',sessionId,trigger:'farewell',history:p.history},ctx,signal));}catch(e){if(!(e instanceof RuntimeError))throw e;}}
    repo.append('chatTurns',turn(log,result.replyFit));
+   this.replayLog(p.operationId,sessionId,now,last,value.message);
    const suggestions:TaskPublicView[]=session?value.taskIds.flatMap(id=>{const t=this.r.catalog.publicTask(id,2);return t?[t]:[];}):[];
    return chatReply({text:value.message,stage,sessionId,run:result.run,suggestions,quickReplies:suggestions.length?[]:HOME_QUICK_REPLIES[stage],askStudy:decision.askStudy&&!sceneBusy,needsCheck:decision.needsCheck,askProblem:decision.askProblem,
     modeSuggestion:decision.modeSuggestion?{mode:'professional',reason:'想看清楚自己现在的情况，可以做一次正式测试。'}:null,problemDraft,progressCardDraft,memoryDraft,summary});
@@ -440,9 +454,10 @@ export class LearningCoordinator {
   // Audit only: fingerprints and reason codes, never answers or model text. exposed derives from real task exposures.
   generations:this.r.repository.list('generations').map(g=>({...g,exposed:!!g.taskId&&this.r.repository.list('exposures').some(e=>e.kind==='task'&&e.taskId===g.taskId&&e.taskVersion===g.taskVersion)})),generationAvailable:this.r.provider.kind!=='offline',
   // G0: learning records for the home revamp. problemSecrets is deliberately absent; chatTurns carry no student text.
+  // chatLog (2026-10-24) is the verbatim replay shown on the home “对话记录”: user message + Tutor reply per turn, safety turns excluded.
   learningLoops:latestRevisions(this.r.repository.list('episodes')).filter(e=>e.loop).map(e=>loopView(e,this.r)),
   problems:this.r.repository.list('problems'),episodes:this.r.repository.list('episodes'),progressCards:this.r.repository.list('progressCards'),memoryMentions:this.r.repository.list('memoryMentions'),
-  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),lifeScenes:this.r.repository.list('lifeScenes'),
+  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),lifeScenes:this.r.repository.list('lifeScenes'),chatLog:this.r.repository.list('chatLog'),
   // G2: professional-mode learning records, shown whatever the memory switch says. interviews/monthStages are the latest revision of each.
   interviews:latestRevisions(this.r.repository.list('interviews')),interviewTurns:this.r.repository.list('interviewTurns'),professionalReports:this.r.repository.list('professionalReports'),
   monthStages:latestRevisions(this.r.repository.list('monthStages')),retestReminder:this.currentRetestReminder()};

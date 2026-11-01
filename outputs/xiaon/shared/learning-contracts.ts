@@ -132,6 +132,9 @@ const ChatTurn = z.strictObject({...base,...operation,sessionId:id,turn:version,
   dropped:z.array(z.strictObject({field:stageField,reason:z.enum(['stage_not_allowed','memory_off','invalid','not_implemented'])})).max(8),
   // Program length gate on the Tutor reply (≤ TUTOR_REPLY_MAX_CHARS): ok, rewritten once by the model, or cut at a sentence end.
   replyFit:z.enum(['ok','retried','truncated']),at:utc});
+// 对话回放（2026-10-24）：每轮两条（学生 + 小N）追加式原文，供首页“对话记录”回看当时说了什么。
+// 学习记录：不受记忆开关影响，随重置演示清除。安全轮（SAFETY_PATTERN）在入口拦截，永不写入。
+const ChatLog = z.strictObject({...base,...operation,sessionId:id,role:z.enum(['user','assistant']),content:text,at:utc});
 const ChatReply = z.strictObject({text,stage:ChatStage,sessionId:id.nullable(),run:AgentRun.nullable(),safety:z.boolean(),quickReplies:z.array(z.string().min(1).max(40)).max(6),suggestions:z.array(TaskPublicView).max(3),
   askStudy:z.boolean(),needsCheck:z.boolean(),askProblem:z.boolean(),modeSuggestion:ModeSuggestion.nullable(),
   problemDraft:ProblemDraft.nullable(),progressCardDraft:ProgressCardDraft.nullable(),memoryDraft:MemoryDraft.nullable(),summary:ConversationSummary.nullable()});
@@ -234,7 +237,7 @@ export const schemas = {
   ToolArguments:tools,
   // G0 首页改版
   ModeSuggestion,ProblemDraft,ProblemRecord,ProblemSecret,LearningEpisode,ProgressCardDraft,ProgressCard,MemoryDraft,MemoryMention,MemoryOffer,Greeting,
-  ObservationDraft,ChatObservation,ConversationSummary,ChatTurn,ChatReply,RecognizeResult,LifeSceneState,
+  ObservationDraft,ChatObservation,ConversationSummary,ChatTurn,ChatLog,ChatReply,RecognizeResult,LifeSceneState,
   ConfirmProblem:z.strictObject({...operation,sessionId:id.nullable(),draft:ProblemDraft,referenceAnswer:z.string().min(1).max(500).nullable()}),
   Recognize:z.strictObject({...operation,sessionId:id.nullable(),mimeType:z.literal('image/jpeg'),image:z.string().min(4).max(RECOGNIZE_MAX_BASE64).regex(/^[A-Za-z0-9+/]+={0,2}$/),maskConfirmed:z.literal(true)}),
   ConfirmProgressCard:z.strictObject({...operation,sessionId:id,episodeId:id.nullable(),aiDraft:ProgressCardDraft.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable(),confidence:confidence.nullable()}),
@@ -307,6 +310,7 @@ export type ChatObservation = z.infer<typeof ChatObservation>;
 export type LifeSceneState = z.infer<typeof LifeSceneState>;
 export type ConversationSummary = z.infer<typeof ConversationSummary>;
 export type ChatTurn = z.infer<typeof ChatTurn>;
+export type ChatLog = z.infer<typeof ChatLog>;
 export type ChatReply = z.infer<typeof ChatReply>;
 export type RecognizeResult = z.infer<typeof RecognizeResult>;
 export type ConfirmProblem = z.infer<typeof schemas.ConfirmProblem>;
@@ -353,6 +357,8 @@ export interface EntityMap {
   /** G0 首页改版. problemSecrets never leaves the server; observations/summaries are learning records independent of the memory switch. All cleared by reset. */
   problems:ProblemRecord; problemSecrets:ProblemSecret; episodes:LearningEpisode; progressCards:ProgressCard; memoryMentions:MemoryMention; memoryOffers:MemoryOffer;
   observations:ChatObservation; summaries:ConversationSummary; chatTurns:ChatTurn;
+  /** 对话回放（2026-10-24）：每轮两条的聊天原文。学习记录，不受记忆开关影响，重置演示时清除；安全轮永不写入。 */
+  chatLog:ChatLog;
   /** 生活话题观察（2026-10-24）：场景推进记录。学习记录，不受记忆开关影响，重置演示时清除。 */
   lifeScenes:LifeSceneState;
   /** G2 第二期. Necessary learning records independent of the memory switch; cleared by reset. interviews/monthStages are revisioned (key id:r<revision>).

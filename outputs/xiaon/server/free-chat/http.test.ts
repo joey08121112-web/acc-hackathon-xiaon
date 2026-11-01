@@ -55,3 +55,18 @@ test('还没空闲够久不整理；「现在整理」不等空闲；重置清�
   s.r.freeChat.reset();assert.equal(s.r.freeChat.digest(),null);
  }finally{await s.close();}
 });
+
+test('历史接口可回看旧线程但不切走当前会话，拒绝无效查询',async()=>{
+ const s=await serve(3*3600000);
+ try{
+  const first=await s.post<{threadId:string}>('/api/free-chat',{text:'第一段旧对话'});
+  await s.post('/api/free-chat/new-thread',{});const next=await s.post<{threadId:string}>('/api/free-chat',{text:'第二段当前对话'});
+  const list=await s.get<{threads:{threadId:string;preview:string}[]}>('/api/free-chat/threads');
+  assert.equal(list.threads.length,2);assert.equal(list.threads[0].threadId,next.body.threadId);
+  const old=await s.get<{messages:{content:string}[]}>('/api/free-chat/messages?threadId='+first.body.threadId);
+  assert.equal(old.messages[0].content,'第一段旧对话');
+  assert.equal((await s.get<{threadId:string}>('/api/free-chat/messages')).threadId,next.body.threadId);
+  assert.equal((await s.get<{error:{code:string}}>('/api/free-chat/messages?threadId=../bad')).error.code,'invalid_params');
+  assert.equal((await s.get<{error:{code:string}}>('/api/free-chat/messages?extra=x')).error.code,'invalid_params');
+ }finally{await s.close();}
+});

@@ -50,6 +50,12 @@ test('基本信息、开关和重置', ()=>{
  store.reset();
  const r=store.profile();assert.deepEqual([r.basic,r.items.length,r.autoRemember],[{nickname:'',grade:''},0,true]);
 });
+test('重置换一个数据代次；自动记忆开关每变一次换一个记忆代次', ()=>{
+ const{store}=setup();
+ const e=store.epoch(),m=store.memoryEpoch();
+ store.setAutoRemember(true);assert.equal(store.memoryEpoch(),m+1);
+ store.reset();assert.equal(store.epoch(),e+1);assert.equal(store.memoryEpoch(),m+1);
+});
 test('请求格式不对、一类条目太多都会被拒绝', ()=>{
  const{store}=setup();
  assert.throws(()=>profilePost(store,'/api/free-chat/profile/item',{action:'add',kind:'secret',text:'x'}),/格式/);
@@ -58,4 +64,17 @@ test('请求格式不对、一类条目太多都会被拒绝', ()=>{
  for(let i=0;i<30;i++)store.studentEdit({action:'add',kind:'about',text:'第'+i+'条'});
  assert.throws(()=>store.studentEdit({action:'add',kind:'about',text:'再一条'}),/很多条/);
  assert.equal(profilePost(store,'/api/free-chat/nope',{}),undefined);
+});
+
+test('历史分页覆盖超过 200 条消息，回看旧线程不会切换当前对话',()=>{
+ const clock=new TestClock('2026-11-01T02:00:00.000Z'),store=new FreeChatStore(':memory:',clock);
+ for(let i=0;i<105;i++)store.appendExchange(store.currentThread(),'问'+i,'答'+i);
+ const old=store.currentThread()!;
+ const page=store.historyPage(old);assert.equal(page.messages.length,200);assert.equal(page.hasMore,true);
+ const earlier=store.historyPage(old,page.before!);assert.equal(earlier.messages.length,10);assert.equal(earlier.messages[0].content,'问0');assert.equal(earlier.hasMore,false);
+ const fresh=store.newThread();store.appendExchange(fresh.threadId,'新段','新答');
+ assert.equal(store.threads().length,2);assert.equal(store.historyPage(old).messages.at(-1)!.content,'答104');
+ assert.equal(store.history().threadId,fresh.threadId);
+ assert.throws(()=>store.historyPage(fresh.threadId!,page.before!),/刷新/);
+ store.reset();assert.deepEqual(store.threads(),[]);store.close();
 });
