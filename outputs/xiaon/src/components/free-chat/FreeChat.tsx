@@ -1,4 +1,4 @@
-/** 首页语音与底栏文字共用自由聊：同一会话、同一档案，不走旧学习协调器或阶段提示词。 */
+/** 首页小N：语音和文字共用自由聊的同一会话、同一档案，不走旧学习协调器或阶段提示词。 */
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUp, Volume2, VolumeX } from 'lucide-react';
 import { apiRequest } from '../../agent-client';

@@ -23,7 +23,7 @@ async function ready(page:Page,sound=false,permission:'prompt'|'granted'='prompt
 const nav=(page:Page,name:string)=>page.getByRole('navigation',{name:'主导航'}).getByRole('button',{name,exact:true});
 const recognize=(page:Page,text:string)=>page.evaluate(t=>(window as unknown as {__recognitions:{say(text:string):void}[]}).__recognitions.at(-1)!.say(t),text);
 
-test('旧chat链接回到自由聊，缓存的旧智能体请求不再显示重试或联网',async({page})=>{
+test('旧chat/freechat链接回到小N，缓存的旧智能体请求不再显示重试或联网',async({page})=>{
  const old:string[]=[];page.on('request',r=>{if(/\/api\/(chat(?:\?|$)|learning\/(chat|greeting|conversation))/.test(r.url()))old.push(r.url());});
  await ready(page,false,'prompt',false,40,true);await expect(page).toHaveURL(/#home$/);await expect(page.locator('.companion-chat')).toBeVisible();
  await page.getByRole('button',{name:'缩小小N，查看对话'}).click();await nav(page,'成长').click();
@@ -31,7 +31,7 @@ test('旧chat链接回到自由聊，缓存的旧智能体请求不再显示重�
  expect(old).toEqual([]);expect(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).chat[0].content,WORKSPACE_KEY)).toBe('保留旧缓存原文');
 });
 
-test('首页直接用自由聊；缩小后可打字，切换自由聊入口共用同一回复',async({page})=>{
+test('首页直接用自由聊；缩小后可打字，切页回来还是同一段对话；底栏没有自由聊',async({page})=>{
  await page.setViewportSize({width:380,height:625});
  const old:string[]=[];page.on('request',r=>{if(/\/learning\/(chat|greeting|conversation)/.test(r.url()))old.push(r.url());});
  await ready(page);
@@ -49,7 +49,7 @@ test('首页直接用自由聊；缩小后可打字，切换自由聊入口共�
  await page.getByRole('textbox',{name:'对小N说',exact:true}).fill('首页共享会话测试');
  await page.getByRole('button',{name:'发送',exact:true}).click();await expect(page.locator('.free-chat-list').first()).toHaveAttribute('aria-busy','false');
  await expect(page.getByText('我在听。你想从哪里开始聊？',{exact:true}).last()).toBeVisible();
- await nav(page,'自由聊').click();await expect(page.getByText('首页共享会话测试',{exact:true})).toBeVisible();
+ await expect(nav(page,'自由聊')).toHaveCount(0);await nav(page,'成长').click();
  await nav(page,'小N').click();await expect(stage).toHaveAttribute('data-compact','true');await expect(page.getByText('首页共享会话测试',{exact:true})).toBeVisible();expect(old).toEqual([]);
  await page.screenshot({path:'/tmp/xiaon-home-compact.png'});
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -82,7 +82,7 @@ test('已有权限时开场白结束后自动听，回复播完继续听；离�
  await expect(page.locator('.free-chat')).toHaveAttribute('data-mic-phase','listening');await recognize(page,'连续语音测试');
  await expect.poll(()=>chats).toBe(1);await expect.poll(()=>page.evaluate(()=>(window as unknown as {__recognitions:unknown[]}).__recognitions.length)).toBe(2);
  await expect(page.locator('.free-chat')).toHaveAttribute('data-mic-phase','listening');
- await page.getByRole('button',{name:'缩小小N，查看对话'}).click();await nav(page,'自由聊').click();await nav(page,'小N').click();await expect(page.locator('.free-chat')).toHaveAttribute('data-mic-phase','idle');
+ await page.getByRole('button',{name:'缩小小N，查看对话'}).click();await nav(page,'成长').click();await nav(page,'小N').click();await expect(page.locator('.free-chat')).toHaveAttribute('data-mic-phase','idle');
 });
 
 test('等模型时停止语音，晚到回复保留文字但不播报或重开麦',async({page})=>{
@@ -115,7 +115,7 @@ test('回复等待期间切页仍保留同一请求和回复',async({page})=>{
  await ready(page);let release!:()=>void;const gate=new Promise<void>(r=>release=r);let calls=0;
  await page.route('**/api/free-chat',async route=>{calls++;const response=await route.fetch();await gate;await route.fulfill({response});});
  await page.getByRole('button',{name:'切换到打字'}).click();await page.getByRole('textbox',{name:'对小N说',exact:true}).fill('在途切页唯一消息');await page.getByRole('button',{name:'发送',exact:true}).click();
- await expect(page.locator('.free-chat-list').first()).toHaveAttribute('aria-busy','true');await nav(page,'自由聊').click();release();
+ await expect(page.locator('.free-chat-list').first()).toHaveAttribute('aria-busy','true');await nav(page,'成长').click();release();
  await expect(page.locator('.free-chat-list').first()).toHaveAttribute('aria-busy','false');await nav(page,'小N').click();
  await expect(page.getByText('在途切页唯一消息',{exact:true})).toHaveCount(1);expect(calls).toBe(1);
 });

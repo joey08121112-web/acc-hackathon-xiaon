@@ -20,7 +20,6 @@ import {
   LoaderCircle,
   Map,
   MessageCircle,
-  MessagesSquare,
   Minus,
   Pause,
   Play,
@@ -76,7 +75,6 @@ const uid = () =>
 const icons = [Flower2, BookOpen, Plus, ShoppingBagIcon, Compass];
 const PAGE_OF_TAB: Record<string, string> = {
   小N: "home",
-  自由聊: "freechat",
   探索: "explore",
   今日: "today",
   成长: "growth",
@@ -143,7 +141,7 @@ function App() {
   const [s, dispatch] = useReducer(reducer, null, () => {
     try {
       const restored = hydrate(localStorage.getItem(PROGRESS_KEY));
-      return restored.page === "chat" || window.location.hash === "#chat"
+      return restored.page === "chat" || restored.page === "freechat" || /^#(chat|freechat)$/.test(window.location.hash)
         ? { ...restored, page: "home", tab: "小N" }
         : restored;
     } catch {
@@ -174,9 +172,9 @@ function App() {
   const submitLock = useRef(false),
     taskTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const patch = (p: Partial<State>) => dispatch({ type: "patch", patch: p });
-  // 历史 chat 链接统一回到新的自由聊首页。
+  // 历史 chat / freechat 链接统一回到小N首页（自由聊已并入小N，底栏不再单列）。
   useEffect(() => {
-    if (s.page === "chat") {
+    if (s.page === "chat" || s.page === "freechat") {
       patch({ page: "home", tab: "小N" });
       window.history.replaceState(
         { ...window.history.state, page: "home", tab: "小N" },
@@ -218,7 +216,7 @@ function App() {
     if (window.history.state?.modal) window.history.back();
   };
   const navigate = (page: string, _tab?: string) => {
-    if (page === "chat") page = "home";
+    if (page === "chat" || page === "freechat") page = "home";
     // 只有四个 Tab 首页才切换 Tab；子页面沿用来处的 Tab，底栏高亮和兜底返回都回到原来的地方。
     const tab = TAB_OF_PAGE[page] ?? stateRef.current.tab;
     setStation(false);
@@ -273,7 +271,7 @@ function App() {
     const pop = (e: PopStateEvent) => {
       if (!e.state?.modal) setModal(null);
       if (!e.state?.page) return;
-      if (e.state.page === "chat") {
+      if (e.state.page === "chat" || e.state.page === "freechat") {
         patch({ page: "home", tab: "小N" });
         window.history.replaceState({ ...e.state, page: "home", tab: "小N" }, "", "#home");
         return;
@@ -833,7 +831,7 @@ function App() {
                 </button>
               </div>
             )}
-            {!s.safety && s.page !== "home" && s.page !== "freechat" && learning.enabled && (s.rest || !!learning.view?.paused) && (
+            {!s.safety && s.page !== "home" && learning.enabled && (s.rest || !!learning.view?.paused) && (
               <div className="safety-bar rest-bar" role="status">
                 <Leaf size={16} />
                 今天先休息，任务提醒已暂停
@@ -844,12 +842,12 @@ function App() {
             )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
             <LearningStatus l={learning} />
-            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。首页小N和底部「自由聊」共用的对话存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
+            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。你和小N的对话存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
             <main className={`page page-${s.page}`}>
               {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>openModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
-              {/* 两个入口共用同一会话实例，切页只隐藏；首页不再挂载旧多智能体 ChatPanel。 */}
-              <div hidden={s.page !== "home" && s.page !== "freechat"}>
-                <FreeChat active={s.page === "home" || s.page === "freechat"} home={s.page === "home"} legacy={learning} navigate={navigate} safety={s.safety}/>
+              {/* 首页小N就是自由聊，切页只隐藏：还在等的回复回来照样接上；不再挂载旧多智能体 ChatPanel。 */}
+              <div hidden={s.page !== "home"}>
+                <FreeChat active={s.page === "home"} home legacy={learning} navigate={navigate} safety={s.safety}/>
               </div>
               {!learning.enabled && s.page === "explore" && (
                 <>
@@ -2167,9 +2165,9 @@ function App() {
                     </div>
                     {learning.enabled && (
                       <div>
-                        <strong>自由聊与我的档案 · 可选</strong>
+                        <strong>小N的聊天与我的档案 · 可选</strong>
                         <Tag>在「我的档案」里开关</Tag>
-                        <p>首页小N和底部「自由聊」共用同一段对话，保存在服务器上只属于你的空间里。聊完一段时间后，小N 会从里面整理出关于你的小事、兴趣、最近的事和有用的学习方法，放进「成长 · 我的档案」，回话时当作背景。心事和情绪、身体健康、家庭矛盾、住址电话这类不会记。你可以随时改、删，或者关掉「让小N 从聊天里记住我」：关掉后不再记新的，关着时说的话以后也不会补记。整理过的对话 30 天后删除。</p>
+                        <p>你和小N的对话保存在服务器上只属于你的空间里。聊完一段时间后，小N 会从里面整理出关于你的小事、兴趣、最近的事和有用的学习方法，放进「成长 · 我的档案」，回话时当作背景。心事和情绪、身体健康、家庭矛盾、住址电话这类不会记。你可以随时改、删，或者关掉「让小N 从聊天里记住我」：关掉后不再记新的，关着时说的话以后也不会补记。整理过的对话 30 天后删除。</p>
                         <button onClick={() => navigate("growth")}>
                           去我的档案 <ArrowRight size={15} />
                         </button>
@@ -2189,7 +2187,7 @@ function App() {
                   <div className="info-paper">
                     <h3>第三方服务与生成来源</h3>
                     <p>
-                      {learning.enabled ? "真实模型模式会向智谱发送当前对话、必要题目和作答、用于整理观察或小结的相关内容，以及你允许使用的记忆。记忆关闭后不发送可选记忆。学习记录由程序保存，学生确认由你的点击或输入决定。自由聊会发送当前这段对话最近的内容和档案摘要；整理档案时会发送还没整理过的自由聊对话和现有档案。" : "当前为离线规则原型，聊天来自本地预设，观察来自本机作答。"} OCR、身份核验、通知和研究平台仍未接入，插画为原创矢量绘制，未宣称安全认证。
+                      {learning.enabled ? "真实模型模式会向智谱发送当前对话、必要题目和作答、用于整理观察或小结的相关内容，以及你允许使用的记忆。记忆关闭后不发送可选记忆。学习记录由程序保存，学生确认由你的点击或输入决定。首页小N会发送当前这段对话最近的内容和档案摘要；整理档案时会发送还没整理过的对话和现有档案。" : "当前为离线规则原型，聊天来自本地预设，观察来自本机作答。"} OCR、身份核验、通知和研究平台仍未接入，插画为原创矢量绘制，未宣称安全认证。
                     </p>
                     <h3>保存与删除</h3>
                     <p>
@@ -2557,7 +2555,6 @@ function App() {
             <nav className="bottom-nav" aria-label="主导航">
               {[
                 { name: "小N", icon: MessageCircle },
-                { name: "自由聊", icon: MessagesSquare },
                 { name: "探索", icon: Compass },
                 { name: "今日", icon: BookOpen },
                 { name: "成长", icon: Sprout },
@@ -2609,7 +2606,7 @@ function App() {
                     陪你做日常数学学习，不评判智力或人格，不诊断心理疾病，不承诺治疗或保证提高成绩。
                   </p>
                   <p>
-                    首页使用自由聊，连接后会把当前这段对话最近的内容和个人档案摘要发给模型；未连接时会提示重试。专业测评按需使用题目、作答和评分依据。模型可能出错，数学步骤与观察请一起核对。
+                    首页小N连接后会把当前这段对话最近的内容和个人档案摘要发给模型；未连接时会提示重试。专业测评按需使用题目、作答和评分依据。模型可能出错，数学步骤与观察请一起核对。
                   </p>
                   <p>
                     你可以随时暂停、休息、关闭可选记忆；需要现实中的帮助时，去找值得信任的人。
