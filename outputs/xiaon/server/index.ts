@@ -26,10 +26,10 @@ const usersDir=resolve(process.env.XIAON_USERS_DIR?.trim()||join(dirname(databas
 const {provider,modelTimeoutMs}=providerFromEnvironment();const generation=readGenerationConfig();
 const maxUsers=Number(process.env.XIAON_MAX_USERS??1000);if(!Number.isInteger(maxUsers)||maxUsers<1)throw new Error('Invalid XIAON_MAX_USERS');
 const runtime=new UserRuntimes({directory:usersDir,provider,learning:true,maxUsers,create:path=>{const r=createRuntime({databasePath:path,provider,modelTimeoutMs});installLearning(r,{generation});return r;}});
-const server=createHttpServer(runtime,{allowedOrigins:origins,host:`127.0.0.1:${port}`,extraHosts:wildcard?[`localhost:${port}`,`0.0.0.0:${port}`]:[],publicOrigins,staticDir,tts:ttsFromEnvironment(),asr:asrFromEnvironment()});
+const server=createHttpServer(runtime,{allowedOrigins:origins,host:`127.0.0.1:${port}`,extraHosts:wildcard?[`localhost:${port}`,`0.0.0.0:${port}`]:[],publicOrigins,staticDir,tts:ttsFromEnvironment(),asr:asrFromEnvironment(),requireLogin:process.env.XIAON_REQUIRE_LOGIN!=='0'});
 const mode=runtime.provider.kind==='offline'?'local_rules':'model';
 server.listen(port,bindHost,()=>console.log(publicOrigins.length
- ?`学伴小N ${staticDir?'静态站+API':'API'} ${bindHost}:${port} → ${publicOrigins.join(', ')} (${mode})；匿名身份，每人独立数据 ${usersDir}`
- :`学伴小N 本地 API http://127.0.0.1:${port} (${mode}); 匿名身份，每人独立数据 ${usersDir}`));
+ ?`学伴小N ${staticDir?'静态站+API':'API'} ${bindHost}:${port} → ${publicOrigins.join(', ')} (${mode})；${process.env.XIAON_REQUIRE_LOGIN!=='0'?'手机号登录':'匿名身份'}，每人独立数据 ${usersDir}`
+ :`学伴小N 本地 API http://127.0.0.1:${port} (${mode}); ${process.env.XIAON_REQUIRE_LOGIN!=='0'?'手机号登录':'匿名身份'}，每人独立数据 ${usersDir}`));
 function shutdown(){server.close(()=>{runtime.close();process.exit(0);});server.closeAllConnections();}
 process.once('SIGINT',shutdown);process.once('SIGTERM',shutdown);

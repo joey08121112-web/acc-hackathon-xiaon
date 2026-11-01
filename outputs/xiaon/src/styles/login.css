@@ -1,0 +1,10 @@
+/* 手机号登录页：沿用首次介绍的版式 */
+.login-loading { display: grid; place-items: center; color: #8da379; }
+.login-mascot { display: flex; justify-content: center; padding-top: 8px; }
+.login-screen .onboard-copy h1 { font-size: 2.2rem; }
+.login-screen .field { margin: 14px 0; }
+.login-screen .primary:disabled { opacity: 0.55; cursor: default; }
+.login-screen .login-back { justify-content: flex-start; padding: 0 0 8px; min-height: 36px; }
+.login-password { position: relative; display: block; }
+.login-screen .login-password input { padding-right: 48px; }
+.login-screen .login-eye { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; display: grid; place-items: center; color: #6d7869; background: none; border: 0; }

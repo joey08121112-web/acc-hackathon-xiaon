@@ -2,6 +2,7 @@ import { createServer,type IncomingMessage } from 'node:http';
 import { randomBytes,randomUUID,timingSafeEqual } from 'node:crypto';
 import { schemas,SCHEMA_VERSION } from '../../shared/learning-contracts';
 import { isLegacyHomePath,LEGACY_HOME_DISABLED_MESSAGE } from '../../shared/legacy-home';
+import { maskPhone,type AuthStatus } from '../../shared/auth';
 import type { LearningRuntime } from '../bootstrap';
 import { failure,RuntimeError } from '../core/errors';
 import { learningFor } from '../agents/learning';
@@ -29,6 +30,8 @@ export interface HttpServerConfig {
  asr?:AsrProvider;
  /** 自由聊空闲多久后在后台整理记忆；不给就读 XIAON_FC_IDLE_MIN（默认 3 小时）。 */
  freeChatIdleMs?:number;
+ /** 要先用手机号+密码登录才能开会话（只对 UserRuntimes 生效）；不给就保持匿名身份。 */
+ requireLogin?:boolean;
 }
 /** A single runtime is one shared student (local tools and tests); UserRuntimes gives every anonymous identity its own database. */
 export function createHttpServer(source:LearningRuntime|UserRuntimes,config:HttpServerConfig){
@@ -57,13 +60,31 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     if(!allowed.has(req.headers.origin??'')||req.headers['sec-fetch-site']==='cross-site')throw new RuntimeError('forbidden','写操作需要允许的 Origin');
     if(!req.headers['content-type']?.startsWith('application/json'))throw new RuntimeError('invalid_params','需要 application/json');
    }else if(req.method!=='GET')throw new RuntimeError('not_found');
+   const loginRequired=!!users&&!!config.requireLogin,secure=publicMode?'; Secure':'';
+   if(req.method==='POST'&&path.startsWith('/api/auth/')){
+    const body=await readBody(req,4000) as Record<string,unknown>;if(!body||typeof body!=='object'||Array.isArray(body))throw new RuntimeError('invalid_params');
+    const loginToken=cookieValue(req,'xiaon_login')??'';
+    if(path==='/api/auth/status'){const who=loginRequired?users!.identities.resolveLogin(loginToken):undefined;send({required:loginRequired,phone:who?maskPhone(who.phone):null} satisfies AuthStatus);return;}
+    if(!loginRequired)throw new RuntimeError('not_found');
+    const identities=users!.identities,sid=cookieValue(req,'xiaon_session');
+    // 登录、注册、退出都作废这个浏览器手上的旧会话，下一次 local-session 按新身份重开。
+    if(sid)localSessions.delete(sid);
+    if(path==='/api/auth/logout'){identities.logout(loginToken);res.setHeader('Set-Cookie',[`xiaon_login=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0${secure}`,`xiaon_session=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0${secure}`]);send({ok:true});return;}
+    if(path==='/api/auth/check'){send({registered:identities.isRegistered(body.phone)});return;}
+    const issued=path==='/api/auth/register'?identities.register(body.phone,body.password,cookieValue(req,'xiaon_user')??''):path==='/api/auth/login'?identities.login(body.phone,body.password):undefined;
+    if(!issued)throw new RuntimeError('not_found');
+    res.setHeader('Set-Cookie',`xiaon_login=${issued.token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=15552000${secure}`);send({phone:maskPhone(String(body.phone))});return;
+   }
    if(req.method==='POST'&&path==='/api/local-session'){
     const body=await readBody(req);if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(body).length)throw new RuntimeError('invalid_params');
     for(const[k,v]of localSessions)if(v.expires<Date.now())localSessions.delete(k);
     if(localSessions.size>=4096)throw new RuntimeError('unavailable','临时会话过多');
     // The long-lived identity cookie is the user boundary; an unknown or forged one gets a new, empty identity.
     const cookies:string[]=[];let userId='local';
-    if(users){
+    if(loginRequired){
+     const who=users!.identities.resolveLogin(cookieValue(req,'xiaon_login')??'');if(!who)throw new RuntimeError('forbidden','请先登录');userId=who.userId;
+     const own=[...localSessions].filter(([,v])=>v.userId===userId);for(const[k]of own.slice(0,Math.max(0,own.length-7)))localSessions.delete(k);
+    }else if(users){
      const known=users.identities.resolve(cookieValue(req,'xiaon_user')??'');
      if(known){userId=known;}else{const created=users.identities.create();userId=created.userId;cookies.push(`xiaon_user=${created.token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=31536000${publicMode?'; Secure':''}`);}
      const own=[...localSessions].filter(([,v])=>v.userId===userId);for(const[k]of own.slice(0,Math.max(0,own.length-7)))localSessions.delete(k);

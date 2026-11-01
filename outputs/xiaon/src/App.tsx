@@ -1,6 +1,7 @@
-import { useEffect, useReducer, useRef, useState, type ReactNode } from "react";
+import { useContext, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
 import {
   ArrowDown,
+  LogOut,
   ArrowLeft,
   ArrowRight,
   BookOpen,
@@ -38,6 +39,7 @@ import {
   X,
 } from "lucide-react";
 import { HeroArt, MapArt, Mascot, SpaceShape } from "./Art";
+import { AccountContext } from "./auth/session";
 import { explorationStatus } from "./components/learning/ExplorationMap";
 import { placeOf } from "./components/professional/ProfessionalMap";
 import { useLearning } from "./agents/useLearning";
@@ -137,6 +139,7 @@ function App() {
     } catch { setIntroError("这次没有保存好，请连接后再试。你的选择还在。"); }
     finally { setIntroSaving(false); }
   };
+  const account = useContext(AccountContext);
   const learningPages = ["chat","explore","task","growth","report","plan","today","review","memory"];
   const [s, dispatch] = useReducer(reducer, null, () => {
     try {
@@ -726,7 +729,7 @@ function App() {
         </div>
       )}
       <footer className="onboard-footer">
-        体验版 · 别输入真名和联系方式
+        体验版 · 不用填真名
       </footer>
     </div>
   );
@@ -842,7 +845,7 @@ function App() {
             )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
             <LearningStatus l={learning} />
-            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。你和小N的对话存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
+            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；{account.phone?"它跟你的手机号账号绑定，换手机登录同一个号还能接着用。":"它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。"}真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。你和小N的对话存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
             <main className={`page page-${s.page}`}>
               {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>openModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
               {/* 首页小N就是自由聊，切页只隐藏：还在等的回复回来照样接上；不再挂载旧多智能体 ChatPanel。 */}
@@ -1846,10 +1849,10 @@ function App() {
                     <div>
                       <h1>我的小小空间</h1>
                       <p>
-                        虚构体验者 · {s.grade} · {s.book}
+                        {account.phone ?? "虚构体验者"} · {s.grade} · {s.book}
                       </p>
                     </div>
-                    <Tag>本地演示</Tag>
+                    <Tag>{account.phone ? "已登录" : "本地演示"}</Tag>
                   </div>
                   <div className="settings-group">
                     {[
@@ -1916,6 +1919,18 @@ function App() {
                       <ChevronRight size={18} />
                     </button>
                   </div>
+                  {account.phone && (
+                    <div className="settings-group">
+                      <button onClick={account.logout}>
+                        <LogOut size={20} />
+                        <span>
+                          <strong>退出登录</strong>
+                          <small>{account.phone} · 记录留在账号里，换手机登录还能接着用</small>
+                        </span>
+                        <ChevronRight size={18} />
+                      </button>
+                    </div>
+                  )}
                   <div className="settings-group">
                     <button
                       onClick={() => {
