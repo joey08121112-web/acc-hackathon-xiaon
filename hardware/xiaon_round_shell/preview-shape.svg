@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620">
+  <rect width="1000" height="620" fill="#f7f4ec"/>
+  <style>
+    .part{fill:#d9e4d2;stroke:#294238;stroke-width:3}
+    .cut{fill:#f7f4ec;stroke:#294238;stroke-width:3}
+    .line{stroke:#294238;stroke-width:2;fill:none}
+    .txt{fill:#294238}
+    .small{font-size:18px}.big{font-size:26px;font-weight:700}
+  </style>
+
+  <g transform="translate(240 305)">
+    <circle r="150" class="part"/>
+    <circle r="94" class="cut"/>
+    <rect x="-85" y="-65" width="170" height="130" rx="8" class="cut"/>
+  </g>
+
+  <g transform="translate(650 210)">
+    <circle r="150" class="part"/>
+    <circle r="97" class="cut"/>
+    <circle cx="-115" cy="0" r="6" class="line"/>
+    <circle cx="115" cy="0" r="6" class="line"/>
+  </g>
+
+  <g transform="translate(650 480)">
+    <path d="M -150 0 L -150 45 Q 0 95 150 45 L 150 0 Q 0 50 -150 0 Z" class="part"/>
+    <path d="M -135 4 L -135 38 Q 0 78 135 38 L 135 4 Q 0 44 -135 4 Z" class="cut"/>
+  </g>
+
+  <line x1="88" y1="570" x2="392" y2="570" class="line"/>
+  <line x1="88" y1="560" x2="88" y2="580" class="line"/>
+  <line x1="392" y1="560" x2="392" y2="580" class="line"/>
+</svg>
