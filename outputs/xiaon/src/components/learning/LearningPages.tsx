@@ -11,7 +11,6 @@ import { ChatHistory } from './home/ChatHistory';
 import { ProfileView } from '../free-chat/ProfileView';
 // G2 第二期挂载位：professional/* 归 ChatGPT，plan/* 归 zCode（见 交付/claude/CONTRACT-PHASE2.md）。
 import { ProfessionalModeView } from '../professional/ProfessionalModeView';
-import { StarbrookGame } from '../game/StarbrookGame';
 import { ProfessionalReportView } from '../professional/ProfessionalReportView';
 import { GrowthArchive } from '../professional/GrowthArchive';
 import { MonthStageView } from '../plan/MonthStageView';
@@ -28,7 +27,7 @@ const confidenceLabels:Record<string,string>={more_sure:'更有把握',about_sam
 export function LearningStatus({l}:{l:LearningUI}){const dev=useDevMode();if(!dev)return null;return <div className="learning-status" aria-live="polite" aria-label="服务模式"><Leaf size={15}/><span>{l.mode}</span><button className="text-button" onClick={()=>swallow(l.connect())}>重新连接</button></div>;}
 export function LearningPages({l,page,navigate,onExploreDimension,safety=false,station,onStation}:{l:LearningUI;page:string;navigate:(page:string,tab?:string)=>void;onExploreDimension:(index:number)=>void;safety?:boolean;station?:string|false;onStation?:(module:string|false)=>void}){
  const dev=useDevMode();
- const [message,setMessage]=useState(''),[memoryText,setMemoryText]=useState(''),[editing,setEditing]=useState<string|null>(null),[scheduledDate,setScheduledDate]=useState(''),[reportId,setReportId]=useState(''),[planId,setPlanId]=useState(''),[preview,setPreview]=useState<{hash:string;attemptCount:number;warnings:string[]}|null>(null),[migration,setMigration]=useState(''),[retention,setRetention]=useState<MemoryRetention>('forever');
+ const [message,setMessage]=useState(''),[memoryText,setMemoryText]=useState(''),[editing,setEditing]=useState<string|null>(null),[scheduledDate,setScheduledDate]=useState(''),[reportId,setReportId]=useState(''),[planId,setPlanId]=useState(''),[preview,setPreview]=useState<{hash:string;attemptCount:number;warnings:string[]}|null>(null),[migration,setMigration]=useState(''),[retention,setRetention]=useState<MemoryRetention>('forever'),[growthTab,setGrowthTab]=useState<'profile'|'skills'|'records'>('profile');
  const v=l.view;
  if(!l.connected||!v)return <section className="info-paper"><h1>学习记录等待本地服务</h1><p>{dev?'新版记录保存在本机 SQLite。启动服务后重新连接，草稿仍在本机。':'暂时没能连接学习记录，草稿还在。请稍后重试。'}</p><button className="primary" onClick={()=>swallow(l.connect())}>重连本地服务</button></section>;
  const currentPlan=v.plans.at(-1)?.snapshot;
@@ -47,31 +46,42 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false,s
  {(page==='explore'||page==='growth')&&<>
  {headline(page==='explore'?'A SMALL WORLD TO EXPLORE':'GROW AT YOUR OWN PACE',page==='explore'?'每一种思考，都值得发现。':'每一点变化，都有来处。',page==='explore'?'不用证明什么。去几个地方，看看你怎样理解和解决问题。':'结果仅限已观察的子技能；待观察不代表能力弱。可以随时暂停。')}
  {v.paused&&page==='growth'&&!unfinishedInterview&&<div className="notice">学习已暂停，由你决定何时继续。<button className="secondary" disabled={l.busy||safety} onClick={()=>swallow(l.run('learning/start',{mode:'exploration'}))}>主动恢复本次学习</button></div>}
- {/* One map for both: the assessment lights the places up, and each place card also offers free practice (locked until the assessment is finished). */}
- {/* 星溪镇小游戏挂在专业模式地图下方：独立卡片、独立播放器，不进五维测评契约。 */}
- {page==='explore'?<><ProfessionalModeView l={l} navigate={navigate} safety={safety} onPractice={onExploreDimension} station={station} onStation={onStation}/><StarbrookGame/></>:<>
- <ProfileView/>
- {['理解','逻辑','计算','建模','空间想象'].map(dim=><section className="info-paper" key={dim}><h2>{dim}</h2>{v.assessment.skills.filter(s=>s.dimension===dim).map(s=><div className="learning-skill" key={s.id}><strong>{names[s.knowledgePointId]}</strong><span className="tag">{skillStatusLabels[s.status]}</span><p>{s.coverage}</p>{s.recentDifficulty&&<p>最近一次仍有困难，此前成功继续保留。</p>}{isGenerationKnowledgePoint(s.knowledgePointId)&&<details><summary>针对这个环节出一道新题</summary><GenerationPanel l={l} knowledgePointId={s.knowledgePointId} purpose="practice" navigate={navigate} safety={safety}/></details>}<details><summary>观察范围与待了解</summary>{s.unknowns.map((u,i)=><p className="small" key={i}>{u}</p>)}</details></div>)}</section>)}
- <ProblemList l={l} navigate={navigate}/>
- <GrowthArchive l={l} navigate={navigate}/>
- {v.progressCards.length>0&&<section className="info-paper progress-cards"><h2>进步卡</h2><p className="small muted">你确认过的学习记录，不是评分。</p>
-  {[...v.progressCards].reverse().map(c=>{const ep=c.episodeId?v.episodes.filter(e=>e.id===c.episodeId).at(-1):undefined;const helped=!!ep&&ep.helpLevelsUsed.length>0;
-   return <div className="progress-card-record" key={c.id}><small>{date(c.confirmedAt)}{ep?.studentSolvedAt?(helped?' · 提示后完成':' · 自己完成'):''}</small>
-    {([['今天的小突破',c.breakthrough],['这次有用的方法',c.method],['下次想试试',c.nextTry]] as const).map(([label,value])=><p key={label}><strong>{label}：</strong>{value??'跳过'}</p>)}
-    <p className="small">信心自评：{c.confidence?confidenceLabels[c.confidence]:'未记录'}</p>
-   </div>;})}
- </section>}
- {v.summaries.length>0&&<section className="info-paper conversation-summaries"><h2>对话小结</h2><p className="small muted">聊天观察，待专业模式确认，不是评分。</p>
-  {[...v.summaries].reverse().map(s=><details key={s.id}><summary>{date(s.createdAt)} · {s.topics.join('、')||'聊了聊'}</summary>
-   {/* 当时说了什么：对话回放（2026-10-24），原文按轮成对保存在本地服务的 chatLog 里 */}
-   {v.chatLog.filter(m=>m.sessionId===s.sessionId).map(m=><p className="chat-line" key={m.id}><strong>{m.role==='user'?'我':'小N'}</strong>{m.content}</p>)}
-   {s.observationIds.map(oid=>v.observations.find(o=>o.id===oid)).flatMap(o=>o?[o]:[]).map(o=><p key={o.id}><span className="tag">{o.dimension} · {o.sceneId?'生活话题 · ':''}待核实</span>「{o.quote}」{o.note}</p>)}
-   {s.changes.length>0&&<><h3>和上次比</h3>{s.changes.map((c,i)=><p key={i}>{c}</p>)}</>}
-   <h3>可以试试</h3>{s.planSuggestions.map((c,i)=><p key={i}>{c}</p>)}
-  </details>)}
- </section>}
- <ChatHistory l={l} navigate={navigate} includeCurrent={false} onlyWithoutSummary/>
- <div className="quick-replies"><button onClick={()=>navigate('report','成长')}>学习观察报告</button><button onClick={()=>navigate('plan','成长')}>查看我的计划</button><button onClick={()=>navigate('review','成长')}>阶段回顾</button><button onClick={()=>navigate('memory')}>我的学习记忆</button></div>
+ {/* 星溪镇小游戏已深度融合进专业模式地图第一站「理解花园（理解能力）」。 */}
+ {page==='explore'?<ProfessionalModeView l={l} navigate={navigate} safety={safety} onPractice={onExploreDimension} station={station} onStation={onStation}/>:<>
+ <div className="growth-tabs" role="tablist" aria-label="成长视图切换">
+  {([['profile','我的档案'],['skills','能力进展'],['records','报告与记录']] as const).map(([key,label])=><button key={key} type="button" role="tab" aria-selected={growthTab===key} className={growthTab===key?'active':''} onClick={()=>setGrowthTab(key)}>{label}</button>)}
+ </div>
+ {growthTab==='profile'&&<>
+  <ProfileView/>
+  <div className="growth-quick-links"><button className="secondary" onClick={()=>navigate('report','成长')}>学习观察报告</button><button className="secondary" onClick={()=>navigate('plan','成长')}>我的计划</button><button className="secondary" onClick={()=>navigate('memory')}>辅导偏好记忆</button></div>
+ </>}
+ {growthTab==='skills'&&<>
+  <div className="growth-skills-grid">
+  {['理解','逻辑','计算','建模','空间想象'].map(dim=><section className="info-paper growth-skill-card" key={dim}><h2>{dim}</h2>{v.assessment.skills.filter(s=>s.dimension===dim).map(s=><div className="learning-skill" key={s.id}><div className="growth-skill-top"><strong>{names[s.knowledgePointId]}</strong><span className="tag">{skillStatusLabels[s.status]}</span></div><p>{s.coverage}</p>{s.recentDifficulty&&<p>最近一次仍有困难，此前成功继续保留。</p>}{isGenerationKnowledgePoint(s.knowledgePointId)&&<details><summary>针对这个环节出一道新题</summary><GenerationPanel l={l} knowledgePointId={s.knowledgePointId} purpose="practice" navigate={navigate} safety={safety}/></details>}<details><summary>观察范围与待了解</summary>{s.unknowns.map((u,i)=><p className="small" key={i}>{u}</p>)}</details></div>)}</section>)}
+  </div>
+  <ProblemList l={l} navigate={navigate}/>
+ </>}
+ {growthTab==='records'&&<>
+  <GrowthArchive l={l} navigate={navigate}/>
+  {v.progressCards.length>0&&<section className="info-paper progress-cards"><h2>进步卡</h2><p className="small muted">你确认过的学习记录，不是评分。</p>
+   {[...v.progressCards].reverse().map(c=>{const ep=c.episodeId?v.episodes.filter(e=>e.id===c.episodeId).at(-1):undefined;const helped=!!ep&&ep.helpLevelsUsed.length>0;
+    return <div className="progress-card-record" key={c.id}><small>{date(c.confirmedAt)}{ep?.studentSolvedAt?(helped?' · 提示后完成':' · 自己完成'):''}</small>
+     {([['今天的小突破',c.breakthrough],['这次有用的方法',c.method],['下次想试试',c.nextTry]] as const).map(([label,value])=><p key={label}><strong>{label}：</strong>{value??'跳过'}</p>)}
+     <p className="small">信心自评：{c.confidence?confidenceLabels[c.confidence]:'未记录'}</p>
+    </div>;})}
+  </section>}
+  {v.summaries.length>0&&<section className="info-paper conversation-summaries"><h2>对话小结</h2><p className="small muted">聊天观察，待专业模式确认，不是评分。</p>
+   {[...v.summaries].reverse().map(s=><details key={s.id}><summary>{date(s.createdAt)} · {s.topics.join('、')||'聊了聊'}</summary>
+    {/* 当时说了什么：对话回放（2026-10-24），原文按轮成对保存在本地服务的 chatLog 里 */}
+    {v.chatLog.filter(m=>m.sessionId===s.sessionId).map(m=><p className="chat-line" key={m.id}><strong>{m.role==='user'?'我':'小N'}</strong>{m.content}</p>)}
+    {s.observationIds.map(oid=>v.observations.find(o=>o.id===oid)).flatMap(o=>o?[o]:[]).map(o=><p key={o.id}><span className="tag">{o.dimension} · {o.sceneId?'生活话题 · ':''}待核实</span>「{o.quote}」{o.note}</p>)}
+    {s.changes.length>0&&<><h3>和上次比</h3>{s.changes.map((c,i)=><p key={i}>{c}</p>)}</>}
+    <h3>可以试试</h3>{s.planSuggestions.map((c,i)=><p key={i}>{c}</p>)}
+   </details>)}
+  </section>}
+  <ChatHistory l={l} navigate={navigate} includeCurrent={false} onlyWithoutSummary/>
+  <div className="quick-replies"><button onClick={()=>navigate('report','成长')}>学习观察报告</button><button onClick={()=>navigate('plan','成长')}>查看我的计划</button><button onClick={()=>navigate('review','成长')}>阶段回顾</button><button onClick={()=>navigate('memory')}>我的学习记忆</button></div>
+ </>}
  </>}
  </>}
  {page==='task'&&<>

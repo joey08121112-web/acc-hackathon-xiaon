@@ -1,0 +1,568 @@
+/* 2026-11-20 整体视觉与流程精简升级：首次引导、开关控件、专业模式地图星溪镇融合、成长页与我的档案 */
+
+/* 通用现代开关 */
+.ui-switch {
+  flex: none;
+  position: relative;
+  width: 50px;
+  height: 30px;
+  padding: 3px;
+  border-radius: 999px;
+  background: #d5dcc9;
+  transition: background 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ui-switch[aria-checked='true'] {
+  background: #3e624c;
+}
+
+.ui-switch-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fffef9;
+  box-shadow: 0 2px 6px rgba(36, 56, 44, 0.22);
+  transform: translateX(0);
+  transition: transform 0.18s ease;
+}
+
+.ui-switch[aria-checked='true'] .ui-switch-thumb {
+  transform: translateX(20px);
+}
+
+/* 1. 精简单页首次引导 */
+.onboard-slim {
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at 50% 8%, rgba(215, 232, 194, 0.7) 0%, rgba(248, 247, 239, 0) 52%),
+    linear-gradient(180deg, #f4f7ec 0%, #f8f7ef 46%, #f3f2e7 100%);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+}
+
+.onboard-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(62, 98, 76, 0.09);
+  color: #3e624c;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.onboard-hero-compact {
+  text-align: center;
+  padding: 4px 8px 18px;
+}
+
+.onboard-mascot-halo {
+  width: 108px;
+  height: 108px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, #ffffff 35%, #e4efd4 100%);
+  box-shadow:
+    0 12px 28px rgba(62, 98, 76, 0.12),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.85);
+}
+
+.onboard-mascot-halo .mascot {
+  width: 88px;
+  height: 82px;
+}
+
+.onboard-hero-compact h1 {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #24382c;
+  margin: 0 0 6px;
+}
+
+.onboard-hero-compact p {
+  font-size: 0.86rem;
+  color: #637461;
+  max-width: 280px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+.onboard-card {
+  background: rgba(255, 254, 249, 0.94);
+  border: 1px solid #dfe5d4;
+  border-radius: 26px;
+  padding: 20px 18px 18px;
+  display: grid;
+  gap: 16px;
+  box-shadow:
+    0 16px 36px rgba(45, 64, 52, 0.07),
+    0 2px 8px rgba(45, 64, 52, 0.04);
+}
+
+.onboard-optional-row {
+  display: grid;
+  gap: 14px;
+}
+
+.onboard-card .field {
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #3b4f41;
+}
+
+.onboard-card input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1.5px solid #dbe2d0;
+  background: #fcfcf7;
+  font-size: 16px;
+  color: #24382c;
+}
+
+.onboard-card input:focus {
+  border-color: #3e624c;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(62, 98, 76, 0.12);
+  outline: none;
+}
+
+.onboard-grade-group {
+  display: grid;
+  gap: 8px;
+}
+
+.onboard-field-label {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #3b4f41;
+}
+
+.onboard-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.onboard-chip {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid #d7dfca;
+  background: #f6f8ef;
+  color: #485e4b;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.onboard-chip[aria-pressed='true'] {
+  background: #3e624c;
+  border-color: #3e624c;
+  color: #fffef9;
+  box-shadow: 0 4px 12px rgba(62, 98, 76, 0.22);
+}
+
+.onboard-memory-card {
+  padding: 14px;
+  border-radius: 18px;
+  background: #f4f7ec;
+  border: 1px solid #dde6cf;
+}
+
+.onboard-memory-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.onboard-memory-head strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #24382c;
+  margin-bottom: 3px;
+}
+
+.onboard-memory-head p {
+  line-height: 1.55;
+}
+
+.onboard-privacy-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: #6b7a67;
+  padding: 0 2px;
+}
+
+.onboard-privacy-note svg {
+  margin-top: 2px;
+  color: #5a7b58;
+}
+
+.onboard-start-btn {
+  min-height: 50px;
+  border-radius: 16px;
+  font-size: 0.96rem;
+  font-weight: 600;
+  box-shadow: 0 10px 22px rgba(62, 98, 76, 0.24);
+}
+
+/* 2. 专业模式地图 × 星溪镇视觉深度融合 */
+.professional {
+  box-shadow: 0 10px 28px rgba(45, 64, 52, 0.06);
+}
+
+.professional-map .map-node-starbrook .node-icon {
+  background: linear-gradient(145deg, #d7ecc1 0%, #bfdca8 100%) !important;
+  color: #264a34;
+  border-color: #fff9e6;
+  box-shadow:
+    0 6px 0 rgba(62, 98, 76, 0.2),
+    0 10px 20px rgba(62, 98, 76, 0.2);
+}
+
+.professional-map .map-node-starbrook[data-state='current'] .node-icon {
+  outline: 3px solid #d5a648;
+  outline-offset: 3px;
+}
+
+.node-game-dot {
+  position: absolute;
+  right: -6px;
+  top: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e7be62 0%, #c89535 100%);
+  color: #1f2e22;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  border: 2px solid #f2f2e6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+}
+
+.map-node-game-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #2e4f3c;
+  color: #f6df9e;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
+.professional-starbrook-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #edf4e1 0%, #f8f1dc 100%);
+  border: 1px solid #d7e2c3;
+  color: #2e4c39;
+  font-size: 0.83rem;
+  font-weight: 500;
+}
+
+.professional-starbrook-banner span {
+  flex: 1;
+  min-width: 0;
+}
+
+.professional-starbrook-banner .text-button {
+  min-height: 30px;
+  font-size: 0.8rem;
+  color: #3e624c;
+  font-weight: 600;
+}
+
+/* 3. 成长页分段标签与清爽布局 */
+.growth-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 5px;
+  margin: 4px 0 18px;
+  border-radius: 18px;
+  background: #e9ede0;
+  border: 1px solid #dce2d0;
+}
+
+.growth-tabs button {
+  min-height: 40px;
+  border-radius: 13px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: #5b6d58;
+  transition: background 0.16s, color 0.16s, box-shadow 0.16s;
+}
+
+.growth-tabs button.active {
+  background: #fffef9;
+  color: #253d2e;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(45, 64, 52, 0.08);
+}
+
+.growth-quick-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0 22px;
+}
+
+.growth-quick-links button {
+  min-height: 42px;
+  padding: 6px 8px;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.growth-skills-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.growth-skill-card {
+  margin: 0;
+  padding: 16px;
+  border-radius: 20px;
+}
+
+.growth-skill-card h2 {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  color: #294132;
+}
+
+.growth-skill-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* 4. 个人档案卡片化重构 */
+.profile-modern {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-hero-card {
+  padding: 18px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #f3f8ea 0%, #fffef8 60%, #f6f2e2 100%);
+  border: 1px solid #dce5ce;
+  box-shadow: 0 12px 26px rgba(45, 64, 52, 0.06);
+}
+
+.profile-hero-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-avatar-badge {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #4b775b 0%, #365943 100%);
+  color: #fffef9;
+  box-shadow: 0 6px 14px rgba(54, 89, 67, 0.24);
+}
+
+.profile-hero-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-hero-meta h2 {
+  margin: 0;
+  font-size: 1.18rem;
+  color: #22362a;
+}
+
+.profile-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.profile-hero-tags span {
+  font-size: 0.74rem;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(62, 98, 76, 0.1);
+  color: #3e624c;
+  font-weight: 500;
+}
+
+.profile-edit-pill {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #d7e0c9;
+  color: #3b5745;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.profile-hero-desc {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #647561;
+}
+
+.profile-groups-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.profile-group-card {
+  padding: 16px;
+  border-radius: 20px;
+  background: #fffef9;
+  border: 1px solid #e1e6d7;
+  box-shadow: 0 4px 14px rgba(45, 64, 52, 0.04);
+}
+
+.profile-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.profile-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-group-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #edf3e2;
+  color: #3e624c;
+}
+
+.profile-group-card h3 {
+  margin: 0;
+  font-size: 0.94rem;
+  color: #253b2e;
+}
+
+.profile-group-count {
+  font-size: 0.72rem;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #eef2e5;
+  color: #5b6e59;
+  font-weight: 600;
+}
+
+.profile-add-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #f3f6ec;
+  color: #3e624c;
+  font-size: 0.76rem;
+  font-weight: 500;
+}
+
+.profile-add-pill:hover {
+  background: #e6eed8;
+}
+
+.profile-empty-hint {
+  line-height: 1.55;
+}
+
+.profile-chip-game {
+  background: linear-gradient(135deg, #ecf5df 0%, #f9efd6 100%);
+  border-color: #d6c896;
+  color: #2e4832;
+  font-weight: 500;
+}
+
+.profile-chip-game svg {
+  color: #8f6a20;
+}
+
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-switch-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 16px;
+  border-radius: 20px;
+  background: #f5f7ee;
+  border: 1px solid #dfe5d4;
+}
+
+.profile-switch-card strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #263c2f;
+}
+
+.profile-switch-card small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #6b7a67;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-switch,
+  .ui-switch-thumb {
+    transition: none;
+  }
+}

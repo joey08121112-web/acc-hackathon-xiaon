@@ -1,23 +1,477 @@
-/* 星溪镇小游戏（所有者：zCode）：入口卡片 + 全屏播放器。样式只挂 starbrook-* 前缀，不碰其他模块。 */
-.starbrook-card { margin: 20px 0 28px; padding: 20px; border: 1px solid #d9dfcd; border-radius: 22px; background: #fffdf5; overflow-wrap: anywhere; }
-.starbrook-head { display: flex; gap: 12px; align-items: flex-start; }
-.starbrook-icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: #3e624c; color: #fffdf5; }
-.starbrook-card h3 { margin: 2px 0 6px; font-size: 1.08rem; line-height: 1.5; font-family: var(--serif); }
-.starbrook-card p { margin: 0; line-height: 1.7; }
-.starbrook-card button { min-height: 44px; touch-action: manipulation; }
-.starbrook-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
-.starbrook-actions .small { flex: 1 1 220px; }
-.starbrook-card .notice { margin-top: 12px; }
-.starbrook-card .notice .text-button { display: inline-flex; min-height: 0; margin-left: 8px; padding: 2px 0; font-size: .8rem; }
-.starbrook-overlay { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: #0f1d16; }
-.starbrook-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 8px 12px; padding-top: calc(8px + env(safe-area-inset-top, 0px)); color: #f2f4ea; background: #17281e; border-bottom: 1px solid #2c4433; }
-.starbrook-bar strong { font-size: .95rem; }
-.starbrook-back { color: #cfe0c6; }
-.starbrook-hint { margin-left: auto; font-size: .78rem; color: #9db294; }
-.starbrook-overlay iframe { flex: 1; width: 100%; border: 0; background: #000; }
-/* 章节完成评价：叠在游戏画面底部，可滚动，不打断游玩（返回手势/关闭按钮照常）。 */
-.starbrook-report { flex: none; max-height: 46%; overflow: auto; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)); color: #f2f4ea; background: #17281e; border-top: 1px solid #2c4433; }
-.starbrook-report strong { font-size: .9rem; color: #f0d18c; }
-.starbrook-report .small { margin: 4px 0 6px; font-size: .78rem; color: #9db294; }
-.starbrook-report-text { font-size: .82rem; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
-@media (max-width: 640px) { .starbrook-hint { flex-basis: 100%; margin-left: 0; } }
+/* 星溪镇 × 小N「理解能力」深度融合播放器 */
+.starbrook-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  display: flex;
+  flex-direction: column;
+  background: #0c1a14;
+  color: #f3f5ec;
+}
+
+.starbrook-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: calc(8px + env(safe-area-inset-top, 0px)) 12px 8px;
+  background: rgba(17, 34, 26, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(203, 224, 190, 0.14);
+  z-index: 4;
+}
+
+.starbrook-nav-btn,
+.starbrook-hud-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 36px;
+  padding: 0 11px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #dfead6;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.starbrook-nav-btn:hover,
+.starbrook-hud-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.starbrook-hud-btn[aria-expanded='true'] {
+  background: #f0d18c;
+  color: #1c2e22;
+  border-color: transparent;
+}
+
+.starbrook-hud-btn.ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #b4c8ae;
+}
+
+.starbrook-title-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.86rem;
+  color: #f4ebd0;
+}
+
+.starbrook-title-pill strong {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.starbrook-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.starbrook-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0a1410;
+}
+
+.starbrook-stage iframe {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0a1410;
+}
+
+/* 加载故事幕布：温暖暮林氛围，替代冰冷黑屏 */
+.starbrook-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(240, 209, 140, 0.16) 0%, transparent 40%),
+    radial-gradient(circle at 80% 78%, rgba(126, 179, 132, 0.2) 0%, transparent 45%),
+    linear-gradient(165deg, #0f231a 0%, #163024 52%, #0c1914 100%);
+}
+
+.starbrook-curtain-inner {
+  width: min(460px, 100%);
+  text-align: center;
+  padding: 24px 20px;
+  border-radius: 26px;
+  background: rgba(20, 41, 31, 0.78);
+  border: 1px solid rgba(226, 238, 212, 0.16);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+}
+
+.starbrook-curtain-mascot {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(247, 232, 187, 0.28) 0%, rgba(154, 198, 152, 0.14) 70%, transparent 100%);
+  box-shadow: 0 0 0 1px rgba(240, 209, 140, 0.25);
+}
+
+.starbrook-curtain-mascot .mascot {
+  width: 78px;
+  height: 74px;
+}
+
+.starbrook-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(240, 209, 140, 0.14);
+  color: #f0d18c;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.starbrook-curtain h2 {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  margin: 10px 0 8px;
+  color: #faf8ee;
+}
+
+.starbrook-curtain-lead {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: #c7d8c3;
+  margin: 0 auto 16px;
+}
+
+.starbrook-quest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.starbrook-quest-grid > div {
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  display: grid;
+  gap: 3px;
+  color: #f0d18c;
+}
+
+.starbrook-quest-grid strong {
+  font-size: 0.78rem;
+  color: #f5f7ee;
+}
+
+.starbrook-quest-grid span {
+  font-size: 0.7rem;
+  line-height: 1.45;
+  color: #a9bea5;
+}
+
+.starbrook-progress-track {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.starbrook-progress-fill {
+  width: 42%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7fb084, #f0d18c);
+  animation: starbrook-loading 1.6s ease-in-out infinite;
+}
+
+@keyframes starbrook-loading {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(260%); }
+}
+
+.starbrook-control-hint {
+  font-size: 0.75rem;
+  color: #9cb497;
+  line-height: 1.6;
+}
+
+.starbrook-skip-btn {
+  margin-top: 12px;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #dfead6;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.starbrook-missing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+/* 小N 伴游锦囊浮层 */
+.starbrook-tips-drawer {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: min(340px, calc(100% - 24px));
+  z-index: 5;
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(20, 40, 30, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(240, 209, 140, 0.28);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
+}
+
+.starbrook-tips-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.starbrook-tips-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.84rem;
+  color: #f0d18c;
+}
+
+.starbrook-icon-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #c2d4be;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.starbrook-tips-list {
+  display: grid;
+  gap: 8px;
+}
+
+.starbrook-tip-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 9px 10px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.starbrook-tip-icon {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: rgba(240, 209, 140, 0.16);
+  color: #f0d18c;
+}
+
+.starbrook-tip-item strong {
+  display: block;
+  font-size: 0.8rem;
+  color: #f5f7ee;
+  margin-bottom: 2px;
+}
+
+.starbrook-tip-item p {
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: #bfd1bc;
+}
+
+.starbrook-tips-foot {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.71rem;
+  color: #97af93;
+}
+
+/* 通关评价抽屉 */
+.starbrook-report {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  max-height: 56%;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(18, 36, 27, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(240, 209, 140, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  overflow-y: auto;
+}
+
+.starbrook-report-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.starbrook-report-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #f0d18c;
+}
+
+.starbrook-report-title strong {
+  display: block;
+  font-size: 0.94rem;
+  color: #faf6e8;
+}
+
+.starbrook-save-status {
+  display: block;
+  font-size: 0.74rem;
+  color: #a9c4a2;
+  margin-top: 2px;
+}
+
+.starbrook-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.starbrook-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  background: rgba(255, 255, 255, 0.09);
+  color: #e4efde;
+}
+
+.starbrook-badge.gold {
+  background: rgba(240, 209, 140, 0.2);
+  color: #f6dc9b;
+}
+
+.starbrook-report-text {
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.83rem;
+  line-height: 1.75;
+  color: #ecf2e7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.starbrook-report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.starbrook-gold-btn {
+  flex: 1 1 180px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #e7c272 0%, #d8ac56 100%);
+  color: #1b2c20;
+  font-weight: 600;
+  font-size: 0.86rem;
+}
+
+.starbrook-outline-btn {
+  flex: 1 1 160px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e9f2e4;
+  font-size: 0.85rem;
+}
+
+.starbrook-report-fab {
+  position: absolute;
+  right: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 6;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e7c272;
+  color: #1b2c20;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 460px) {
+  .starbrook-quest-grid {
+    grid-template-columns: 1fr;
+  }
+  .starbrook-title-pill strong {
+    font-size: 0.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .starbrook-progress-fill {
+    animation: none;
+    width: 65%;
+  }
+}
