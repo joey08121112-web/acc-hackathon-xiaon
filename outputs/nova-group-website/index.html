@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      const saved = localStorage.getItem('color-scheme');
+      if (saved === 'light' || saved === 'dark') {
+        document.querySelector('meta[name="color-scheme"]').content = saved;
+      }
+    } catch {}
+  </script>
+  <title>NOVA 集团 — 让每一次思考，都留下看得见的生长</title>
+  <meta name="description" content="NOVA 教育科技集团官网：面向青少年自主学习与认知发展，构建学伴小N语音伴学、星溪五维探索世界、桌面硬件终端与受控多 Agent 教育技术生态。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700;900&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">跳至正文内容</a>
+
+  <!-- 共享 SVG 图标定义（包含品牌徽标与学伴小N形象） -->
+  <svg class="svg-defs" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="xiaon-body-grad" x1="0" y1="0" x2="0.8" y2="1">
+        <stop offset="0%" stop-color="#e2edc9"/>
+        <stop offset="52%" stop-color="#bed49f"/>
+        <stop offset="100%" stop-color="#83a871"/>
+      </linearGradient>
+      <radialGradient id="xiaon-glow-grad">
+        <stop offset="0%" stop-color="#f6fae6" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#e4efce" stop-opacity="0"/>
+      </radialGradient>
+      <g id="xiaon-mascot">
+        <path d="M149 70C124 39 137 19 146 17c4 23 20 22 20 51" fill="#587c4b"/>
+        <path d="M157 66C149 33 173 14 198 21c-6 29-20 44-41 45" fill="#88a86f"/>
+        <path d="M159 59l27-29" stroke="#b9cc9b" stroke-width="2"/>
+        <path d="M91 117C69 144 67 175 49 182c-17 10-13 26 5 28 18 1 36-19 44-32" fill="url(#xiaon-body-grad)" stroke="#83a76e" stroke-width="1.4"/>
+        <path d="M226 119c18 19 27 49 43 54 18 5 22 24 5 29-17 6-43-13-54-29" fill="url(#xiaon-body-grad)" stroke="#83a76e" stroke-width="1.4"/>
+        <path d="M80 178C69 122 85 74 135 63c39-9 88 6 102 52 11 37-6 70-5 93 1 22-13 47-32 48-19 1-22-23-39-23-17 0-23 26-43 23-23-2-28-24-29-45Z" fill="url(#xiaon-body-grad)" stroke="#86a76f" stroke-width="1.5"/>
+        <ellipse cx="137" cy="112" rx="65" ry="49" fill="url(#xiaon-glow-grad)"/>
+        <path d="M113 84c-17 8-25 22-25 37" fill="none" stroke="#f0f5df" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+        <ellipse cx="127" cy="139" rx="5" ry="8" fill="#304932"/>
+        <ellipse cx="183" cy="139" rx="5" ry="8" fill="#304932"/>
+        <circle cx="129" cy="136" r="1.7" fill="#ffffff"/>
+        <circle cx="185" cy="136" r="1.7" fill="#ffffff"/>
+        <ellipse cx="109" cy="155" rx="12" ry="6" fill="#d9a88c" opacity="0.58"/>
+        <ellipse cx="199" cy="155" rx="12" ry="6" fill="#d9a88c" opacity="0.58"/>
+        <path d="M147 157q9 10 18 0" fill="none" stroke="#446043" stroke-width="3" stroke-linecap="round"/>
+        <path d="M141 197v-17l28 22v-18" stroke="#f4f8e5" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+        <path d="M97 219c7 13 14 17 23 15M201 234c10-3 17-9 20-19" stroke="#74965e" stroke-width="2" fill="none" opacity="0.6"/>
+      </g>
+      <g id="nova-mark">
+        <rect x="2" y="2" width="36" height="36" rx="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M11 28V12l18 16V12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M29 6.5l1.1 2.9 2.9 1.1-2.9 1.1-1.1 2.9-1.1-2.9-2.9-1.1 2.9-1.1z" fill="var(--gold)"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- 顶栏导航 -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="NOVA 教育科技集团首页">
+        <svg class="brand-mark" viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
+          <use href="#nova-mark"/>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">NOVA</span>
+          <span class="brand-sub">EDUCATION TECH</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="主导航">
+        <a href="#philosophy">使命理念</a>
+        <a href="#ecosystem">业务矩阵</a>
+        <a href="#world">五维世界</a>
+        <a href="#architecture">技术与安全</a>
+        <a href="#research">研究与路线</a>
+        <a href="#partnerships">合作联系</a>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="切换浅色或深色外观">
+          <span class="theme-option theme-to-dark">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+            </svg>
+            <span class="visually-hidden">切换到深色模式</span>
+          </span>
+          <span class="theme-option theme-to-light">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+            <span class="visually-hidden">切换到浅色模式</span>
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-primary btn-sm header-cta" data-open-contact data-partner-preset="学校小范围试点">
+          预约体验与合作
+        </button>
+
+        <button type="button" class="menu-trigger" id="drawer-open" aria-label="打开导航菜单" aria-expanded="false" aria-controls="mobile-drawer">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 移动端原生 <dialog> 抽屉导航 -->
+  <dialog class="nav-drawer" id="mobile-drawer" aria-label="移动端主导航">
+    <div class="drawer-scroller">
+      <div class="drawer-sheet">
+        <div class="drawer-head">
+          <span class="brand">
+            <svg class="brand-mark" viewBox="0 0 40 40" width="32" height="32" aria-hidden="true">
+              <use href="#nova-mark"/>
+            </svg>
+            <span class="brand-text">
+              <span class="brand-name">NOVA</span>
+              <span class="brand-sub">EDUCATION TECH</span>
+            </span>
+          </span>
+          <button type="button" class="icon-close" id="drawer-close" aria-label="关闭导航菜单" autofocus>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+          </button>
+        </div>
+
+        <nav class="drawer-links" aria-label="移动端页面目录">
+          <a href="#philosophy"><span>01</span>使命理念</a>
+          <a href="#ecosystem"><span>02</span>四大业务矩阵</a>
+          <a href="#world"><span>03</span>五维探索世界</a>
+          <a href="#architecture"><span>04</span>技术与安全底座</a>
+          <a href="#research"><span>05</span>教育研究与路线</a>
+          <a href="#partnerships"><span>06</span>合作与联系</a>
+        </nav>
+
+        <div class="drawer-foot">
+          <button type="button" class="btn btn-primary btn-block" data-open-contact data-partner-preset="学校小范围试点">
+            预约体验与合作
+          </button>
+          <p class="drawer-note">当前为研究型原型与软硬一体演进阶段</p>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <main id="main-content">
+    <!-- Hero 品牌宣言 -->
+    <section class="hero grid-paper" id="top">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            NOVA EDUCATION TECHNOLOGY · 教育科技生态
+          </p>
+          <h1 class="hero-title">
+            让每一次思考，<br>
+            都留下<span class="title-accent">看得见的生长</span>
+          </h1>
+          <p class="hero-lead">
+            NOVA 聚焦青少年自主学习与认知观测，从初中数学切入，以<strong>学伴小N</strong>为核心，串联语音伴学、星溪五维探索世界、桌面硬件终端实验室与受控多 Agent 引擎——不替孩子交出答案，而是陪他们把卡住的那一步真正想明白。
+          </p>
+          <div class="hero-actions">
+            <button type="button" class="btn btn-primary" data-open-contact data-partner-preset="学校小范围试点">
+              预约演示与合作
+            </button>
+            <a class="btn btn-outline" href="#ecosystem">探索业务矩阵</a>
+            <button type="button" class="btn btn-quiet" id="open-preview-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"/>
+                <polygon points="10,8.5 16,12 10,15.5" fill="currentColor" stroke="none"/>
+              </svg>
+              查看演示概览
+            </button>
+          </div>
+          <p class="hero-footnote">
+            ACC 黑客松孵化 · 研究型产品与开源软硬原型 · 站内学习示例均采用合成演示材料
+          </p>
+        </div>
+
+        <!-- 原创精雕 SVG 生态轨道图 -->
+        <div class="hero-visual">
+          <figure class="orbit-frame">
+            <svg class="orbit-svg" viewBox="0 0 540 540" role="img" aria-labelledby="orbit-title orbit-desc">
+              <title id="orbit-title">NOVA 教育科技生态轨道图</title>
+              <desc id="orbit-desc">以 NOVA 与学伴小N为核心，通过精密几何轨道串联学伴小N语音伴学、五维探索世界、硬件终端实验室与家长守护四个生态节点。</desc>
+              <defs>
+                <radialGradient id="orbit-aura" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="var(--gold)" stop-opacity="0.16"/>
+                  <stop offset="55%" stop-color="var(--brand)" stop-opacity="0.08"/>
+                  <stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <!-- 背景星辉光晕与坐标刻度 -->
+              <circle cx="270" cy="270" r="245" fill="url(#orbit-aura)"/>
+              <g stroke="var(--line-strong)" stroke-width="1" fill="none" opacity="0.72">
+                <line x1="270" y1="24" x2="270" y2="516" stroke-dasharray="3 6"/>
+                <line x1="24" y1="270" x2="516" y2="270" stroke-dasharray="3 6"/>
+                <line x1="96" y1="96" x2="444" y2="444" opacity="0.45"/>
+                <line x1="444" y1="96" x2="96" y2="444" opacity="0.45"/>
+              </g>
+
+              <!-- 外圈精密刻度环 -->
+              <circle cx="270" cy="270" r="228" fill="none" stroke="var(--line-strong)" stroke-width="1"/>
+              <circle cx="270" cy="270" r="218" fill="none" stroke="var(--brand)" stroke-width="1" stroke-dasharray="2 10" opacity="0.55" class="orbit-spin-slow"/>
+              <circle cx="270" cy="270" r="168" fill="none" stroke="var(--brand)" stroke-width="1.25" opacity="0.7"/>
+              <circle cx="270" cy="270" r="116" fill="none" stroke="var(--gold)" stroke-width="1" stroke-dasharray="5 5" opacity="0.78" class="orbit-spin-reverse"/>
+
+              <!-- 金色星轨四象限连接弧 -->
+              <path d="M 152 152 A 168 168 0 0 1 388 152" fill="none" stroke="var(--gold)" stroke-width="1.8" opacity="0.85"/>
+              <path d="M 388 388 A 168 168 0 0 1 152 388" fill="none" stroke="var(--brand)" stroke-width="1.8" opacity="0.85"/>
+
+              <!-- 核心节点：NOVA × 小N -->
+              <g transform="translate(270 270)">
+                <circle r="76" fill="var(--surface)" stroke="var(--brand)" stroke-width="1.5"/>
+                <circle r="68" fill="none" stroke="var(--gold)" stroke-width="1" stroke-dasharray="2 4" opacity="0.85"/>
+                <g transform="translate(-44 -56) scale(0.285)">
+                  <use href="#xiaon-mascot"/>
+                </g>
+                <text x="0" y="36" text-anchor="middle" fill="var(--ink)" font-family="Noto Serif SC, Songti SC, serif" font-weight="900" font-size="16" letter-spacing="0.18em">NOVA</text>
+                <text x="0" y="53" text-anchor="middle" fill="var(--muted)" font-family="ui-monospace, SF Mono, monospace" font-size="9.5" letter-spacing="0.12em">ECOSYSTEM CORE</text>
+              </g>
+
+              <!-- 节点 01：左上 学伴小N -->
+              <g transform="translate(106 106)">
+                <circle r="58" fill="var(--paper)" stroke="var(--brand)" stroke-width="1.5"/>
+                <circle cx="41" cy="-41" r="5" fill="var(--gold)"/>
+                <text x="0" y="-14" text-anchor="middle" fill="var(--gold-ink)" font-family="ui-monospace, SF Mono, monospace" font-size="9.5" font-weight="600">01 · COMPANION</text>
+                <text x="0" y="6" text-anchor="middle" fill="var(--ink)" font-family="Noto Serif SC, Songti SC, serif" font-weight="700" font-size="14.5">学伴小N</text>
+                <text x="0" y="24" text-anchor="middle" fill="var(--muted)" font-size="9.8">语音自由聊 · 步步追问</text>
+              </g>
+
+              <!-- 节点 02：右上 五维探索世界 -->
+              <g transform="translate(434 106)">
+                <circle r="58" fill="var(--paper)" stroke="var(--brand)" stroke-width="1.5"/>
+                <circle cx="-41" cy="-41" r="5" fill="var(--gold)"/>
+                <text x="0" y="-14" text-anchor="middle" fill="var(--gold-ink)" font-family="ui-monospace, SF Mono, monospace" font-size="9.5" font-weight="600">02 · ATLAS</text>
+                <text x="0" y="6" text-anchor="middle" fill="var(--ink)" font-family="Noto Serif SC, Songti SC, serif" font-weight="700" font-size="14.5">五维世界</text>
+                <text x="0" y="24" text-anchor="middle" fill="var(--muted)" font-size="9.8">星溪镇 · 空间山丘</text>
+              </g>
+
+              <!-- 节点 03：左下 硬件实验室 -->
+              <g transform="translate(106 434)">
+                <circle r="58" fill="var(--paper)" stroke="var(--brand)" stroke-width="1.5"/>
+                <circle cx="41" cy="41" r="5" fill="var(--sprout)"/>
+                <text x="0" y="-14" text-anchor="middle" fill="var(--brand)" font-family="ui-monospace, SF Mono, monospace" font-size="9.5" font-weight="600">03 · HARDWARE</text>
+                <text x="0" y="6" text-anchor="middle" fill="var(--ink)" font-family="Noto Serif SC, Songti SC, serif" font-weight="700" font-size="14.5">硬件终端</text>
+                <text x="0" y="24" text-anchor="middle" fill="var(--muted)" font-size="9.8">CoreS3 · 96mm 原型</text>
+              </g>
+
+              <!-- 节点 04：右下 家长守护 -->
+              <g transform="translate(434 434)">
+                <circle r="58" fill="var(--paper)" stroke="var(--brand)" stroke-width="1.5"/>
+                <circle cx="-41" cy="41" r="5" fill="var(--sprout)"/>
+                <text x="0" y="-14" text-anchor="middle" fill="var(--brand)" font-family="ui-monospace, SF Mono, monospace" font-size="9.5" font-weight="600">04 · GUARDIAN</text>
+                <text x="0" y="6" text-anchor="middle" fill="var(--ink)" font-family="Noto Serif SC, Songti SC, serif" font-weight="700" font-size="14.5">家长守护</text>
+                <text x="0" y="24" text-anchor="middle" fill="var(--muted)" font-size="9.8">独立隔离 · 清晰边界</text>
+              </g>
+
+              <!-- 轨道星标点缀 -->
+              <g fill="var(--gold)">
+                <circle cx="270" cy="42" r="3.5"/>
+                <circle cx="498" cy="270" r="3.5"/>
+                <circle cx="270" cy="498" r="3.5"/>
+                <circle cx="42" cy="270" r="3.5"/>
+              </g>
+            </svg>
+            <figcaption class="orbit-caption">
+              <span>NOVA ECOSYSTEM MAP</span>
+              <span>软件 · 互动世界 · 桌面硬件 · 工程护栏</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- 核心定位锚点条 -->
+      <div class="container">
+        <dl class="anchor-strip" aria-label="NOVA 核心定位锚点">
+          <div class="anchor-item">
+            <dt>起步学段</dt>
+            <dd>
+              <strong>初中数学起步</strong>
+              <span>聚焦去括号负号、合并同类项等真实卡点</span>
+            </dd>
+          </div>
+          <div class="anchor-item">
+            <dt>评估视角</dt>
+            <dd>
+              <strong>五维认知观测</strong>
+              <span>理解 · 逻辑 · 计算 · 建模 · 空间想象</span>
+            </dd>
+          </div>
+          <div class="anchor-item">
+            <dt>工程架构</dt>
+            <dd>
+              <strong>受控四角色 Agent</strong>
+              <span>程序管算术与流程，模型只在边界内分析</span>
+            </dd>
+          </div>
+          <div class="anchor-item">
+            <dt>形态探索</dt>
+            <dd>
+              <strong>软硬一体探索</strong>
+              <span>移动网页端 × 96mm 参数化桌面语音终端</span>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 板块 01：集团理念与三大承诺 -->
+    <section class="section" id="philosophy">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">01 / 使命与理念 · PHILOSOPHY</p>
+          <h2>面向青少年重新设计 AI 学习的节奏、主动权与证据</h2>
+          <p class="section-lead">
+            通用 AI 工具多为成人效率而生，往往一步给出完整解答。NOVA 认为，对正在建立思维习惯的青少年而言，保护思考的“留白”与记录真实的“跨步”，比立刻得到答案更重要。
+          </p>
+        </div>
+
+        <div class="pillars-grid">
+          <article class="pillar-card">
+            <span class="pillar-num">01</span>
+            <h3>自主节奏</h3>
+            <p>学习计划永远先是一份草案，分量与时间由学生拍板——可以<strong>接受、减量、改期或暂不开始</strong>。学累了随时说「今天先休息」，没有连续打卡的焦虑；个人记忆由学生授权，可随时更正、删除或关闭。</p>
+          </article>
+          <article class="pillar-card">
+            <span class="pillar-num">02</span>
+            <h3>先思后答</h3>
+            <p>面对笼统的「我不会」，小N 先接住情绪，再帮学生把模糊困惑拆成具体卡点。进入解题后不直接抛答案，而是<strong>一次只追问一小步</strong>，直到规律由学生亲口说出来。</p>
+          </article>
+          <article class="pillar-card">
+            <span class="pillar-num">03</span>
+            <h3>证据可见</h3>
+            <p>进步不靠模糊夸奖，而靠可追溯的作答事实。系统由程序判对错并保存原始尝试与提示暴露记录，复习优先调度未见新题，让每一次独立跨越都有据可查。</p>
+          </article>
+        </div>
+
+        <!-- 三种真实做对记录 -->
+        <div class="evidence-band">
+          <div class="evidence-header">
+            <div>
+              <p class="mono-tag">EVIDENCE TAXONOMY · 真实成长刻度</p>
+              <h3>把三种「做对」分开记录，不把看过提示混同为已经掌握</h3>
+            </div>
+            <p class="evidence-note">同日反复刷题不会直接判定为“跨次稳定”；稳定状态需经多道未见新题、跨日期与跨场次检验。</p>
+          </div>
+          <ol class="evidence-steps">
+            <li class="evidence-step">
+              <span class="step-badge">记录层级 01</span>
+              <h4>提示后做对</h4>
+              <p>借助分级提示想通当前步骤，系统如实记录提交前看过几条提示，不虚报独立程度。</p>
+            </li>
+            <li class="evidence-step">
+              <span class="step-badge">记录层级 02</span>
+              <h4>原题改对</h4>
+              <p>同一道题初次出错后，经过小N 一步步追问，自己找出符号或推理疏漏并改对。</p>
+            </li>
+            <li class="evidence-step evidence-step-highlight">
+              <span class="step-badge">记录层级 03</span>
+              <h4>新题独立做对</h4>
+              <p>在后续练习或到期复习中，面对未见过的同类新题，零提示、一次独立作答正确。</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 02：四大业务矩阵（可访问 Tab 面板） -->
+    <section class="section section-tinted" id="ecosystem">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">02 / 业务矩阵 · BUSINESS ECOSYSTEM</p>
+          <h2>四大业务支柱，构筑从对话到桌面的伴学闭环</h2>
+          <p class="section-lead">
+            围绕青少年日常学习的真实场景，NOVA 将软件对话、互动探索世界、桌面硬件终端与家长透明守护有机联动。
+          </p>
+        </div>
+
+        <div class="matrix-tabs" id="ecosystem-tabs">
+          <div class="tablist-wrap">
+            <div class="tablist" role="tablist" focusgroup="tablist nomemory" aria-label="NOVA 四大业务矩阵">
+              <button type="button" role="tab" id="tab-xiaon" aria-selected="true" tabindex="0" focusgroupstart>
+                <span class="tab-index">01</span>
+                <span class="tab-label">学伴小N · 语音伴学</span>
+              </button>
+              <button type="button" role="tab" id="tab-world" aria-selected="false" tabindex="-1">
+                <span class="tab-index">02</span>
+                <span class="tab-label">星溪互动世界</span>
+              </button>
+              <button type="button" role="tab" id="tab-hardware" aria-selected="false" tabindex="-1">
+                <span class="tab-index">03</span>
+                <span class="tab-label">硬件实验室</span>
+              </button>
+              <button type="button" role="tab" id="tab-guardian" aria-selected="false" tabindex="-1">
+                <span class="tab-index">04</span>
+                <span class="tab-label">家长守护与隐私</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="tabpanels-stage">
+            <!-- Panel 1: 学伴小N -->
+            <div class="matrix-panel" role="tabpanel" id="panel-xiaon" aria-labelledby="tab-xiaon" tabindex="0">
+              <div class="matrix-panel-inner">
+                <div class="panel-copy">
+                  <p class="mono-tag">COMPANION AI · 移动端语音伴学</p>
+                  <h3>先听你说，再一步步把卡住的那一步问明白</h3>
+                  <p>
+                    打开学伴小N 首页即可进入自然语音自由聊。按住小N 下拉可平滑收起成顶部语音栏，收起展开与回看历史均不中断收音或播报；对话里的值得记住的小事，会整理进「我的档案」，始终由学生决定是否保留。
+                  </p>
+                  <ul class="feature-list">
+                    <li><strong>语音自由聊 + 档案整理</strong>：支持说话与打字自由切换，声音口型随音频包络自然响应。</li>
+                    <li><strong>记题卡确认机制</strong>：把口语描述整理成结构化错题卡，学生确认后才记下。</li>
+                    <li><strong>步步追问不抛答案</strong>：如化简 <code>3 − (x − 2)</code>，先问负号管着括号里的谁，再让学生自己补出变号步骤。</li>
+                  </ul>
+                  <div class="panel-actions">
+                    <button type="button" class="btn btn-primary btn-sm" data-open-contact data-partner-preset="学校小范围试点">申请体验演示</button>
+                    <a class="btn btn-outline btn-sm" href="https://github.com/joey08121112-web/acc-hackathon-xiaon" target="_blank" rel="noopener noreferrer">查看开源仓库</a>
+                  </div>
+                </div>
+
+                <div class="panel-media phones-showcase">
+                  <figure class="phone-card">
+                    <div class="phone-bezel">
+                      <img src="assets/screen-start.jpg" width="476" height="960" alt="学伴小N 记题卡界面：展示化简 3-(x-2) 的题目、我的作答、卡在哪一步，下方提供记下、改一下、不用了三个确认按钮" loading="lazy">
+                    </div>
+                    <figcaption>记题卡：学生确认了才记下</figcaption>
+                  </figure>
+                  <figure class="phone-card phone-card-offset">
+                    <div class="phone-bezel">
+                      <img src="assets/screen-record.jpg" width="476" height="960" alt="学伴小N 步步追问界面：小N肯定学生对负号管到 x 的判断，再追问括号里的 2 该如何变号" loading="lazy">
+                    </div>
+                    <figcaption>一次只问一步，答案由自己说出</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 2: 星溪互动世界 -->
+            <div class="matrix-panel" role="tabpanel" id="panel-world" aria-labelledby="tab-world" hidden="until-found">
+              <div class="matrix-panel-inner">
+                <div class="panel-copy">
+                  <p class="mono-tag">INTERACTIVE ATLAS · 游戏化认知探索</p>
+                  <h3>用生活故事与互动场景，替代令人紧绷的试卷测评</h3>
+                  <p>
+                    在专业模式中，NOVA 将五个数学核心能力映射为地图上的五座站点。学生不必面对冷冰冰的分数表，而是在故事与交互中做出选择并说出理由，完成后逐站点亮地图并沉淀结构化探索摘要。
+                  </p>
+                  <ul class="feature-list">
+                    <li><strong>已上线双互动站</strong>：「理解花园 · 星溪镇（钟声响起之前）」与「空间山丘 · 星象风车台」。</li>
+                    <li><strong>研发规划三站点</strong>：「逻辑小桥 · 温室水路（6×4 控制变量网格）」「计算工坊」「生活集市」。</li>
+                    <li><strong>无 AI 亦可运行</strong>：核心交互与分级提示不绑定大模型，确保弱网或离线也能平稳体验。</li>
+                  </ul>
+                  <div class="panel-actions">
+                    <a class="btn btn-primary btn-sm" href="#world">深入查看五座站点</a>
+                  </div>
+                </div>
+
+                <div class="panel-media world-preview-card">
+                  <div class="world-mini-header">
+                    <span class="mono-tag">FIVE-STATION PROGRESS</span>
+                    <span class="status-pill status-live">2 站已上线 · 3 站研发中</span>
+                  </div>
+                  <div class="mini-stations">
+                    <div class="mini-station is-live">
+                      <span class="station-dot" aria-hidden="true"></span>
+                      <div>
+                        <strong>理解花园 · 星溪镇</strong>
+                        <p>已上线 · 听故事拆线索，训练条件提取与语义理解</p>
+                      </div>
+                    </div>
+                    <div class="mini-station is-live">
+                      <span class="station-dot" aria-hidden="true"></span>
+                      <div>
+                        <strong>空间山丘 · 星象风车台</strong>
+                        <p>已上线 · 观测旋转与方位变换，检验空间想象</p>
+                      </div>
+                    </div>
+                    <div class="mini-station">
+                      <span class="station-dot" aria-hidden="true"></span>
+                      <div>
+                        <strong>逻辑小桥 · 温室水路</strong>
+                        <p>研发规划 · 2D 网格预算约束与单变量对比推理</p>
+                      </div>
+                    </div>
+                    <div class="mini-station">
+                      <span class="station-dot" aria-hidden="true"></span>
+                      <div>
+                        <strong>计算工坊 &amp; 生活集市</strong>
+                        <p>研发规划 · 代数式运算稳定度与生活建模抽象</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 3: 硬件实验室 -->
+            <div class="matrix-panel" role="tabpanel" id="panel-hardware" aria-labelledby="tab-hardware" hidden="until-found">
+              <div class="matrix-panel-inner">
+                <div class="panel-copy">
+                  <p class="mono-tag">NOVA HARDWARE LAB · 桌面语音陪伴终端原型</p>
+                  <h3>脱离手机屏幕干扰，把小N 放回书桌一角</h3>
+                  <p>
+                    手机自带社交与短视频干扰，并不总适合专注学习。NOVA 硬件实验室围绕 <strong>M5Stack CoreS3 主机</strong> 打造了第一版 96mm 圆形可 3D 打印桌面外壳原型，通过 Python 参数化脚本生成 STL，优先验证“装得下、拿得住、孩子愿意按一下说话”的真实物理交互。
+                  </p>
+                  <dl class="spec-grid" aria-label="硬件外壳原型规格参数">
+                    <div>
+                      <dt>外径 × 组装高度</dt>
+                      <dd>96 mm × 24 mm</dd>
+                    </div>
+                    <div>
+                      <dt>中心圆形视窗</dt>
+                      <dd>Ø 60 mm（露出方屏）</dd>
+                    </div>
+                    <div>
+                      <dt>主控适配</dt>
+                      <dd>M5Stack CoreS3 (54×54×15.5 mm)</dd>
+                    </div>
+                    <div>
+                      <dt>制造与壁厚</dt>
+                      <dd>Bambu Lab A1 mini · 无支撑 · 3.2 mm</dd>
+                    </div>
+                  </dl>
+                  <p class="honest-micro-note">
+                    当前状态：外观与装配试装第一版样机（PLA 0.20mm 切片校验完成），尚未接入小N 服务端与最终电池/灯环/声学腔验收。
+                  </p>
+                  <div class="panel-actions">
+                    <button type="button" class="btn btn-primary btn-sm" data-open-contact data-partner-preset="桌面硬件与工业设计联名">硬件联名与共创咨询</button>
+                  </div>
+                </div>
+
+                <div class="panel-media hardware-blueprint">
+                  <figure class="blueprint-plate">
+                    <img src="assets/preview.png" width="1000" height="620" alt="NOVA 96mm 圆形桌面语音陪伴终端参数化外壳工程视图：左侧为主板装配俯视图，右侧为面框环与弧形截面剖视图" loading="lazy">
+                    <figcaption>
+                      <span><code>xiaon_round_shell</code> · 参数化 CAD 预览</span>
+                      <span>Ø 96mm · 内部可用 Ø 89.6mm</span>
+                    </figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 4: 家长守护与隐私 -->
+            <div class="matrix-panel" role="tabpanel" id="panel-guardian" aria-labelledby="tab-guardian" hidden="until-found">
+              <div class="matrix-panel-inner">
+                <div class="panel-copy">
+                  <p class="mono-tag">GUARDIAN &amp; PRIVACY · 清晰边界的成长同步</p>
+                  <h3>让家长看见真实的能力变化，而不窥探孩子的私密倾诉</h3>
+                  <p>
+                    青少年需要安全的表达空间，家长需要了解真实的学习进展。NOVA 将两者的边界写进数据结构里：家长端按周一至周日生成结构化成长小结与沟通建议，绝不转发孩子的自由聊天原文、情绪倾诉或私密档案。
+                  </p>
+                  <ul class="feature-list">
+                    <li><strong>每人独立 SQLite 隔离</strong>：账号模式下每位学习者拥有独立数据库文件，彼此不可见，重置仅清空本人数据。</li>
+                    <li><strong>可控记忆开关</strong>：个人档案记忆需学生同意，可按条目更正、停用或删除，关闭后不影响必要作答记录。</li>
+                    <li><strong>不焦虑、不排名</strong>：不设总分榜与连续打卡惩罚，聚焦具体知识点的独立完成迁移。</li>
+                  </ul>
+                </div>
+
+                <div class="panel-media">
+                  <article class="digest-card" aria-label="家长每周小结示例卡片">
+                    <header class="digest-head">
+                      <span>家长每周小结 · 合成示例数据</span>
+                      <span class="mono-tag">周一 — 周日</span>
+                    </header>
+                    <dl class="digest-metrics">
+                      <div>
+                        <dt>学习天数</dt>
+                        <dd>4<small>天</small></dd>
+                      </div>
+                      <div>
+                        <dt>完成题目</dt>
+                        <dd>17<small>道</small></dd>
+                      </div>
+                      <div>
+                        <dt>新题独立做对</dt>
+                        <dd>3<small>道</small></dd>
+                      </div>
+                    </dl>
+                    <div class="digest-change">
+                      <span class="mono-tag">能力迁移轨迹</span>
+                      <p>去括号负号处理：上周 <strong>提示后做对</strong> → 本周 <strong>新题独立做对</strong></p>
+                    </div>
+                    <div class="digest-boundary">
+                      <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <rect x="4" y="9" width="12" height="8" rx="2"/>
+                        <path d="M7 9V6.5a3 3 0 0 1 6 0V9"/>
+                      </svg>
+                      <span>隐私红线：小结仅基于结构化练习事实，不展示聊天记录、情绪倾诉、个人记忆与作答原文。</span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 03：五维探索世界（互动五站地图） -->
+    <section class="section" id="world">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">03 / 五维探索世界 · FIVE-DIMENSION ATLAS</p>
+          <h2>五座学习坐标，把数学素养放进真实可感的互动世界</h2>
+          <p class="section-lead">
+            点击下方任意站点，查看 NOVA 如何以故事与交互机制承接五个数学能力维度。报告不打总分、不排名，每条结论都附带具体的作答依据。
+          </p>
+        </div>
+
+        <div class="atlas-layout">
+          <!-- 五维星图 + 可交互站点节点 -->
+          <div class="atlas-visual grid-paper">
+            <svg class="atlas-svg" viewBox="-195 -165 390 330" role="img" aria-label="NOVA 五维数学认知坐标图：理解、逻辑、计算、建模、空间想象">
+              <g fill="none" stroke="var(--line-strong)" stroke-width="1.2">
+                <polygon points="0,-118 112.2,-36.5 69.4,95.5 -69.4,95.5 -112.2,-36.5"/>
+                <polygon points="0,-78 74.2,-24.1 45.8,63.1 -45.8,63.1 -74.2,-24.1" stroke-dasharray="3 4"/>
+                <polygon points="0,-39 37.1,-12.1 22.9,31.5 -22.9,31.5 -37.1,-12.1"/>
+                <path d="M0 0L0 -118M0 0L112.2 -36.5M0 0L69.4 95.5M0 0L-69.4 95.5M0 0L-112.2 -36.5"/>
+              </g>
+              <!-- 已上线两站高亮连接 -->
+              <path d="M0,-118 L-112.2,-36.5" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round"/>
+              <polygon points="0,-118 74.2,-24.1 45.8,63.1 -45.8,63.1 -112.2,-36.5" fill="var(--brand)" fill-opacity="0.11" stroke="var(--brand)" stroke-width="1.4"/>
+
+              <!-- 站点圆点（JS 高亮当前选中站点） -->
+              <g class="atlas-nodes">
+                <circle class="atlas-node is-live is-selected" data-station-dot="understanding" cx="0" cy="-118" r="8"/>
+                <circle class="atlas-node" data-station-dot="logic" cx="112.2" cy="-36.5" r="7"/>
+                <circle class="atlas-node" data-station-dot="calculation" cx="69.4" cy="95.5" r="7"/>
+                <circle class="atlas-node" data-station-dot="modeling" cx="-69.4" cy="95.5" r="7"/>
+                <circle class="atlas-node is-live" data-station-dot="spatial" cx="-112.2" cy="-36.5" r="8"/>
+              </g>
+
+              <g fill="var(--ink)" font-family="Noto Serif SC, Songti SC, serif" font-weight="700" font-size="14">
+                <text x="0" y="-136" text-anchor="middle">理解 · 星溪镇</text>
+                <text x="124" y="-32" text-anchor="start">逻辑</text>
+                <text x="74" y="122" text-anchor="middle">计算工坊</text>
+                <text x="-74" y="122" text-anchor="middle">生活集市</text>
+                <text x="-124" y="-32" text-anchor="end">空间山丘</text>
+              </g>
+            </svg>
+            <div class="atlas-legend">
+              <span><i class="legend-dot live" aria-hidden="true"></i>已上线互动体验</span>
+              <span><i class="legend-dot planned" aria-hidden="true"></i>研发规划中（保留基础问答契约）</span>
+            </div>
+          </div>
+
+          <!-- 交互式五站列表 + 详情卡 -->
+          <div class="atlas-inspector">
+            <div class="station-selector" role="group" aria-label="选择五维探索站点">
+              <button type="button" class="station-btn is-active" data-station="understanding" aria-pressed="true">
+                <span class="station-btn-top">
+                  <strong>理解花园 · 星溪镇</strong>
+                  <span class="status-pill status-live">已上线</span>
+                </span>
+                <span class="station-btn-sub">理解能力 · 语义与条件提取</span>
+              </button>
+
+              <button type="button" class="station-btn" data-station="spatial" aria-pressed="false">
+                <span class="station-btn-top">
+                  <strong>空间山丘 · 星象风车台</strong>
+                  <span class="status-pill status-live">已上线</span>
+                </span>
+                <span class="station-btn-sub">空间想象 · 二维旋转与方位关系</span>
+              </button>
+
+              <button type="button" class="station-btn" data-station="logic" aria-pressed="false">
+                <span class="station-btn-top">
+                  <strong>逻辑小桥 · 温室水路</strong>
+                  <span class="status-pill status-plan">研发规划中</span>
+                </span>
+                <span class="station-btn-sub">逻辑推理 · 反例检验与控制变量</span>
+              </button>
+
+              <button type="button" class="station-btn" data-station="calculation" aria-pressed="false">
+                <span class="station-btn-top">
+                  <strong>计算工坊</strong>
+                  <span class="status-pill status-plan">研发规划中</span>
+                </span>
+                <span class="station-btn-sub">计算能力 · 去括号负号与同类项</span>
+              </button>
+
+              <button type="button" class="station-btn" data-station="modeling" aria-pressed="false">
+                <span class="station-btn-top">
+                  <strong>生活集市</strong>
+                  <span class="status-pill status-plan">研发规划中</span>
+                </span>
+                <span class="station-btn-sub">数学建模 · 现实关系抽象成式子</span>
+              </button>
+            </div>
+
+            <article class="station-detail" id="station-detail" aria-live="polite">
+              <div class="station-detail-head">
+                <span class="mono-tag" id="station-dim-tag">DIMENSION 01 · 理解能力</span>
+                <span class="status-pill status-live" id="station-status-badge">已上线</span>
+              </div>
+              <h3 id="station-title">理解花园 · 星溪镇（钟声响起之前）</h3>
+              <p id="station-desc">
+                深度融合《星溪镇：钟声响起之前》互动叙事体验。学生不必在题海里找答案，而是跟着小N 走进星溪镇听故事、拆线索，把复杂条件和运算顺序梳理清楚；通关后自动点亮地图第一站，并将探索回顾写入「我的档案」。
+              </p>
+              <dl class="station-meta">
+                <div>
+                  <dt>核心观测点</dt>
+                  <dd id="station-focus">能不能读清题干条件、关键词与运算顺序</dd>
+                </div>
+                <div>
+                  <dt>呈现形态</dt>
+                  <dd id="station-format">同源互动叙事小游戏 + 专业模式五维问答契约</dd>
+                </div>
+              </dl>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 04：技术与安全底座 -->
+    <section class="section section-tinted" id="architecture">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">04 / 技术与安全底座 · ARCHITECTURE &amp; GUARDRAILS</p>
+          <h2>程序管规则与算术，模型只做受控表达</h2>
+          <p class="section-lead">
+            在教育产品里，大模型的自由发挥往往意味着“算错数”或“乱打分”。NOVA 使用本机 Node 与 SQLite 作为确定性规则中枢，用严格的工程护栏把四个 Agent 角色关在各自清晰的权限框里。
+          </p>
+        </div>
+
+        <!-- 四角色受控分工 -->
+        <div class="agents-grid">
+          <article class="agent-card">
+            <div class="agent-top">
+              <code class="agent-code">01 / Tutor</code>
+              <span class="agent-scope">陪伴与追问</span>
+            </div>
+            <h3>温和倾听，一次只问一步</h3>
+            <p>负责自然对话、情绪承接与思路追问。评分标准与参考答案不进入自由聊上下文，各角色之间不互相转发全部聊天记录。</p>
+          </article>
+
+          <article class="agent-card">
+            <div class="agent-top">
+              <code class="agent-code">02 / Assessor</code>
+              <span class="agent-scope">证据对照分析</span>
+            </div>
+            <h3>只做要点解析，无权私自加分</h3>
+            <p>对照可信题面与评分要点（rubric）分析学生的文字理由，所有客观对错判定与能力分层仍由确定性程序执行。</p>
+          </article>
+
+          <article class="agent-card">
+            <div class="agent-top">
+              <code class="agent-code">03 / PlannerReporter</code>
+              <span class="agent-scope">报告与草案</span>
+            </div>
+            <h3>只用程序整理的事实说话</h3>
+            <p>仅消费程序生成的结构化事实、证据 ID 与获准偏好，输出分角度学习报告与可调计划草案，严禁凭空编造进步结论。</p>
+          </article>
+
+          <article class="agent-card">
+            <div class="agent-top">
+              <code class="agent-code">04 / Generator (E1)</code>
+              <span class="agent-scope">白名单出题</span>
+            </div>
+            <h3>白名单模板约束，严控越界</h3>
+            <p>当前仅开放「去括号负号」与「合并同类项」两个知识点的变式出题；模型只选模板与整数参数，绝不自由发散超纲题。</p>
+          </article>
+        </div>
+
+        <!-- E1 受控出题双轮验算闭环 -->
+        <div class="pipeline-box">
+          <div class="pipeline-head">
+            <div>
+              <p class="mono-tag">E1 VERIFICATION LOOP · 受控出题双轮验算闭环</p>
+              <h3>新题发布前，程序独立重算每一项；两次不通过则一道也不发</h3>
+            </div>
+            <span class="pipeline-badge">最多 2 轮（1 候选 + 1 修复）· 零工具调用</span>
+          </div>
+
+          <ol class="pipeline-steps">
+            <li>
+              <span class="pipe-num">01</span>
+              <strong>程序门控</strong>
+              <p>检查先修条件、本场次 10 道计算预算、日限额与到期状态。</p>
+            </li>
+            <li>
+              <span class="pipe-num">02</span>
+              <strong>脱敏输入</strong>
+              <p>仅传最近 ≤6 次作答判定与错误线索，绝不发送聊天原文。</p>
+            </li>
+            <li>
+              <span class="pipe-num">03</span>
+              <strong>白名单生成</strong>
+              <p>模型在白名单模板内选参并给出题面、答案与提示草案。</p>
+            </li>
+            <li>
+              <span class="pipe-num">04</span>
+              <strong>程序重算验真</strong>
+              <p>程序按模板独立重算题面/答案/提示，核对可判性与去重指纹。</p>
+            </li>
+            <li>
+              <span class="pipe-num">05</span>
+              <strong>学生确认暴露</strong>
+              <p>先展示针对环节与预计用时，确认后才展示题面并计入证据链。</p>
+            </li>
+          </ol>
+
+          <div class="guard-footer">
+            <div class="guard-chip">
+              <strong>每人独立 SQLite 数据库</strong>
+              <span>账号维度物理隔离，互不可见；重置操作仅清理本人演示数据。</span>
+            </div>
+            <div class="guard-chip">
+              <strong>确定性离线降级边界</strong>
+              <span>未配置模型 Key 或断网时，明确切换为本地规则模式；程序判题、证据记录与复习队列照常可运行。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 05：教育研究与透明路线图 -->
+    <section class="section" id="research">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">05 / 教育研究与透明路线 · RESEARCH &amp; HONESTY</p>
+          <h2>把已经做到的，与尚未验证的，同样坦诚地摆在台面上</h2>
+          <p class="section-lead">
+            NOVA 目前仍处于研究与原型演进阶段。我们拒绝编造百万用户或未经检验的“提分神话”，而是把能力边界、合成数据声明与后续路线清楚呈现给每一位教育者与合作方。
+          </p>
+        </div>
+
+        <div class="roadmap-table-wrap">
+          <table class="roadmap-table">
+            <thead>
+              <tr>
+                <th scope="col">演进维度</th>
+                <th scope="col">当前已实现（原型实测）</th>
+                <th scope="col">下一阶段规划</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">学段与知识范围</th>
+                <td>初中数学起步，聚焦有理数、去括号负号、合并同类项及五维核心子任务。</td>
+                <td class="col-next">逐步扩展至更多初中代数/几何单元与其他理科基础学科。</td>
+              </tr>
+              <tr>
+                <th scope="row">首页伴学体验</th>
+                <td>语音自由聊、下拉收起小N、不中断语音的往期回看、个人档案主动整理与可控编辑。</td>
+                <td class="col-next">补充拍照识题（OCR）与手写草稿步骤识别能力。</td>
+              </tr>
+              <tr>
+                <th scope="row">五维探索世界</th>
+                <td>已上线「理解花园 · 星溪镇」与「空间山丘 · 星象风车台」，保留完整五维生活故事测评与月底复测提醒。</td>
+                <td class="col-next">完成「逻辑小桥 · 温室水路」2D 网格切片、「计算工坊」与「生活集市」互动化升级。</td>
+              </tr>
+              <tr>
+                <th scope="row">受控出题 (E1)</th>
+                <td>在去括号负号、合并同类项 2 个知识点跑通白名单模板 + 程序双轮验算闭环。</td>
+                <td class="col-next">沿用同等确定性验算标准，扩展至更多可验证的计算与推理题型。</td>
+              </tr>
+              <tr>
+                <th scope="row">桌面硬件终端</th>
+                <td>完成 96mm 圆形外壳参数化建模与 Bambu Lab A1 mini 无支撑 3D 打印尺寸校验。</td>
+                <td class="col-next">开展 M5Stack CoreS3 实物试装，迭代灯环、声学腔、电池仓及小N 服务端联动。</td>
+              </tr>
+              <tr>
+                <th scope="row">研究效度与合规</th>
+                <td>全站使用合成演示材料，如实展示系统内从“提示后做对”到“新题独立做对”的变化；账号隔离已具备基础 SQLite 独立库。</td>
+                <td class="col-next">在监护授权下开展小范围真实学生试用与长期学习研究；建设正式账号体系、真实监护核验与应用层加密。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="honesty-callout" aria-label="研究边界与诚实声明">
+          <div class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 8v5M12 16h.01"/>
+            </svg>
+          </div>
+          <div>
+            <h3>诚实研究声明（非标准化诊断与非医疗承诺）</h3>
+            <p>
+              NOVA 专业模式的五维报告属于有限任务下的学习行为观察，<strong>不是</strong>标准化心理测量、智力测评或临床医疗诊断；目前尚未完成大规模真实学生对照实验与标准化效度验证。本站展示的所有对话样例与统计数字均为合成演示材料，不含任何真实学生隐私数据。
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 板块 06：合作与联系 -->
+    <section class="section section-tinted grid-paper" id="partnerships">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">06 / 合作与共建 · PARTNERSHIPS</p>
+          <h2>期待与一线教育者、研究者、硬件伙伴与开源社区同行</h2>
+          <p class="section-lead">
+            无论你关注初中数学课堂试点、学习科学测评研究、低干扰桌面学习硬件，还是受控多 Agent 开源工程，都欢迎向 NOVA 发起交流。
+          </p>
+        </div>
+
+        <div class="partner-grid">
+          <article class="partner-card">
+            <span class="mono-tag">01 / SCHOOL PILOT</span>
+            <h3>学校小范围试点</h3>
+            <p>面向初中数学教研组与创新实验班，在明确监护授权前提下，共同探索温和、低焦虑的课后伴学试用。</p>
+            <button type="button" class="partner-link" data-open-contact data-partner-preset="学校小范围试点">
+              发起试点交流 <span aria-hidden="true">→</span>
+            </button>
+          </article>
+
+          <article class="partner-card">
+            <span class="mono-tag">02 / EDUCATION RESEARCH</span>
+            <h3>教育研究与测评合作</h3>
+            <p>欢迎学习科学、数学教育与心理测量研究者共同探讨五维观察效度、过程性证据与互动学习机制。</p>
+            <button type="button" class="partner-link" data-open-contact data-partner-preset="教育研究与测评合作">
+              探讨研究合作 <span aria-hidden="true">→</span>
+            </button>
+          </article>
+
+          <article class="partner-card">
+            <span class="mono-tag">03 / HARDWARE CO-DESIGN</span>
+            <h3>桌面硬件与工业设计联名</h3>
+            <p>基于 M5Stack CoreS3 开源圆形外壳原型，联合工业设计、声学与嵌入式团队打磨青少年桌面伴学终端。</p>
+            <button type="button" class="partner-link" data-open-contact data-partner-preset="桌面硬件与工业设计联名">
+              对接硬件实验室 <span aria-hidden="true">→</span>
+            </button>
+          </article>
+
+          <article class="partner-card">
+            <span class="mono-tag">04 / OPEN SOURCE</span>
+            <h3>开源技术与内容共建</h3>
+            <p>欢迎前端工程、受控多 Agent 架构、互动叙事关卡设计与参数化 3D 结构开发者加入开源共建。</p>
+            <button type="button" class="partner-link" data-open-contact data-partner-preset="开源技术与内容共建">
+              参与开源共建 <span aria-hidden="true">→</span>
+            </button>
+          </article>
+        </div>
+
+        <div class="closing-banner">
+          <div class="closing-copy">
+            <h2>陪孩子把卡住的那一步，<br>一步步真正想明白。</h2>
+            <p>预约 NOVA 团队一对一产品演示，或直接在 GitHub 查阅当前完整开源实现。</p>
+          </div>
+          <div class="closing-actions">
+            <button type="button" class="btn btn-primary" data-open-contact data-partner-preset="学校小范围试点">预约体验与合作</button>
+            <a class="btn btn-outline" href="https://github.com/joey08121112-web/acc-hackathon-xiaon" target="_blank" rel="noopener noreferrer">查看 GitHub 源码</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 集团页脚 -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <a class="brand" href="#top" aria-label="返回 NOVA 集团首页顶部">
+            <svg class="brand-mark" viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+              <use href="#nova-mark"/>
+            </svg>
+            <span class="brand-text">
+              <span class="brand-name">NOVA</span>
+              <span class="brand-sub">EDUCATION TECH</span>
+            </span>
+          </a>
+          <p class="footer-desc">
+            面向青少年的研究型教育科技生态。用受控的工程护栏与温和的互动设计，让每一次思考都留下看得见的生长。
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>生态导航</h4>
+          <ul>
+            <li><a href="#philosophy">使命与三大承诺</a></li>
+            <li><a href="#ecosystem">四大业务矩阵</a></li>
+            <li><a href="#world">五维探索世界</a></li>
+            <li><a href="#partnerships">合作与共建</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>工程与开源</h4>
+          <ul>
+            <li><a href="#architecture">受控四角色 Agent</a></li>
+            <li><a href="#research">透明路线图</a></li>
+            <li><a href="https://github.com/joey08121112-web/acc-hackathon-xiaon" target="_blank" rel="noopener noreferrer">GitHub 源码仓库</a></li>
+            <li><button type="button" class="footer-link-btn" data-open-contact data-partner-preset="学校小范围试点">预约演示与联系</button></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>透明边界</h4>
+          <p class="footer-boundary">
+            当前为 ACC 黑客松孵化之研究型原型，演示材料与页面示例均为合成数据，不含真实学生隐私信息，亦不构成标准化智力测评或医疗声明。
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 NOVA Education Technology · 学伴小N生态</span>
+        <span>温和克制 · 证据可见 · 隐私优先</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 原生 <dialog>：合作咨询与预约演示 -->
+  <dialog class="modal-dialog" id="contact-dialog" closedby="any" aria-labelledby="contact-dialog-title">
+    <div class="dialog-shell">
+      <header class="dialog-head">
+        <div>
+          <p class="mono-tag">NOVA PARTNERSHIP DESK</p>
+          <h2 id="contact-dialog-title">预约体验与合作咨询</h2>
+        </div>
+        <form method="dialog">
+          <button type="submit" value="close" class="icon-close" aria-label="关闭合作咨询弹窗">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+          </button>
+        </form>
+      </header>
+
+      <form class="contact-form" id="contact-form" novalidate>
+        <p class="dialog-intro">
+          请填写合作方向与联系方式。提交后将生成一份结构化本地回执与一键可复制联系模板（本站为纯静态集团展示页，不会向外部服务器上传表单数据）。
+        </p>
+
+        <div class="field">
+          <label for="partner-type">合作方向 <span class="req" aria-hidden="true">*</span></label>
+          <select id="partner-type" name="partnerType" required data-error="partner-type-error" autofocus>
+            <option value="">请选择一个合作方向</option>
+            <option value="学校小范围试点">学校小范围试点</option>
+            <option value="教育研究与测评合作">教育研究与测评合作</option>
+            <option value="桌面硬件与工业设计联名">桌面硬件与工业设计联名</option>
+            <option value="开源技术与内容共建">开源技术与内容共建</option>
+          </select>
+          <div id="partner-type-error" class="error-msg">请先选择希望交流的合作方向。</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="contact-name">您的称呼 <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="contact-name" name="name" required minlength="2" autocomplete="name" placeholder="例如：林老师 / 陈同学" data-error="contact-name-error">
+            <div id="contact-name-error" class="error-msg">请填写至少 2 个字的姓名或称呼。</div>
+          </div>
+
+          <div class="field">
+            <label for="contact-org">所属学校 / 机构（选填）</label>
+            <input type="text" id="contact-org" name="organization" autocomplete="organization" placeholder="学校、教研组、实验室或团队名称">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="contact-email">联系邮箱 <span class="req" aria-hidden="true">*</span></label>
+          <span id="contact-email-hint" class="field-hint">格式示例：name@organization.edu.cn</span>
+          <input type="email" id="contact-email" name="email" required autocomplete="email" aria-describedby="contact-email-hint" data-error="contact-email-error" placeholder="you@example.com">
+          <div id="contact-email-error" class="error-msg">请输入有效的电子邮箱地址（如 you@example.com）。</div>
+        </div>
+
+        <div class="field">
+          <label for="contact-notes">交流背景或演示需求 <span class="req" aria-hidden="true">*</span></label>
+          <span id="contact-notes-hint" class="field-hint">请至少输入 10 个字，方便团队提前准备对应环节的演示。</span>
+          <textarea id="contact-notes" name="notes" rows="3" required minlength="10" aria-describedby="contact-notes-hint" data-error="contact-notes-error" placeholder="例如：希望了解星溪镇五维探索流程、E1 受控出题机制或桌面硬件原型打印细节…"></textarea>
+          <div id="contact-notes-error" class="error-msg">请至少填写 10 个字的交流背景或演示需求。</div>
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-quiet btn-sm" id="contact-cancel-btn">取消</button>
+          <button type="submit" class="btn btn-primary btn-sm">生成合作联系回执</button>
+        </div>
+      </form>
+
+      <!-- 提交后的本地回执视图 -->
+      <div class="contact-receipt" id="contact-receipt" hidden>
+        <div class="receipt-badge">
+          <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="10" cy="10" r="8"/>
+            <path d="M6.8 10.2l2.1 2.2 4.4-4.6"/>
+          </svg>
+          <span>已生成本地静态预约回执</span>
+        </div>
+        <p class="receipt-note">
+          当前网站为纯静态展示原型，未接入后台表单接口，您的信息仅保留在当前浏览器会话中。您可以一键复制以下结构化联系模板，或通过 GitHub 仓库与 NOVA 团队直接取得联系。
+        </p>
+        <pre class="receipt-preview" id="receipt-preview"></pre>
+        <p class="copy-status" id="copy-status" aria-live="polite"></p>
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-quiet btn-sm" id="receipt-reset-btn">重新填写</button>
+          <button type="button" class="btn btn-outline btn-sm" id="copy-template-btn">复制联系模板</button>
+          <a class="btn btn-primary btn-sm" href="https://github.com/joey08121112-web/acc-hackathon-xiaon" target="_blank" rel="noopener noreferrer">前往 GitHub 仓库</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- 原生 <dialog>：产品演示概览弹窗 -->
+  <dialog class="modal-dialog modal-dialog-wide" id="preview-dialog" closedby="any" aria-labelledby="preview-dialog-title">
+    <div class="dialog-shell">
+      <header class="dialog-head">
+        <div>
+          <p class="mono-tag">PRODUCT OVERVIEW · 合成演示</p>
+          <h2 id="preview-dialog-title">学伴小N · 一次完整学习演示概览</h2>
+        </div>
+        <form method="dialog">
+          <button type="submit" value="close" class="icon-close" aria-label="关闭演示概览弹窗" autofocus>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+          </button>
+        </form>
+      </header>
+
+      <div class="preview-body">
+        <figure class="preview-poster">
+          <img src="assets/poster.jpg" width="1280" height="720" alt="学伴小N 演示封面：陪你把卡住的那一步，想明白。数学题卡住时，你能说清自己卡在哪一步吗？" loading="lazy">
+          <figcaption>演示素材均采用合成学习数据与真实模型回复，不含真实学生数据。</figcaption>
+        </figure>
+        <ol class="preview-steps">
+          <li><strong>01 说出卡点</strong><span>在首页语音自由聊里说出困惑，小N 先听再整理成可确认的记题卡。</span></li>
+          <li><strong>02 步步追问</strong><span>不直接抛答案，一次只追问一小步；做对方式按“提示后 / 原题改对 / 新题独立”分开记录。</span></li>
+          <li><strong>03 五维点亮</strong><span>进入专业模式探索星溪镇与空间山丘，沉淀可追溯依据的成长小结与计划草案。</span></li>
+        </ol>
+        <div class="dialog-actions">
+          <a class="btn btn-outline btn-sm" href="https://github.com/joey08121112-web/acc-hackathon-xiaon" target="_blank" rel="noopener noreferrer">查看开源仓库与本地启动说明</a>
+          <button type="button" class="btn btn-primary btn-sm" id="preview-to-contact">预约团队现场演示</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="main.js" defer></script>
+</body>
+</html>
