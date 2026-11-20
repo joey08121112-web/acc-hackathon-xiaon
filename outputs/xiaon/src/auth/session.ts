@@ -8,9 +8,14 @@ export async function authPost<T>(path:'status'|'check'|'login'|'register'|'logo
  return data as T;
 }
 export const authStatus=()=>authPost<AuthStatus>('status');
-/** 换账号前清掉上一个人留在这台浏览器里的进度和草稿；只保留声音开关、开发者模式这类设备偏好。 */
+/** 上次在这台浏览器登录的是哪个号（打码手机号）。同号再登录不清本地进度，换号登录才清。 */
+const LAST_ACCOUNT_KEY='xiaon-last-account';
+export const rememberAccount=(masked:string)=>{try{localStorage.setItem(LAST_ACCOUNT_KEY,masked);}catch{/* 记不住就每次按换号处理 */}};
+export const lastAccount=()=>{try{return localStorage.getItem(LAST_ACCOUNT_KEY);}catch{return null;}};
+/** 换账号前清掉上一个人留在这台浏览器里的进度和草稿；只保留声音开关、开发者模式这类设备偏好，
+ * 以及「上次登录的号」——退出登录会清进度，但同一个人再登录回来不该重走一遍入门引导。 */
 export function clearAccountCache(){
- try{for(const key of Object.keys(localStorage))if(key.startsWith('xiaon-')&&key!=='xiaon-voice-on'&&key!=='xiaon-dev-mode')localStorage.removeItem(key);}catch{/* 存储不可用时没有可清的 */}
+ try{for(const key of Object.keys(localStorage))if(key.startsWith('xiaon-')&&key!=='xiaon-voice-on'&&key!=='xiaon-dev-mode'&&key!==LAST_ACCOUNT_KEY)localStorage.removeItem(key);}catch{/* 存储不可用时没有可清的 */}
 }
 export async function logout(){
  await authPost('logout').catch(()=>{});clearAccountCache();window.location.replace('/');

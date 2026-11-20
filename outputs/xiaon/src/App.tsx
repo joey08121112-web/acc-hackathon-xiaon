@@ -459,7 +459,12 @@ function App() {
     say("这台设备上的演示进度、图片和记忆已清空。");
   };
   useEffect(()=>{
-    if (s.onboarded && learning.connected && learning.view && !learning.view.consentConfigured && !learning.busy) void learning.run('consent',{optionalMemory:s.longMemory},{persist:false}).catch(()=>{});
+    if (!learning.connected || !learning.view) return;
+    // 本地完成过引导但服务端还没有记录（离线引导等）：静默补一次 consent。
+    if (s.onboarded && !learning.view.consentConfigured && !learning.busy) void learning.run('consent',{optionalMemory:s.longMemory},{persist:false}).catch(()=>{});
+    // 反过来：服务端已有 consent（这个账号早就完成过引导，只是这台浏览器没有本地进度，
+    // 比如换设备登录、清过本地数据）：直接进入小N，不再重走监护人确认和记忆选择。
+    if (!s.onboarded && learning.view.consentConfigured) patch({ onboarded: true, longMemory: learning.view.optionalMemory, page: "home", tab: "小N" });
   },[s.onboarded,learning.connected,learning.view?.consentConfigured]);
   const report = observations(s),
     plan = planDraft(s),

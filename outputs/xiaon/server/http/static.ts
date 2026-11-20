@@ -6,7 +6,7 @@ const contentTypes:Record<string,string>={
  '.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8',
  '.json':'application/json; charset=utf-8','.map':'application/json; charset=utf-8','.txt':'text/plain; charset=utf-8','.md':'text/markdown; charset=utf-8',
  '.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.gif':'image/gif','.ico':'image/x-icon',
- '.zip':'application/zip','.mp3':'audio/mpeg','.woff':'font/woff','.woff2':'font/woff2','.webmanifest':'application/manifest+json',
+ '.zip':'application/zip','.mp3':'audio/mpeg','.woff':'font/woff','.woff2':'font/woff2','.webmanifest':'application/manifest+json','.wasm':'application/wasm',
 };
 export function createStaticHandler(root:string){
  const base=resolve(root);const index=resolve(base,'index.html');
@@ -24,7 +24,8 @@ export function createStaticHandler(root:string){
    if(extname(decoded))return false;
    file=index;stat=statOrNull(index);if(!stat)return false;
   }
-  const immutable=decoded.startsWith('/assets/');
+  // 星溪镇的 wasm/pck 体积大且版本内不变，与 /assets/ 一样长缓存；换版本时改目录名或加查询参数。
+  const immutable=decoded.startsWith('/assets/')||(decoded.startsWith('/starbrook/')&&['.wasm','.pck'].includes(extname(file).toLowerCase()));
   res.writeHead(200,{'Content-Type':contentTypes[extname(file).toLowerCase()]??'application/octet-stream','Content-Length':stat.size,'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-cache'});
   if(req.method==='HEAD'){res.end();return true;}
   createReadStream(file).on('error',()=>res.destroy()).pipe(res);
