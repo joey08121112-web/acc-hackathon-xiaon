@@ -33,3 +33,18 @@ outputs/xiaon/vite.tunnel.config.ts
 # Mimosa 安全工具本地目录
 .mimosa/
 **/.mimosa/
+
+# 本地构建/工具残留与非项目截图
+.codex-ppt-build/
+.video_agent/
+result.json
+workbench-terminal.png
+
+# 本地部署包与临时浏览器测试产物
+outputs/xiaon-deploy-*.zip
+outputs/evidence/browser-*.json
+任务书/2026-10-21-Agent升级/交付/D/evidence/browser-artifacts/
+
+# 历史评审源码整包快照（体量大，保留报告与轻证据即可）
+文档/审查/2026-10-24-大众推广评审/evidence/reviewed-source/
+文档/审查/2026-10-24-大众推广评审/evidence/reviewed-source.tar.gz
