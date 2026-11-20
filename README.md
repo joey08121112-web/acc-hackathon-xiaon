@@ -1,43 +1,52 @@
-# 2026-10-21 Agent升级 · 当前入口
+# 学伴小N（ACC 黑客松）
 
-D集成版本在 `outputs/xiaon`，启动：
+面向中小学生的语音学习陪伴应用。支持首页语音自由聊、个人学习档案、专业模式结构化测评与智能体辅导、记忆治理以及「星溪镇」学习小游戏联动。
 
-```sh
-cd '/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon'
-npm run dev:learning
-```
-
-打开 http://127.0.0.1:5194/ 。本机Node/SQLite与受控三角色已接线；模型、迁移、数据用途和离线边界见[应用运行说明](outputs/xiaon/README.md)。[D交付](任务书/2026-10-21-Agent升级/交付/D/HANDOFF.md)与[验收矩阵](任务书/2026-10-21-Agent升级/交付/D/ACCEPTANCE.md)记录独立模块复核、集成自验、模拟及真实模型的证据。
-
-没有commit/push/部署，没有替换原分享ZIP。下方为先前交付与迁移记录，测试数及5173状态是历史时点，不能代替本轮证据。
+> **项目入口提示**：应用的前后端源码全部位于 [`outputs/xiaon/`](outputs/xiaon/)，仓库根目录主要存放产品/工程文档、硬件外壳模型与黑客松历史交付材料。
 
 ---
 
-# ACC黑客松 · 学伴小N
+## 核心能力与技术栈
 
-本次小N项目和交付材料已迁至这个目录。`audit-stage1-20261020/` 为另外新增的审计资料，迁移时保留未改动。阶段2审查已完成：[audit-stage2-20261020/REPORT.md](audit-stage2-20261020/REPORT.md)（结论：不通过，1项P1）。审查发现的 3 项问题及打包脚本缺陷已修复：[fixes-stage2-20261020/FIX-REPORT.md](fixes-stage2-20261020/FIX-REPORT.md)（修复者自验 22/22 单元、18/18 浏览器通过，待独立复验后改判）。
+| 模块 | 说明 |
+|---|---|
+| **前端** | React + TypeScript + Vite（手机端竖屏体验，桌面浏览器建议切至移动端视口） |
+| **后端** | Node.js（`tsx` 直接运行 `.ts` 源码，无需预编译）+ SQLite（按账号隔离） |
+| **模型与语音** | 对话/辅导大脑：智谱 GLM（`/api/coding/paas/v4`）；语音识别与合成：豆包 ASR / TTS |
+| **主要功能** | 手机号 + 密码登录 · 首页语音自由聊与个人档案 · 专业模式（题库、受控出题与 `record_stuck_point` / `select_task` / `get_hint` / `grade_attempt` 工具链） · `fc_epoch` 双代次记忆治理 · 专业模式接入「星溪镇」网页小游戏（评价摘要写入档案） |
 
-- **打开体验**：http://localhost:5173/
-- **打开与分享说明**：http://localhost:5173/share.html
-- **源码**：[outputs/xiaon](outputs/xiaon/README.md)
-- **发给队友**：[队友上手指南](队友上手指南.md)（拉代码、命令行启动、演示路线、真实现与演示边界）；只想快速体验的同学可直接用 [队友体验包](outputs/学伴小N-队友体验包.zip)，解压后按包内说明用电脑浏览器打开。
-- **截图**：[手机截图索引](outputs/SCREENSHOTS.md)
-- **验证记录**：[VALIDATION.md](outputs/VALIDATION.md)
-- **原始失败与工作资料**：`work/`
+---
 
-## 重新启动
+## 本地快速启动
 
-依赖已一起迁移，无需重复安装。打开终端执行：
+前置要求：Node.js ≥ 22.13。
 
 ```sh
-cd '/Users/ami/Documents/个人/ACC黑客松/outputs/xiaon'
-npm run dev
+cd outputs/xiaon
+npm ci
+cp .env.example .env.server   # 按需填入 GLM / 豆包密钥（.env.server 已被忽略，绝不进 git）
+npm run dev:learning          # 默认访问 http://127.0.0.1:5194，以终端输出为准
 ```
 
-请通过上面的 HTTP 地址体验，不要直接双击源码里的 `index.html`。队友包的单文件版与源码入口不同。
+> 未配置模型 Key 时仍可运行离线规则与本地基础流程；详细运行、测试与打包命令见 [`outputs/xiaon/README.md`](outputs/xiaon/README.md)。
 
-## 迁移说明
+---
 
-实际文件存放于当前目录。旧工作目录仅保留 `outputs`、`work` 两个兼容链接，让此前对话里的文件链接继续可用，不是另一份项目副本。旧日志、trace 和解压出的历史交付包保留原始内容及当时路径，不对历史证据做批量替换。
+## 线上状态
 
-迁移复核：发布清单中的14个源码文件SHA一致，19份ZIP通过CRC检查；迁移后文件清单和详细核对记录在 `work/migration/`。这不是整套功能的重新验收，功能测试范围仍以原验证记录为准。
+当前演示服务运行于 2026-11-20 重建的阿里云香港 ECS 实例，公网入口通过 Cloudflare 临时隧道暴露（重启后 URL 会变化）；最新服务器信息、隧道地址查询方式与更新流程见 [`文档/交接/2026-11-20-新服务器部署信息.md`](文档/交接/2026-11-20-新服务器部署信息.md)，通用部署说明见 [`outputs/xiaon/DEPLOY.md`](outputs/xiaon/DEPLOY.md)。
+
+---
+
+## 仓库目录地图
+
+| 路径 | 内容说明 |
+|---|---|
+| [`outputs/xiaon/`](outputs/xiaon/README.md) | **应用源码主目录**（前端、后端、SQLite 存储、测试与 Docker 部署文件） |
+| [`文档/`](文档/) | 产品方案、工程审查与规划、架构设计、测试集、研究报告、宣传稿/PPT 与运维交接文档 |
+| [`文档/交接/2026-11-20-新服务器部署信息.md`](文档/交接/2026-11-20-新服务器部署信息.md) | 最新线上服务器环境与维护交接文档 |
+| [`MEMORY-DESIGN-GUIDE.md`](MEMORY-DESIGN-GUIDE.md) | 小N 记忆系统设计指南 |
+| [`hardware/xiaon_round_shell/`](hardware/xiaon_round_shell/README.md) | 语音陪伴终端（M5Stack CoreS3）第一版 3D 打印圆形外壳模型与打印指南 |
+| [`队友上手指南.md`](队友上手指南.md) | 早期纯前端原型阶段的队友快速体验说明（参考存档，当前运行方式以 [`outputs/xiaon/README.md`](outputs/xiaon/README.md) 为准） |
+| [`任务书/`](任务书/) | 黑客松各阶段任务书与历史交付材料 |
+| `audit-stage*/`、`fixes-stage*/` | 历史阶段独立审查报告、修复记录与原始证据（只读归档） |
