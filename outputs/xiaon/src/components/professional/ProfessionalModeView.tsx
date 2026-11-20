@@ -1,6 +1,6 @@
-/** 专业模式：五维探索地图为主入口，第一站「理解花园（理解能力）」深度融合星溪镇互动游戏，同时保留完整五维问答测评契约。 */
+/** 专业模式：五维探索地图为主入口，第一站「理解花园」融合星溪镇、第三站「计算工坊」融合符号拆包坊、第五站「空间山丘」融合星象风车台，同时保留完整五维问答测评契约。 */
 import { useEffect, useRef, useState } from 'react';
-import { Gamepad2, Sparkles } from 'lucide-react';
+import { Compass, Gamepad2, Sparkles, Wrench } from 'lucide-react';
 import {
   INTERVIEW_MODULE_ORDER,
   INTERVIEW_REQUIRED_MODULES,
@@ -18,6 +18,16 @@ import {
   readStarbrookCompletion,
   type StarbrookCompletion,
 } from '../game/StarbrookGame';
+import {
+  SpatialHillGame,
+  readSpatialCompletion,
+  type SpatialCompletion,
+} from '../game/SpatialHillGame';
+import {
+  CalcWorkshopGame,
+  readCalcWorkshopCompletion,
+  type CalcWorkshopCompletion,
+} from '../game/CalcWorkshopGame';
 
 /** onPractice(index): the existing free-practice entry for that place (welcome card → one task, 理解/逻辑 first). */
 /** station/onStation: 正在走的一站由 App 管，记进浏览器历史，顶栏返回和系统返回手势都能退回地图；不传时组件自己记。 */
@@ -47,6 +57,14 @@ export function ProfessionalModeView({
   const [starbrookOpen, setStarbrookOpen] = useState(false);
   const [starbrookDone, setStarbrookDone] = useState<StarbrookCompletion | null>(() =>
     readStarbrookCompletion(),
+  );
+  const [spatialOpen, setSpatialOpen] = useState(false);
+  const [spatialDone, setSpatialDone] = useState<SpatialCompletion | null>(() =>
+    readSpatialCompletion(),
+  );
+  const [calcOpen, setCalcOpen] = useState(false);
+  const [calcDone, setCalcDone] = useState<CalcWorkshopCompletion | null>(() =>
+    readCalcWorkshopCompletion(),
   );
 
   const open = station ?? localOpen;
@@ -96,7 +114,7 @@ export function ProfessionalModeView({
     }
   }, [working, l.busy]);
 
-  // 地图为主：一站对应一个模块；第一站「理解」通关星溪镇后自动在地图上点亮。
+  // 地图为主：一站对应一个模块；第一站「理解」、第三站「计算」、第五站「空间想象」通关对应互动游戏后自动在地图上点亮。
   const stop = (i: typeof interview) => i?.currentModule ?? '整理报告';
   const current: MapModule | null = interview
     ? interview.currentModule
@@ -106,7 +124,10 @@ export function ProfessionalModeView({
         ? INTERVIEW_MODULE_ORDER[1]
         : INTERVIEW_MODULE_ORDER[0];
   const stateOf = (m: MapModule) =>
-    latest?.completedModules.includes(m) || (m === '理解' && !!starbrookDone)
+    latest?.completedModules.includes(m) ||
+    (m === '理解' && !!starbrookDone) ||
+    (m === '计算' && !!calcDone) ||
+    (m === '空间想象' && !!spatialDone)
       ? ('done' as const)
       : current === m
         ? ('current' as const)
@@ -127,12 +148,30 @@ export function ProfessionalModeView({
     if (card) cardRef.current?.scrollIntoView?.({ block: 'nearest' });
   }, [card]);
 
-  // 点击地图「理解花园（理解能力）」直接进入星溪镇小游戏；其他地点按测评进度直接进站或展开地点卡片。
+  // 点击地图「理解花园」直进星溪镇；点击「计算工坊」「空间山丘」平时直进对应游戏，若正在正式问答测评对应站则优先进问答。
   function onNode(m: MapModule) {
     setNotice('');
     if (m === '理解') {
       setCard(null);
       setStarbrookOpen(true);
+      return;
+    }
+    if (m === '计算') {
+      setCard(null);
+      if (interview?.status === 'in_progress' && interview.currentModule === '计算') {
+        if (!disabled) setOpen(stop(interview));
+        return;
+      }
+      setCalcOpen(true);
+      return;
+    }
+    if (m === '空间想象') {
+      setCard(null);
+      if (interview?.status === 'in_progress' && interview.currentModule === '空间想象') {
+        if (!disabled) setOpen(stop(interview));
+        return;
+      }
+      setSpatialOpen(true);
       return;
     }
     const a = assessAction(m);
@@ -153,6 +192,23 @@ export function ProfessionalModeView({
       setNotice('');
       setOpen(stop(interview));
     }
+  }
+
+  function launchModuleAssess(module: MapModule) {
+    if (interview?.status === 'in_progress') {
+      setNotice('');
+      setOpen(stop(interview));
+      return;
+    }
+    if (interview?.status === 'paused') {
+      if (!disabled) void act('resume');
+      return;
+    }
+    if (onPractice) {
+      onPractice(INTERVIEW_MODULE_ORDER.indexOf(module));
+      return;
+    }
+    if (!disabled) void act('start');
   }
 
   function assessAction(m: MapModule): { text: string; go?: () => void } {
@@ -325,6 +381,28 @@ export function ProfessionalModeView({
         onFallbackAssess={launchUnderstandAssess}
       />
 
+      <SpatialHillGame
+        open={spatialOpen}
+        onClose={() => setSpatialOpen(false)}
+        onCompleted={(summary) => {
+          setSpatialDone(summary);
+          setNotice('星象风车台通关啦！空间山丘已点亮，探索摘要也写进了「成长 · 我的档案」。');
+        }}
+        onGoChat={() => navigate('home', '小N')}
+        onFallbackAssess={() => launchModuleAssess('空间想象')}
+      />
+
+      <CalcWorkshopGame
+        open={calcOpen}
+        onClose={() => setCalcOpen(false)}
+        onCompleted={(summary) => {
+          setCalcDone(summary);
+          setNotice('符号拆包坊通关啦！计算工坊已点亮，探索摘要也写进了「成长 · 我的档案」。');
+        }}
+        onGoChat={() => navigate('home', '小N')}
+        onFallbackAssess={() => launchModuleAssess('计算')}
+      />
+
       {blocked ? (
         <div className="notice" role="alert">
           <p>{step?.safety ? step.text : '学习先暂停，先照顾好自己。'}</p>
@@ -400,13 +478,17 @@ export function ProfessionalModeView({
           <div className="professional-heading">
             <span className="eyebrow">跟着小N，一站一站来</span>
             <h2>一起看看你的思考方式</h2>
-            <p>本次观察，不打总分，不排名。点地图「理解花园」直接进入星溪镇互动探索。</p>
+            <p>
+              本次观察，不打总分，不排名。点地图「理解花园」「计算工坊」或「空间山丘」都可直接进入互动探索。
+            </p>
           </div>
 
           <ProfessionalMap
             stateOf={stateOf}
             onNode={onNode}
             starbrookDone={!!starbrookDone}
+            calcDone={!!calcDone}
+            spatialDone={!!spatialDone}
           />
 
           {starbrookDone && (
@@ -424,6 +506,44 @@ export function ProfessionalModeView({
                 onClick={() => setStarbrookOpen(true)}
               >
                 再去逛逛
+              </button>
+            </div>
+          )}
+
+          {calcDone && (
+            <div className="professional-starbrook-banner professional-calc-banner">
+              <Wrench size={16} />
+              <span>
+                计算能力 · 符号拆包坊已点亮
+                {calcDone.achievements.length > 0
+                  ? `（${calcDone.achievements.slice(0, 2).join('、')}）`
+                  : ''}
+              </span>
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => setCalcOpen(true)}
+              >
+                再去拆包
+              </button>
+            </div>
+          )}
+
+          {spatialDone && (
+            <div className="professional-starbrook-banner professional-spatial-banner">
+              <Compass size={16} />
+              <span>
+                空间想象 · 星象风车台已点亮
+                {spatialDone.achievements.length > 0
+                  ? `（${spatialDone.achievements.slice(0, 2).join('、')}）`
+                  : ''}
+              </span>
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => setSpatialOpen(true)}
+              >
+                再去校准
               </button>
             </div>
           )}
@@ -509,8 +629,8 @@ export function ProfessionalModeView({
           {!interview && (
             <div className="professional-intro">
               <p>
-                约 10–15 分钟按你的节奏探索：理解（星溪镇互动体验） → 逻辑 → 计算 → 建模 →
-                空间想象，可以随时暂停。
+                约 10–15 分钟按你的节奏探索：理解（星溪镇） → 逻辑 → 计算 → 建模 →
+                空间想象（星象风车台），可以随时暂停。
               </p>
               <div className="home-card-actions">
                 <button
@@ -519,6 +639,13 @@ export function ProfessionalModeView({
                   onClick={() => setStarbrookOpen(true)}
                 >
                   <Gamepad2 size={17} /> 进入理解能力 · 星溪镇
+                </button>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setSpatialOpen(true)}
+                >
+                  <Compass size={17} /> 空间想象 · 星象风车台
                 </button>
                 <button
                   ref={startRef}

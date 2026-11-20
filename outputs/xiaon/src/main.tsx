@@ -8,6 +8,8 @@ import "./styles/problem.css";
 import "./styles/progress.css";
 import "./styles/guardian.css";
 import "./components/game/StarbrookGame.css";
+import "./components/game/SpatialHillGame.css";
+import "./components/game/CalcWorkshopGame.css";
 import "./styles/polish.css";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

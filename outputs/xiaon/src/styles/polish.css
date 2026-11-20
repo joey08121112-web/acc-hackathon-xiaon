@@ -220,9 +220,39 @@
   box-shadow: 0 10px 22px rgba(62, 98, 76, 0.24);
 }
 
-/* 2. 专业模式地图 × 星溪镇视觉深度融合 */
+/* 2. 专业模式地图 × 互动小世界视觉深度融合（舒展无重叠、明亮绘本风） */
 .professional {
   box-shadow: 0 10px 28px rgba(45, 64, 52, 0.06);
+}
+
+.professional-map {
+  min-height: 560px;
+  aspect-ratio: 400 / 610;
+}
+
+.professional-map .node-0 {
+  left: 26%;
+  top: 15%;
+}
+
+.professional-map .node-1 {
+  left: 72%;
+  top: 33%;
+}
+
+.professional-map .node-2 {
+  left: 26%;
+  top: 52%;
+}
+
+.professional-map .node-3 {
+  left: 72%;
+  top: 70%;
+}
+
+.professional-map .node-4 {
+  left: 26%;
+  top: 87%;
 }
 
 .professional-map .map-node-starbrook .node-icon {
@@ -230,11 +260,51 @@
   color: #264a34;
   border-color: #fff9e6;
   box-shadow:
-    0 6px 0 rgba(62, 98, 76, 0.2),
-    0 10px 20px rgba(62, 98, 76, 0.2);
+    0 6px 0 rgba(62, 98, 76, 0.16),
+    0 10px 20px rgba(62, 98, 76, 0.16);
 }
 
 .professional-map .map-node-starbrook[data-state='current'] .node-icon {
+  outline: 3px solid #d5a648;
+  outline-offset: 3px;
+}
+
+.professional-map .map-node-spatial .node-icon {
+  width: 58px;
+  height: 54px;
+  background: linear-gradient(145deg, #e7e2f9 0%, #d4cbf0 100%) !important;
+  color: #3d3570;
+  border-color: #fff9ec;
+  filter: none;
+  box-shadow:
+    0 6px 0 rgba(78, 68, 134, 0.16),
+    0 10px 20px rgba(78, 68, 134, 0.16);
+}
+
+.professional-map .map-node-calc .node-icon {
+  width: 58px;
+  height: 54px;
+  background: linear-gradient(145deg, #d7f0e9 0%, #b7e2d6 100%) !important;
+  color: #1f544b;
+  border-color: #fff9ec;
+  filter: none;
+  box-shadow:
+    0 6px 0 rgba(31, 84, 75, 0.16),
+    0 10px 20px rgba(31, 84, 75, 0.16);
+}
+
+.professional-map .map-node-calc[data-state='waiting'] .node-icon,
+.professional-map .map-node-spatial[data-state='waiting'] .node-icon {
+  filter: none;
+}
+
+.professional-map .map-node-calc[data-state='waiting'] strong,
+.professional-map .map-node-spatial[data-state='waiting'] strong {
+  color: inherit;
+}
+
+.professional-map .map-node-calc[data-state='current'] .node-icon,
+.professional-map .map-node-spatial[data-state='current'] .node-icon {
   outline: 3px solid #d5a648;
   outline-offset: 3px;
 }
@@ -246,27 +316,42 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #e7be62 0%, #c89535 100%);
-  color: #1f2e22;
+  background: linear-gradient(135deg, #f3ce74 0%, #dfa642 100%);
+  color: #32240d;
   font-style: normal;
   font-size: 11px;
   font-weight: 700;
   display: grid;
   place-items: center;
   border: 2px solid #f2f2e6;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
 }
 
-.map-node-game-tag {
+.professional-map .map-node small.map-node-game-tag {
   display: inline-block;
-  padding: 1px 8px;
+  margin-top: 2px;
+  padding: 2px 9px;
   border-radius: 999px;
-  background: #2e4f3c;
-  color: #f6df9e;
-  font-size: 0.68rem;
+  background: #e5f1d8;
+  border: 1px solid #bfd7a8;
+  color: #2b4e38;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   line-height: 1.5;
+  white-space: nowrap;
+}
+
+.professional-map .map-node small.map-node-game-tag-calc {
+  background: #def2ec;
+  border-color: #a9d8cb;
+  color: #1c534a;
+}
+
+.professional-map .map-node small.map-node-game-tag-spatial {
+  background: #ebe7fb;
+  border-color: #c8bef0;
+  color: #413878;
 }
 
 .professional-starbrook-banner {
@@ -281,6 +366,26 @@
   color: #2e4c39;
   font-size: 0.83rem;
   font-weight: 500;
+}
+
+.professional-calc-banner {
+  background: linear-gradient(135deg, #e3f4ef 0%, #f8f2df 100%);
+  border-color: #c2e2d8;
+  color: #19453e;
+}
+
+.professional-calc-banner .text-button {
+  color: #1d5a50;
+}
+
+.professional-spatial-banner {
+  background: linear-gradient(135deg, #ede9fa 0%, #f9f2df 100%);
+  border-color: #d6cff0;
+  color: #312b5c;
+}
+
+.professional-spatial-banner .text-button {
+  color: #453c82;
 }
 
 .professional-starbrook-banner span {
