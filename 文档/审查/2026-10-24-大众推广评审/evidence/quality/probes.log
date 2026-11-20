@@ -1,0 +1,5 @@
+{"probe":"independent-browser-reads-other-memory","separateCookies":true,"writeStatus":200,"bSeesAText":true}
+{"probe":"memory-off-chat-persisted","optionalMemory":false,"rawChatSaved":true}
+{"probe":"prior-safety-text-in-next-model-context","firstBlocked":true,"subsequentModelSawPriorSafety":true}
+{"probe":"keyword-safety-limits","englishDetected":false,"euphemismDetected":false,"benignNegationFlagged":true}
+{"probe":"independent-browser-resets-shared-db","status":200,"result":{"cleared":true},"remainingChat":0,"remainingMemories":0}

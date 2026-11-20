@@ -1,0 +1,30 @@
+✔ level rule: every boundary maps through the program basis (0.377ms)
+✔ order is fixed: 理解 then 逻辑 then 计算 → 建模 → 空间想象; no report before 理解 and 逻辑; each answer asks one follow-up (30.515333ms)
+✔ a transfer question is asked only after a wrong first answer, from the same family (14.47525ms)
+✔ calculation without reason rubric: related but unverified prose → partial; hints and incorrect paths preserved (56.1215ms)
+✔ pause keeps the pending question and pauses the session; resume (also next day) continues there without re-asking (21.203542ms)
+✔ rest words pause; safety words store nothing and leave the interview as it was (9.62475ms)
+✔ report: comparison cites only real observations; a second interview compares with the last report; a re-report supersedes (31.414083ms)
+✔ per-session calculation cap reached: 计算 is skipped and reported as not tested (18.405541ms)
+✔ with a model: questions are phrased by the model, the program keeps the level, a stated reason makes 理解 good (14.856959ms)
+✔ retests stay on life stories: two story sets per station, then a review of a seen story, never an old-style question (119.709708ms)
+✔ life stories: answers and typical errors are distinct choice labels; free practice gets them last (5.710833ms)
+✔ listen lasts at least 2 turns even when the student already talks about exams or clicks study (1.179458ms)
+✔ needs-check is offered exactly once, after 2 listen turns, and waits while the latest message is intense (0.131292ms)
+✔ companion stays companion until a study intent appears; study intent moves to probe and resets the streak (0.096625ms)
+✔ after 6 consecutive companion turns the reply asks about study once, never again (0.069083ms)
+✔ a decline (button or words) means study is never asked again in this session (0.086125ms)
+✔ understanding/logic probing only in probe, at least every 3 turns, never while intense or listening (0.085458ms)
+✔ safety and rest outrank every stage; a safety message does not advance the conversation (0.078542ms)
+✔ probe asks for the concrete problem only when a specific wrong problem is mentioned and none is recorded yet (0.058375ms)
+✔ probe → think needs a confirmed problem or active task plus start_together; think → reflect → companion (0.3075ms)
+✔ each stage allows only its own model fields; memory drafts disappear when memory is off (0.118959ms)
+✔ formal test choice suggests professional mode (not while intense); farewell ends the session (0.081125ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 442.800417

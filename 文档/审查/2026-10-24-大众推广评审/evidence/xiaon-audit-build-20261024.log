@@ -1,0 +1,18 @@
+
+> xiaon-learning-companion@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 1712 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   2.27 kB │ gzip:   1.41 kB
+dist/assets/index-DXhkL-f4.css   65.71 kB │ gzip:  15.15 kB
+dist/assets/index-CvgZu3fj.js   557.89 kB │ gzip: 173.64 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 834ms

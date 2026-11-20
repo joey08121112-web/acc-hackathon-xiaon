@@ -1,0 +1,17 @@
+{
+  "laterHead": "59eec1824a102478ee1eeb2fa78a69675787e745",
+  "changedAfterSnapshot": [
+    {
+      "path": "outputs/xiaon/src/components/professional/ProfessionalAnswer.tsx",
+      "reviewedSHA256": "71c04c013ceeeedd8da98518f7c844b9eddbde4b09cb8eda4e23e8c7943e4d5a",
+      "laterSHA256": "97014fd39e89709f7f3dea1f98d78cf90ffefcefaef410545ee6ed89fabe75f4"
+    },
+    {
+      "path": "outputs/xiaon/src/voice/mic.ts",
+      "reviewedSHA256": "967f146bbc86d95b85f3190e13b96dd3b22c24ad534b82c8ade3f5bf3ab270dd",
+      "laterSHA256": "3094f8ff9b876ccb00481bdc071d1154ce75f3f2d6cce0ee6767c507ea11b5b1"
+    }
+  ],
+  "reviewedSnapshotReconstruction": "237/237 hashes match",
+  "laterChangesTestStatus": "not retested in this audit"
+}

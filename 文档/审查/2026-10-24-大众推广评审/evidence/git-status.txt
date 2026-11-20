@@ -1,0 +1,10 @@
+ M outputs/xiaon/server/agents/learning.ts
+ M outputs/xiaon/server/storage/repository.ts
+ M outputs/xiaon/shared/learning-contracts.schema.json
+ M outputs/xiaon/shared/learning-contracts.ts
+ M outputs/xiaon/src/App.tsx
+ M outputs/xiaon/src/components/learning/ChatPanel.tsx
+ M outputs/xiaon/src/components/learning/LearningPages.tsx
+ M outputs/xiaon/src/components/learning/home/ChatHistory.tsx
+ M outputs/xiaon/src/style.css
+?? "\346\226\207\346\241\243/\345\256\241\346\237\245/2026-10-24-\345\244\247\344\274\227\346\216\250\345\271\277\350\257\204\345\256\241/"

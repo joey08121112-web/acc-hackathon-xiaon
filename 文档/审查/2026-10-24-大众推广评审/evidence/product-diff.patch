@@ -1,0 +1,325 @@
+diff --git a/outputs/xiaon/server/agents/learning.ts b/outputs/xiaon/server/agents/learning.ts
+index 7320568..aec2a3c 100644
+--- a/outputs/xiaon/server/agents/learning.ts
++++ b/outputs/xiaon/server/agents/learning.ts
+@@ -157,22 +157,28 @@ export class LearningCoordinator {
+   if(p.flow==='home'&&activeLoop){
+    if(p.intent==='decline_study'||p.intent==='life'||DECLINE_PATTERN.test(last)||FAREWELL_PATTERN.test(last)){
+     const ended=await this.loopEvent({operationId:p.operationId+'-leave-loop',action:'leave',episodeId:activeLoop.id,expectedRevision:activeLoop.revision},signal);
+-    return chatReply({text:'好，先收好这次的记录，想聊什么由你决定。'+ended.summary,stage:'companion',sessionId:activeLoop.sessionId});
++    const farewell='好，先收好这次的记录，想聊什么由你决定。'+ended.summary;
++    this.replayLog(p.operationId,activeLoop.sessionId,this.r.clock.now(),last,farewell);
++    return chatReply({text:farewell,stage:'companion',sessionId:activeLoop.sessionId});
+    }
+-   if(REST_PATTERN.test(last)){await this.preference({operationId:p.operationId+'-pause',rest:true,questionInvitePaused:true});return chatReply({text:REST_TEXT,stage:'rest',sessionId:activeLoop.sessionId});}
++   if(REST_PATTERN.test(last)){await this.preference({operationId:p.operationId+'-pause',rest:true,questionInvitePaused:true});this.replayLog(p.operationId,activeLoop.sessionId,this.r.clock.now(),last,REST_TEXT);return chatReply({text:REST_TEXT,stage:'rest',sessionId:activeLoop.sessionId});}
+    return this.perform(p.operationId,p,async()=>{
+     this.r.events.requireSession(activeLoop.loop!.learningSessionId);
+     let live=activeLoop;
+     if(HELP_PATTERN.test(last)||STOP_THINK_PATTERN.test(last)){
+      const out=await runLoop({operationId:p.operationId+'-loop',action:STOP_THINK_PATTERN.test(last)?'end':'help',episodeId:live.id,expectedRevision:live.revision},this.r,{context:this.revamp(),assess:(a,op,signal)=>this.assess(a,op,signal),generate:(op,signal)=>this.generator.generate({operationId:op,knowledgePointId:'negative-brackets',purpose:'practice',reviewItemId:null,timeBudgetMinutes:5},signal,()=>true)},signal);
+      live=out.episode;
+-     return chatReply({text:STOP_THINK_PATTERN.test(last)?out.summary:out.help.at(-1)?.text??'可以先回顾，或换种方法继续。',stage:live.stage,sessionId:live.sessionId});
++     const loopHelp=STOP_THINK_PATTERN.test(last)?out.summary:out.help.at(-1)?.text??'可以先回顾，或换种方法继续。';
++     this.replayLog(p.operationId,live.sessionId,this.r.clock.now(),last,loopHelp);
++     return chatReply({text:loopHelp,stage:live.stage,sessionId:live.sessionId});
+     }
+     const current=loopView(live,this.r),hypothesis=live.loop!.hypotheses.at(-1)!;
+     const result=await this.roles.invoke('tutor',p.operationId,{stage:live.stage,history:p.history.slice(-TUTOR_HISTORY_TURNS),context:this.tutorContext(p.history,live.sessionId,live.stage),task:current.task,confirmedStuckPoint:hypothesis.status==='proposed'?null:hypothesis,unconfirmedHypothesis:hypothesis.status==='proposed'?hypothesis:null,latestFeedback:current.currentGrade,signals:{},helpLevel:0,helpLevelsUsed:live.helpLevelsUsed},signal,{prompt:homeTutorPrompt({stage:live.stage,allowed:[]}),secrets:current.task?this.r.catalog.definition(current.task.id,current.task.version)?.answer:[]});
+     const out=homeTutorOutput.safeParse(result.value);
+     if(out.success&&result.run.status==='completed')recordLoopDialogue(live,this.r,p.operationId,out.data.message);
+-    return chatReply({text:out.success?out.data.message:'我们还在这一步。可以在题目下保存尝试，也可以选择一点提示。',stage:live.stage,sessionId:live.sessionId,run:result.run});
++    const loopReply=out.success?out.data.message:'我们还在这一步。可以在题目下保存尝试，也可以选择一点提示。';
++    this.replayLog(p.operationId,live.sessionId,this.r.clock.now(),last,loopReply);
++    return chatReply({text:loopReply,stage:live.stage,sessionId:live.sessionId,run:result.run});
+    },signal);
+   }
+   // G0: the home flow runs the stage machine; the legacy D two-step flow below is unchanged.
+@@ -197,6 +203,13 @@ export class LearningCoordinator {
+  }
+  /** Stuck-point confirmation is derived from a student event: a confirmed ProblemRecord that links the stuck point. */
+  private stuckConfirmed(stuckPointId:string){return this.r.repository.list('problems').some(p=>p.stuckPointId===stuckPointId);}
++ /** 对话回放（2026-10-24 需求）：把这一轮原文按消息追加进 chatLog，首页“对话记录”可回看当时说了什么。
++  * 学习记录，重置演示时清除。安全轮在 chat() 顶部已被拦截，永远不会走到这里。 */
++ private replayLog(operationId:string,sessionId:string,at:string,user:string,assistant:string){
++  const repo=this.r.repository;
++  repo.append('chatLog',{schemaVersion:SCHEMA_VERSION,id:`log-${operationId}-user`,operationId,sessionId,role:'user',content:user,at});
++  repo.append('chatLog',{schemaVersion:SCHEMA_VERSION,id:`log-${operationId}-assistant`,operationId,sessionId,role:'assistant',content:assistant,at});
++ }
+  private recentStuckPoints(){return this.r.repository.list('stuckPoints').slice(-3).map(({id,knowledgePointId,kind,summary,createdAt})=>({knowledgePointId,kind,summary,studentConfirmed:this.stuckConfirmed(id),createdAt}));}
+  /** Professional-mode background for the home Tutor: the latest report's tested modules (level labels only, no evidence or quotes)
+   * and this Shanghai month's student-confirmed goal. Learning records, so the memory switch does not apply. null when there is neither. */
+@@ -261,7 +274,7 @@ export class LearningCoordinator {
+     ...(live?.task&&!live.studentSolvedAt?this.r.catalog.definition(live.task.taskId,live.task.taskVersion)?.answer??[]:[])];
+    const releasedAnswers=solvedEpisodes.flatMap(e=>e.task?this.r.catalog.definition(e.task.taskId,e.task.taskVersion)?.answer??[]:[]);
+    const turn=(dropped:ChatTurn['dropped'],replyFit:ChatTurn['replyFit']='ok'):ChatTurn=>({schemaVersion:SCHEMA_VERSION,id:'turn-'+p.operationId,operationId:p.operationId,sessionId,turn:s.turn,stage,intent:p.intent??null,problemId:problem?.id??null,episodeId,listenTurns:s.listenTurns,companionStreak:s.companionStreak,thinkTurns:s.thinkTurns,lastProbeTurn:s.lastProbeTurn,needsCheckAsked:s.needsCheckAsked,askStudyAsked:s.askStudyAsked,studyDeclined:s.studyDeclined,ended:s.ended,signals:{needsCheck:decision.needsCheck,askStudy:decision.askStudy,askProblem:decision.askProblem,probeAllowed:decision.probeAllowed,modeSuggestion:decision.modeSuggestion},dropped:dropped.slice(0,8),replyFit,at:now});
+-   if(stage==='rest'){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});repo.append('chatTurns',turn([]));return chatReply({text:REST_TEXT,stage,sessionId});}
++   if(stage==='rest'){await this.preference({operationId:p.operationId+'-pause',rest:/休息/.test(last),questionInvitePaused:true});repo.append('chatTurns',turn([]));this.replayLog(p.operationId,sessionId,now,last,REST_TEXT);return chatReply({text:REST_TEXT,stage,sessionId});}
+    // memoryDraft: the stage machine already removed it when memory is off; memory-flow may narrow it further.
+    let memoryGate:'memory_off'|'stage_not_allowed'|'not_implemented'|null=memoryEnabled?null:'memory_off';
+    if(decision.allowed.includes('memoryDraft')){try{if(!shouldOfferMemory({sessionId,stage,turn:s.turn},ctx))memoryGate='stage_not_allowed';}catch(e){if(!notImplementedError(e))throw e;memoryGate='not_implemented';}}
+@@ -334,6 +347,7 @@ export class LearningCoordinator {
+    let summary=null;
+    if(decision.end){try{summary=schemas.ConversationSummary.parse(await endConversation({operationId:p.operationId+'-end',sessionId,trigger:'farewell',history:p.history},ctx,signal));}catch(e){if(!(e instanceof RuntimeError))throw e;}}
+    repo.append('chatTurns',turn(log,result.replyFit));
++   this.replayLog(p.operationId,sessionId,now,last,value.message);
+    const suggestions:TaskPublicView[]=session?value.taskIds.flatMap(id=>{const t=this.r.catalog.publicTask(id,2);return t?[t]:[];}):[];
+    return chatReply({text:value.message,stage,sessionId,run:result.run,suggestions,quickReplies:suggestions.length?[]:HOME_QUICK_REPLIES[stage],askStudy:decision.askStudy&&!sceneBusy,needsCheck:decision.needsCheck,askProblem:decision.askProblem,
+     modeSuggestion:decision.modeSuggestion?{mode:'professional',reason:'想看清楚自己现在的情况，可以做一次正式测试。'}:null,problemDraft,progressCardDraft,memoryDraft,summary});
+@@ -440,9 +454,10 @@ export class LearningCoordinator {
+   // Audit only: fingerprints and reason codes, never answers or model text. exposed derives from real task exposures.
+   generations:this.r.repository.list('generations').map(g=>({...g,exposed:!!g.taskId&&this.r.repository.list('exposures').some(e=>e.kind==='task'&&e.taskId===g.taskId&&e.taskVersion===g.taskVersion)})),generationAvailable:this.r.provider.kind!=='offline',
+   // G0: learning records for the home revamp. problemSecrets is deliberately absent; chatTurns carry no student text.
++  // chatLog (2026-10-24) is the verbatim replay shown on the home “对话记录”: user message + Tutor reply per turn, safety turns excluded.
+   learningLoops:latestRevisions(this.r.repository.list('episodes')).filter(e=>e.loop).map(e=>loopView(e,this.r)),
+   problems:this.r.repository.list('problems'),episodes:this.r.repository.list('episodes'),progressCards:this.r.repository.list('progressCards'),memoryMentions:this.r.repository.list('memoryMentions'),
+-  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),lifeScenes:this.r.repository.list('lifeScenes'),
++  observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),lifeScenes:this.r.repository.list('lifeScenes'),chatLog:this.r.repository.list('chatLog'),
+   // G2: professional-mode learning records, shown whatever the memory switch says. interviews/monthStages are the latest revision of each.
+   interviews:latestRevisions(this.r.repository.list('interviews')),interviewTurns:this.r.repository.list('interviewTurns'),professionalReports:this.r.repository.list('professionalReports'),
+   monthStages:latestRevisions(this.r.repository.list('monthStages')),retestReminder:this.currentRetestReminder()};
+diff --git a/outputs/xiaon/server/storage/repository.ts b/outputs/xiaon/server/storage/repository.ts
+index 862be6c..ba3c089 100644
+--- a/outputs/xiaon/server/storage/repository.ts
++++ b/outputs/xiaon/server/storage/repository.ts
+@@ -11,6 +11,8 @@ export const entitySchemas = {
+  problems:schemas.ProblemRecord,problemSecrets:schemas.ProblemSecret,episodes:schemas.LearningEpisode,progressCards:schemas.ProgressCard,memoryMentions:schemas.MemoryMention,memoryOffers:schemas.MemoryOffer,observations:schemas.ChatObservation,summaries:schemas.ConversationSummary,chatTurns:schemas.ChatTurn,
+  // 生活话题观察（2026-10-24）：场景推进记录
+  lifeScenes:schemas.LifeSceneState,
++ // 对话回放（2026-10-24）：每轮两条的聊天原文（学生 + 小N）；安全轮永不写入。
++ chatLog:schemas.ChatLog,
+  // G2 第二期：专业模式. Learning records (not subject to the memory switch); interviews and monthStages are revisioned like episodes.
+  interviews:schemas.InterviewSession,interviewTurns:schemas.InterviewTurn,professionalReports:schemas.ProfessionalReport,monthStages:schemas.MonthStage,
+ } satisfies {[K in keyof EntityMap]:z.ZodType<EntityMap[K]>};
+@@ -48,7 +50,9 @@ export class SqliteRepository implements LearningRepository {
+    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(6);');
+    // v7 (2026-10-24): additive lifeScenes table, created by the same additive loop.
+    this.db.exec('INSERT OR IGNORE INTO migrations VALUES(7);');
+-   for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans','problems','episodes','progressCards','observations','summaries','chatTurns','lifeScenes'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
++   // v8 (2026-10-24): additive chatLog table (对话回放), created by the same additive loop.
++   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(8);');
++   for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans','problems','episodes','progressCards','observations','summaries','chatTurns','lifeScenes','chatLog'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
+   });
+  }
+  private table<K extends keyof EntityMap>(name:K){if(!Object.hasOwn(entitySchemas,name))throw new RuntimeError('invalid_params');return name;}
+diff --git a/outputs/xiaon/shared/learning-contracts.schema.json b/outputs/xiaon/shared/learning-contracts.schema.json
+index f5552f2..83f20b0 100644
+--- a/outputs/xiaon/shared/learning-contracts.schema.json
++++ b/outputs/xiaon/shared/learning-contracts.schema.json
+@@ -7763,6 +7763,55 @@
+       ],
+       "additionalProperties": false
+     },
++    "ChatLog": {
++      "$schema": "https://json-schema.org/draft/2020-12/schema",
++      "type": "object",
++      "properties": {
++        "schemaVersion": {
++          "type": "string",
++          "const": "1.0.0"
++        },
++        "id": {
++          "type": "string",
++          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
++        },
++        "operationId": {
++          "type": "string",
++          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
++        },
++        "sessionId": {
++          "type": "string",
++          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$"
++        },
++        "role": {
++          "type": "string",
++          "enum": [
++            "user",
++            "assistant"
++          ]
++        },
++        "content": {
++          "type": "string",
++          "minLength": 1,
++          "maxLength": 8000
++        },
++        "at": {
++          "type": "string",
++          "format": "date-time",
++          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
++        }
++      },
++      "required": [
++        "schemaVersion",
++        "id",
++        "operationId",
++        "sessionId",
++        "role",
++        "content",
++        "at"
++      ],
++      "additionalProperties": false
++    },
+     "ChatReply": {
+       "$schema": "https://json-schema.org/draft/2020-12/schema",
+       "type": "object",
+diff --git a/outputs/xiaon/shared/learning-contracts.ts b/outputs/xiaon/shared/learning-contracts.ts
+index 0943cc0..9367242 100644
+--- a/outputs/xiaon/shared/learning-contracts.ts
++++ b/outputs/xiaon/shared/learning-contracts.ts
+@@ -132,6 +132,9 @@ const ChatTurn = z.strictObject({...base,...operation,sessionId:id,turn:version,
+   dropped:z.array(z.strictObject({field:stageField,reason:z.enum(['stage_not_allowed','memory_off','invalid','not_implemented'])})).max(8),
+   // Program length gate on the Tutor reply (≤ TUTOR_REPLY_MAX_CHARS): ok, rewritten once by the model, or cut at a sentence end.
+   replyFit:z.enum(['ok','retried','truncated']),at:utc});
++// 对话回放（2026-10-24）：每轮两条（学生 + 小N）追加式原文，供首页“对话记录”回看当时说了什么。
++// 学习记录：不受记忆开关影响，随重置演示清除。安全轮（SAFETY_PATTERN）在入口拦截，永不写入。
++const ChatLog = z.strictObject({...base,...operation,sessionId:id,role:z.enum(['user','assistant']),content:text,at:utc});
+ const ChatReply = z.strictObject({text,stage:ChatStage,sessionId:id.nullable(),run:AgentRun.nullable(),safety:z.boolean(),quickReplies:z.array(z.string().min(1).max(40)).max(6),suggestions:z.array(TaskPublicView).max(3),
+   askStudy:z.boolean(),needsCheck:z.boolean(),askProblem:z.boolean(),modeSuggestion:ModeSuggestion.nullable(),
+   problemDraft:ProblemDraft.nullable(),progressCardDraft:ProgressCardDraft.nullable(),memoryDraft:MemoryDraft.nullable(),summary:ConversationSummary.nullable()});
+@@ -234,7 +237,7 @@ export const schemas = {
+   ToolArguments:tools,
+   // G0 首页改版
+   ModeSuggestion,ProblemDraft,ProblemRecord,ProblemSecret,LearningEpisode,ProgressCardDraft,ProgressCard,MemoryDraft,MemoryMention,MemoryOffer,Greeting,
+-  ObservationDraft,ChatObservation,ConversationSummary,ChatTurn,ChatReply,RecognizeResult,LifeSceneState,
++  ObservationDraft,ChatObservation,ConversationSummary,ChatTurn,ChatLog,ChatReply,RecognizeResult,LifeSceneState,
+   ConfirmProblem:z.strictObject({...operation,sessionId:id.nullable(),draft:ProblemDraft,referenceAnswer:z.string().min(1).max(500).nullable()}),
+   Recognize:z.strictObject({...operation,sessionId:id.nullable(),mimeType:z.literal('image/jpeg'),image:z.string().min(4).max(RECOGNIZE_MAX_BASE64).regex(/^[A-Za-z0-9+/]+={0,2}$/),maskConfirmed:z.literal(true)}),
+   ConfirmProgressCard:z.strictObject({...operation,sessionId:id,episodeId:id.nullable(),aiDraft:ProgressCardDraft.nullable(),breakthrough:cardText.nullable(),method:cardText.nullable(),nextTry:cardText.nullable(),confidence:confidence.nullable()}),
+@@ -307,6 +310,7 @@ export type ChatObservation = z.infer<typeof ChatObservation>;
+ export type LifeSceneState = z.infer<typeof LifeSceneState>;
+ export type ConversationSummary = z.infer<typeof ConversationSummary>;
+ export type ChatTurn = z.infer<typeof ChatTurn>;
++export type ChatLog = z.infer<typeof ChatLog>;
+ export type ChatReply = z.infer<typeof ChatReply>;
+ export type RecognizeResult = z.infer<typeof RecognizeResult>;
+ export type ConfirmProblem = z.infer<typeof schemas.ConfirmProblem>;
+@@ -353,6 +357,8 @@ export interface EntityMap {
+   /** G0 首页改版. problemSecrets never leaves the server; observations/summaries are learning records independent of the memory switch. All cleared by reset. */
+   problems:ProblemRecord; problemSecrets:ProblemSecret; episodes:LearningEpisode; progressCards:ProgressCard; memoryMentions:MemoryMention; memoryOffers:MemoryOffer;
+   observations:ChatObservation; summaries:ConversationSummary; chatTurns:ChatTurn;
++  /** 对话回放（2026-10-24）：每轮两条的聊天原文。学习记录，不受记忆开关影响，重置演示时清除；安全轮永不写入。 */
++  chatLog:ChatLog;
+   /** 生活话题观察（2026-10-24）：场景推进记录。学习记录，不受记忆开关影响，重置演示时清除。 */
+   lifeScenes:LifeSceneState;
+   /** G2 第二期. Necessary learning records independent of the memory switch; cleared by reset. interviews/monthStages are revisioned (key id:r<revision>).
+diff --git a/outputs/xiaon/src/App.tsx b/outputs/xiaon/src/App.tsx
+index 106ccf1..f53492f 100644
+--- a/outputs/xiaon/src/App.tsx
++++ b/outputs/xiaon/src/App.tsx
+@@ -891,7 +891,7 @@ function App() {
+             )}
+             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
+             <LearningStatus l={learning} />
+-            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在本地服务里；真实模型会向智谱发送本次需要的学习内容和获准记忆。你可以查看记录、管理记忆或重置整个演示。{devMode && <p>SQLite 保存学习事实，浏览器缓存草稿；单用户演示。</p>}</div>}
++            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在本地服务里；真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在这台设备的学习记录里，可以在首页下方的“对话记录”回看。你可以查看记录、管理记忆或重置整个演示。{devMode && <p>SQLite 保存学习事实，浏览器缓存草稿；单用户演示。</p>}</div>}
+             <main className={`page page-${s.page}`}>
+               {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>openModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
+               {/* 新版首页离开时只隐藏不卸载：聊天里弹出的卡片、改到一半的草稿和还在等的回复，回来都还在。 */}
+diff --git a/outputs/xiaon/src/components/learning/ChatPanel.tsx b/outputs/xiaon/src/components/learning/ChatPanel.tsx
+index bc83b72..2f857aa 100644
+--- a/outputs/xiaon/src/components/learning/ChatPanel.tsx
++++ b/outputs/xiaon/src/components/learning/ChatPanel.tsx
+@@ -159,7 +159,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
+   {/* 记忆已关是如实告知的一行状态，不是选择卡：首页空闲时（只剩学习片段入口）照样显示 */}
+   {(slot==='memoryOff'||slot==='loopEntry')&&<MemoryOffNotice memoryEnabled={memoryEnabled} where="home" navigate={navigate}/>}
+   <ConversationSummaryView key={`${shownSummary?.id}`} summary={blocked?null:shownSummary} l={l} navigate={startProfessional}/>
+-  <ChatHistory l={l} navigate={navigate} excludeSummaryId={shownSummary?.id??null}/>
++  <ChatHistory l={l} navigate={navigate} currentSessionId={sessionId} excludeSummaryId={shownSummary?.id??null}/>
+   <div className="home-composer-wrap">
+    <div className="home-card-actions"><button className="secondary" disabled={disabled||blocked||!sessionId||!!shownSummary} onClick={end}>今天先聊到这</button><button className="text-button" disabled={disabled} onClick={()=>void pause()}>今天先休息</button></div>
+   </div>
+diff --git a/outputs/xiaon/src/components/learning/LearningPages.tsx b/outputs/xiaon/src/components/learning/LearningPages.tsx
+index 073aa24..cd28dc0 100644
+--- a/outputs/xiaon/src/components/learning/LearningPages.tsx
++++ b/outputs/xiaon/src/components/learning/LearningPages.tsx
+@@ -60,6 +60,8 @@ export function LearningPages({l,page,navigate,onExploreDimension,safety=false,s
+  </section>}
+  {v.summaries.length>0&&<section className="info-paper conversation-summaries"><h2>对话小结</h2><p className="small muted">聊天观察，待专业模式确认，不是评分。</p>
+   {[...v.summaries].reverse().map(s=><details key={s.id}><summary>{date(s.createdAt)} · {s.topics.join('、')||'聊了聊'}</summary>
++   {/* 当时说了什么：对话回放（2026-10-24），原文按轮成对保存在本地服务的 chatLog 里 */}
++   {v.chatLog.filter(m=>m.sessionId===s.sessionId).map(m=><p className="chat-line" key={m.id}><strong>{m.role==='user'?'我':'小N'}</strong>{m.content}</p>)}
+    {s.observationIds.map(oid=>v.observations.find(o=>o.id===oid)).flatMap(o=>o?[o]:[]).map(o=><p key={o.id}><span className="tag">{o.dimension} · {o.sceneId?'生活话题 · ':''}待核实</span>「{o.quote}」{o.note}</p>)}
+    {s.changes.length>0&&<><h3>和上次比</h3>{s.changes.map((c,i)=><p key={i}>{c}</p>)}</>}
+    <h3>可以试试</h3>{s.planSuggestions.map((c,i)=><p key={i}>{c}</p>)}
+diff --git a/outputs/xiaon/src/components/learning/home/ChatHistory.tsx b/outputs/xiaon/src/components/learning/home/ChatHistory.tsx
+index beaf454..8d19206 100644
+--- a/outputs/xiaon/src/components/learning/home/ChatHistory.tsx
++++ b/outputs/xiaon/src/components/learning/home/ChatHistory.tsx
+@@ -1,13 +1,27 @@
+-/** 首页往下拉的对话记录：这轮对话的原文只在本机浏览器缓存里；往期对话服务端按隐私口径只存小结，不存原话。 */
++/** 首页往下拉的对话记录：这轮对话实时显示（浏览器缓存）；往期对话从本地服务的 chatLog 回放完整原文。
++ * chatLog 是学习记录：每轮两条（学生 + 小N），重置演示时清除；安全轮在服务端入口被拦截，永不落库。 */
+ import type { LearningUI } from '../../../agents/useLearning';
++import type { ChatLog } from '../../../../shared/learning-contracts';
+ const date=(s:string)=>new Date(s).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false});
+-export function ChatHistory({l,navigate,excludeSummaryId=null}:{l:LearningUI;navigate:(page:string,tab?:string)=>void;excludeSummaryId?:string|null}){
+- const chat=l.cache.chat,summaries=(l.view?.summaries??[]).filter(s=>s.id!==excludeSummaryId);
+- if(!chat.length&&!summaries.length)return null;
++/** 按场次分组（chatLog 追加有序），最新一场在前；当前正在聊的场次不算“更早”。 */
++const groupReplays=(log:ChatLog[],currentSessionId:string|null):{sessionId:string;messages:ChatLog[]}[]=>{
++ const by=new Map<string,ChatLog[]>();
++ for(const m of log){
++  if(m.sessionId===currentSessionId)continue;
++  const list=by.get(m.sessionId)??[];if(!list.length)by.set(m.sessionId,list);list.push(m);
++ }
++ return [...by.entries()].map(([sessionId,messages])=>({sessionId,messages}))
++  .sort((a,b)=>Date.parse(b.messages[0].at)-Date.parse(a.messages[0].at));
++};
++export function ChatHistory({l,navigate,currentSessionId=null,excludeSummaryId=null}:{l:LearningUI;navigate:(page:string,tab?:string)=>void;currentSessionId?:string|null;excludeSummaryId?:string|null}){
++ const chat=l.cache.chat;
++ const summaries=(l.view?.summaries??[]).filter(s=>s.id!==excludeSummaryId);
++ const replays=groupReplays(l.view?.chatLog??[],currentSessionId);
++ if(!chat.length&&!replays.length)return null;
+  return <section className="chat-history">
+   <div className="chat-history-head"><span className="eyebrow">LOOKING BACK</span><h2>对话记录</h2></div>
+   {chat.length>0&&<div className="chat-history-block">
+-   <h3>这轮对话<small>原文只保存在这台设备上</small></h3>
++   <h3>这轮对话<small>还在聊的这轮</small></h3>
+    <div className="messages chat-history-messages">
+     {chat.map((m,i)=><div className={`message${m.role==='user'?' user':''}`} key={i}>
+      {m.role==='assistant'&&<span className="message-label">小N</span>}
+@@ -15,14 +29,20 @@ export function ChatHistory({l,navigate,excludeSummaryId=null}:{l:LearningUI;nav
+     </div>)}
+    </div>
+   </div>}
+-  {summaries.length>0&&<div className="chat-history-block">
+-   <h3>更早的对话<small>按话题留下的小结</small></h3>
+-   {[...summaries].reverse().slice(0,5).map(s=><details className="chat-history-item" key={s.id}>
+-    <summary>{date(s.createdAt)} · {s.topics.join('、')||'聊了聊'}</summary>
+-    <p className="small muted">下次可以试试</p>
+-    {s.planSuggestions.map((p,i)=><p key={i}>{p}</p>)}
+-   </details>)}
+-   {summaries.length>5&&<button className="text-button" onClick={()=>navigate('growth')}>更早的 {summaries.length-5} 次对话，去成长页看</button>}
++  {replays.length>0&&<div className="chat-history-block">
++   <h3>更早的对话<small>点开回放当时说了什么</small></h3>
++   {replays.map(r=>{
++    const summary=summaries.find(s=>s.sessionId===r.sessionId)??null;
++    return <details className="chat-history-item" key={r.sessionId}>
++     <summary>{date(r.messages[0].at)} · {summary?.topics.join('、')||'聊了聊'}</summary>
++     <div className="messages chat-history-messages">
++      {r.messages.map(m=><div className={`message${m.role==='user'?' user':''}`} key={m.id}>
++       {m.role==='assistant'&&<span className="message-label">小N</span>}
++       <div>{m.content}</div>
++      </div>)}
++     </div>
++     {summary&&<><p className="small muted">下次可以试试</p>{summary.planSuggestions.map((p,i)=><p key={i}>{p}</p>)}</>}
++    </details>;})}
+   </div>}
+  </section>;
+ }
+diff --git a/outputs/xiaon/src/style.css b/outputs/xiaon/src/style.css
+index 4261444..22756f7 100644
+--- a/outputs/xiaon/src/style.css
++++ b/outputs/xiaon/src/style.css
+@@ -3135,7 +3135,11 @@ input[type="range"] {
+ .chat-history-messages .message-label { margin-bottom: 3px; }
+ .chat-history-item { border: 1px solid #e4e7da; background: #fffef7; padding: 10px 12px; margin-bottom: 8px; }
+ .chat-history-item summary { cursor: pointer; font-size: 0.84rem; line-height: 1.6; color: #42533c; }
++.chat-history-item .chat-history-messages { margin: 8px 0 2px; }
+ .chat-history-item p { margin: 6px 0 0; font-size: 0.8rem; line-height: 1.7; }
++/* 成长页“对话小结”里的回放行：说话人 + 原文 */
++.chat-line { margin: 6px 0 0; font-size: 0.8rem; line-height: 1.7; }
++.chat-line strong { margin-right: 6px; color: #6c7f5d; }
+ .chat-history .text-button { min-height: 0; padding: 2px 0; font-size: 0.78rem; }
+ /* 微信式输入栏：[语音/键盘切换] [输入框 或 按住说话] [声音开关] */
+ /* 固定在底部导航（.bottom-nav，高 76px + 安全区）正上方，宽度跟导航一致 */

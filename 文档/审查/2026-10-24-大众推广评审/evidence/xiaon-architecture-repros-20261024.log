@@ -1,0 +1,3 @@
+{"case":"R1_ambiguous_answer_substring","input":"我不知道是不是 x+5，也可能是 x-5","accepted":true,"programCard":"自己算出了结果"}
+{"case":"R2_model_agreement_unparsed_question","answerStatus":"verified","secrets":[{"answer":["x+5"],"origin":"program_computed"}]}
+{"case":"R3_cross_day_loop_help","newSessionCreated":true,"error":"invalid_state","message":"场次暂停或已结束"}

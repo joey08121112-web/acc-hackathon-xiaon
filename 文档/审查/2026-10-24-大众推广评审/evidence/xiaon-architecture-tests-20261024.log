@@ -1,0 +1,39 @@
+✔ choice correct alone does not prove reasoning; validated explanation has exact saved-answer quotes (24.941417ms)
+✔ the program locates verbatim quotes itself: model offsets are ignored, wrapping quotes and edge punctuation are tolerated (36.602292ms)
+✔ no quote, foreign quote, malformed JSON, unknown points, extra keys and program/model conflict all defer (57.603375ms)
+✔ model sees only required task/rubric, persisted answer and exposure snapshot, no optional profile/chat/history (7.417375ms)
+✔ revision supersedes grading/evidence without overwriting attempts; regrading recomputes latest skill and preserves old success (13.020042ms)
+✔ A01/A02 partial, negated, quoted or reported understanding stays in think (0.9995ms)
+✔ B01 production interview report: no reason rubric never upgrades unrelated or unverified prose (69.614334ms)
+✔ A03/E01 unverified budget ending and unsupported AI facts fall back to saved process (7.033042ms)
+✔ C01/C02/D02 real loop saves first error, help, correction and a first independent unseen check (23.606292ms)
+✔ A01 coordinator revises neither completion nor end reason for mixed understanding (12.286625ms)
+✔ C03 verification help or wrong first answer cannot become first independent on correction (29.37825ms)
+✔ A04 help uses the corrected hypothesis; three levels then alternative representation; budget allows ending (13.8085ms)
+✔ C04 original, seen and alias fingerprints are rejected; exhausted catalog produces no pretend unseen task (7.839084ms)
+✔ D01/D02 SQLite restart retains task, draft, attempts and receipts; conflicting operation/revision rejected (14.805542ms)
+✔ D03 additive optional loop reads old episode/report without inventing or rewriting evidence (6.016084ms)
+✔ E01/E02 skip verification/card/confidence, optional memory off and student edits never change scoring (10.342791ms)
+✔ E03 safety stores nothing, pause rejects new tasks/help, resumed fragment uses same task (8.09075ms)
+✔ HTTP loop uses authentication, CSRF, strict schema, revision and operation receipts (46.319125ms)
+✔ F01 existing planner with TestClock creates confirmed review, next-day due is distinct from same-day new task (23.871334ms)
+✔ D02 leaving during submission retains raw attempt and the original operation can finish after restart (9.393875ms)
+✔ E03 natural refusal and farewell leave the exercise; pure chat is usable even after pausing (16.16ms)
+✔ C03 a model reply during verification is conservatively recorded as help before the next attempt (14.357125ms)
+✔ A04 proposed hypothesis cannot reveal a whitespace-normalized reference answer (7.037041ms)
+✔ validateMemoryDraft: 关闭即拒、情绪与评价丢弃、40 字上限、origin 由程序决定 (0.620333ms)
+✔ shouldOfferMemory: 同一场次最多两次实际提议；新场次重新计 (13.479459ms)
+✔ confirmMemoryDraft: 只有学生确认才写入；写 chat 提起与 30 天复核；关闭时拒绝 (7.822209ms)
+✔ greeting: 优先接上次小结（记忆关闭也可以）；没有小结才提记忆 (17.046542ms)
+✔ greeting: 离线（无模型）返回默认文字；刚确认的记忆不会被马上提起 (7.088292ms)
+✔ selectMemoriesForContext: 只取与当前话题相关的记忆，按相关度排序，最多 5 条 (0.579375ms)
+✔ greeting 只从有效记忆里挑：过期、到期待复核、已停用的一律不提 (10.480416ms)
+✔ Tutor 上下文经协调器按需取用：相关记忆才进上下文 (13.220792ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 453.605334
