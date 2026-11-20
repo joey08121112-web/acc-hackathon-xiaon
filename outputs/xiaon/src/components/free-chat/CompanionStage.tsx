@@ -22,7 +22,7 @@ export function CompanionStage({mood,status,subtitle,children,composer,notice,vi
  const current=useRef<Point>({p:0,x:0,y:142,s:1}),target=useRef<Point>({...current.current}),velocity=useRef<Point>({p:0,x:0,y:0,s:0});
  const drag=useRef<{id:number;x:number;y:number;lastY:number;at:number;v:number;base:Point;compact:boolean}|null>(null);
  const levels=useRef({input:0,output:0}),moodRef=useRef(mood);moodRef.current=mood;enabled.current=visible;
- const positions=()=>{const height=window.visualViewport?.height??window.innerHeight,scale=height<620?.8:1;return{x:Math.max(0,((root.current?.clientWidth??390)-240*scale)/2),y:Math.max(132,Math.min(210,height*.22)),scale,miniX:20,miniY:58};};
+ const positions=()=>{const height=window.visualViewport?.height??window.innerHeight,scale=height<620?.8:1;return{x:Math.max(0,((root.current?.clientWidth??390)-240*scale)/2),y:Math.max(132,Math.min(204,height*.21)),scale,miniX:20,miniY:58};};
  const setTarget=(value:boolean)=>{const p=positions();target.current={p:value?1:0,x:value?p.miniX:p.x,y:value?p.miniY:p.y,s:value?.225:p.scale};};
  const draw=()=>{
   const c=current.current,p=clamp(c.p),fade=clamp((p-.2)/.8);
@@ -65,7 +65,7 @@ export function CompanionStage({mood,status,subtitle,children,composer,notice,vi
  },[]);
  useLayoutEffect(()=>{
   if(!visible){cancelAnimationFrame(raf.current);drag.current=null;setDragging(false);return;}
-  const measure=()=>{if(drag.current)return;setTarget(compactRef.current);current.current={...target.current};velocity.current={p:0,x:0,y:0,s:0};const pos=positions();if(caption.current)caption.current.style.top=pos.y+225*pos.scale+25+'px';draw();};
+  const measure=()=>{if(drag.current)return;setTarget(compactRef.current);current.current={...target.current};velocity.current={p:0,x:0,y:0,s:0};const pos=positions();if(caption.current)caption.current.style.top=pos.y+225*pos.scale+20+'px';draw();};
   measure();animate();const resize=new ResizeObserver(measure);resize.observe(root.current!);window.visualViewport?.addEventListener('resize',measure);
   return()=>{resize.disconnect();window.visualViewport?.removeEventListener('resize',measure);cancelAnimationFrame(raf.current);};
  },[visible]); // The motion lives outside React renders; controls never restart it.
@@ -82,21 +82,20 @@ export function CompanionStage({mood,status,subtitle,children,composer,notice,vi
  const release=(e:PointerEvent<HTMLButtonElement>,cancelled=false)=>{
   const d=drag.current;if(!d||d.id!==e.pointerId)return;drag.current=null;setDragging(false);
   const value=cancelled?d.compact:swiped.current?(current.current.p>.28||(d.v>.55&&!d.compact)):!d.compact;
-  // Carry the finger's velocity into the release, and allow immediate reversal.
   if(swiped.current&&!cancelled&&!reduced.current)velocity.current.y=clamp(d.v,-1,1)*1000;
   change(value,!swiped.current);if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);
  };
  const hidden=!compact||dragging;
- return <div ref={root} className="companion-chat" data-compact={compact} data-home={visible} data-dragging={dragging}>
+ return <div ref={root} className="companion-chat" data-compact={compact} data-home={visible} data-dragging={dragging} data-mood={mood}>
   <header className="companion-nav" hidden={!visible}>
    <button type="button" className="companion-icon" aria-label={compact?'展开小N':'缩小小N，查看对话'} onClick={e=>change(!compact,e.detail===0)}><ChevronDown size={20}/></button>
-   <h1>小N</h1><button type="button" className="companion-settings" aria-label="我的与设置" onClick={onSettings}><span className="companion-dot"/><span>{running?'语音中':'自由聊'}</span><Settings size={16}/></button>
+   <h1>小N</h1><button type="button" className="companion-settings" aria-label="我的与设置" onClick={onSettings}><span className="companion-dot" data-live={running}/><span>{running?'语音中':'自由聊'}</span><Settings size={15}/></button>
   </header>
   <div className="companion-mini" ref={mini} aria-hidden={hidden||!visible} inert={hidden||!visible} hidden={!visible}>
    <div className="companion-mini-copy"><strong>{status}</strong><small>{running?(muted?'麦克风已静音':'语音对话持续中'):'随时接着聊'}</small></div>
-   <button type="button" className="companion-icon" aria-label={muted?'打开麦克风':'静音麦克风'} aria-pressed={muted} disabled={disabled} onClick={onToggleMute}>{muted?<MicOff size={19}/>:<Mic size={19}/>}</button>
-   <button type="button" className="companion-icon" aria-label="展开语音" onClick={e=>change(false,e.detail===0)}><Maximize2 size={18}/></button>
-   <button type="button" className="companion-icon" aria-label={running?'结束语音对话':'开始语音对话'} disabled={disabled&&!running} onClick={onToggleConversation}>{running?<X size={19}/>:<Play size={18}/>}</button>
+   <button type="button" className="companion-icon" aria-label={muted?'打开麦克风':'静音麦克风'} aria-pressed={muted} disabled={disabled} onClick={onToggleMute}>{muted?<MicOff size={18}/>:<Mic size={18}/>}</button>
+   <button type="button" className="companion-icon" aria-label="展开语音" onClick={e=>change(false,e.detail===0)}><Maximize2 size={17}/></button>
+   <button type="button" className="companion-icon" aria-label={running?'结束语音对话':'开始语音对话'} disabled={disabled&&!running} onClick={onToggleConversation}>{running?<X size={18}/>:<Play size={17}/>}</button>
   </div>
   <div className="companion-messages" ref={body} aria-hidden={visible&&hidden} inert={visible&&hidden} id="companion-transcript">{children}</div>
   <div className="companion-voice-surface" ref={surface} hidden={!visible}/>
@@ -107,12 +106,22 @@ export function CompanionStage({mood,status,subtitle,children,composer,notice,vi
   </button>
   <div className="companion-full-caption" ref={caption} hidden={!visible} aria-hidden={compact}>
    <div className="companion-wave" ref={bars} aria-hidden="true">{Array.from({length:9},(_,i)=><i key={i}/>)}</div>
-   <p>{subtitle}</p><small>按住小N下拉，查看聊天</small>
+   <p>{subtitle}</p>
+   <button type="button" className="companion-pull-pill" onClick={()=>change(true)}><ChevronDown size={13}/> 下拉或点此查看聊天记录</button>
   </div>
   <div className="companion-voice-controls" ref={controls} hidden={!visible} aria-hidden={compact} inert={compact}>
-   <button type="button" className="companion-icon" aria-label={muted?'打开麦克风':'静音麦克风'} aria-pressed={muted} disabled={disabled} onClick={onToggleMute}>{muted?<MicOff size={21}/>:<Mic size={21}/>}</button>
-   <button type="button" className="companion-icon companion-end" aria-label={running?'结束语音对话':'开始语音对话'} disabled={disabled&&!running} onClick={onToggleConversation}>{running?<PhoneOff size={22}/>:<Play size={22}/>}</button>
-   <button type="button" className="companion-icon" aria-label="切换到打字" onClick={()=>{change(true);onTyping();}}><Keyboard size={21}/></button>
+   <div className="companion-ctrl-item">
+    <button type="button" className="companion-icon" aria-label={muted?'打开麦克风':'静音麦克风'} aria-pressed={muted} disabled={disabled} onClick={onToggleMute}>{muted?<MicOff size={20}/>:<Mic size={20}/>}</button>
+    <span>{muted?'已静音':'静音'}</span>
+   </div>
+   <div className="companion-ctrl-item">
+    <button type="button" className={'companion-icon '+(running?'companion-end':'companion-start')} aria-label={running?'结束语音对话':'开始语音对话'} disabled={disabled&&!running} onClick={onToggleConversation}>{running?<PhoneOff size={22}/>:<Play size={22}/>}</button>
+    <span>{running?'结束语音':'开始语音'}</span>
+   </div>
+   <div className="companion-ctrl-item">
+    <button type="button" className="companion-icon" aria-label="切换到打字" onClick={()=>{change(true);onTyping();}}><Keyboard size={20}/></button>
+    <span>打字</span>
+   </div>
   </div>
   <div className="companion-notice" hidden={!visible}>{notice}{micPhase==='listening'&&<button className="text-button" onClick={onFinish}>这句说完了</button>}</div>
   <div className={visible?'companion-composer':'talk-dock'} aria-hidden={visible&&hidden} inert={visible&&hidden}>{composer}</div>

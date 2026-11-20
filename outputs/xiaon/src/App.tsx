@@ -38,7 +38,8 @@ import {
   WifiOff,
   X,
 } from "lucide-react";
-import { HeroArt, MapArt, Mascot, SpaceShape } from "./Art";
+import { MapArt, Mascot, SpaceShape } from "./Art";
+import { apiRequest } from "./agent-client";
 import { AccountContext } from "./auth/session";
 import { explorationStatus } from "./components/learning/ExplorationMap";
 import { placeOf } from "./components/professional/ProfessionalMap";
@@ -121,16 +122,23 @@ function SectionHeading({
 function App() {
   const learning = useLearning();
   const devMode = useDevMode();
-  const [memoryChoice, setMemoryChoice] = useState<boolean | null>(null);
+  const [memoryChoice, setMemoryChoice] = useState<boolean>(true);
+  const [introNickname, setIntroNickname] = useState("");
   const [introSaving, setIntroSaving] = useState(false);
   const [introError, setIntroError] = useState("");
   const finishIntroduction = async () => {
-    if (memoryChoice === null || introSaving) return;
+    if (introSaving) return;
     setIntroSaving(true); setIntroError("");
     try {
       if (learning.enabled && !learning.connected) throw new Error("请先连接，再保存你的选择。");
-      if (learning.connected) await learning.run("consent", { optionalMemory: memoryChoice }, { persist: false });
-      patch({ longMemory: memoryChoice, onboarded: true, introBackup: undefined, page: "home", tab: "小N" });
+      if (learning.connected) {
+        await learning.run("consent", { optionalMemory: memoryChoice }, { persist: false });
+        const nickname = introNickname.trim();
+        if (nickname || s.grade) {
+          void apiRequest("free-chat/profile/basic", { nickname, grade: s.grade }).catch(() => {});
+        }
+      }
+      patch({ necessary: true, longMemory: memoryChoice, onboarded: true, introBackup: undefined, page: "home", tab: "小N" });
       window.history.replaceState(
         { ...window.history.state, page: "home", tab: "小N" },
         "",
@@ -560,12 +568,14 @@ function App() {
     );
   }
   const onboarding = (
-    <div className="onboarding">
+    <div className="onboarding onboard-slim">
       <div className="onboard-top">
         <span className="brand">
-          <Sprout size={23} /> 学伴小N
+          <Sprout size={22} /> 学伴小N
         </span>
-        <span className="muted small">认识彼此 · {s.onboardStep + 1}/3</span>
+        <span className="onboard-pill">
+          <Sparkles size={13} /> 轻松开场
+        </span>
       </div>
       {s.introBackup && (
         <button
@@ -584,157 +594,83 @@ function App() {
           <ArrowLeft size={16} /> 不重新体验了，回到设置
         </button>
       )}
-      <div className="progress-line">
-        <span style={{ width: `${((s.onboardStep + 1) / 3) * 100}%` }} />
+      <div className="onboard-hero-compact">
+        <div className="onboard-mascot-halo">
+          <Mascot small mood="happy" />
+        </div>
+        <h1>慢慢来，也会到达。</h1>
+        <p>我是小N，陪你语音聊题、探索星溪镇，按你自己的节奏成长。</p>
       </div>
-      {s.onboardStep === 0 ? (
-        <>
-          <HeroArt />
-          <div className="onboard-copy">
-            <span className="eyebrow">HELLO, I'M N</span>
-            <h1>
-              慢慢来，
-              <br />
-              也会到达。
-            </h1>
-            <p>
-              我是小N，一个 AI 学伴。
-              <br />
-              陪你看懂一道题，也陪你找回自己的节奏。
-            </p>
-            <div className="intro-facts">
-              <span>
-                <BookOpen size={17} /> 先从七年级数学开始
-              </span>
-              <span>
-                <Leaf size={17} /> 由你选择开始、暂停或休息
-              </span>
-              <span>
-                <CircleHelp size={17} /> AI 也会出错，可以一起核对
-              </span>
+
+      <div className="onboard-card">
+        <div className="onboard-optional-row">
+          <label className="field">
+            <span>怎么称呼你（选填）</span>
+            <input
+              value={introNickname}
+              maxLength={20}
+              placeholder="比如：小宇、小禾"
+              onChange={(e) => setIntroNickname(e.target.value)}
+            />
+          </label>
+          <div className="onboard-grade-group">
+            <span className="onboard-field-label">年级（可选）</span>
+            <div className="onboard-chips" role="group" aria-label="年级">
+              {["七年级", "八年级", "九年级", "小学高年级"].map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  className="onboard-chip"
+                  aria-pressed={s.grade === g}
+                  onClick={() => patch({ grade: g })}
+                >
+                  {g}
+                </button>
+              ))}
             </div>
-            <p className="small muted">
-              我陪你学数学、聊聊天，不会给你贴“聪明”或“笨”的标签，也代替不了身边的老师和家人。
-            </p>
+          </div>
+        </div>
+
+        <div className="onboard-memory-card">
+          <div className="onboard-memory-head">
+            <div>
+              <strong>让小N记住我的学习偏好</strong>
+              <p className="small muted">
+                记住你聊过的小事与适合你的讲法，随时可在「成长 · 我的档案」里修改、删除或关闭。
+              </p>
+            </div>
             <button
-              className="primary wide"
-              onClick={() => patch({ onboardStep: 1 })}
+              type="button"
+              role="switch"
+              aria-checked={memoryChoice}
+              aria-label="让小N记住我的学习偏好"
+              className="ui-switch"
+              disabled={introSaving}
+              onClick={() => setMemoryChoice((v) => !v)}
             >
-              认识一下小N <ArrowRight size={18} />
+              <span className="ui-switch-thumb" />
             </button>
           </div>
-        </>
-      ) : s.onboardStep === 1 ? (
-        <div className="onboard-copy">
-          <SectionHeading
-            eyebrow="A LITTLE ABOUT YOU"
-            title="从适合你的起点开始"
-          >
-            只用来挑适合你的题，不用填真实信息。
-          </SectionHeading>
-          <label className="field">
-            年龄段
-            <select
-              value={s.age}
-              onChange={(e) => patch({ age: e.target.value, guardian: "none" })}
-            >
-              <option value="under14">未满 14 周岁</option>
-              <option value="14-17">14—17 周岁</option>
-              <option value="adult">成年体验者</option>
-            </select>
-          </label>
-          <div className="two-fields">
-            <label className="field">
-              年级
-              <select
-                value={s.grade}
-                onChange={(e) => patch({ grade: e.target.value })}
-              >
-                <option>七年级</option>
-              </select>
-            </label>
-            <label className="field">
-              教材
-              <select
-                value={s.book}
-                onChange={(e) => patch({ book: e.target.value })}
-              >
-                <option>人教版</option>
-                <option>北师大版</option>
-                <option>暂不确定</option>
-              </select>
-            </label>
-          </div>
-          <div className="info-paper">
-            <h3>小N会记下什么？</h3>
-            <p>
-              你的年级、教材，还有做过的题和学习计划，这样下次能接着上次学。
-            </p>
-            <p className="small">
-              这些记录存在这台设备上。小N连上 AI 时，会把聊天和作答发给帮它思考的 AI 服务（智谱）。所以别告诉小N你的真名、学校和电话。
-            </p>
-          </div>
-          <label className="check-row">
-            <input
-              type="checkbox"
-              checked={s.necessary}
-              onChange={(e) => patch({ necessary: e.target.checked })}
-            />
-            <span>我看懂了</span>
-          </label>
-          {s.age === "under14" && guardianPanel()}
-          <button
-            className="primary wide"
-            disabled={
-              !s.necessary || (s.age === "under14" && s.guardian !== "complete")
-            }
-            onClick={() => patch({ onboardStep: 2 })}
-          >
-            继续，选择可选功能 <ArrowRight size={18} />
-          </button>
-          <button
-            className="text-button"
-            onClick={() => patch({ onboardStep: 0 })}
-          >
-            返回介绍
-          </button>
         </div>
-      ) : (
-        <div className="onboard-copy">
-          <SectionHeading eyebrow="YOUR CHOICE, ALWAYS" title="要不要让小N记住？">
-            你聊过的小事和有用的方法，可以由你确认后记住。开或关都能正常聊天和学习。
-          </SectionHeading>
-          <p className="notice">聊天时小N会留意你怎么读题、怎么想，帮你找方法，不打分。</p>
-          <fieldset className="home-memory-choice" disabled={introSaving}>
-            <legend>记忆由你选择</legend>
-            <label><input type="radio" name="intro-memory" checked={memoryChoice === true} onChange={() => setMemoryChoice(true)} /><span>愿意，让小N在我确认后记住</span></label>
-            <label><input type="radio" name="intro-memory" checked={memoryChoice === false} onChange={() => setMemoryChoice(false)} /><span>暂时不记住，照样可以聊</span></label>
-          </fieldset>
-          <p className="small muted">选“暂时不记住”，小N就不会问你要不要记，也不会主动提起。你做过的题、错题和每次的小结还是会留着，方便接着学。以后随时可以改。</p>
-          <Toggle
-            title="用于学习研究"
-            description="这个版本不收集任何研究数据，开关只是演示。"
-            checked={s.research}
-            onChange={() => patch({ research: !s.research })}
-          />
-          <div className="notice">
-            <ShieldCheck size={18} />
-            以后随时可以在“我的与设置”里改选择，或者清空这台设备上的记录。
-          </div>
-          {introError && <p className="error" role="alert">{introError}</p>}
-          <button className="primary wide" disabled={memoryChoice === null || introSaving || learning.busy} onClick={() => void finishIntroduction()}>
-            {introSaving ? "正在保存…" : "按我的选择，开始"} <ArrowRight size={18} />
-          </button>
-          <button
-            className="text-button"
-            onClick={() => patch({ onboardStep: 1 })}
-          >
-            返回基本信息
-          </button>
-        </div>
-      )}
+
+        <p className="onboard-privacy-note">
+          <ShieldCheck size={15} />
+          <span>记录仅保存在你的专属空间，不会给别人看；聊天时请勿透露真名、学校和电话。</span>
+        </p>
+
+        {introError && <p className="notice error" role="alert">{introError}</p>}
+
+        <button
+          className="primary wide onboard-start-btn"
+          disabled={introSaving || learning.busy}
+          onClick={() => void finishIntroduction()}
+        >
+          {introSaving ? "正在准备小N…" : "开始和小N聊"} <ArrowRight size={18} />
+        </button>
+      </div>
+
       <footer className="onboard-footer">
-        体验版 · 不用填真名
+        不打分、不排名 · 一切选择随时可在「设置」更改
       </footer>
     </div>
   );
@@ -1939,7 +1875,7 @@ function App() {
                   <div className="settings-group">
                     <button
                       onClick={() => {
-                        setMemoryChoice(null); setIntroError("");
+                        setMemoryChoice(s.longMemory); setIntroError("");
                         const { age, grade, book, necessary, guardian, research } = s;
                         patch({
                           onboarded: false,
