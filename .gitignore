@@ -22,3 +22,14 @@ outputs/xiaon-prototype.zip
 # 测试产物
 test-results/
 playwright-report/
+
+# 星溪镇游戏二进制（~55MB，Godot Web 导出，不进 git；占位说明见 public/starbrook/README.md）
+outputs/xiaon/public/starbrook/*
+!outputs/xiaon/public/starbrook/README.md
+
+# 临时体验隧道配置（本机调试用）
+outputs/xiaon/vite.tunnel.config.ts
+
+# Mimosa 安全工具本地目录
+.mimosa/
+**/.mimosa/
