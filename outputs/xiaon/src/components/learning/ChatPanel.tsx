@@ -134,7 +134,7 @@ export function ChatPanel({ l, paused, safety, navigate, trace, active = true }:
  const micLabel=conversation.running?'结束语音对话':'开始语音对话';
  const micStatus=mic.phase==='requesting'?'请允许使用麦克风…':mic.phase==='transcribing'?'正在识别…':awaiting?'小N正在想…':v.phase==='loading'?'正在准备回复…':v.phase==='playing'?'小N正在说…':mic.phase==='listening'?'我在听，说完停顿一下':'点一下开始，随时可结束';
  const showComposer=typing||mic.engine==='none';
- const note=mic.engine==='server'?'你的声音会发送到火山引擎豆包识别成文字，服务端不保存录音。':mic.engine==='browser'?'语音由浏览器自带的识别服务转成文字，可能由浏览器厂商处理。':'';
+ const note=mic.engine==='server'?'你的声音会发送到火山引擎豆包识别成文字，本机服务端不保存录音。':mic.engine==='browser'?'语音由浏览器自带的识别服务转成文字，可能由浏览器厂商处理。':'';
  return <div className={'home-chat'+(keyboard?' keyboard-open':'')} aria-busy={awaiting||l.busy}>
   <span className="eyebrow">先听你说</span>
   <PetHero mood={pet.mood} bubble={bubble} thinking={awaiting&&!pet.line} onTouch={pet.onTouch}/>

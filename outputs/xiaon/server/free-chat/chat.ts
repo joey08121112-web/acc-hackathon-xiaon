@@ -35,7 +35,7 @@ const MAX_TURNS=20;
  * 界面显示的就是代码在做的事。 */
 export const FREE_CHAT_DISCLOSURE='说这句话时，会把这段对话最近20条消息和你的档案摘要发给 MiniMax。'+
  '你在「我的档案」里删掉的条目，在下次整理档案时也会一起发过去——这样才认得出「这件事你已经不想记了」，不会再记回来。'+
- '录音会发给火山引擎豆包做语音识别，服务端不保存录音。';
+ '录音会发给火山引擎豆包做语音识别，本机服务端不保存录音。';
 /** 提示词后面附上档案摘要，再带上当前这段对话的最近 MAX_TURNS 条去问模型；回复成功才把这一问一答存进学生自己的库。 */
 export async function freeChat(store:FreeChatStore,provider:ModelProvider,raw:unknown,signal:AbortSignal):Promise<FreeChatExchange>{
  const p=chatRequests.send.safeParse(raw);if(!p.success)throw new RuntimeError('invalid_params','需要 {text}');
