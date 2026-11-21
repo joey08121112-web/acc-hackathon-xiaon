@@ -56,6 +56,8 @@ Railway 新账号送 **30 天试用 + $5 一次性额度**，用 GitHub 登录�
    可选：`XIAON_GLM_REASONING_EFFORT`（MiniMax 专用，low/medium/high/xhigh/max，留空由服务端决定）——思考深度越高越慢越贵。
    不要设 `XIAON_GLM_THINKING`：那是智谱 GLM 专用的，MiniMax 收到 `thinking.type=disabled` 会直接 400（改用智谱时才设 disabled）。
 
+   > **线上自建服务器（ECS `47.76.72.179`）的环境变量不在面板上**，而在服务器 `/root/xiaon.env`，容器用 `--env-file /root/xiaon.env` 启动；改完必须重建/重启容器才生效。且 `/data` 不是挂载卷，换容器前要 `docker cp xiaon:/data /root/xiaon-data-restore` 备份、起好新容器后再恢复，漏了会丢学习记录。完整命令见 [部署记录](文档/交接/2026-11-21-部署记录-385b27f.md)。
+
    `XIAON_API_HOST` / `XIAON_API_PORT` / `XIAON_STATIC_DIR` / `XIAON_DB_PATH` 已在 Dockerfile 里写好。
 6. （可选，建议）按第 9 节给服务添加 Volume（Mount Path `/data`），学习记录在重新部署后保留。不加也能正常运行，只是每次重新部署记录清空——对比赛演示反而合适（见第 7 节）。
 7. Settings → Networking → **Generate Domain**，得到 `https://xxx-production.up.railway.app`。
