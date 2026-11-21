@@ -111,6 +111,7 @@ export function StarbrookGame({
   onFallbackAssess,
 }: StarbrookGameProps) {
   const [deploy, setDeploy] = useState<DeployState>('unknown');
+  const [checkSeq, setCheckSeq] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [allowSkipCurtain, setAllowSkipCurtain] = useState(false);
   const [tipsOpen, setTipsOpen] = useState(false);
@@ -118,6 +119,8 @@ export function StarbrookGame({
   const [reportMinimized, setReportMinimized] = useState(false);
   const [saved, setSaved] = useState<'saving' | 'saved' | 'error'>('saving');
   const pushed = useRef(false);
+  const deployRef = useRef<DeployState>('unknown');
+  deployRef.current = deploy;
   const onCloseRef = useRef(onClose);
   const onCompletedRef = useRef(onCompleted);
   onCloseRef.current = onClose;
@@ -141,34 +144,42 @@ export function StarbrookGame({
     };
   }, []);
 
-  // 打开时校验游戏文件、锁背景滚动并压入独立历史记录。
+  // 打开时锁背景滚动并压入独立历史记录。
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     if (!open) {
       setTipsOpen(false);
       setAllowSkipCurtain(false);
+      setLoaded(false);
       return;
     }
     if (!pushed.current) {
       window.history.pushState({ ...window.history.state, page: undefined, starbrook: true }, '', '#starbrook');
       pushed.current = true;
     }
-    if (deploy === 'unknown' || deploy === 'missing') {
-      // 静态资源，不是 API：取不到就当游戏没部署好，别把控制台刷满错误。
-      const controller = new AbortController();
-      setDeploy('checking');
-      fetchText(GAME_INDEX, { signal: controller.signal, cache: 'no-store' })
-        .then((body) => {
+  }, [open]);
+
+  // 独立校验游戏文件是否就绪：不把 deploy 放进依赖，避免 checking 态重渲染触发 cleanup 把请求自中断导致 checking ↔ missing 屏闪死循环。
+  useEffect(() => {
+    if (!open || deployRef.current === 'ready') return;
+    // 静态资源，不是 API：取不到就当游戏没部署好，别把控制台刷满错误。
+    const controller = new AbortController();
+    setDeploy('checking');
+    fetchText(GAME_INDEX, { signal: controller.signal, cache: 'no-store' })
+      .then((body) => {
+        if (!controller.signal.aborted) {
           setDeploy(/godot|\.wasm/i.test(body) ? 'ready' : 'missing');
-        })
-        .catch(() => {
+        }
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
           setDeploy('missing');
-        });
-      return () => {
-        controller.abort();
-      };
-    }
-  }, [open, deploy]);
+        }
+      });
+    return () => {
+      controller.abort();
+    };
+  }, [open, checkSeq]);
 
   // 防止旧版游戏构建未发 starbrook-loaded 时遮罩卡住：4 秒后提供一键进入按钮。
   useEffect(() => {
@@ -371,7 +382,7 @@ export function StarbrookGame({
                 <button
                   type="button"
                   className="starbrook-skip-btn"
-                  onClick={() => setDeploy('unknown')}
+                  onClick={() => setCheckSeq((n) => n + 1)}
                 >
                   再检查一次
                 </button>
