@@ -14,6 +14,7 @@ import {
   MessageCircle,
   RotateCcw,
   RotateCw,
+  ScrollText,
   Sparkles,
   Target,
   Undo2,
@@ -190,6 +191,7 @@ export function SpatialHillGame({
 
   const [levelIdx, setLevelIdx] = useState(0);
   const [placed, setPlaced] = useState<GridPoint[]>([]);
+  const [lastMissedPoints, setLastMissedPoints] = useState<GridPoint[] | null>(null);
   const [phase, setPhase] = useState<StagePhase>('placing');
   const [animDeg, setAnimDeg] = useState(0);
   const [evaluation, setEvaluation] = useState<PredictionEvaluation | null>(null);
@@ -306,6 +308,7 @@ export function SpatialHillGame({
     }
     setLevelIdx(nextIdx);
     setPlaced([]);
+    setLastMissedPoints(null);
     setPhase('placing');
     setAnimDeg(0);
     setEvaluation(null);
@@ -429,6 +432,7 @@ export function SpatialHillGame({
     setAnimDeg(level.clockwiseDeg);
     setEvaluation(result);
     if (result.matched) {
+      setLastMissedPoints(null);
       setPhase('matched');
       const rec: SpatialLevelRecord = {
         levelId: level.id,
@@ -480,12 +484,15 @@ export function SpatialHillGame({
   }
 
   function handleRetryCalibrate() {
-    // 清除真实落点与上一次虚影，让孩子基于观察独立重摆，绝不代填
+    // 保留上一轮虚影的极淡参照残影，帮助基于观察微调，同时由孩子独立重新点选 3 个顶点
+    if (placed.length === 3) {
+      setLastMissedPoints([...placed]);
+    }
     setPlaced([]);
     setAnimDeg(0);
     setEvaluation(null);
     setPhase('placing');
-    setMicroNotice('已收起真实星轨，按刚才的观察重新点出 3 个顶点吧。');
+    setMicroNotice('已保留上次校准的浅灰残影作为对照，请重新点出 3 个顶点。');
   }
 
   async function completeAllLevels() {
@@ -580,7 +587,7 @@ export function SpatialHillGame({
 
             <div className="spatial-title-pill">
               <Compass size={15} />
-              <h1 id={titleId}>风车山丘</h1>
+              <h1 id={titleId}>星象风车台</h1>
               <span className="spatial-level-pill" aria-label={`第 ${level.index} 关，共 4 关`}>
                 {phase === 'completed' ? '4/4' : `${level.index}/4`}
               </span>
@@ -693,6 +700,18 @@ export function SpatialHillGame({
 
                   <div className="spatial-assessment-box">{summary.assessment}</div>
 
+                  <div className="spatial-scroll-card" aria-label="解锁星溪秘籍">
+                    <div className="spatial-scroll-head">
+                      <ScrollText size={15} />
+                      <strong>解锁星溪秘籍 · 《星轨旋转诀》</strong>
+                    </div>
+                    <ul>
+                      <li>先锚定星钉：非原点旋转时，一切位移与方向必须相对于旋转中心计算，绝不误绕原点 O。</li>
+                      <li>刚体双不变：旋转只改变朝向，绝不拉长或缩短边长，也不翻转折角的左右手方向。</li>
+                      <li>角度等价术：顺时针 270° = 逆时针 90°；180° 旋转即关于星钉中心对称。</li>
+                    </ul>
+                  </div>
+
                   <ul className="spatial-record-list" aria-label="4 座星台完成记录">
                     {SPATIAL_LEVELS.map((lv) => {
                       const rec = records.find((r) => r.levelId === lv.id);
@@ -786,12 +805,12 @@ export function SpatialHillGame({
                     >
                       <div className="spatial-board-hud-strip">
                         <span className="spatial-legend-chip source">
-                          <i /> 原风叶
+                          <i /> 原星翼
                         </span>
                         <span
                           className={`spatial-legend-chip ${phase === 'missed' ? 'missed' : 'ghost'}`}
                         >
-                          <i /> 我的虚影
+                          <i /> 预测虚影
                         </span>
                         {showRotatingOverlay && (
                           <span className="spatial-legend-chip truth">
@@ -800,10 +819,10 @@ export function SpatialHillGame({
                         )}
                         <span className="spatial-coord-readout" aria-live="polite">
                           {phase === 'animating'
-                            ? `旋转 ${Math.round(animDeg)}° / ${level.clockwiseDeg}°`
+                            ? `↻ 旋转 ${Math.round(animDeg)}° / ${level.clockwiseDeg}°`
                             : activeCoord
-                              ? `格点 ${formatPoint(activeCoord)}`
-                              : '横轴向右 · 纵轴向上'}
+                              ? `坐标 ${formatPoint(activeCoord)}`
+                              : '↻ 顺时针 · x右 y上'}
                         </span>
                       </div>
 
@@ -1059,6 +1078,32 @@ export function SpatialHillGame({
                           </g>
                         )}
 
+                        {/* 上次偏差的极淡残影参考线（重新校准时帮助微调） */}
+                        {phase === 'placing' && lastMissedPoints && lastMissedPoints.length === 3 && (
+                          <g className="spatial-prev-trace" pointerEvents="none">
+                            <polyline
+                              points={polylinePointsAttr(lastMissedPoints)}
+                              fill="none"
+                              stroke="#a89cc2"
+                              strokeWidth="2.4"
+                              strokeDasharray="4 6"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              opacity="0.58"
+                            />
+                            {lastMissedPoints.map((pt, idx) => (
+                              <circle
+                                key={`prev-${idx}`}
+                                cx={toSvgX(pt.x)}
+                                cy={toSvgY(pt.y)}
+                                r="3.4"
+                                fill="#c4badb"
+                                opacity="0.7"
+                              />
+                            ))}
+                          </g>
+                        )}
+
                         {/* 学生预测虚影折线 */}
                         {placed.length > 0 && (
                           <g className={`spatial-ghost-layer ${phase}`}>
@@ -1186,20 +1231,20 @@ export function SpatialHillGame({
                     {/* 已放顶点条 */}
                     <div className="spatial-tray-card">
                       <div className="spatial-tray-head">
-                        <strong>我的预测虚影（3 个顶点）</strong>
+                        <strong>预测星翼虚影（3 个顶点）</strong>
                         {phase === 'placing' && placed.length === 0 && (
                           <button
                             type="button"
                             className="spatial-anchor-chip"
                             onClick={handleAnchorCenter}
                           >
-                            从中心 {formatPoint(level.center)} 起笔
+                            锚定星钉 {formatPoint(level.center)}
                           </button>
                         )}
                       </div>
 
                       <div className="spatial-vertex-row" aria-live="polite">
-                        {(['起点图钉', '拐弯点', '小旗尖'] as const).map((slotName, i) => {
+                        {(['轴心锚点', '折角顶点', '翼尖端点'] as const).map((slotName, i) => {
                           const pt = placed[i];
                           return (
                             <span

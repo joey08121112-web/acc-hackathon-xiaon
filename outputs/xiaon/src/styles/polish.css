@@ -281,6 +281,30 @@
     0 10px 20px rgba(78, 68, 134, 0.16);
 }
 
+.professional-map .map-node-logic .node-icon {
+  width: 58px;
+  height: 54px;
+  background: linear-gradient(145deg, #f8ebca 0%, #edd59e 100%) !important;
+  color: #62410c;
+  border-color: #fff9ec;
+  filter: none;
+  box-shadow:
+    0 6px 0 rgba(126, 86, 20, 0.16),
+    0 10px 20px rgba(126, 86, 20, 0.16);
+}
+
+.professional-map .map-node-market .node-icon {
+  width: 58px;
+  height: 54px;
+  background: linear-gradient(145deg, #f9e4d7 0%, #eec7b2 100%) !important;
+  color: #7c3818;
+  border-color: #fff9ec;
+  filter: none;
+  box-shadow:
+    0 6px 0 rgba(142, 68, 32, 0.16),
+    0 10px 20px rgba(142, 68, 32, 0.16);
+}
+
 .professional-map .map-node-calc .node-icon {
   width: 58px;
   height: 54px;
@@ -293,17 +317,23 @@
     0 10px 20px rgba(31, 84, 75, 0.16);
 }
 
+.professional-map .map-node-logic[data-state='waiting'] .node-icon,
 .professional-map .map-node-calc[data-state='waiting'] .node-icon,
+.professional-map .map-node-market[data-state='waiting'] .node-icon,
 .professional-map .map-node-spatial[data-state='waiting'] .node-icon {
   filter: none;
 }
 
+.professional-map .map-node-logic[data-state='waiting'] strong,
 .professional-map .map-node-calc[data-state='waiting'] strong,
+.professional-map .map-node-market[data-state='waiting'] strong,
 .professional-map .map-node-spatial[data-state='waiting'] strong {
   color: inherit;
 }
 
+.professional-map .map-node-logic[data-state='current'] .node-icon,
 .professional-map .map-node-calc[data-state='current'] .node-icon,
+.professional-map .map-node-market[data-state='current'] .node-icon,
 .professional-map .map-node-spatial[data-state='current'] .node-icon {
   outline: 3px solid #d5a648;
   outline-offset: 3px;
@@ -342,10 +372,22 @@
   white-space: nowrap;
 }
 
+.professional-map .map-node small.map-node-game-tag-logic {
+  background: #faefd2;
+  border-color: #e4c989;
+  color: #68440c;
+}
+
 .professional-map .map-node small.map-node-game-tag-calc {
   background: #def2ec;
   border-color: #a9d8cb;
   color: #1c534a;
+}
+
+.professional-map .map-node small.map-node-game-tag-market {
+  background: #fce8dc;
+  border-color: #e9bfa7;
+  color: #7d3918;
 }
 
 .professional-map .map-node small.map-node-game-tag-spatial {
@@ -368,6 +410,16 @@
   font-weight: 500;
 }
 
+.professional-logic-banner {
+  background: linear-gradient(135deg, #fbf1d6 0%, #faf6e6 100%);
+  border-color: #e6cfa0;
+  color: #5c3d0e;
+}
+
+.professional-logic-banner .text-button {
+  color: #7c5112;
+}
+
 .professional-calc-banner {
   background: linear-gradient(135deg, #e3f4ef 0%, #f8f2df 100%);
   border-color: #c2e2d8;
@@ -376,6 +428,16 @@
 
 .professional-calc-banner .text-button {
   color: #1d5a50;
+}
+
+.professional-market-banner {
+  background: linear-gradient(135deg, #fceae0 0%, #fbf3e4 100%);
+  border-color: #e9c4ae;
+  color: #753617;
+}
+
+.professional-market-banner .text-button {
+  color: #8f421d;
 }
 
 .professional-spatial-banner {

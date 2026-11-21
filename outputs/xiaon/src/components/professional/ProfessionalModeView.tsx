@@ -1,6 +1,6 @@
-/** 专业模式：五维探索地图为主入口，第一站「理解花园」融合星溪镇、第三站「计算工坊」融合符号拆包坊、第五站「空间山丘」融合星象风车台，同时保留完整五维问答测评契约。 */
+/** 专业模式：五维探索地图为主入口，五站全部融合星溪世界互动探索游戏（星溪镇、断桥真伪录、符号炼金台、星溪策算司、星象风车台），同时保留完整五维问答测评契约。 */
 import { useEffect, useRef, useState } from 'react';
-import { Compass, Gamepad2, Sparkles, Wrench } from 'lucide-react';
+import { Compass, Gamepad2, SearchCheck, Sparkles, Store, Wrench } from 'lucide-react';
 import {
   INTERVIEW_MODULE_ORDER,
   INTERVIEW_REQUIRED_MODULES,
@@ -19,6 +19,11 @@ import {
   type StarbrookCompletion,
 } from '../game/StarbrookGame';
 import {
+  LogicBridgeGame,
+  readLogicBridgeCompletion,
+  type LogicBridgeCompletion,
+} from '../game/LogicBridgeGame';
+import {
   SpatialHillGame,
   readSpatialCompletion,
   type SpatialCompletion,
@@ -28,6 +33,11 @@ import {
   readCalcWorkshopCompletion,
   type CalcWorkshopCompletion,
 } from '../game/CalcWorkshopGame';
+import {
+  MarketModelGame,
+  readMarketModelCompletion,
+  type MarketModelCompletion,
+} from '../game/MarketModelGame';
 
 /** onPractice(index): the existing free-practice entry for that place (welcome card → one task, 理解/逻辑 first). */
 /** station/onStation: 正在走的一站由 App 管，记进浏览器历史，顶栏返回和系统返回手势都能退回地图；不传时组件自己记。 */
@@ -58,6 +68,10 @@ export function ProfessionalModeView({
   const [starbrookDone, setStarbrookDone] = useState<StarbrookCompletion | null>(() =>
     readStarbrookCompletion(),
   );
+  const [logicOpen, setLogicOpen] = useState(false);
+  const [logicDone, setLogicDone] = useState<LogicBridgeCompletion | null>(() =>
+    readLogicBridgeCompletion(),
+  );
   const [spatialOpen, setSpatialOpen] = useState(false);
   const [spatialDone, setSpatialDone] = useState<SpatialCompletion | null>(() =>
     readSpatialCompletion(),
@@ -65,6 +79,10 @@ export function ProfessionalModeView({
   const [calcOpen, setCalcOpen] = useState(false);
   const [calcDone, setCalcDone] = useState<CalcWorkshopCompletion | null>(() =>
     readCalcWorkshopCompletion(),
+  );
+  const [marketOpen, setMarketOpen] = useState(false);
+  const [marketDone, setMarketDone] = useState<MarketModelCompletion | null>(() =>
+    readMarketModelCompletion(),
   );
 
   const open = station ?? localOpen;
@@ -114,20 +132,21 @@ export function ProfessionalModeView({
     }
   }, [working, l.busy]);
 
-  // 地图为主：一站对应一个模块；第一站「理解」、第三站「计算」、第五站「空间想象」通关对应互动游戏后自动在地图上点亮。
+  // 地图为主：五站全部融合互动游戏，通关对应游戏或完成测评模块后自动在地图上点亮。
   const stop = (i: typeof interview) => i?.currentModule ?? '整理报告';
+  const gameDoneOf = (m: MapModule) =>
+    (m === '理解' && !!starbrookDone) ||
+    (m === '逻辑' && !!logicDone) ||
+    (m === '计算' && !!calcDone) ||
+    (m === '建模' && !!marketDone) ||
+    (m === '空间想象' && !!spatialDone);
   const current: MapModule | null = interview
     ? interview.currentModule
     : latest?.status === 'completed'
       ? null
-      : starbrookDone
-        ? INTERVIEW_MODULE_ORDER[1]
-        : INTERVIEW_MODULE_ORDER[0];
+      : (INTERVIEW_MODULE_ORDER.find((m) => !gameDoneOf(m)) ?? null);
   const stateOf = (m: MapModule) =>
-    latest?.completedModules.includes(m) ||
-    (m === '理解' && !!starbrookDone) ||
-    (m === '计算' && !!calcDone) ||
-    (m === '空间想象' && !!spatialDone)
+    latest?.completedModules.includes(m) || gameDoneOf(m)
       ? ('done' as const)
       : current === m
         ? ('current' as const)
@@ -148,12 +167,25 @@ export function ProfessionalModeView({
     if (card) cardRef.current?.scrollIntoView?.({ block: 'nearest' });
   }, [card]);
 
-  // 点击地图「理解花园」直进星溪镇；点击「计算工坊」「空间山丘」平时直进对应游戏，若正在正式问答测评对应站则优先进问答。
+  // 点击五维地图任意一站：若正在正式问答测评对应站则优先进问答，平时直进对应互动游戏。
   function onNode(m: MapModule) {
     setNotice('');
     if (m === '理解') {
       setCard(null);
+      if (interview?.status === 'in_progress' && interview.currentModule === '理解') {
+        if (!disabled) setOpen(stop(interview));
+        return;
+      }
       setStarbrookOpen(true);
+      return;
+    }
+    if (m === '逻辑') {
+      setCard(null);
+      if (interview?.status === 'in_progress' && interview.currentModule === '逻辑') {
+        if (!disabled) setOpen(stop(interview));
+        return;
+      }
+      setLogicOpen(true);
       return;
     }
     if (m === '计算') {
@@ -163,6 +195,15 @@ export function ProfessionalModeView({
         return;
       }
       setCalcOpen(true);
+      return;
+    }
+    if (m === '建模') {
+      setCard(null);
+      if (interview?.status === 'in_progress' && interview.currentModule === '建模') {
+        if (!disabled) setOpen(stop(interview));
+        return;
+      }
+      setMarketOpen(true);
       return;
     }
     if (m === '空间想象') {
@@ -381,12 +422,23 @@ export function ProfessionalModeView({
         onFallbackAssess={launchUnderstandAssess}
       />
 
+      <LogicBridgeGame
+        open={logicOpen}
+        onClose={() => setLogicOpen(false)}
+        onCompleted={(summary) => {
+          setLogicDone(summary);
+          setNotice('《断桥真伪录》已结案！逻辑小桥已点亮，秘籍与探索摘要已同步至「成长 · 我的档案」。');
+        }}
+        onGoChat={() => navigate('home', '小N')}
+        onFallbackAssess={() => launchModuleAssess('逻辑')}
+      />
+
       <SpatialHillGame
         open={spatialOpen}
         onClose={() => setSpatialOpen(false)}
         onCompleted={(summary) => {
           setSpatialDone(summary);
-          setNotice('星象风车台通关啦！空间山丘已点亮，探索摘要也写进了「成长 · 我的档案」。');
+          setNotice('《星象风车台》校准完成！空间山丘已点亮，秘籍与探索摘要已同步至「成长 · 我的档案」。');
         }}
         onGoChat={() => navigate('home', '小N')}
         onFallbackAssess={() => launchModuleAssess('空间想象')}
@@ -397,10 +449,21 @@ export function ProfessionalModeView({
         onClose={() => setCalcOpen(false)}
         onCompleted={(summary) => {
           setCalcDone(summary);
-          setNotice('符号拆包坊通关啦！计算工坊已点亮，探索摘要也写进了「成长 · 我的档案」。');
+          setNotice('《符号炼金台》验收完成！计算工坊已点亮，秘籍与探索摘要已同步至「成长 · 我的档案」。');
         }}
         onGoChat={() => navigate('home', '小N')}
         onFallbackAssess={() => launchModuleAssess('计算')}
+      />
+
+      <MarketModelGame
+        open={marketOpen}
+        onClose={() => setMarketOpen(false)}
+        onCompleted={(summary) => {
+          setMarketDone(summary);
+          setNotice('《星溪策算司》策算完成！生活集市已点亮，秘籍与探索摘要已同步至「成长 · 我的档案」。');
+        }}
+        onGoChat={() => navigate('home', '小N')}
+        onFallbackAssess={() => launchModuleAssess('建模')}
       />
 
       {blocked ? (
@@ -479,7 +542,7 @@ export function ProfessionalModeView({
             <span className="eyebrow">跟着小N，一站一站来</span>
             <h2>一起看看你的思考方式</h2>
             <p>
-              本次观察，不打总分，不排名。点地图「理解花园」「计算工坊」或「空间山丘」都可直接进入互动探索。
+              本次观察，不打总分，不排名。点击地图任意一站都可直接开启互动小游戏，也能在游戏顶栏一键切回问答版。
             </p>
           </div>
 
@@ -487,7 +550,9 @@ export function ProfessionalModeView({
             stateOf={stateOf}
             onNode={onNode}
             starbrookDone={!!starbrookDone}
+            logicDone={!!logicDone}
             calcDone={!!calcDone}
+            marketDone={!!marketDone}
             spatialDone={!!spatialDone}
           />
 
@@ -510,11 +575,30 @@ export function ProfessionalModeView({
             </div>
           )}
 
+          {logicDone && (
+            <div className="professional-starbrook-banner professional-logic-banner">
+              <SearchCheck size={16} />
+              <span>
+                逻辑推理 · 断桥真伪录已点亮
+                {logicDone.achievements.length > 0
+                  ? `（${logicDone.achievements.slice(0, 2).join('、')}）`
+                  : ''}
+              </span>
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => setLogicOpen(true)}
+              >
+                重探案卷
+              </button>
+            </div>
+          )}
+
           {calcDone && (
             <div className="professional-starbrook-banner professional-calc-banner">
               <Wrench size={16} />
               <span>
-                计算能力 · 符号拆包坊已点亮
+                计算能力 · 符号炼金台已点亮
                 {calcDone.achievements.length > 0
                   ? `（${calcDone.achievements.slice(0, 2).join('、')}）`
                   : ''}
@@ -524,7 +608,26 @@ export function ProfessionalModeView({
                 className="text-button"
                 onClick={() => setCalcOpen(true)}
               >
-                再去拆包
+                重校工单
+              </button>
+            </div>
+          )}
+
+          {marketDone && (
+            <div className="professional-starbrook-banner professional-market-banner">
+              <Store size={16} />
+              <span>
+                生活建模 · 星溪策算司已点亮
+                {marketDone.achievements.length > 0
+                  ? `（${marketDone.achievements.slice(0, 2).join('、')}）`
+                  : ''}
+              </span>
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => setMarketOpen(true)}
+              >
+                重算方案
               </button>
             </div>
           )}
@@ -543,7 +646,7 @@ export function ProfessionalModeView({
                 className="text-button"
                 onClick={() => setSpatialOpen(true)}
               >
-                再去校准
+                重测星轨
               </button>
             </div>
           )}
@@ -629,8 +732,8 @@ export function ProfessionalModeView({
           {!interview && (
             <div className="professional-intro">
               <p>
-                约 10–15 分钟按你的节奏探索：理解（星溪镇） → 逻辑 → 计算 → 建模 →
-                空间想象（星象风车台），可以随时暂停。
+                按自己的节奏走完星溪镇五站（随时可停、不打总分）：理解《星溪镇》 → 逻辑《断桥真伪录》 →
+                计算《符号炼金台》 → 建模《星溪策算司》 → 空间《星象风车台》，通关解锁对应思维秘籍；也可随时切至五维问答。
               </p>
               <div className="home-card-actions">
                 <button
@@ -638,14 +741,35 @@ export function ProfessionalModeView({
                   className="primary"
                   onClick={() => setStarbrookOpen(true)}
                 >
-                  <Gamepad2 size={17} /> 进入理解能力 · 星溪镇
+                  <Gamepad2 size={17} /> ① 星溪镇
+                </button>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setLogicOpen(true)}
+                >
+                  <SearchCheck size={17} /> ② 断桥真伪录
+                </button>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setCalcOpen(true)}
+                >
+                  <Wrench size={17} /> ③ 符号炼金台
+                </button>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setMarketOpen(true)}
+                >
+                  <Store size={17} /> ④ 星溪策算司
                 </button>
                 <button
                   type="button"
                   className="secondary"
                   onClick={() => setSpatialOpen(true)}
                 >
-                  <Compass size={17} /> 空间想象 · 星象风车台
+                  <Compass size={17} /> ⑤ 星象风车台
                 </button>
                 <button
                   ref={startRef}

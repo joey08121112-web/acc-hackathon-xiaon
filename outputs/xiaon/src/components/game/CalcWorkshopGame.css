@@ -1,4 +1,4 @@
-/* 计算工坊 · 《口袋整理坊》温暖明亮绘本纸感样式（与学伴小N主界面一脉相承） */
+/* 计算工坊 · 《符号炼金台》星溪钟楼松墨黄铜手账样式（与学伴小N主界面一脉相承） */
 
 dialog.calc-dialog {
   width: 100vw;
@@ -926,4 +926,71 @@ dialog.calc-dialog::backdrop {
 .calc-archive-status svg {
   flex: none;
   margin-top: 2px;
+}
+
+
+/* ── 《符号炼金台》升级组件：槽内项直显、天平代入过程条、秘籍卷轴 ── */
+.calc-stepper-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.calc-stepper-items {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #edf5ef;
+  border: 1px solid #cce0d4;
+  color: #1f4d3b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.calc-scale-sub-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #f5f9f6;
+  border: 1px dashed #bed6c8;
+  font-size: 0.78rem;
+  color: #2b4d3e;
+}
+
+.calc-scale-sub-strip b {
+  color: #143b2d;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.calc-scroll-card {
+  margin: 0 0 14px;
+  padding: 13px 14px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #eef7f1 0%, #f9f3e1 100%);
+  border: 1px solid #c6dacb;
+  color: #213d32;
+}
+
+.calc-scroll-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #1d4c3b;
+  font-size: 0.88rem;
+}
+
+.calc-scroll-card ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 5px;
+  font-size: 0.82rem;
+  line-height: 1.55;
 }

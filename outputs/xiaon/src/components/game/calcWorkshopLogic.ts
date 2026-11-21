@@ -1,4 +1,4 @@
-/** 计算工坊 · 《符号拆包工坊》确定性代数规则、拆盒诊断、试数天平与过程证据引擎。
+/** 计算工坊 · 《符号炼金台》确定性代数规则、反转闸诊断、黄铜试数天平与过程证据引擎。
  * 所有表达式求值、符号翻转校验、同类项归槽校验与恒等核验均为 100% 确定性纯函数。 */
 
 export type VariableName = 'x' | 'a';
@@ -224,16 +224,16 @@ export function summarizeTerms(
   };
 }
 
-/** 4 个递进工坊订单：完全同源专业模式题库「计算·合并同类项」与「计算·去括号负号」。 */
+/** 4 份星溪钟楼递进工单：完全同源专业模式题库「计算·合并同类项」与「计算·去括号负号」。 */
 export const CALC_WORKSHOP_LEVELS: readonly CalcWorkshopLevel[] = [
   {
     id: 'like-class-fund',
     index: 1,
-    title: '班费小账本',
+    title: '一号工单 · 钟楼配重账',
     subtitle: '合并同类项 · 2x + 3x − 4',
     skillTag: '合并同类项',
     story:
-      '班长在理班费：周一收了 2x 元，周二又收了 3x 元，买粉笔花了 4 元。把带 x 的小袋子和纯数字小星星分别放进对应的口袋里吧！',
+      '星溪钟楼正在重校主缆配重：上午挂入 2x 组主齿轮，下午追加 3x 组主齿轮，同时卸下 4 单位旧铅块。把带字母 x 的齿轮项和纯数值砝码分别归入对应工作槽！',
     expressionDisplay: '2x + 3x − 4',
     variable: 'x',
     looseTerms: [
@@ -244,33 +244,33 @@ export const CALC_WORKSHOP_LEVELS: readonly CalcWorkshopLevel[] = [
     bracketBox: null,
     target: { variable: 'x', varCoeff: 5, constVal: -4 },
     sampleValues: [1, 2, 3, 4],
-    praise: '理得真清楚！2x 和 3x 都是 x 小袋子，合起来是 5x；花了 4 元记作 −4，一共 5x − 4。',
+    praise: '校准精准！2x 与 3x 同属 x 齿轮槽，合并为 5x；常数砝码槽保留 −4，整条配重指令化简为 5x − 4。',
     hints: [
       {
         tier: 1,
-        title: '同类才能住进同一个口袋',
-        body: '带着字母 x 的放进「x 小袋子」，只有数字的放进「星星数字袋」，它们不能混在一起数哦。',
+        title: '同类构件才能进入同一工作槽',
+        body: '带字母 x 的项归入「x 齿轮槽」，不含字母的纯数字归入「常数砝码槽」，两类项不能直接相加减。',
       },
       {
         tier: 2,
-        title: '数数一共有几袋 x',
-        body: '2 袋 x 加上 3 袋 x，一共是几袋 x？字母 x 本身不用变样。',
+        title: '合并变量项时只算系数',
+        body: '2x 与 3x 的字母部分相同，把前面的系数 2 和 3 相加，字母 x 保持不变。',
       },
       {
         tier: 3,
-        title: '别落下数字前面的减号',
-        body: '买粉笔花掉 4 元是 −4，搬进口袋时要把减号一起带走。',
+        title: '常数项前的负号必须一起带走',
+        body: '卸下的 4 单位是 −4，归入常数砝码槽时切记连同它前面的负号一起计入。',
       },
     ],
   },
   {
     id: 'like-points-ledger',
     index: 2,
-    title: '积分小本子',
-    subtitle: '带符号归类 · 7a + 2 − 4a + 5',
+    title: '二号工单 · 风灯蓄能表',
+    subtitle: '带符号归槽 · 7a + 2 − 4a + 5',
     skillTag: '合并同类项',
     story:
-      '小美这周的积分：周一得 7a 分，周二奖 2 分，周三扣 4a 分，周四又奖 5 分。记得让每个宝贝带着自己前面的「+ / −」小牌子一起搬家哦！',
+      '镇口风灯塔的蓄能记录正负交错：充入 7a、补压 +2、分流损耗 −4a、再补压 +5。把每枚构件连同它前面的「+ / −」极性标牌一起归槽，再分别合并！',
     expressionDisplay: '7a + 2 − 4a + 5',
     variable: 'a',
     looseTerms: [
@@ -282,33 +282,33 @@ export const CALC_WORKSHOP_LEVELS: readonly CalcWorkshopLevel[] = [
     bracketBox: null,
     target: { variable: 'a', varCoeff: 3, constVal: 7 },
     sampleValues: [1, 2, 3, 4],
-    praise: '算得一分不差！+7a 和 −4a 抵消后剩 3a，两份奖励 +2 和 +5 合起来是 +7，一共 3a + 7。',
+    praise: '极性零失误！+7a 与 −4a 抵消后剩 3a，两枚正砝码 +2 与 +5 合并为 +7，最终输出 3a + 7。',
     hints: [
       {
         tier: 1,
-        title: '符号小牌子跟着后面的数走',
-        body: '看 −4a：减号是跟着 4a 的；看 +2 和 +5：它们都是加分，各带各的符号进袋。',
+        title: '符号永远绑在它紧跟着的项上',
+        body: '看 −4a：负号属于 4a；看 +2 与 +5：两者都带正号，归槽时各带各的符号。',
       },
       {
         tier: 2,
-        title: 'a 袋子里的加与减',
-        body: '把 +7a 和 −4a 放进同一个 a 袋子：7 袋扣掉 4 袋，还剩几袋 a 呢？',
+        title: '计算 a 齿轮槽内的正负抵消',
+        body: '把 +7a 和 −4a 放进同一槽位，相当于 7 − 4，看看剩下几个 a。',
       },
       {
         tier: 3,
-        title: '数字袋单独合起来',
-        body: '星星数字袋里有 +2 和 +5，它们两个都是正的，别被旁边的 −4a 带偏啦。',
+        title: '常数砝码槽不受 −4a 干扰',
+        body: '常数槽里只有 +2 和 +5，都是正值，直接合并即可。',
       },
     ],
   },
   {
     id: 'bracket-card-gate',
     index: 3,
-    title: '卡片魔法盒',
+    title: '三号工单 · 负号反转闸',
     subtitle: '去括号变号 · 3x − (2x − 5)',
     skillTag: '去括号负号',
     story:
-      '小林攒了 3x 张卡片，送给同桌的张数比 2x 少 5 张，也就是 (2x − 5) 张。盒子外面贴着红色「减号」贴纸——过变号小门时，先把盒里每一项的新符号选好！',
+      '主轴箱外存有 3x 能量，需扣除封装箱内的 (2x − 5)。注意封装箱前挂着红色「负号反转闸」——箱内每一枚构件通过闸门时，必须由你亲手切换过闸后的新极性！',
     expressionDisplay: '3x − (2x − 5)',
     variable: 'x',
     looseTerms: [{ id: 'l3-t1', kind: 'var', coeff: 3 }],
@@ -322,33 +322,33 @@ export const CALC_WORKSHOP_LEVELS: readonly CalcWorkshopLevel[] = [
     },
     target: { variable: 'x', varCoeff: 1, constVal: 5 },
     sampleValues: [1, 2, 3, 4],
-    praise: '魔法盒拆得太棒啦！−(2x − 5) 变成 −2x 和 +5，再和 3x 合起来就是 x + 5——少送 5 张，手里就多留 5 张！',
+    praise: '反转闸一气呵成！−(2x − 5) 拆出 −2x 与 +5，与外部 3x 合并得 x + 5——减去一个负数，相当于反向补回 +5！',
     hints: [
       {
         tier: 1,
-        title: '盒外的减号管着盒里的每一个',
-        body: '不只第一个 +2x 要变号，盒子里排在后面的那一项，也要经过变号小门哦！',
+        title: '闸门外的负号作用于箱内每一项',
+        body: '不仅第一项 +2x 过闸要变号，排在括号后面的第二项同样要经过负号反转闸。',
       },
       {
         tier: 2,
-        title: '想想“少送了 5 张”的意思',
-        body: '原本要送 2x 张，结果“少送了 5 张”，那小林自己手里是多了 5 张还是少了 5 张呢？',
+        title: '理解“少扣了 5”的直观含义',
+        body: '本来要减去 2x，但实际扣除的量比 2x 少了 5，所以最终剩余的能量反而多了 5。',
       },
       {
         tier: 3,
-        title: '打开下面的「试数小天平」',
-        body: '拿不准符号时，点开试数小天平设 x = 2 看一看：原式是 3×2 − (2×2 − 5) = 7，你的拆法能让天平平下来吗？',
+        title: '善用下方「黄铜试数天平」自检',
+        body: '拿不准符号时，打开天平代入 x = 2：原式为 3×2 − (2×2 − 5) = 7，看看哪种拆法能让天平严丝合缝！',
       },
     ],
   },
   {
     id: 'bracket-allowance-exam',
     index: 4,
-    title: '零花钱小挑战',
-    subtitle: '数字在前 + 负括号 · 8 − (3x − 4)',
+    title: '四号工单 · 蓄水闸门校准',
+    subtitle: '常数在前 + 负括号 · 8 − (3x − 4)',
     skillTag: '去括号负号',
     story:
-      '小美有 8 元零花钱，买文具花的钱比 3x 元少 4 元，也就是 (3x − 4) 元。外面的 +8 不用进小门，先把魔法盒里的两项变好号拆出来，再分类合起来吧！',
+      '蓄水主阀初始水压为 8，需要扣除支路密封箱内的 (3x − 4)。外置的 +8 不经过闸门，先把箱内两枚构件逐项完成极性反转，再归槽合成最终指令！',
     expressionDisplay: '8 − (3x − 4)',
     variable: 'x',
     looseTerms: [{ id: 'l4-t1', kind: 'const', coeff: 8 }],
@@ -362,22 +362,22 @@ export const CALC_WORKSHOP_LEVELS: readonly CalcWorkshopLevel[] = [
     },
     target: { variable: 'x', varCoeff: -3, constVal: 12 },
     sampleValues: [1, 2, 3, 4],
-    praise: '零花钱挑战稳稳拿下！外面的 8 保持 +8，盒里的 −(3x − 4) 变成 −3x 和 +4，合起来就是 12 − 3x！',
+    praise: '高阶工单稳稳通关！外置 +8 保持不变，−(3x − 4) 拆出 −3x 与 +4，合并得 12 − 3x！',
     hints: [
       {
         tier: 1,
-        title: '只变盒子里面的项',
-        body: '+8 在括号外面，它不用过变号小门；只有盒里的 +3x 和 −4 需要变号。',
+        title: '括号外面的项保持原样',
+        body: '+8 位于括号外，不需要过反转闸；只有括号里面的 +3x 和 −4 需要逐项变号。',
       },
       {
         tier: 2,
-        title: '别漏掉排在后面的 −4',
-        body: '想想刚才那关的规律：盒外是减号，盒里的两项都要变一次号，−4 变完会是加还是减呢？',
+        title: '盯紧括号里排在后面的 −4',
+        body: '负号在括号外，箱内两项都要反号：正变负，负变正。检查一下 −4 过闸后该是什么符号。',
       },
       {
         tier: 3,
-        title: 'x 袋子里可以是负的哦',
-        body: 'x 袋子里放的是 −3x，星星数字袋里有 +8 和 +4，合起来写成 12 − 3x（和 −3x + 12 是一样的）。',
+        title: '变量项系数可以是负数',
+        body: 'x 齿轮槽合并后是 −3x，常数砝码槽有 +8 和 +4，最终写成 12 − 3x（与 −3x + 12 完全等价）。',
       },
     ],
   },
@@ -395,8 +395,8 @@ export function evaluateBracketUnpack(
       ok: false,
       code: 'incomplete',
       unpackedTerms: [],
-      headline: '先给礼盒里每一项都选好出闸符号',
-      feedback: '点击每一张工件卡上的「+ / −」按钮，决定它通过闸门后的新符号，再点「通过反转闸门」。',
+      headline: '先为封装箱内每一项选定过闸极性',
+      feedback: '点击每枚构件上的「+ / −」按钮，决定它通过反转闸后的新符号，再点击「解锁反转闸门」。',
     };
   }
 
@@ -444,9 +444,9 @@ export function evaluateBracketUnpack(
         ok: false,
         code: 'forgot-all-signs',
         unpackedTerms,
-        headline: '红色反转闸门还没生效哦',
+        headline: '红色负号反转闸还没触发',
         feedback:
-          '括号外面是一个负号「−」，盒内每一项过闸门都要把正变负、负变正。点一下试数天平看看现在的差值，再逐项翻转吧！',
+          '括号外面是一个负号「−」，箱内每一项过闸都必须正变负、负变正。打开下方「黄铜试数天平」看清左右差值，再逐项反转！',
       };
     }
 
@@ -459,8 +459,8 @@ export function evaluateBracketUnpack(
         ok: false,
         code: 'forgot-second-sign',
         unpackedTerms,
-        headline: '差一点就全对啦：看看排在后面的第二项！',
-        feedback: `第一项变号很准！不过后面的 ${origStr} 好像还留着原来的符号。盒外的「−」会照顾到里面的每一项，点下面的「试数小天平」看看为什么歪了，再试试翻一下它？`,
+        headline: '差一步全对：检查排在后面的第二项！',
+        feedback: `第一项极性翻得很准！不过后面的 ${origStr} 仍停在原符号。括号外的「−」管辖箱内每一项——点下方「黄铜试数天平」验证一下偏差，再调整它。`,
       };
     }
   }
@@ -472,15 +472,15 @@ export function evaluateBracketUnpack(
     ok: false,
     code: 'flipped-wrong-term',
     unpackedTerms,
-    headline: '有一项的符号还没对上',
+    headline: '有一项的过闸符号尚未对齐',
     feedback:
       box.outerSign === -1
-        ? `再检查一下原盒里的 ${wrongLabel}：前面有负号闸门，每一项都要变成相反符号。也可以打开「试数天平」验证一下！`
-        : `这个礼盒外面是正号「+」，里面的 ${wrongLabel} 不需要反转符号哦。`,
+        ? `再核对一下原箱内的 ${wrongLabel}：前有负号反转闸，每一项都要变成相反符号。可用「黄铜试数天平」代入数字自查。`
+        : `这个封装箱外是正号「+」，内部的 ${wrongLabel} 保持原符号即可。`,
   };
 }
 
-/** 校验散装工件投入目标收纳槽是否同类。 */
+/** 校验散装构件投入目标工作槽是否同类。 */
 export function checkSlotAssignment(
   token: TermToken,
   targetSlot: TermKind,
@@ -493,8 +493,8 @@ export function checkSlotAssignment(
       code: 'matched',
       message:
         targetSlot === 'var'
-          ? `${label} 放进「${variable} 小袋子」啦！`
-          : `${label} 放进「星星数字袋」啦！`,
+          ? `${label} 已归入「${variable} 齿轮槽」。`
+          : `${label} 已归入「常数砝码槽」。`,
     };
   }
   const label = formatTermToken(token, variable);
@@ -503,8 +503,8 @@ export function checkSlotAssignment(
     code: 'mixed-unlike-terms',
     message:
       token.kind === 'const'
-        ? `${label} 是纯数字小星星，和 ${variable} 小袋子不是同一种，放进「星星数字袋」更合适哦！`
-        : `${label} 带着字母 ${variable}，和纯数字不是同一种，放进「${variable} 小袋子」吧！`,
+        ? `${label} 是纯数值常数，与带字母 ${variable} 的项不是同类项，应放入「常数砝码槽」。`
+        : `${label} 带有变量 ${variable}，不能与纯数字混装，应放入「${variable} 齿轮槽」。`,
   };
 }
 
@@ -523,7 +523,7 @@ export function evaluateWorkshopSubmission(
       matched: true,
       code: 'exact',
       expected: level.target,
-      headline: `第 ${level.index} 关过关啦！`,
+      headline: `第 ${level.index} 号工单验收通过！`,
       feedback: level.praise,
     };
   }
@@ -544,16 +544,16 @@ export function evaluateWorkshopSubmission(
         matched: false,
         code: 'const-sign-error',
         expected: level.target,
-        headline: `${variable} 小袋子算对啦，再看看数字的正负号！`,
-        feedback: `带 ${variable} 的部分完全正确，不过星星数字袋的符号好像反了一点。点开「试数小天平」代个数字看看，马上就能发现！`,
+        headline: `${variable} 齿轮槽准确无误，再复查常数槽的正负号`,
+        feedback: `含 ${variable} 项系数完全正确，但常数砝码槽的符号似乎反了。打开「黄铜试数天平」代入一个数字称重，立刻就能看清偏差。`,
       };
     }
     return {
       matched: false,
       code: 'const-val-mismatch',
       expected: level.target,
-      headline: `${variable} 小袋子对啦，再数数星星数字袋`,
-      feedback: `${variable} 的数量已经算准啦！把星星数字袋里的几个数带着符号再合一次就能过关。`,
+      headline: `${variable} 齿轮槽准确，再核对常数砝码槽`,
+      feedback: `${variable} 项系数已经校准完成！把常数砝码槽里的数值带着各自符号再合并一次。`,
     };
   }
 
@@ -562,8 +562,8 @@ export function evaluateWorkshopSubmission(
       matched: false,
       code: 'var-coeff-mismatch',
       expected: level.target,
-      headline: `星星数字袋对啦，再数数 ${variable} 小袋子`,
-      feedback: `纯数字部分完全对啦！再看看 ${variable} 小袋子里的加减抵消，注意每个数前面的符号哦。`,
+      headline: `常数砝码槽准确，再核对 ${variable} 齿轮槽`,
+      feedback: `常数部分完全正确！回头再算一次 ${variable} 齿轮槽里的系数加减，留意每枚构件前的符号。`,
     };
   }
 
@@ -571,8 +571,8 @@ export function evaluateWorkshopSubmission(
     matched: false,
     code: 'both-mismatch',
     expected: level.target,
-    headline: '还差一点点就对齐啦',
-    feedback: '点开下面的「试数小天平」代个数字称一称，再对着两个口袋慢慢数一遍！',
+    headline: '两组槽位还有一点偏差',
+    feedback: '打开「黄铜试数天平」代入具体数值验算，再对照两个工作槽里的构件逐项合并。',
   };
 }
 

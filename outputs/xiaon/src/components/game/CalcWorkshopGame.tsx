@@ -1,6 +1,6 @@
-/** 计算工坊 · 《口袋整理坊》互动小游戏（专业模式第三站「计算」深度融合）。
- * 温暖明亮绘本纸感风：亲手把变号魔法盒内每一项翻号拆出 → 分类放进「神秘小袋子」与「星星数字袋」
- * → 亲手把袋里数量合起来，并随时用「试数小天平」代入数字称重验算。 */
+/** 计算工坊 · 《符号炼金台》互动探索游戏（专业模式第三站「计算」深度融合）。
+ * 星溪钟楼松墨黄铜手账风：亲手操控负号反转闸逐项变号 → 归入变量齿轮槽与常数砝码槽
+ * → 合并系数启动验收，并随时调用「黄铜试数天平」代入检验恒等性；通关解锁《符号反转律》。 */
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
@@ -15,6 +15,7 @@ import {
   Plus,
   RotateCcw,
   Scale,
+  ScrollText,
   Sparkles,
   Unlock,
   Wrench,
@@ -432,10 +433,10 @@ export function CalcWorkshopGame({
       ? 1
       : 2;
   const currentStepLabel = !boxUnpacked
-    ? '打开变号魔法盒'
+    ? '解锁负号反转闸'
     : !allSorted
-      ? '分类放进口袋'
-      : '合起来数一数';
+      ? '同类构件归槽'
+      : '合并两槽并验收';
 
   return (
     <dialog
@@ -452,7 +453,7 @@ export function CalcWorkshopGame({
 
         <div className="calc-title-pill" id={titleId}>
           <Wrench size={15} />
-          <strong>计算工坊</strong>
+          <strong>符号炼金台</strong>
           {!allComplete && (
             <span className="calc-step-pill">
               {level.index}/{CALC_WORKSHOP_LEVELS.length}
@@ -537,9 +538,21 @@ export function CalcWorkshopGame({
               </div>
               <div>
                 <span className="calc-eyebrow">计算工坊 · 已点亮</span>
-                <h2>口袋整理坊小手记</h2>
+                <h2>符号炼金台 · 校准档案</h2>
                 <p>{summary.assessment}</p>
               </div>
+            </div>
+
+            <div className="calc-scroll-card" aria-label="解锁星溪秘籍">
+              <div className="calc-scroll-head">
+                <ScrollText size={15} />
+                <strong>解锁星溪秘籍 · 《符号反转律》</strong>
+              </div>
+              <ul>
+                <li>去负括号铁律：括号前是减号「−」，括号内每一项都要反号，不能只翻第一项而漏掉第二项。</li>
+                <li>同类项边界：带同一变量的项合并系数，纯常数归入常数砝码槽，绝不跨类混算。</li>
+                <li>代数自检术：化简拿不准时，代入 x = 2 进原式和结果式，恒等必平衡。</li>
+              </ul>
             </div>
 
             {summary.achievements.length > 0 && (
@@ -641,20 +654,20 @@ export function CalcWorkshopGame({
                 </div>
               </div>
               <div className="calc-expr-banner" aria-label={`原式 ${level.expressionDisplay}`}>
-                <span>要整理的式子</span>
+                <span>待校准指令</span>
                 <code>{level.expressionDisplay}</code>
               </div>
             </section>
 
-            {/* 变号魔法盒（仅负括号关卡） */}
+            {/* 负号反转闸（仅负括号关卡） */}
             {level.bracketBox && !boxUnpacked && (
-              <section className="calc-panel calc-gate-panel" aria-label="变号魔法盒">
+              <section className="calc-panel calc-gate-panel" aria-label="负号反转闸">
                 <div className="calc-panel-head">
                   <h3>
-                    <Lock size={16} /> 变号小门：帮盒里的每一项选新符号
+                    <Lock size={16} /> 负号反转闸：逐项选定过闸后的极性
                   </h3>
                   <span className="calc-gate-badge">
-                    盒外是「{level.bracketBox.outerSign < 0 ? '减号 −' : '加号 +'}」
+                    闸门外为「{level.bracketBox.outerSign < 0 ? '负号 −' : '正号 +'}」
                   </span>
                 </div>
 
@@ -670,13 +683,13 @@ export function CalcWorkshopGame({
                     return (
                       <div key={term.id} className="calc-box-item">
                         <div className="calc-box-orig">
-                          <small>盒里第 {i + 1} 个</small>
+                          <small>箱内第 {i + 1} 项</small>
                           <strong>{formatTermToken(term, level.variable)}</strong>
                         </div>
                         <div
                           className="calc-sign-picker"
                           role="group"
-                          aria-label={`盒里第 ${i + 1} 个出小门后的符号`}
+                          aria-label={`箱内第 ${i + 1} 项过闸后的极性`}
                         >
                           <button
                             type="button"
@@ -713,7 +726,7 @@ export function CalcWorkshopGame({
                     onClick={handleUnpackSubmit}
                   >
                     <PackageOpen size={16} />
-                    打开魔法盒
+                    解锁反转闸门
                   </button>
                   <button
                     type="button"
@@ -721,7 +734,7 @@ export function CalcWorkshopGame({
                     onClick={() => toggleScale(true, true)}
                   >
                     <Scale size={15} />
-                    用试数小天平看看
+                    用黄铜天平自检
                   </button>
                 </div>
 
@@ -734,15 +747,15 @@ export function CalcWorkshopGame({
               </section>
             )}
 
-            {/* 分类放进口袋 */}
+            {/* 同类构件归槽 */}
             {boxUnpacked && (
-              <section className="calc-panel" aria-label="分类放进口袋">
+              <section className="calc-panel" aria-label="同类构件归槽">
                 <div className="calc-panel-head">
                   <h3>
-                    <Unlock size={16} /> 分类放进口袋
+                    <Unlock size={16} /> 同类构件归槽
                   </h3>
                   <span className="calc-muted">
-                    {allSorted ? '全部放好啦！' : `还剩 ${looseUnassigned.length} 个`}
+                    {allSorted ? '全部归槽完成' : `待归槽：${looseUnassigned.length} 枚`}
                   </span>
                 </div>
 
@@ -760,7 +773,7 @@ export function CalcWorkshopGame({
                             onClick={() => setSelectedId(t.id)}
                           >
                             <strong>{formatTermToken(t, level.variable)}</strong>
-                            <small>{t.fromBox ? '刚拆出' : '待分类'}</small>
+                            <small>{t.fromBox ? '刚过闸' : '待归槽'}</small>
                           </button>
                         );
                       })}
@@ -768,7 +781,7 @@ export function CalcWorkshopGame({
                     {activeToken && (
                       <div className="calc-assign-bar">
                         <span>
-                          把 <b>{formatTermToken(activeToken, level.variable)}</b> 放进：
+                          将 <b>{formatTermToken(activeToken, level.variable)}</b> 归入：
                         </span>
                         <div className="calc-assign-btns">
                           <button
@@ -776,14 +789,14 @@ export function CalcWorkshopGame({
                             className="calc-btn calc-slot-var-btn"
                             onClick={() => assignToSlot('var')}
                           >
-                            {level.variable} 小袋子
+                            {level.variable} 齿轮槽
                           </button>
                           <button
                             type="button"
                             className="calc-btn calc-slot-const-btn"
                             onClick={() => assignToSlot('const')}
                           >
-                            星星数字袋
+                            常数砝码槽
                           </button>
                         </div>
                       </div>
@@ -794,12 +807,12 @@ export function CalcWorkshopGame({
                 <div className="calc-slots-grid">
                   <div className="calc-slot-box var-slot">
                     <div className="calc-slot-head">
-                      <strong>{level.variable} 小袋子（带字母）</strong>
-                      <small>{varSlotTerms.length} 个</small>
+                      <strong>{level.variable} 齿轮槽（变量项）</strong>
+                      <small>{varSlotTerms.length} 枚</small>
                     </div>
                     <div className="calc-slot-items">
                       {varSlotTerms.length === 0 ? (
-                        <span className="calc-slot-empty">等带 {level.variable} 的进来</span>
+                        <span className="calc-slot-empty">等待含 {level.variable} 的项</span>
                       ) : (
                         varSlotTerms.map((t) => (
                           <button
@@ -807,7 +820,7 @@ export function CalcWorkshopGame({
                             type="button"
                             className={`calc-chip ${t.coeff >= 0 ? 'pos' : 'neg'}`}
                             disabled={levelSolved}
-                            title="点一下放回上面"
+                            title="点击移回待归槽区"
                             onClick={() => returnFromSlot(t.id)}
                           >
                             {formatTermToken(t, level.variable)}
@@ -819,12 +832,12 @@ export function CalcWorkshopGame({
 
                   <div className="calc-slot-box const-slot">
                     <div className="calc-slot-head">
-                      <strong>星星数字袋（纯数字）</strong>
-                      <small>{constSlotTerms.length} 个</small>
+                      <strong>常数砝码槽（纯数值）</strong>
+                      <small>{constSlotTerms.length} 枚</small>
                     </div>
                     <div className="calc-slot-items">
                       {constSlotTerms.length === 0 ? (
-                        <span className="calc-slot-empty">等纯数字小星星进来</span>
+                        <span className="calc-slot-empty">等待纯数值常数项</span>
                       ) : (
                         constSlotTerms.map((t) => (
                           <button
@@ -832,7 +845,7 @@ export function CalcWorkshopGame({
                             type="button"
                             className={`calc-chip ${t.coeff >= 0 ? 'pos' : 'neg'}`}
                             disabled={levelSolved}
-                            title="点一下放回上面"
+                            title="点击移回待归槽区"
                             onClick={() => returnFromSlot(t.id)}
                           >
                             {formatTermToken(t, level.variable)}
@@ -851,13 +864,13 @@ export function CalcWorkshopGame({
               </section>
             )}
 
-            {/* 合起来数一数 */}
+            {/* 合并两槽系数并验收 */}
             {allSorted && (
-              <section className="calc-panel calc-pack-panel" aria-label="合起来数一数">
+              <section className="calc-panel calc-pack-panel" aria-label="合并两槽系数">
                 <div className="calc-panel-head">
-                  <h3>把两个口袋分别合起来</h3>
+                  <h3>合并两个工作槽的系数</h3>
                   <span className="calc-preview-pill">
-                    合起来是：
+                    当前化简：
                     <strong>
                       {formatLinearExpr({
                         variable: level.variable,
@@ -870,9 +883,14 @@ export function CalcWorkshopGame({
 
                 <div className="calc-steppers">
                   <div className="calc-stepper">
-                    <span className="calc-stepper-label">
-                      {level.variable} 小袋子一共是
-                    </span>
+                    <div className="calc-stepper-top">
+                      <span className="calc-stepper-label">
+                        {level.variable} 齿轮槽合并
+                      </span>
+                      <span className="calc-stepper-items">
+                        {varSlotTerms.map((t) => formatTermToken(t, level.variable)).join('  ')}
+                      </span>
+                    </div>
                     <div className="calc-stepper-controls">
                       <button
                         type="button"
@@ -914,7 +932,12 @@ export function CalcWorkshopGame({
                   </div>
 
                   <div className="calc-stepper">
-                    <span className="calc-stepper-label">星星数字袋一共是</span>
+                    <div className="calc-stepper-top">
+                      <span className="calc-stepper-label">常数砝码槽合并</span>
+                      <span className="calc-stepper-items">
+                        {constSlotTerms.map((t) => formatTermToken(t, level.variable)).join('  ')}
+                      </span>
+                    </div>
                     <div className="calc-stepper-controls">
                       <button
                         type="button"
@@ -964,7 +987,7 @@ export function CalcWorkshopGame({
                         onClick={handleSubmitPackage}
                       >
                         <CheckCircle2 size={16} />
-                        交卷看看对不对
+                        启动工坊验收
                       </button>
                       <button
                         type="button"
@@ -972,7 +995,7 @@ export function CalcWorkshopGame({
                         onClick={() => toggleScale(true, true)}
                       >
                         <Scale size={15} />
-                        用试数小天平验算
+                        用黄铜天平验算
                       </button>
                     </>
                   ) : (
@@ -983,8 +1006,8 @@ export function CalcWorkshopGame({
                     >
                       <span>
                         {levelIdx < CALC_WORKSHOP_LEVELS.length - 1
-                          ? '进入下一关'
-                          : '看看我的探索手记'}
+                          ? '进入下一份工单'
+                          : '解锁校准档案与秘籍'}
                       </span>
                       <ArrowRight size={16} />
                     </button>
@@ -1010,11 +1033,11 @@ export function CalcWorkshopGame({
               </section>
             )}
 
-            {/* 随身暖木绘本风 SVG 试数小天平 */}
-            <section ref={scaleRef} className="calc-panel calc-scale-panel" aria-label="试数小天平">
+            {/* 随身星溪黄铜试数天平 */}
+            <section ref={scaleRef} className="calc-panel calc-scale-panel" aria-label="黄铜试数天平">
               <div className="calc-panel-head">
                 <h3>
-                  <Scale size={16} /> 试数小天平（代个数字称称看）
+                  <Scale size={16} /> 黄铜试数天平（代入数值检验恒等性）
                 </h3>
                 <button
                   type="button"
@@ -1022,14 +1045,14 @@ export function CalcWorkshopGame({
                   aria-expanded={scaleOpen}
                   onClick={() => toggleScale()}
                 >
-                  {scaleOpen ? '收起' : '打开称重'}
+                  {scaleOpen ? '收起' : '展开验算'}
                 </button>
               </div>
 
               {scaleOpen && (
                 <div className="calc-scale-body">
                   <div className="calc-sample-row" role="group" aria-label="选择代入数字">
-                    <span>试试让 {level.variable} =</span>
+                    <span>令 {level.variable} =</span>
                     {level.sampleValues.map((val) => (
                       <button
                         key={val}
@@ -1041,6 +1064,15 @@ export function CalcWorkshopGame({
                         {val}
                       </button>
                     ))}
+                  </div>
+
+                  <div className="calc-scale-sub-strip">
+                    <span>
+                      左盘原式 ({level.expressionDisplay}) → <b>{scaleResult.leftValue}</b>
+                    </span>
+                    <span>
+                      右盘当前 ({formatLinearExpr(scalePreviewExpr)}) → <b>{scaleResult.rightValue}</b>
+                    </span>
                   </div>
 
                   <svg

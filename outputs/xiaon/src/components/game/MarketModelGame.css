@@ -1,0 +1,1113 @@
+/* 生活集市 · 《星溪策算司》星溪夜集账房手账样式（呼应地图节点 #f0d9cc） */
+
+dialog.market-dialog {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background:
+    radial-gradient(circle at 14% 10%, rgba(240, 217, 204, 0.64) 0%, transparent 46%),
+    radial-gradient(circle at 88% 85%, rgba(248, 232, 190, 0.5) 0%, transparent 48%),
+    linear-gradient(170deg, #fdf4ee 0%, #fbf6ee 56%, #f6f1e6 100%);
+  color: #3d281c;
+  overflow: hidden;
+}
+
+dialog.market-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+dialog.market-dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog.market-dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: rgba(61, 40, 28, 0.38);
+}
+
+/* 顶栏：单行零折行零截断 */
+.market-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+  background: rgba(253, 244, 238, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #edd8ca;
+  z-index: 4;
+}
+
+.market-nav-btn,
+.market-hud-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  padding: 0 11px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #6b3519;
+  background: #ffffff;
+  border: 1px solid #ebd2c1;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(107, 53, 25, 0.06);
+}
+
+.market-nav-btn:hover,
+.market-hud-btn:hover {
+  background: #fdf0e7;
+}
+
+.market-hud-btn[aria-expanded='true'] {
+  background: #f5d88c;
+  color: #3a2a0b;
+  border-color: #e4be63;
+}
+
+.market-hud-ghost {
+  background: transparent;
+  color: #84553d;
+  box-shadow: none;
+}
+
+.market-title-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.92rem;
+  color: #5a2c14;
+  white-space: nowrap;
+}
+
+.market-title-pill strong {
+  font-weight: 700;
+}
+
+.market-step-pill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f8dfd0;
+  color: #843b18;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.market-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.market-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 14px calc(30px + env(safe-area-inset-bottom, 0px));
+}
+
+.market-workspace,
+.market-summary-card,
+.market-tips-drawer {
+  width: min(620px, 100%);
+  margin: 0 auto 12px;
+}
+
+/* 锦囊卡片 */
+.market-tips-drawer {
+  padding: 14px 16px;
+  border-radius: 22px;
+  background: #fffcf0;
+  border: 1.5px solid #e9d292;
+  box-shadow: 0 8px 22px rgba(154, 120, 42, 0.1);
+}
+
+.market-tips-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #7c5613;
+  font-size: 0.88rem;
+}
+
+.market-tips-head strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.market-icon-btn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #f5ebd0;
+  color: #5c4417;
+  border: 0;
+}
+
+.market-tips-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.market-tips-tabs button {
+  flex: 1;
+  min-height: 34px;
+  border-radius: 12px;
+  border: 1px solid #e6d6a8;
+  background: #ffffff;
+  color: #6b562b;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.market-tips-tabs button.active {
+  background: #f2cf78;
+  color: #362507;
+  border-color: #dfa93f;
+}
+
+.market-tip-content h4 {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  color: #382a0e;
+}
+
+.market-tip-content p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: #5a4b2c;
+}
+
+/* 暖米白绘本卡片 */
+.market-order-card,
+.market-panel,
+.market-summary-card {
+  padding: 16px;
+  border-radius: 24px;
+  background: #fffef9;
+  border: 1px solid #edd9cb;
+  box-shadow: 0 6px 20px rgba(107, 53, 25, 0.06);
+  margin-bottom: 12px;
+}
+
+.market-order-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.market-skill-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #fbe4d6;
+  color: #8a3f1a;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.market-step-hint,
+.market-muted {
+  font-size: 0.8rem;
+  color: #835f4b;
+  font-weight: 500;
+}
+
+.market-story-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.market-story-mascot {
+  width: 52px;
+  height: 52px;
+  flex: none;
+}
+
+.market-order-card h2 {
+  margin: 0 0 4px;
+  font-size: 1.06rem;
+  color: #462413;
+}
+
+.market-story {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #634636;
+}
+
+.market-stall-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #fdf2ea;
+  border: 1.5px solid #eccab6;
+}
+
+.market-stall-banner span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #9b4a22;
+}
+
+.market-stall-banner strong {
+  font-size: 0.86rem;
+  color: #542d18;
+}
+
+.market-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.market-panel-head h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.96rem;
+  color: #4a2614;
+}
+
+.market-formula-pill {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #fcf0d8;
+  border: 1px solid #e6c58b;
+  color: #6c410d;
+  font-size: 0.84rem;
+}
+
+.market-formula-pill strong {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.96rem;
+}
+
+/* 独立按钮体系：绝不复用全局 .primary / .secondary */
+.market-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+}
+
+.market-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.market-btn-main {
+  background: #9e4d28;
+  color: #fffef9;
+  box-shadow: 0 5px 14px rgba(158, 77, 40, 0.22);
+}
+
+.market-btn-main:hover:not(:disabled) {
+  background: #853e1e;
+}
+
+.market-btn-soft {
+  background: #fceddf;
+  color: #6e3518;
+  border-color: #e8c3ac;
+}
+
+.market-btn-soft:hover:not(:disabled) {
+  background: #f7dfc9;
+}
+
+.market-btn-ghost {
+  background: transparent;
+  color: #7d523c;
+  border-color: #e5ccbc;
+}
+
+.market-action-row,
+.market-summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* 费用积木拼装卡 */
+.market-block-list {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.market-cost-card {
+  padding: 12px;
+  border-radius: 18px;
+  background: #fffaf5;
+  border: 1px solid #edd6c6;
+}
+
+.market-cost-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.market-cost-meta strong {
+  display: block;
+  font-size: 0.92rem;
+  color: #462413;
+}
+
+.market-cost-meta small {
+  font-size: 0.78rem;
+  color: #7e5d4a;
+}
+
+.market-cost-tag {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fae2d2;
+  color: #853c18;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.market-slot-picker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 460px) {
+  .market-slot-picker {
+    grid-template-columns: 1fr;
+  }
+}
+
+.market-slot-btn {
+  min-height: 42px;
+  padding: 6px 10px;
+  border-radius: 13px;
+  border: 1.5px solid #e6d1c3;
+  background: #ffffff;
+  color: #5c3e2e;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.market-slot-btn.rate.selected {
+  background: #fde5d6;
+  border-color: #ce7449;
+  color: #752f11;
+  box-shadow: 0 3px 10px rgba(206, 116, 73, 0.2);
+}
+
+.market-slot-btn.fixed.selected {
+  background: #e1f4ea;
+  border-color: #499d74;
+  color: #1b5a40;
+  box-shadow: 0 3px 10px rgba(73, 157, 116, 0.18);
+}
+
+/* 实时分单位计费条 */
+.market-meter-box {
+  padding: 12px;
+  border-radius: 18px;
+  background: #fdf8f2;
+  border: 1.5px dashed #e5c6b1;
+}
+
+.market-meter-head {
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #774f38;
+}
+
+.market-meter-rows {
+  display: grid;
+  gap: 7px;
+}
+
+.market-meter-row {
+  display: grid;
+  grid-template-columns: 58px 1fr 48px;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: #513626;
+}
+
+.market-meter-lbl {
+  font-weight: 600;
+}
+
+.market-meter-bars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.market-bar-rate {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f8d8c4;
+  color: #7d3614;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .market-bar-rate {
+    transition: width 0.24s ease;
+  }
+}
+
+.market-bar-fixed {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #def3e8;
+  color: #1c5c42;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.market-meter-row b {
+  text-align: right;
+  color: #5b2e16;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+/* 开张试算台 */
+.market-trial-panel {
+  background: linear-gradient(180deg, #fffaf4 0%, #fffef9 100%);
+  border: 1.5px solid #ebcab4;
+}
+
+.market-order-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fde7d8;
+  color: #8c3d18;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.market-trial-prompt {
+  margin: 0 0 10px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #543726;
+}
+
+.market-quick-guesses {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  color: #7c5843;
+}
+
+.market-quick-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.market-quick-row button {
+  min-height: 36px;
+  border-radius: 12px;
+  border: 1.5px solid #e6cfc0;
+  background: #ffffff;
+  color: #5b3824;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.market-quick-row button.active {
+  background: #f5d88c;
+  border-color: #d9a43b;
+  color: #3c2706;
+}
+
+.market-stepper-box {
+  padding: 12px;
+  border-radius: 18px;
+  background: #fdf6ef;
+  border: 1px solid #ead2c2;
+}
+
+.market-stepper-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #724a33;
+}
+
+.market-stepper-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.market-stepper-controls button {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 12px;
+  border: 1px solid #e4c6b3;
+  background: #ffffff;
+  color: #5a341f;
+  font-weight: 700;
+  font-size: 0.84rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.market-stepper-controls button:hover:not(:disabled) {
+  background: #fbece2;
+}
+
+.market-stepper-controls output {
+  min-width: 68px;
+  text-align: center;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 1.16rem;
+  font-weight: 700;
+  color: #7a3515;
+}
+
+/* 收银台清单积木条 */
+.market-receipt-visual {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #ebd4c4;
+  display: grid;
+  gap: 8px;
+}
+
+.market-receipt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.market-chip-unit {
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: #fde9dc;
+  border: 1px solid #eec3a8;
+  color: #7d3614;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.market-chip-fixed {
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: #e1f5eb;
+  border: 1px solid #a1d9bc;
+  color: #1b5c41;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.market-receipt-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed #ead5c7;
+  font-size: 0.84rem;
+  color: #634433;
+}
+
+.market-receipt-total strong {
+  color: #216b4c;
+}
+
+/* 自由切数量规律探索条 */
+.market-explore-box {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: #f1faf5;
+  border: 1px solid #bae0cc;
+  display: grid;
+  gap: 8px;
+}
+
+.market-explore-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #275e48;
+}
+
+.market-explore-head strong {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.94rem;
+  color: #17523a;
+}
+
+.market-qty-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.market-qty-pills button {
+  min-height: 34px;
+  padding: 0 11px;
+  border-radius: 10px;
+  border: 1.5px solid #b8dec9;
+  background: #ffffff;
+  color: #205943;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.market-qty-pills button.active {
+  background: #2e7c5b;
+  border-color: #2e7c5b;
+  color: #ffffff;
+}
+
+/* 第 4 关：雨天账本对照与决策 */
+.market-diff-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fdeae3;
+  color: #a63d24;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.market-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 460px) {
+  .market-compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.market-ledger-box {
+  padding: 12px;
+  border-radius: 16px;
+  display: grid;
+  gap: 4px;
+}
+
+.market-ledger-box.old {
+  background: #fbf7ef;
+  border: 1.5px solid #e6d5b8;
+  color: #5c431f;
+}
+
+.market-ledger-box.actual {
+  background: #fff4ef;
+  border: 1.5px solid #edbda9;
+  color: #7c341d;
+}
+
+.market-ledger-box small {
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.market-ledger-box strong {
+  font-size: 1.24rem;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+.market-ledger-box span {
+  font-size: 0.76rem;
+  opacity: 0.9;
+}
+
+.market-cause-list,
+.market-path-tabs {
+  display: grid;
+  gap: 8px;
+}
+
+.market-path-tabs {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .market-path-tabs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.market-cause-card,
+.market-path-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1.5px solid #ead4c5;
+  background: #fffcf8;
+  color: #4b2d1c;
+  text-align: left;
+}
+
+.market-cause-card strong,
+.market-path-btn strong {
+  font-size: 0.88rem;
+}
+
+.market-cause-card small,
+.market-path-btn small {
+  font-size: 0.78rem;
+  color: #7c5c49;
+  line-height: 1.45;
+}
+
+.market-cause-card.selected,
+.market-path-btn.active {
+  border-color: #c26a3f;
+  background: #fdf0e6;
+  box-shadow: 0 0 0 3px rgba(194, 106, 63, 0.14);
+}
+
+.market-cause-card.ok {
+  border-color: #4aa378;
+  background: #eef9f2;
+}
+
+.market-upgrade-box,
+.market-scope-box {
+  padding: 12px;
+  border-radius: 18px;
+  background: #fdf8f2;
+  border: 1px solid #ecd5c4;
+}
+
+.market-scope-tag-preview {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #82c4a3;
+}
+
+.market-scope-tag-preview span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #216b4c;
+}
+
+.market-scope-tag-preview strong {
+  font-size: 0.88rem;
+  color: #244537;
+  line-height: 1.55;
+}
+
+/* 反馈框 */
+.market-feedback {
+  margin-top: 12px;
+  padding: 13px 15px;
+  border-radius: 18px;
+  border: 1.5px solid #ead5c5;
+}
+
+.market-feedback.ok {
+  background: #edf9f1;
+  border-color: #a3dbb7;
+}
+
+.market-feedback.warn {
+  background: #fff5f1;
+  border-color: #efc2b4;
+}
+
+.market-feedback-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.market-mini-mascot {
+  width: 46px;
+  height: 46px;
+  flex: none;
+}
+
+.market-feedback strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.92rem;
+  color: #3a2316;
+}
+
+.market-feedback.warn strong {
+  color: #9e3820;
+}
+
+.market-feedback p {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: #5c4335;
+}
+
+/* 通关手记评价卡 */
+.market-summary-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.market-summary-mascot {
+  width: 68px;
+  height: 68px;
+  flex: none;
+}
+
+.market-eyebrow {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #9b4a22;
+  margin-bottom: 4px;
+}
+
+.market-summary-head h2 {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+  color: #462413;
+}
+
+.market-summary-head p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: #634737;
+}
+
+.market-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.market-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: #fce7d7;
+  color: #7c3817;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.market-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.market-metrics > div {
+  padding: 10px;
+  border-radius: 16px;
+  text-align: center;
+  background: #fdf6ef;
+  border: 1px solid #edd6c5;
+}
+
+.market-metrics strong {
+  display: block;
+  font-size: 1.06rem;
+  color: #843a18;
+}
+
+.market-metrics span {
+  font-size: 0.74rem;
+  color: #805e4b;
+}
+
+.market-record-list {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.market-record-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 9px 12px;
+  border-radius: 14px;
+  background: #fdf9f4;
+  border: 1px solid #efe0d4;
+  color: #472a1a;
+  font-size: 0.85rem;
+}
+
+.market-record-list li svg {
+  color: #348361;
+  flex: none;
+}
+
+.market-record-list li small {
+  margin-left: auto;
+  color: #7e5c48;
+  font-size: 0.76rem;
+}
+
+.market-archive-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #fceddf;
+  color: #73391a;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.market-archive-status svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+
+/* ── 《星溪策算司》升级组件：线性费用趋势图、秘籍卷轴 ── */
+.market-chart-box {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #fffaf5;
+  border: 1px solid #ecd7c6;
+}
+
+.market-chart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b3b22;
+}
+
+.market-chart-head small {
+  color: #93593a;
+  font-weight: 500;
+}
+
+.market-chart-svg {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+  height: auto;
+}
+
+.market-scroll-card {
+  margin: 0 0 14px;
+  padding: 13px 14px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #fdf3ea 0%, #f9ebd8 100%);
+  border: 1px solid #e3c2a6;
+  color: #4b2816;
+}
+
+.market-scroll-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #7c3b1a;
+  font-size: 0.88rem;
+}
+
+.market-scroll-card ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 5px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
