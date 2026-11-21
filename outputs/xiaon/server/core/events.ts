@@ -44,6 +44,16 @@ export class StudentEvents {
   const t=this.task(input.taskId,input.taskVersion);const hinted=new Set(prior.filter(e=>e.kind==='hint').map(e=>e.hintId));
   const a=schemas.Attempt.parse({schemaVersion:SCHEMA_VERSION,id:randomUUID(),...input,sourceTime:serverTime(clock),exposureIds:prior.map(e=>e.id),hintSnapshot:t.hints.filter(h=>hinted.has(h.id)),answerExposed:prior.some(e=>['answer','chat_help'].includes(e.kind)),origin:'student_api',exposureHistory:repository.list('attempts').some(a=>a.taskId===input.taskId&&a.taskVersion===input.taskVersion&&a.exposureHistory==='legacy_unknown')?'legacy_unknown':'complete',supersedesAttemptId:null});repository.append('attempts',a);return a;
  });}
+ /** 监护人同意留痕（2026-11-21）。追加式：撤回再记一条 revoked，前面的记录原样保留。
+  *  同一份同意书的同一项授权，重复提交只会覆盖 revision，不会凭空多出几条流水。 */
+ guardianConsent(raw:{operationId:string;agreementVersion:string;actor:'student'|'guardian';decision:'granted'|'declined'|'revoked';scope:('learning_overview'|'memory_use'|'chat_replay')[];note?:string|null}){
+  const {repository,clock}=this.ctx();
+  return repository.once(raw.operationId,{kind:'guardian-consent',...raw},()=>{
+   const previous=repository.list('guardianConsents').filter(c=>c.agreementVersion===raw.agreementVersion&&raw.scope.every(s=>c.scope.includes(s)));
+   const record=schemas.GuardianConsent.parse({schemaVersion:SCHEMA_VERSION,id:previous.at(-1)?.id??randomUUID(),operationId:raw.operationId,revision:(previous.at(-1)?.revision??0)+1,agreementVersion:raw.agreementVersion,actor:raw.actor,decision:raw.decision,scope:raw.scope,note:raw.note??null,at:clock.now()});
+   repository.append('guardianConsents',record);return record;
+  });
+ }
  consent(raw:z.infer<typeof schemas.SetConsent>){const input=this.parse(schemas.SetConsent,raw);const {repository,clock}=this.ctx();return repository.once(input.operationId,{kind:'consent',...input},()=>{const state=schemas.ConsentState.parse({schemaVersion:SCHEMA_VERSION,id:randomUUID(),...input,updatedAt:clock.now()});repository.append('consents',state);return state;});}
  memoryEnabled(){return this.ctx().repository.list('consents').at(-1)?.optionalMemory===true;}
  remember(raw:z.infer<typeof schemas.Remember>):MemoryItem{

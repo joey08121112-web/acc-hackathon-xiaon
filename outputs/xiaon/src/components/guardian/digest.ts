@@ -1,10 +1,10 @@
 /** 家长视图的数据口径（纯函数，浏览器与测试共用）。
  * 只读结构化学习记录：作答分类、知识点状态、计划确认、复习队列、错题条数、进步卡信心自评、专业模式等级。
  * 不读聊天、倾诉、记忆、对话观察，也不读孩子写下的作答原文、错题原话或进步卡文字。 */
-import type { LearningView } from '../../../server/agents/learning';
+import type { LearningView } from '../../../shared/views';
 import { MODULE_LEVEL_LABELS } from '../../../shared/learning-contracts';
-import { skillStatusLabels } from '../../learning/assessment';
-import { shanghaiDate } from '../../learning/review';
+import { skillStatusLabels } from '../../../shared/assessment-labels';
+import { shanghaiDate } from '../../../shared/review';
 import { MONTH_PLAN_POINT_NAMES } from '../plan/pointNames';
 
 type Kind='new_independent'|'completed_with_help'|'corrected_original'|'original_redo'|'incorrect'|'pending'|'unknown';

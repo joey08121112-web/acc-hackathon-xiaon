@@ -1,11 +1,10 @@
 /** 手机号登录的前端一侧：问服务器要不要登录、登录/注册/退出。登录凭据只在 HttpOnly cookie 里，浏览器存储里不放。 */
 import { createContext } from 'react';
 import type { AuthStatus } from '../../shared/auth';
+import { fetchJson } from '../agent-client/http';
 export async function authPost<T>(path:'status'|'check'|'login'|'register'|'logout',body:unknown={}):Promise<T>{
- const res=await fetch('/api/auth/'+path,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
- const data=await res.json().catch(()=>null);
- if(!res.ok)throw new Error(data?.error?.message??'服务暂时连不上，请稍后再试');
- return data as T;
+ // /api/auth/* 在拿到本地会话之前就能调，所以不走 apiRequest 的 CSRF 流程。
+ return fetchJson<T>('/api/auth/'+path,{method:'POST',body,credentials:'same-origin',fallbackMessage:'服务暂时连不上，请稍后再试'});
 }
 export const authStatus=()=>authPost<AuthStatus>('status');
 /** 上次在这台浏览器登录的是哪个号（打码手机号）。同号再登录不清本地进度，换号登录才清。 */

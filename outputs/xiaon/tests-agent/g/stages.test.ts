@@ -1,7 +1,7 @@
 /** 所有者：Claude。G0 对话阶段机单测：纯函数，合成对话。 */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { decideStage,filterStageFields,initialStageState,ASK_STUDY_AFTER_COMPANION_TURNS,THINK_MAX_TURNS,type ChatStageState,type StageDecision,type StageEvent } from '../../server/agents/stages';
+import { decideStage,filterStageFields,initialStageState,ASK_STUDY_AFTER_COMPANION_TURNS,THINK_MAX_TURNS,type ChatStageState,type StageDecision,type StageEvent } from '../../server/core/stages';
 type Step=string|(Partial<StageEvent>&{text:string});
 const event=(step:Step):StageEvent=>({sessionId:'chat-test',intent:null,hasProblem:false,hasActiveTask:false,solved:false,progressCardDone:false,memoryEnabled:true,...(typeof step==='string'?{text:step}:step)});
 /** Threads the program state through a scripted conversation, exactly like the coordinator does. */

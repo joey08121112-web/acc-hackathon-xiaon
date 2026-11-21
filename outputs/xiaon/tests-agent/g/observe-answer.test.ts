@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRuntime } from '../../server/bootstrap';
 import { installLearning } from '../../server/agents/learning';
-import { decideStage,type ChatStageState } from '../../server/agents/stages';
+import { decideStage,type ChatStageState } from '../../server/core/stages';
 import { temporaryRepository } from '../../server/storage/testing';
 import type { ModelProvider } from '../../shared/learning-contracts';
 const id=()=>crypto.randomUUID();

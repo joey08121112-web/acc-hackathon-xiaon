@@ -9,9 +9,18 @@ export type ProfileItem={
  id:string;kind:ProfileKind;text:string;status:'active'|'past';source:'chat'|'student';
  firstMentionedAt:string;lastMentionedAt:string;mentionCount:number;expiresAt:string|null;editedByStudent:boolean;
  createdAt:string;updatedAt:string;
+ /** 2026-11-21 溯源：这一条是从哪段对话、凭学生哪句原话记下来的。
+  *  学生问「你为什么记这个」时，答案就是 evidenceQuote。 */
+ originThreadId:string|null;evidenceQuote:string|null;
+ /** 「失效不删」：内容变了以后旧条目标为失效并保留（invalidatedAt 有值），
+  *  新版本是另一条，supersedesId 指向它取代的那一条。 */
+ invalidatedAt:string|null;supersedesId:string|null;
 };
 export type ProfileBasic={nickname:string;grade:string};
-export type Profile={basic:ProfileBasic;items:ProfileItem[];autoRemember:boolean;now:string};
+/** 档案里存了什么。 */
+export type ProfileData={basic:ProfileBasic;items:ProfileItem[];autoRemember:boolean;autoRememberConfigured:boolean;now:string};
+/** 对外的档案：存了什么 + 这条链路会把什么发给模型（披露由聊天层注入，存储层不负责）。 */
+export type Profile=ProfileData&{disclosure:string};
 const itemText=z.string().trim().min(1).max(ITEM_TEXT_MAX);
 const itemId=z.string().regex(/^[A-Za-z0-9_-]{1,64}$/);
 export const profileRequests={
@@ -31,7 +40,10 @@ export type FreeChatMessage={id:string;role:'user'|'assistant';content:string;cr
 export type FreeChatHistory={threadId:string|null;messages:FreeChatMessage[]};
 export type FreeChatPage=FreeChatHistory&{hasMore:boolean;before:string|null};
 export type FreeChatThread={threadId:string;startedAt:string;preview:string;messageCount:number};
-export type FreeChatExchange={threadId:string;user:FreeChatMessage;reply:FreeChatMessage};
+/** 存进学生自己库的一问一答。 */
+export type FreeChatTurn={threadId:string;user:FreeChatMessage;reply:FreeChatMessage};
+/** 对外的响应：在存好的那一问一答之外，附带这次到底把什么发给了模型（2026-11-21）。 */
+export type FreeChatExchange=FreeChatTurn&{disclosure:string};
 export const chatRequests={
  send:z.strictObject({text:z.string().trim().min(1).max(MESSAGE_TEXT_MAX)}),
  newThread:z.strictObject({}),

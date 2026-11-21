@@ -3,8 +3,8 @@
  * 模块选择（需要加强优先、其次部分掌握）是这里的程序规则，模型只负责目标措辞；周计划一律通过 ctx.planning() 的现有计划引擎生成，不另建版本历史。 */
 import { randomUUID } from 'node:crypto';
 import { schemas,SCHEMA_VERSION,INTERVIEW_MODULE_ORDER,MODULE_LEVEL_LABELS,RETEST_REMIND_DAYS_BEFORE,type MonthStage,type ModuleLevel,type RetestReminder,type PlanVersion,type EngineContext } from '../../../shared/learning-contracts';
-import { shiftDate,mondayOf,monthEnd,monthWeeks } from '../../../src/components/plan/calendar';
-import { shanghaiDate } from '../../../src/learning/review';
+import { shiftDate,mondayOf,monthEnd,monthWeeks } from '../../../shared/calendar';
+import { shanghaiDate } from '../../../shared/review';
 import type { MonthStageConfirmInput,MonthStageDraftInput,ProfessionalContext,RetestDeclineInput,RetestReminderInput } from '../context';
 import { RuntimeError } from '../../core/errors';
 /** 各模块没有报告建议时的默认月目标（程序措辞，模型不可用或失败时使用）。 */

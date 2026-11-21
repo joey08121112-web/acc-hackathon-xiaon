@@ -1,0 +1,95 @@
+{
+  "ranAt": "2026-11-21T04:27:33.480Z",
+  "node": "v26.13.0",
+  "scenarios": {
+    "S1-新会话回忆": {
+      "passed": true,
+      "summary": "新会话（重启后）仍然能回忆起记住的事，并且真的进了出站上下文",
+      "details": {
+        "beforeRestart": true,
+        "afterRestart": true,
+        "briefExcerpt": "关于这个同学（他自己填的，或者之前聊天时记下的）： / - 最近喜欢：喜欢打篮球 /  / 这些只是背景。自然地用上，比如举例时用他喜欢的东西，或者顺口关心一下最近的事；不用每句都提，也不要说“我记得你的档案里写着”。如果他现在说的和这里不一样，以他现在说的为准。",
+        "learningMemoriesAfterRestart": [
+          "喜欢打篮球"
+        ]
+      }
+    },
+    "S3-偏好覆盖更新": {
+      "passed": true,
+      "summary": "覆盖更新后出站上下文只有新的一条，旧的那条留痕可查",
+      "details": {
+        "oldItemId": "6Z9sTvnKa5ih",
+        "newItemId": "yCZCGswvpdJR",
+        "briefHasNew": true,
+        "briefHasOld": false,
+        "supersededKept": [
+          {
+            "id": "6Z9sTvnKa5ih",
+            "text": "喜欢打篮球",
+            "invalidatedAt": "2026-11-21T02:00:00.000Z"
+          }
+        ],
+        "liveItems": [
+          "喜欢踢足球"
+        ]
+      }
+    },
+    "S10-开销测量": {
+      "passed": true,
+      "summary": "开销中位数：C0 0.1042ms / C1 0.2768ms / C2 0.7916ms",
+      "details": {
+        "itemCounts": {
+          "C0": 0,
+          "C1": 8,
+          "C2": 120
+        },
+        "samplesMs": {
+          "C0": [
+            0.1837,
+            0.1062,
+            0.0944,
+            0.0988,
+            0.1022,
+            0.1415
+          ],
+          "C1": [
+            7.5145,
+            0.4064,
+            0.2554,
+            0.2403,
+            0.2982,
+            0.2243
+          ],
+          "C2": [
+            0.9329,
+            0.7265,
+            0.8767,
+            0.8567,
+            0.6933,
+            0.6492
+          ]
+        },
+        "medianMs": {
+          "C0": 0.1042,
+          "C1": 0.2768,
+          "C2": 0.7916
+        },
+        "note": "ABBA×3 的顺序是 C0,C1,C2,C2,C1,C0；这里取每个条件 6 次采样的中位数。数字随机器与数据量变化，不是产品承诺。"
+      }
+    },
+    "跨天保持-24h与7d": {
+      "passed": true,
+      "summary": "24 小时与 7 天后记忆仍在，并且仍然进出站上下文",
+      "details": {
+        "itemCounts": {
+          "atStart": 1,
+          "after24h": 1,
+          "after7d": 1
+        },
+        "briefHasMemoryAt24h": true,
+        "briefHasMemoryAt7d": true
+      }
+    }
+  },
+  "honestBoundary": "这次验证的是记忆的**机制**：记住了吗、覆盖对不对、代价多大、跨天保不保得住。它**不**证明「记忆让学习效果变好」——那需要带对照的实验，本文件没有做，也不据此宣称效果。"
+}

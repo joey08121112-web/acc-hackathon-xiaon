@@ -6,7 +6,7 @@ import { installLearning } from '../../server/agents/learning';
 import { createHttpServer } from '../../server/http/server';
 import { temporaryRepository } from '../../server/storage/testing';
 import { RuntimeError } from '../../server/core/errors';
-import { SAFETY_PATTERN, REST_PATTERN } from '../../server/agents/stages';
+import { SAFETY_PATTERN, REST_PATTERN } from '../../server/core/stages';
 import { INTERVIEW_MODULE_ORDER, schemas, type InterviewSession, type InterviewStep, type ProfessionalReport, type TrendQuery, type InterviewModule } from '../../shared/learning-contracts';
 import { professionalMonth } from '../../src/components/professional/archive';
 const api=Number(process.env.XIAON_H2_API_PORT??18952),ui=Number(process.env.XIAON_H2_UI_PORT??5212);

@@ -4,7 +4,7 @@ import type { LearningRuntime } from '../../bootstrap';
 import { RuntimeError } from '../../core/errors';
 import { classifyAttempt } from '../assessment/state';
 import { knownFingerprints } from '../generation/store';
-import { SAFETY_PATTERN,REST_PATTERN,containsAnswer } from '../../agents/stages';
+import { SAFETY_PATTERN,REST_PATTERN,containsAnswer } from '../../core/stages';
 import { draftProgressCard } from '../progress';
 import type { RevampContext } from '../context';
 const op=schemas.StartSession.shape.operationId;

@@ -2,8 +2,8 @@
 import { z } from 'zod';
 import { schemas,SCHEMA_VERSION,type ConversationSummary,type ObservationDraft,type Validation } from '../../../shared/learning-contracts';
 import { RuntimeError } from '../../core/errors';
-import { INTENSE_PATTERN,SAFETY_PATTERN } from '../../agents/stages';
-import { SUMMARY_PROMPT } from '../../agents/prompts/summary';
+import { INTENSE_PATTERN,SAFETY_PATTERN } from '../../core/stages';
+import { SUMMARY_PROMPT } from '../../core/prompts/summary';
 import type { EndConversationInput,ObservationCheck,RevampContext } from '../context';
 export const OBSERVATIONS_PER_DIMENSION=3;
 /** Emotion words never become a topic or a plan line of a learning record. */

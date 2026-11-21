@@ -5,7 +5,9 @@ import { TestClock } from '../core/clock';
 import { FreeChatStore } from './store';
 import { CONSOLIDATE_PROMPT, consolidate, idleMsFromEnv, parseOps, shouldConsolidate, similar } from './consolidate';
 const HOUR=3600000,DAY=24*HOUR;
-const setup=()=>{const clock=new TestClock('2026-10-29T02:00:00.000Z');const store=new FreeChatStore(':memory:',clock);return{clock,store,now:()=>clock.now()};};
+// 这些用例测的是整理机制本身，所以在这里显式打开自动记忆。
+// 默认值是关的（PRD FR12「长期记忆默认关闭」），另有专门用例守着默认值，见下方「默认关着」。
+const setup=()=>{const clock=new TestClock('2026-10-29T02:00:00.000Z');const store=new FreeChatStore(':memory:',clock);store.setAutoRemember(true);return{clock,store,now:()=>clock.now()};};
 /** 假模型：按顺序回 replies（对象会转成 JSON），记下每次收到的消息。 */
 function model(...replies:(unknown|Error)[]){
  const calls:ModelMessage[][]=[];
@@ -83,6 +85,32 @@ test('R5：身体健康换说法也进不了档案；条目干净但原话带健
  const r=await consolidate(store,model(ops).provider,now,signal);
  assert.deepEqual(r.changes.map(c=>c.text),['在看三体']);
 });
+test('2026-11-21：校名、成绩、住址、家长信息四类身份信息进不了档案；普通兴趣不受牵连', async()=>{
+ const{store,now}=setup();
+ // 这四句是中文里描述学校/成绩/住址/家长的最普通说法。原词表四道门全过，会被写进档案并每次对话发给智谱。
+ chat(store,['我在实验中学','嗯'],['我上次考试考了58分','哦'],['我家在文昌路12号','好'],['我爸妈在杭州上班','嗯'],['我喜欢打篮球','走起']);
+ const ops={ops:[
+  {op:'add',kind:'about',text:'在实验中学'},
+  {op:'add',kind:'recent',text:'考试考了58分'},
+  {op:'add',kind:'about',text:'家在文昌路12号'},
+  {op:'add',kind:'about',text:'爸妈在杭州上班'},
+  {op:'add',kind:'interest',text:'喜欢打篮球'},
+ ]};
+ const r=await consolidate(store,model(ops).provider,now,signal);
+ // 四条身份信息一条都不能进；对照组的正常兴趣必须还能记（词表不能变成"什么都拦"）。
+ assert.deepEqual(r.changes.map(c=>c.text),['喜欢打篮球']);
+ assert.deepEqual(store.profile().items.map(i=>i.text),['喜欢打篮球']);
+});
+test('2026-11-21：家长的联系方式与工作地也拦得住，但"家长存在"本身仍是可记的事实', async()=>{
+ const{store,now}=setup();
+ chat(store,['我爸爸在公安局上班','嗯'],['我有个妹妹','她多大']);
+ const ops={ops:[
+  {op:'add',kind:'about',text:'爸爸在公安局上班'},
+  {op:'add',kind:'about',text:'有个妹妹'},
+ ]};
+ const r=await consolidate(store,model(ops).provider,now,signal);
+ assert.deepEqual(r.changes.map(c=>c.text),['有个妹妹']);
+});
 test('R5/R3：没有学生原话做证据的 add/update/mention 都不生效（只记学生自己明确说过的）', async()=>{
  const{store,now}=setup();
  chat(store,['我在看《三体》','好看吗']);
@@ -143,6 +171,28 @@ test('模型调用失败（限流等）直接抛出，不算失败、不记结�
  await assert.rejects(consolidate(store,model(new Error('429')).provider,now,signal),/429/);
  assert.equal(store.pendingMessages().length,2);assert.equal(store.consecutiveFailures(),0);
 });
+test('默认关着：学生没明确表过态之前，小N 不从聊天里记东西（PRD FR12「长期记忆默认关闭」）', async()=>{
+ const clock=new TestClock('2026-10-29T02:00:00.000Z'),store=new FreeChatStore(':memory:',clock);
+ assert.equal(store.autoRemember(),false);
+ assert.equal(store.autoRememberConfigured(),false);
+ chat(store,['我最近超喜欢打篮球','哇'],['下周有篮球赛','加油']);
+ clock.advance(3*HOUR);
+ assert.equal(shouldConsolidate(store,clock.now(),3*HOUR),false);
+ const r=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}).provider,()=>clock.now(),signal);
+ assert.equal(r.status,'off');
+ assert.deepEqual(store.profile().items,[]);
+ // 学生自己明确开了之后才整理。
+ store.setAutoRemember(true);
+ assert.equal(store.autoRememberConfigured(),true);
+ // 关着时说过的话已经标成整理过，之后再打开开关也不回头去记（store.ts:127）。
+ assert.equal(shouldConsolidate(store,clock.now(),3*HOUR),false);
+ chat(store,['打开开关之后我最喜欢打篮球','走起']);
+ clock.advance(3*HOUR);
+ assert.equal(shouldConsolidate(store,clock.now(),3*HOUR),true);
+ const r2=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}).provider,()=>clock.now(),signal);
+ assert.equal(r2.status,'ok');
+ assert.deepEqual(store.profile().items.map(i=>i.text),['喜欢打篮球']);
+});
 test('什么时候整理：空闲够久或者跨天；开关关掉时不整理，关着时说的话也不会补记', ()=>{
  const{clock,store}=setup();const idle=3*HOUR;
  assert.equal(shouldConsolidate(store,clock.now(),idle),false);
@@ -194,4 +244,42 @@ test('不删除内容词来凑证据：喜欢人文不能证明喜欢超人；�
  const{store,now}=setup();chat(store,['我喜欢人文','好呀'],['今天画了一幅画','不错']);
  const r=await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢超人'},{op:'add',kind:'interest',text:'画画'}]}).provider,now,signal);
  assert.deepEqual(r.changes,[]);
+});
+
+test('溯源：每条聊天记下的条目都带「哪段对话、哪句原话」', async()=>{
+ const{store,now}=setup();
+ chat(store,['我最近超喜欢打篮球','哇，打什么位置？']);
+ const threadId=store.currentThread();
+ await consolidate(store,model({ops:[{op:'add',kind:'interest',text:'喜欢打篮球'}]}).provider,now,signal);
+ const item=store.profile().items.find(i=>i.kind==='interest')!;
+ assert.equal(item.originThreadId,threadId,'应当能指回是哪段对话记下的');
+ assert.equal(item.evidenceQuote,'我最近超喜欢打篮球','应当留着学生自己的原话');
+ // 学生自己加的条目没有来源原话 —— 没有就是没有，不编。
+ const sid=store.insert({kind:'about',text:'有个妹妹',source:'student',editedByStudent:true});
+ assert.equal(store.item(sid)!.evidenceQuote,null);
+});
+
+test('「失效不删」：内容变了，旧条目保留为历史，新内容另起一条', async()=>{
+ const{clock,store,now}=setup();
+ const id=store.insert({kind:'interest',text:'喜欢打篮球',source:'chat',editedByStudent:false});
+ chat(store,['我现在改成喜欢踢足球了','足球好啊']);
+ const r=await consolidate(store,model({ops:[{op:'update',id,text:'喜欢踢足球'}]}).provider,now,signal);
+ assert.deepEqual(r.changes.map(c=>c.op),['update']);
+ const newId=r.changes[0].itemId;
+ assert.notEqual(newId,id,'改写后应当是新的一条，不是在原地上盖');
+ // 旧条目还在，只是标了失效；档案页不再显示它。
+ const history=store.itemHistory();
+ assert.equal(history.length,1);
+ assert.equal(history[0].id,id);
+ assert.equal(history[0].text,'喜欢打篮球','旧内容没有被覆盖');
+ assert.ok(history[0].invalidatedAt);
+ assert.equal(store.profile().items.some(i=>i.id===id),false,'失效的条目不出现在档案里');
+ // 新条目在档案里，并指向它取代的那条。
+ const live=store.profile().items.find(i=>i.id===newId)!;
+ assert.equal(live.text,'喜欢踢足球');
+ assert.equal(live.supersedesId,id);
+ assert.equal(live.evidenceQuote,'我现在改成喜欢踢足球了');
+ // 旧 id 仍然可用：顺着版本链拿到当前那一条。
+ assert.equal(store.item(id)!.id,newId);
+ assert.equal(store.item(id)!.text,'喜欢踢足球');
 });

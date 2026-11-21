@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ArrowRight,Leaf,Pause,Send } from 'lucide-react';
 import type { LearningUI } from '../../agents/useLearning';
 import { retentionWindow,type MemoryRetention,type TaskPublicView } from '../../../shared/learning-contracts';
-import { skillStatusLabels,evidenceKindLabels } from '../../learning/assessment';
+import { skillStatusLabels,evidenceKindLabels } from '../../../shared/assessment-labels';
 import { GenerationPanel } from '../../learning/generation/GenerationPanel';
 import { isGenerationKnowledgePoint } from '../../learning/generation';
 import { useDevMode } from '../../agents/devMode';

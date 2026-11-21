@@ -42,13 +42,20 @@ test('改、切换状态、删除；删掉的进 forgotten 并在 90 天后清�
 });
 test('基本信息、开关和重置', ()=>{
  const{store}=setup();
- assert.equal(store.profile().autoRemember,true);
+ // 2026-11-21：默认关闭（PRD FR12「长期记忆默认关闭」）。没表过态 = 还没问过首访。
+ assert.equal(store.profile().autoRemember,false);
+ assert.equal(store.profile().autoRememberConfigured,false);
  profilePost(store,'/api/free-chat/profile/basic',{nickname:'小明',grade:'七年级'});
  const p=profilePost(store,'/api/free-chat/settings',{autoRemember:false})!;
  assert.deepEqual([p.basic,p.autoRemember],[{nickname:'小明',grade:'七年级'},false]);
+ // 明确关过之后算「表过态」，和「还没问」要能区分开。
+ assert.equal(p.autoRememberConfigured,true);
+ // 明确开过就保持开（不会因为默认改成关而把学生的选择抹掉）。
+ profilePost(store,'/api/free-chat/settings',{autoRemember:true});
+ assert.equal(store.profile().autoRemember,true);
  store.studentEdit({action:'add',kind:'method',text:'画个图'});
  store.reset();
- const r=store.profile();assert.deepEqual([r.basic,r.items.length,r.autoRemember],[{nickname:'',grade:''},0,true]);
+ const r=store.profile();assert.deepEqual([r.basic,r.items.length,r.autoRemember,r.autoRememberConfigured],[{nickname:'',grade:''},0,false,false]);
 });
 test('重置换一个数据代次；自动记忆开关每变一次换一个记忆代次', ()=>{
  const{store}=setup();

@@ -158,6 +158,12 @@ export function ProfileView() {
           : `我自己加的 · ${day(item.createdAt)}`}
         {item.mentionCount > 1 ? ` · 聊到过 ${item.mentionCount} 次` : ''}
       </p>
+      {/* 溯源（2026-11-21）：「你为什么记着这条」要有答案 —— 摆出学生自己的原话。 */}
+      {item.evidenceQuote && (
+        <p className="profile-evidence">
+          <small>因为你说过：「{item.evidenceQuote}」</small>
+        </p>
+      )}
       <input
         aria-label="改成"
         value={editText}
@@ -376,6 +382,9 @@ export function ProfileView() {
         <div>
           <strong>让小N 从聊天里记住我</strong>
           <small>关掉后小N 不再记新的东西；已经记下的还在，你可以自己删。</small>
+          {/* 披露由服务端下发（2026-11-21）：写在这里的静态文案跟代码各说各的，
+              尤其是「删掉的条目在整理时也会发过去」这条，界面必须说清楚。 */}
+          {profile.disclosure && <small className="profile-disclosure">{profile.disclosure}</small>}
         </div>
         <button
           type="button"

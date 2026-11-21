@@ -5,7 +5,7 @@ import {
   normalize,
   tasks,
   type Dimension,
-} from "./data";
+} from "../shared/task-bank";
 export const PROGRESS_KEY = "xiaon-progress-v1",
   MEMORY_KEY = "xiaon-memory-v1";
 export type Attempt = {
@@ -22,7 +22,6 @@ export type RecordItem = {
   paused: boolean;
   draft: string;
 };
-export type Chat = { id: string; role: "ai" | "user"; text: string };
 export type Memory = {
   id: string;
   category: "你告诉小N的" | "学习过程中记录的" | "目前的学习观察";
@@ -50,10 +49,6 @@ export type State = {
   activeTask: string | null;
   records: Record<string, RecordItem>;
   calcSeen: string[];
-  chat: Chat[];
-  chatDraft: string;
-  chatStatus: "idle" | "waiting" | "failed" | "paused";
-  pendingChat: string;
   plan: "none" | "accepted" | "lighter" | "rescheduled" | "deferred";
   planDate: string;
   helpContact: string;
@@ -88,12 +83,6 @@ export function initial(): State {
     activeTask: null,
     records: {},
     calcSeen: [],
-    chat: [
-      { id: "hello", role: "ai", text: "这次数学考试之后，你现在最想做什么？" },
-    ],
-    chatDraft: "",
-    chatStatus: "idle",
-    pendingChat: "",
     plan: "none",
     planDate: "",
     helpContact: "我信任的老师",
@@ -113,7 +102,9 @@ export function hydrate(raw: string | null): State {
     const parsed = JSON.parse(raw);
     if (parsed.version !== 1) return initial();
     const s = { ...initial(), ...parsed };
-    if (s.chatStatus === "waiting") s.chatStatus = "failed";
+    // 2026-11-21 删掉整套本地聊天状态机（生产路径走服务端）。旧版本存下来的聊天字段读进来就丢掉，
+    // 别让内存里留着「看起来还在用、其实没人写」的状态。
+    delete s.chat;delete s.chatDraft;delete s.chatStatus;delete s.pendingChat;
     if (s.helpStatus === "sending") s.helpStatus = "failed";
     if (s.rights === "processing") s.rights = "verify";
     return s;
@@ -131,8 +122,6 @@ export type Action =
   | { type: "hint"; id: string }
   | { type: "attempt"; taskId: string; id: string; value: string; time: string }
   | { type: "pause"; id: string }
-  | { type: "chat-send"; id: string; text: string }
-  | { type: "chat-reply"; text: string }
   | { type: "reset" };
 export function reducer(s: State, a: Action): State {
   switch (a.type) {
@@ -221,34 +210,6 @@ export function reducer(s: State, a: Action): State {
       };
       return { ...s, records, statusTrail: withTrail(s.statusTrail, records, a.time) };
     }
-    case "chat-send":
-      if (s.chatStatus === "waiting" || s.chat.some((m) => m.id === a.id))
-        return s;
-      return {
-        ...s,
-        chat: [...s.chat, { id: a.id, role: "user", text: a.text }],
-        chatDraft: "",
-        pendingChat: a.text,
-        questionInvitePaused:
-          s.questionInvitePaused ||
-          /(?:不想|暂不|先不|不愿意)(?:看题|做题|探索)|只想聊聊/.test(a.text),
-        chatStatus: "waiting",
-      };
-    case "chat-reply":
-      if (s.chatStatus !== "waiting") return s;
-      return {
-        ...s,
-        chat: [
-          ...s.chat,
-          {
-            id: `reply-${s.chat[s.chat.length - 1].id}`,
-            role: "ai",
-            text: a.text,
-          },
-        ],
-        chatStatus: "idle",
-        pendingChat: "",
-      };
   }
 }
 export type Observation = {
@@ -360,19 +321,6 @@ export const timeLabel = () =>
     hour: "2-digit",
     minute: "2-digit",
   });
-export function replyFor(text: string, rest = false, questionInvitePaused = false) {
-  if (rest && !/休息/.test(text))
-    return "我在听。今天不用急着回到题目上。你还想说说什么？";
-  if (questionInvitePaused && !/休息/.test(text))
-    return "我在听，我们先聊聊。你现在最想说的是什么？";
-  if (/不想|失败|难过|考砸|累|烦|失落|不好/.test(text))
-    return "听起来，这次考试让你有些难受。现在不用急着解决所有问题。你愿意说说，最让你在意的是哪一部分吗？";
-  if (/休息/.test(text))
-    return "可以，休息也是你的选择。今天先把任务放一放。等你想继续时，我会在这里。";
-  if (/题|试试|开始/.test(text))
-    return "我们可以只看一道题，不用一下子做很多。你愿意从一道去括号的题开始吗？";
-  return "谢谢你告诉我。我先听着，不急着给你下结论。你希望我继续听你说，还是陪你看一道题？";
-}
 export type PlanTask = {
   day: string;
   title: string;

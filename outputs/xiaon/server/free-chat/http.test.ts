@@ -18,6 +18,8 @@ function provider(){
 async function serve(freeChatIdleMs:number){
  const clock=new TestClock('2026-10-29T02:00:00.000Z'),f=temporaryRepository(clock),{p,state}=provider(),r=createRuntime({...f,provider:p});
  const port=await freePort(),origin='http://127.0.0.1:5299',base=`http://127.0.0.1:${port}`;
+ // 默认是关的（PRD FR12），这些用例测整理流程，所以在这里显式打开。
+ r.freeChat.setAutoRemember(true);
  const server=createHttpServer(r,{host:`127.0.0.1:${port}`,allowedOrigins:[origin],freeChatIdleMs});
  await new Promise<void>(resolve=>server.listen(port,'127.0.0.1',resolve));
  const login=await fetch(base+'/api/local-session',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});

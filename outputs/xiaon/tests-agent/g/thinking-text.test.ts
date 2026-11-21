@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { THINKING } from '../../src/components/learning/PetStage';
-import { clipsOf } from '../../src/voice/clips';
+import { clipsOf } from '../../shared/voice-clips';
 test('waiting lines vary at every step and only promise what the home page offers',()=>{
  assert.ok(THINKING.length>=5,'a slow reply keeps getting new words');
  for(const step of THINKING)assert.ok(step.length>=2,step.join('/'));

@@ -3,8 +3,8 @@
  * 只显示本周：错过的任务不扣分、不堆积，沿用现有规则。 */
 import { WeekDraftButton } from './WeekDraftButton';
 import type { LearningUI } from '../../agents/useLearning';
-import { shanghaiDate } from '../../learning/review';
-import { mondayOf,weekLabel } from './calendar';
+import { shanghaiDate } from '../../../shared/review';
+import { mondayOf,weekLabel } from '../../../shared/calendar';
 import { MONTH_PLAN_POINT_NAMES } from './pointNames';
 const swallow=(p:Promise<unknown>)=>{void p.catch(()=>{});};
 export type WeeklyTasksViewProps={l:LearningUI;navigate:(page:string,tab?:string)=>void;safety:boolean};

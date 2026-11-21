@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRuntime } from '../../server/bootstrap';
 import { installLearning,capMemorySelection } from '../../server/agents/learning';
-import { fitReply,replyLength } from '../../server/agents/stages';
+import { fitReply,replyLength } from '../../server/core/stages';
 import { temporaryRepository } from '../../server/storage/testing';
 import { SCHEMA_VERSION,TUTOR_REPLY_MAX_CHARS,MEMORY_CONTEXT_MAX_ITEMS,MEMORY_CONTEXT_MAX_CHARS,type MemoryItem,type ModelProvider } from '../../shared/learning-contracts';
 const id=()=>crypto.randomUUID();

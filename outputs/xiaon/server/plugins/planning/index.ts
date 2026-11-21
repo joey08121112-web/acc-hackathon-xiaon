@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { SCHEMA_VERSION as V, schemas, type EngineContext, type PlanningEnginePort, type ReviewItem, type ReviewOutcome, type ReviewPolicy, type PlanProposal, type PlanVersion } from '../../../shared/learning-contracts';
-import { currentReviewItems, dateStart, reportHistory, selectReviewTarget, shanghaiDate } from '../../../src/learning/review';
+import { currentReviewItems, dateStart, reportHistory, selectReviewTarget, shanghaiDate } from '../../../shared/review';
 import { RuntimeError } from '../../core/errors';
 import { hash } from '../../storage/repository';
 import { assertAssessment, attemptFacts } from './evidence';

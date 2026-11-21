@@ -1,7 +1,7 @@
 /** 所有者：Claude（改造三：一起思考 + 进步卡）。由 server/agents/learning.ts 委托调用。进步卡是学习记录：不进评分证据；AI 草稿与学生确认文本分开存。 */
 import { schemas,SCHEMA_VERSION,type ConfirmProgressCard,type LearningEpisode,type MemoryDraft,type ProgressCard,type ProgressCardDraft } from '../../../shared/learning-contracts';
 import { RuntimeError } from '../../core/errors';
-import { PROGRESS_CARD_PROMPT } from '../../agents/prompts/reflect';
+import { PROGRESS_CARD_PROMPT } from '../../core/prompts/reflect';
 import type { ProgressDraftInput,RevampContext } from '../context';
 const FIELDS=['breakthrough','method','nextTry'] as const;
 /** With any help used, a card may never claim the student did it alone (PRD FR17). */

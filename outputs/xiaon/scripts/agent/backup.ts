@@ -3,7 +3,6 @@ import { DatabaseSync, backup } from 'node:sqlite';
 import { chmodSync, closeSync, existsSync, mkdirSync, openSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { dirname, join, resolve, sep } from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
-import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 export function validateDatabase(path:string){
  const db=new DatabaseSync(path,{readOnly:true});
@@ -47,14 +46,20 @@ export function persistentMountWarning(databasePath:string,mountinfo:string):str
  });
  return mounted?null:'警告：数据库路径未检测到持久卷，换容器可能丢失学习记录。请将持久卷挂载到 /data，并设置 XIAON_DB_PATH=/data/learning.sqlite。';
 }
-if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
- const {values}=parseArgs({options:{db:{type:'string'},out:{type:'string'},keep:{type:'string'},'check-volume':{type:'boolean'}}});
- const databasePath=resolve(values.db??process.env.XIAON_DB_PATH??'.local/learning.sqlite');
- if(values['check-volume']){
-  let mounts='';try{mounts=readFileSync('/proc/self/mountinfo','utf8');}catch{/* unknown mount state warns */}
-  const warning=persistentMountWarning(databasePath,mounts);if(warning)console.warn(warning);
- }else{
-  try{console.log(await backupDatabase({databasePath,directory:values.out,keep:values.keep===undefined?7:Number(values.keep)}));}
-  catch(e){console.error((e as Error).message);process.exitCode=1;}
- }
+// 2026-11-21：入口判定改成不依赖 import.meta，这样同一个文件既能跑 TS 源码（tsx/开发），
+// 也能被编译成 CommonJS 在生产镜像里直接跑（生产镜像里没有 tsx）。
+const isMain=(name:string)=>{const entry=process.argv[1];return !!entry&&new RegExp(name+'\\.(ts|js)$').test(resolve(entry));};
+if(isMain('backup')){
+ // CommonJS 不支持顶层 await，包一层 async 函数（ESM 源码运行同样成立）。
+ void (async()=>{
+  const {values}=parseArgs({options:{db:{type:'string'},out:{type:'string'},keep:{type:'string'},'check-volume':{type:'boolean'}}});
+  const databasePath=resolve(values.db??process.env.XIAON_DB_PATH??'.local/learning.sqlite');
+  if(values['check-volume']){
+   let mounts='';try{mounts=readFileSync('/proc/self/mountinfo','utf8');}catch{/* unknown mount state warns */}
+   const warning=persistentMountWarning(databasePath,mounts);if(warning)console.warn(warning);
+  }else{
+   try{console.log(await backupDatabase({databasePath,directory:values.out,keep:values.keep===undefined?7:Number(values.keep)}));}
+   catch(e){console.error((e as Error).message);process.exitCode=1;}
+  }
+ })();
 }

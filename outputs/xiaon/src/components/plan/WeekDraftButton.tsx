@@ -1,8 +1,8 @@
 /** Student-only entry for this week's missing draft. Uses the normal proposal confirmation controls. */
 import type { MonthStage } from '../../../shared/learning-contracts';
 import type { LearningUI } from '../../agents/useLearning';
-import { shanghaiDate } from '../../learning/review';
-import { mondayOf } from './calendar';
+import { shanghaiDate } from '../../../shared/review';
+import { mondayOf } from '../../../shared/calendar';
 export function WeekDraftButton({stage,l,navigate,safety}:{stage:MonthStage;l:LearningUI;navigate:(page:string,tab?:string)=>void;safety:boolean}){
  const today=l.view?shanghaiDate(l.view.now):null;
  const week=stage.weeks.find(w=>w.weekStart===(today?mondayOf(today):null));

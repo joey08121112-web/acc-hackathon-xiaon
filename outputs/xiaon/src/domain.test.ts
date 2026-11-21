@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { correct, getTask, tasks } from "./data";
+import { correct, getTask, tasks } from "../shared/task-bank";
 import {
   initial,
   hydrate,
@@ -8,7 +8,6 @@ import {
   observations,
   memoryAfter,
   planDraft,
-  replyFor,
   taskStatus,
   type State,
   type Memory,
@@ -97,24 +96,14 @@ test("暂停后草稿和提示持久化，恢复不重开题", () => {
   assert.equal(s.records.bracket.hint, true);
   assert.equal(s.calcSeen.length, 1);
 });
-test("中断的聊天与发送演示恢复为可重试失败，不假装发送成功", () => {
+test("中断的求助发送恢复为可重试失败，不假装发送成功", () => {
   const s = hydrate(
     JSON.stringify({
       ...initial(),
-      chatStatus: "waiting",
       helpStatus: "sending",
     }),
   );
-  assert.equal(s.chatStatus, "failed");
   assert.equal(s.helpStatus, "failed");
-});
-test("聊天重试不重复插入学生消息；暂停时迟到回复被忽略", () => {
-  let s = reducer(initial(), { type: "chat-send", id: "1", text: "你好" });
-  s = reducer(s, { type: "chat-send", id: "1", text: "你好" });
-  assert.equal(s.chat.length, 2);
-  s = reducer(s, { type: "patch", patch: { chatStatus: "paused" } });
-  s = reducer(s, { type: "chat-reply", text: "迟到" });
-  assert.equal(s.chat.length, 2);
 });
 test("安全支持暂停任务，迟到提交不能写入成绩或记录", () => {
   let s = open(initial());
@@ -169,24 +158,19 @@ test("暂不看题在刷新后保留，主动开始前不再邀请，原有草�
   s = hydrate(JSON.stringify(s));
   assert.equal(s.questionInvitePaused, true);
   assert.equal(s.records.bracket.draft, "3x-2x");
-  assert.doesNotMatch(replyFor("谢谢", false, s.questionInvitePaused), /看.*题|试试|开始/);
   s = open(s);
   assert.equal(s.questionInvitePaused, false);
   assert.equal(s.records.bracket.draft, "3x-2x");
   assert.equal(s.calcSeen.length, 1);
 });
 
-test("明确表示只聊聊后，后续消息与刷新不会重新邀请；重置可重新开始", () => {
-  for (const text of ["现在不想看题", "今天不想探索，也不想做题", "我只想聊聊"]) {
-    let s = reducer(initial(), { type: "chat-send", id: "decline", text });
-    assert.equal(s.questionInvitePaused, true);
-    s = reducer(s, { type: "chat-reply", text: replyFor(text, false, s.questionInvitePaused) });
-    s = reducer(s, { type: "chat-send", id: "next", text: "谢谢你" });
-    s = hydrate(JSON.stringify(s));
-    assert.equal(s.questionInvitePaused, true);
-    assert.doesNotMatch(replyFor("谢谢你", false, s.questionInvitePaused), /看.*题|试试|开始/);
-    assert.equal(reducer(s, { type: "reset" }).questionInvitePaused, false);
-  }
+test("暂不看题的选择刷新后仍在；重置可重新开始", () => {
+  // 2026-11-21：本地聊天状态机删掉了，「只聊聊」由服务端判定并回写（server/agents/learning.ts）。
+  // 这里守的是仍然活着的本地那一半：选择要留存、重置要清掉。
+  let s = reducer(initial(), { type: "patch", patch: { questionInvitePaused: true } });
+  s = hydrate(JSON.stringify(s));
+  assert.equal(s.questionInvitePaused, true);
+  assert.equal(reducer(s, { type: "reset" }).questionInvitePaused, false);
 });
 
 test("旧进度兼容新增邀请状态，休息与安全暂停仍优先", () => {
@@ -195,8 +179,6 @@ test("旧进度兼容新增邀请状态，休息与安全暂停仍优先", () =>
   assert.equal(hydrate(JSON.stringify(legacy)).questionInvitePaused, false);
   const s = { ...initial(), safety: true, questionInvitePaused: true };
   assert.equal(open(s).questionInvitePaused, true);
-  assert.match(replyFor("谢谢", true, true), /今天不用急着回到题目/);
-  assert.match(replyFor("今天先休息", true, true), /休息也是你的选择/);
 });
 
 test("数学等价写法（显式乘号、前置正号）被正确接受，错误答案仍判错", () => {

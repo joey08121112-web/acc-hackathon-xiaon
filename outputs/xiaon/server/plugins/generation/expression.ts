@@ -1,5 +1,5 @@
 /**
- * E1 restricted expression structure. Independent from src/data.ts so a model string is never
+ * E1 restricted expression structure. Independent from shared/task-bank.ts so a model string is never
  * "proved" by the same comparator that later grades students. Grammar (no eval, no products):
  *   expr  := [+|-] item ( (+|-) item )*
  *   item  := term | "(" [+|-] term ( (+|-) term )* ")"

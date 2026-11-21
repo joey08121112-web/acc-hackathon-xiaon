@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { fixture } from './fixtures';
 import { PlanningEngine } from '../../server/plugins/planning';
-import { currentReviewItems } from '../../src/learning/review';
+import { currentReviewItems } from '../../shared/review';
 import { attemptFacts } from '../../server/plugins/planning/evidence';
 
 const output=resolve('../../任务书/2026-10-21-Agent升级/交付/C/evidence');

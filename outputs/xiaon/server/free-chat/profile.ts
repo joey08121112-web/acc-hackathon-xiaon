@@ -1,5 +1,6 @@
 /** 档案页的写操作：校验后交给本人的 FreeChatStore，返回改完后的整份档案。不认识的路径返回 undefined。 */
 import { profileRequests,type Profile } from '../../shared/free-chat';
+import { FREE_CHAT_DISCLOSURE } from './chat';
 import { RuntimeError } from '../core/errors';
 import type { FreeChatStore } from './store';
 export function profilePost(store:FreeChatStore,path:string,raw:unknown):Profile|undefined{
@@ -10,5 +11,5 @@ export function profilePost(store:FreeChatStore,path:string,raw:unknown):Profile
   case '/api/free-chat/settings':store.setAutoRemember(parse(profileRequests.settings).autoRemember);break;
   default:return undefined;
  }
- return store.profile();
+ return{...store.profile(),disclosure:FREE_CHAT_DISCLOSURE};
 }

@@ -7,9 +7,10 @@ import type { LearningRuntime } from '../bootstrap';
 import { RubricAssessment,createModelAnalyzer,classifyAttempt } from '../plugins/assessment';
 import { PlanningEngine } from '../plugins/planning';
 import { attemptFacts } from '../plugins/planning/evidence';
-import { currentReviewItems,planHistory,reportHistory,shanghaiDate } from '../../src/learning/review';
+import { currentReviewItems,planHistory,reportHistory,shanghaiDate } from '../../shared/review';
+import { LearningView } from '../../shared/views';
 import { ControlledRoles,tutorOutput,homeTutorOutput,homeTutorPrompt,type TutorStage } from './roles';
-import { decideStage,filterStageFields,matchesAnswer,HELP_PATTERN,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,explicitUnderstanding,STOP_THINK_PATTERN,DECLINE_PATTERN,FAREWELL_PATTERN,type ChatStageState } from './stages';
+import { decideStage,filterStageFields,matchesAnswer,HELP_PATTERN,CHAT_STALE_MS,HOME_QUICK_REPLIES,REST_PATTERN,SAFETY_PATTERN,STAGE_FIELDS,explicitUnderstanding,STOP_THINK_PATTERN,DECLINE_PATTERN,FAREWELL_PATTERN,type ChatStageState } from '../core/stages';
 import type { ProfessionalContext,RevampContext } from '../plugins/context';
 import { startInterview,answerInterview,pauseInterview,resumeInterview,buildReport } from '../plugins/interview';
 import { draftMonthStage,confirmMonthStage,declineRetest,retestReminder,draftStageWeek,linkWeekPlan } from '../plugins/stages';
@@ -446,11 +447,21 @@ export class LearningCoordinator {
    return s&&s.status==='confirmed'&&!s.retestDeclinedAt&&s.retestSuggestedAt===r.retestSuggestedAt&&s.month===r.month?r:null;}
   catch(e){if(!(e instanceof RuntimeError)&&!(e instanceof z.ZodError))throw e;return null;}
  }
+/** 视图出站前的契约闸门。
+  * 视图形状在 shared/views.ts 里显式声明（前端也依赖那一份）。
+  * 服务端实现与契约不一致时当场报错并记录差异路径，不让漂移静默流到前端。 */
+ private parseView(raw:unknown):LearningView{
+  const parsed=LearningView.safeParse(raw);
+  if(parsed.success)return parsed.data;
+  const issues=parsed.error.issues.slice(0,20).map(i=>({path:i.path.join('.'),code:i.code,...('keys' in i&&Array.isArray(i.keys)?{keys:i.keys}:{})}));
+  console.error('[learning/view-contract]',JSON.stringify({stage:'drift',issues}));
+  throw new RuntimeError('unavailable','学习视图与契约不一致，服务端已停止返回未校验的数据');
+ }
  async view(){const ctx=this.r.engineContext();await this.r.planning().due({at:this.r.clock.now(),includePaused:true},ctx);const assessment=await this.r.assessment().snapshot({operationId:'view-'+this.r.repository.evidenceRevision()},ctx);
   const session=this.r.events.sessions().find(s=>s.status!=='closed')??null;
   const attempted=new Set(this.r.repository.list('attempts').flatMap(a=>this.r.catalog.definition(a.taskId,a.taskVersion)?.knowledgePoints??[]));
   const tasks=this.r.catalog.candidates({sessionId:session?.id??'preview',excludeTaskIds:[],limit:100}).map(t=>({...t,eligible:t.prerequisites.every(k=>attempted.has(k))&&(!(session?.mode==='exploration')||['理解','逻辑'].includes(t.primaryDimension)||['理解','逻辑'].every(d=>this.r.repository.list('attempts').some(a=>a.sessionId===session.id&&this.r.catalog.definition(a.taskId,a.taskVersion)?.primaryDimension===d)))}));
-  return {now:this.r.clock.now(),session,paused:session?.status==='paused',assessment,tasks,attempts:this.r.repository.list('attempts').map(a=>({...a,classification:classifyAttempt(a,ctx)})),exposures:this.r.repository.list('exposures'),gradings:this.r.repository.list('gradings'),evidence:this.r.repository.list('evidence'),reports:reportHistory(ctx),plans:planHistory(ctx),proposal:this.r.repository.list('proposals').at(-1)??null,reviews:currentReviewItems(ctx),consentConfigured:this.r.repository.list('consents').length>0,optionalMemory:this.r.events.memoryEnabled(),memories:this.r.repository.list('memories'),runs:this.r.repository.list('runs'),toolCalls:this.r.repository.list('toolCalls'),stuckPoints:this.r.repository.list('stuckPoints').map(s=>({...s,studentConfirmed:this.stuckConfirmed(s.id)})),
+  return this.parseView({now:this.r.clock.now(),session,paused:session?.status==='paused',assessment,tasks,attempts:this.r.repository.list('attempts').map(a=>({...a,classification:classifyAttempt(a,ctx)})),exposures:this.r.repository.list('exposures'),gradings:this.r.repository.list('gradings'),evidence:this.r.repository.list('evidence'),reports:reportHistory(ctx),plans:planHistory(ctx),proposal:this.r.repository.list('proposals').at(-1)??null,reviews:currentReviewItems(ctx),consentConfigured:this.r.repository.list('consents').length>0,optionalMemory:this.r.events.memoryEnabled(),memories:this.r.repository.list('memories'),runs:this.r.repository.list('runs'),toolCalls:this.r.repository.list('toolCalls'),stuckPoints:this.r.repository.list('stuckPoints').map(s=>({...s,studentConfirmed:this.stuckConfirmed(s.id)})),
   // Audit only: fingerprints and reason codes, never answers or model text. exposed derives from real task exposures.
   generations:this.r.repository.list('generations').map(g=>({...g,exposed:!!g.taskId&&this.r.repository.list('exposures').some(e=>e.kind==='task'&&e.taskId===g.taskId&&e.taskVersion===g.taskVersion)})),generationAvailable:this.r.provider.kind!=='offline',
   // G0: learning records for the home revamp. problemSecrets is deliberately absent; chatTurns carry no student text.
@@ -460,7 +471,8 @@ export class LearningCoordinator {
   observations:this.r.repository.list('observations'),summaries:this.r.repository.list('summaries'),chatTurns:this.r.repository.list('chatTurns').slice(-20),lifeScenes:this.r.repository.list('lifeScenes'),chatLog:this.r.repository.list('chatLog'),
   // G2: professional-mode learning records, shown whatever the memory switch says. interviews/monthStages are the latest revision of each.
   interviews:latestRevisions(this.r.repository.list('interviews')),interviewTurns:this.r.repository.list('interviewTurns'),professionalReports:this.r.repository.list('professionalReports'),
-  monthStages:latestRevisions(this.r.repository.list('monthStages')),retestReminder:this.currentRetestReminder()};
+  monthStages:latestRevisions(this.r.repository.list('monthStages')),retestReminder:this.currentRetestReminder(),
+  guardianConsents:this.r.repository.list('guardianConsents')});
  }
  async memoryCorrect(raw:z.infer<typeof requests.memoryCorrect>){const p=this.parse(requests.memoryCorrect,raw);return this.perform(p.operationId,p,async()=>this.r.repository.transaction(()=>{
   if(!this.r.events.memoryEnabled())throw new RuntimeError('forbidden','可选记忆关闭');
@@ -470,4 +482,4 @@ export class LearningCoordinator {
  }));}
  async reset(raw:z.infer<typeof requests.reset>){this.parse(requests.reset,raw);if(this.active)throw new RuntimeError('invalid_state','请先取消并等待当前操作结束，再清除');if(!this.r.repository.reset)throw new RuntimeError('unavailable');this.epoch++;this.r.repository.reset();return {cleared:true};}
 }
-export type LearningView=Awaited<ReturnType<LearningCoordinator['view']>>;
+export type { LearningView } from '../../shared/views';

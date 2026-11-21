@@ -1,6 +1,7 @@
 import { useEffect, useSyncExternalStore } from 'react';
 import { apiBlob } from '../agent-client';
-import { CLIPS, clipsOf, clipUrl, type ClipGroup } from './clips';
+import { fetchJson } from '../agent-client/http';
+import { CLIPS, clipsOf, clipUrl, type ClipGroup } from '../../shared/voice-clips';
 import { splitSentences } from './sentences';
 import { audioEnvelope } from './envelope';
 /**
@@ -124,7 +125,8 @@ export const voice = {
  },
  async probe() {
   if (probed) return; probed = true;
-  try { const res = await fetch('/api/health'); const data = await res.json(); set({ available: !!data?.voice?.tts, asr: !!data?.voice?.asr }); } catch { set({ available: false }); }
+  // 探测服务端语音能力：连不上就当没有语音，不要把失败当成「服务端挂了」。
+  try { const data = await fetchJson<{voice?:{tts?:boolean;asr?:boolean}}>('/api/health',{timeoutMs:5000,fallbackMessage:'服务暂时连不上'}); set({ available: !!data?.voice?.tts, asr: !!data?.voice?.asr }); } catch { set({ available: false }); }
  },
 };
 export const getVoiceState = () => state;

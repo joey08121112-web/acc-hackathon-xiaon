@@ -7,7 +7,9 @@ export const THINK_MAX_TURNS=10;
 /** A conversation idle this long starts a new chat session (same window the client uses). */
 export const CHAT_STALE_MS=6*3600_000;
 // Program gates on the student's own words. Safety and rest come first in every flow; nothing here is delegated to the model.
-export const SAFETY_PATTERN=/自杀|不想活|想死|去死|自残|割腕|结束生命|伤害自己|活着(?:没|没有)意思|跳楼/;
+// SAFETY_PATTERN lives in shared/safety.ts: the browser checks the same words before the server replies.
+import { SAFETY_PATTERN } from '../../shared/safety';
+export { SAFETY_PATTERN };
 export const REST_PATTERN=/休息|暂不看|不想看|只想聊|不想探索/;
 export const STUDY_PATTERN=/考试|考砸|没考好|成绩|分数|错题|做错|算错|不会做|作业|题目|这道题|那道题|这题|数学|复习|测验|期中|期末|学习/;
 export const DECLINE_PATTERN=/不想学|不学了|先不学|不想做题|不用了|别提学习/;

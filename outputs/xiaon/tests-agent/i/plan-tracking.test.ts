@@ -13,7 +13,7 @@ import type { ProfessionalContext } from '../../server/plugins/context';
 import { freePort,temporaryRepository,TestClock } from '../../server/storage/testing';
 import { draftProblems,revisionProblems,trendProblems } from '../../server/agents/professional';
 import { schemas,SCHEMA_VERSION,INTERVIEW_MODULE_ORDER,RETEST_REMIND_DAYS_BEFORE,type Dimension,type ModuleLevel,type MonthStage,type ProfessionalReport,type TrendPoint } from '../../shared/learning-contracts';
-import { shanghaiDate } from '../../src/learning/review';
+import { shanghaiDate } from '../../shared/review';
 import type { LearningUI } from '../../src/agents/useLearning';
 import { MonthStageView } from '../../src/components/plan/MonthStageView';
 import { WeeklyTasksView } from '../../src/components/plan/WeeklyTasksView';

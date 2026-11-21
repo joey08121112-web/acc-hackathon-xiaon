@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { fixture } from './fixtures';
 import { PlanningEngine } from '../../server/plugins/planning';
-import { selectReviewTarget, shanghaiDate, reportHistory } from '../../src/learning/review';
+import { selectReviewTarget, shanghaiDate, reportHistory } from '../../shared/review';
 import { SqliteRepository } from '../../server/storage/repository';
 import { schemas, type ReviewItem, type ReviewOutcome } from '../../shared/learning-contracts';
 

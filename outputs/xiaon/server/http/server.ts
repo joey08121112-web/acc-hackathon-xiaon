@@ -10,12 +10,24 @@ import { MODEL_DISCLOSURE } from '../core/agent';
 import { createStaticHandler } from './static';
 import { NoTts,TTS_MAX_CHARS,type TtsProvider } from '../voice/tts';
 import { NoAsr,ASR_MAX_WAV_BYTES,isWav,type AsrProvider } from '../voice/asr';
-import { UserRuntimes } from '../storage/users';
-import { freeChat } from '../free-chat/chat';
+import { UserRuntimes,LOGIN_COOKIE_MAX_AGE } from '../storage/users';
+import { RateLimiter } from '../core/rate-limit';
+import { freeChat,FREE_CHAT_DISCLOSURE } from '../free-chat/chat';
 import { profilePost } from '../free-chat/profile';
 import { consolidate,idleMsFromEnv,shouldConsolidate } from '../free-chat/consolidate';
 import { chatRequests,type DigestResponse } from '../../shared/free-chat';
-const statusCodes:Record<string,number>={invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,not_implemented:501,unavailable:503};
+import { exportFreeChat } from '../free-chat/export';
+import { exportLearning } from '../core/export';
+// 错误码 → HTTP 状态。2026-11-21 补全：契约里 16 个错误码原来只映射了 7 个，其余全落 500。
+// 落 500 的后果不只是数字难看：unknown_tool / budget_exhausted 是客户端能自己解决的问题，
+// 却让前端和监控以为服务端坏了；provider_* 应该是 502/503，不是内部错误。
+const statusCodes:Record<string,number>={
+ invalid_params:400,forbidden:403,not_found:404,conflict:409,invalid_state:409,
+ not_implemented:501,unavailable:503,internal_error:500,
+ unknown_tool:404,unsupported_tools:501,
+ timeout:504,cancelled:499,budget_exhausted:429,
+ provider_auth:502,provider_rate_limit:503,provider_error:502,
+};
 export interface HttpServerConfig {
  allowedOrigins:string[];host:string;
  /** Exact HTTPS origins reached through a reverse proxy or PaaS. Empty keeps the server loopback-only. */
@@ -44,6 +56,15 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
  const tts=config.tts??new NoTts();let ttsInFlight=0;const asr=config.asr??new NoAsr();let asrInFlight=0;
  const voice=new Map<string,{tts:number;ttsStarts:number[];asr:boolean;asrStarts:number[]}>();
  const voiceOf=(userId:string)=>{let v=voice.get(userId);if(!v){v={tts:0,ttsStarts:[],asr:false,asrStarts:[]};voice.set(userId,v);}return v;};
+ // 2026-11-21：模型调用按人限流。语音侧本来就有（ASR 20/分、TTS 30/分），
+ // 但自由聊和学习接口此前完全没有上限——注册只要手机号+自设密码，可以直接刷爆模型额度。
+ const chatPerMinute=new RateLimiter(20,60000),chatPerDay=new RateLimiter(300,86400000);
+ const learnPerMinute=new RateLimiter(60,60000),learnPerDay=new RateLimiter(800,86400000);
+ const manualConsolidate=new RateLimiter(5,60000);
+ // 认证接口按来源限流：手机号是不是注册过这件事本身会泄露信息，
+ // 枚举必须付出代价。原来的全局 120 次/分是所有学生共享的，一个人就能把所有人挡在门外。
+ const authPerMinute=new RateLimiter(30,60000),authPerDay=new RateLimiter(300,86400000);
+ const checkPerMinute=new RateLimiter(20,60000),checkPerDay=new RateLimiter(200,86400000);
  const server=createServer(async(req,res)=>{
   res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Content-Type','application/json; charset=utf-8');
   const send=(body:unknown,status=200)=>{res.writeHead(status);res.end(JSON.stringify(body));};
@@ -70,10 +91,33 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
     // 登录、注册、退出都作废这个浏览器手上的旧会话，下一次 local-session 按新身份重开。
     if(sid)localSessions.delete(sid);
     if(path==='/api/auth/logout'){identities.logout(loginToken);res.setHeader('Set-Cookie',[`xiaon_login=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0${secure}`,`xiaon_session=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0${secure}`]);send({ok:true});return;}
-    if(path==='/api/auth/check'){send({registered:identities.isRegistered(body.phone)});return;}
+    // 改密（2026-11-21 新增）：验旧密码 → 换哈希 → 作废这个手机号的全部登录令牌 → 给当前设备发一个新的。
+    // 家长改完密码，别处登录的旧令牌立刻失效——这是之前没有的能力。
+    if(path==='/api/auth/password'){
+     const oldPassword=body.oldPassword,newPassword=body.newPassword;
+     if(typeof oldPassword!=='string'||typeof newPassword!=='string')throw new RuntimeError('invalid_params','请填写原密码和新密码');
+     const who=identities.resolveLogin(loginToken);
+     if(!who)throw new RuntimeError('forbidden','请先登录');
+     const changed=identities.changePassword(who.phone,oldPassword,newPassword);
+     res.setHeader('Set-Cookie',`xiaon_login=${changed.token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=${LOGIN_COOKIE_MAX_AGE}${secure}`);
+     send({ok:true,phone:maskPhone(who.phone)});return;
+    }
+    // 退出其他设备（2026-11-21 新增）：保留当前这个令牌，作废同手机号的其余全部。
+    if(path==='/api/auth/logout-all'){
+     const who=identities.resolveLogin(loginToken);
+     if(!who)throw new RuntimeError('forbidden','请先登录');
+     send({ok:true,revoked:identities.revokeOtherLogins(who.phone,loginToken)});return;
+    }
+    // 「这个手机号注册过吗」本身会泄露信息：手机号是不是某个未成年人的账号。
+    // 枚举必须付出代价，所以这条单独限流（比登录更严）。
+    if(path==='/api/auth/check'){
+     if(!allowAll(clientKeys(req,'auth-check'),checkPerMinute,checkPerDay))throw new RuntimeError('unavailable','查询太频繁，请稍后再试');
+     send({registered:identities.isRegistered(body.phone)});return;
+    }
+    if(!allowAll(clientKeys(req,'auth'),authPerMinute,authPerDay))throw new RuntimeError('unavailable','登录的人太多，请稍后再试');
     const issued=path==='/api/auth/register'?identities.register(body.phone,body.password,cookieValue(req,'xiaon_user')??''):path==='/api/auth/login'?identities.login(body.phone,body.password):undefined;
     if(!issued)throw new RuntimeError('not_found');
-    res.setHeader('Set-Cookie',`xiaon_login=${issued.token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=15552000${secure}`);send({phone:maskPhone(String(body.phone))});return;
+    res.setHeader('Set-Cookie',`xiaon_login=${issued.token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=${LOGIN_COOKIE_MAX_AGE}${secure}`);send({phone:maskPhone(String(body.phone))});return;
    }
    if(req.method==='POST'&&path==='/api/local-session'){
     const body=await readBody(req);if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(body).length)throw new RuntimeError('invalid_params');
@@ -114,7 +158,17 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
    if(req.method==='GET'){
     if(path==='/api/learning'){const d=learningFor(runtime);if(!d)throw new RuntimeError('not_implemented');send(await d.view());return;}
     if(path==='/api/context'){send(runtime.context());return;}
-    if(path==='/api/free-chat/profile'){kickConsolidation();send(runtime.freeChat.profile());return;}
+    if(path==='/api/free-chat/profile'){kickConsolidation();send({...runtime.freeChat.profile(),disclosure:FREE_CHAT_DISCLOSURE});return;}
+    // 导出（2026-11-21）：「知道存在」不等于「拿得走」。档案、学习记录、账号信息一次给全。
+    if(path==='/api/free-chat/profile/export'){send(exportFreeChat(runtime.freeChat));return;}
+    // 监护人同意流水（2026-11-21）：家长可查「什么时候、按哪一版、谁同意的」。
+    if(path==='/api/guardian/consents'){send({consents:runtime.repository.list('guardianConsents')});return;}
+    if(path==='/api/account/export'){
+     const account=users?users.identities.exportAccount(session.userId):null;
+     send({exportedAt:new Date().toISOString(),scope:'account',account,learning:exportLearning(runtime.repository),freeChat:exportFreeChat(runtime.freeChat),
+      excluded:['learning.problemSecrets（判题用的参考答案，不是关于学生的记录）']});
+     return;
+    }
     if(path==='/api/free-chat/digest'){kickConsolidation();send({digest:runtime.freeChat.digest(),consolidating:consolidating.has(session.userId)} satisfies DigestResponse);return;}
     if(path==='/api/free-chat/history'){send(runtime.freeChat.history());return;}
     if(path==='/api/free-chat/threads'){send({threads:runtime.freeChat.threads()});return;}
@@ -166,6 +220,8 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
    if(path==='/api/free-chat'){
     // 自由聊：一段提示词直连模型，不进学习记录；每人同一时间一条请求。
     if(freeChatting.has(session.userId))throw new RuntimeError('invalid_state','上一句还在回复中，请稍等');
+    // 每次自由聊都要调一次模型：没有上限就能直接刷爆额度。
+    if(!chatPerMinute.take(session.userId)||!chatPerDay.take(session.userId))throw new RuntimeError('budget_exhausted','今天聊得有点多啦，歇一会儿再聊');
     freeChatting.add(session.userId);
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
     try{send(await freeChat(runtime.freeChat,runtime.provider,raw,c.signal));}finally{freeChatting.delete(session.userId);res.off('close',cancel);}
@@ -173,20 +229,50 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
    }
    if(path==='/api/free-chat/digest/seen'){const p=chatRequests.digestSeen.safeParse(raw);if(!p.success)throw new RuntimeError('invalid_params');runtime.freeChat.markDigestSeen(p.data.runId);send({digest:runtime.freeChat.digest(),consolidating:consolidating.has(session.userId)} satisfies DigestResponse);return;}
    if(path==='/api/free-chat/consolidate'){
-    // 「现在整理」（开发者模式里的按钮）：不等空闲，立刻整理一次。
+    // 「现在整理」（开发者模式里的按钮）：不等空闲，立刻整理一次。这条也要调模型，单独限流。
     if(!chatRequests.consolidate.safeParse(raw).success)throw new RuntimeError('invalid_params');
+    if(!manualConsolidate.take(session.userId))throw new RuntimeError('budget_exhausted','整理得太频繁了，歇一会儿');
     if(consolidating.has(session.userId))throw new RuntimeError('invalid_state','正在整理，请稍等');
     consolidating.add(session.userId);
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
-    try{const r=await consolidate(runtime.freeChat,runtime.provider,()=>runtime.clock.now(),c.signal);send({...r,profile:runtime.freeChat.profile()});}
+    try{const r=await consolidate(runtime.freeChat,runtime.provider,()=>runtime.clock.now(),c.signal);send({...r,profile:{...runtime.freeChat.profile(),disclosure:FREE_CHAT_DISCLOSURE}});}
     finally{consolidating.delete(session.userId);res.off('close',cancel);}
     return;
    }
    if(path==='/api/free-chat/new-thread'){if(!chatRequests.newThread.safeParse(raw).success)throw new RuntimeError('invalid_params');send(runtime.freeChat.newThread());return;}
+   // 删除账号与全部数据（2026-11-21）。不可逆，所以要明文确认 + 验密码。
+   if(path==='/api/account/delete'){
+    // 正文已经在 POST 分支开头读过了（raw），这里不能再读一次流。
+    const body=(raw??{}) as Record<string,unknown>;
+    if(body.confirmation!=='删除我的账号和全部数据')throw new RuntimeError('invalid_params','请先确认要删除的内容');
+    if(!users)throw new RuntimeError('not_found','这个服务没有账号体系');
+    const account=users.identities.exportAccount(session.userId);
+    // 手机号账号要验密码：别让孩子一键把家长的账号删了。
+    if(account.phone&&!users.identities.verifyPassword(session.userId,body.password))throw new RuntimeError('forbidden','手机号或密码不对');
+    const removed=users.identities.deleteAccount(session.userId);
+    users.deleteUserData(session.userId);
+    const sid=cookieValue(req,'xiaon_session');if(sid)localSessions.delete(sid);
+    res.setHeader('Set-Cookie',[`xiaon_login=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0${secure}`,`xiaon_session=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0${secure}`]);
+    send({deleted:true,account:{phone:removed.phone?maskPhone(removed.phone):null},records:removed.deleted});
+    return;
+   }
+   // 监护人同意留痕（2026-11-21）：追加式记录，撤回另记一条，不改旧记录。
+   if(path==='/api/guardian/consent'){
+    const body=(raw??{}) as Record<string,unknown>;
+    const agreementVersion=body.agreementVersion,actor=body.actor,decision=body.decision,scope=body.scope,note=body.note??null;
+    if(typeof agreementVersion!=='string'||!agreementVersion)throw new RuntimeError('invalid_params','缺少同意书版本');
+    if(actor!=='student'&&actor!=='guardian')throw new RuntimeError('invalid_params','缺少操作者');
+    if(decision!=='granted'&&decision!=='declined'&&decision!=='revoked')throw new RuntimeError('invalid_params','缺少同意结果');
+    if(!Array.isArray(scope)||!scope.length)throw new RuntimeError('invalid_params','缺少授权范围');
+    send(runtime.events.guardianConsent({operationId:String(body.operationId??randomUUID()),agreementVersion,actor,decision,scope:scope as ('learning_overview'|'memory_use'|'chat_replay')[],note:typeof note==='string'?note:null}));
+    return;
+   }
    if(path.startsWith('/api/free-chat/')){const profile=profilePost(runtime.freeChat,path,raw);if(!profile)throw new RuntimeError('not_found');send(profile);return;}
    const d=learningFor(runtime);
    if(path.startsWith('/api/learning/')){
     if(!d)throw new RuntimeError('not_implemented');
+    // 学习接口里有多条会调模型的路径（提交、判题、生成、访谈、阶段草案）。统一按人限流。
+    if(!learnPerMinute.take(session.userId)||!learnPerDay.take(session.userId))throw new RuntimeError('budget_exhausted','今天用得有点多啦，歇一会儿再试');
     const c=new AbortController(),cancel=()=>{if(!res.writableEnded)c.abort();};res.once('close',cancel);
     try{switch(path){
      case '/api/learning/activate':send(await d.activate(raw as never));break;
@@ -234,5 +320,15 @@ export function createHttpServer(source:LearningRuntime|UserRuntimes,config:Http
  return server;
 }
 function cookieValue(req:IncomingMessage,name:string){return req.headers.cookie?.split(';').map(s=>s.trim()).find(s=>s.startsWith(name+'='))?.slice(name.length+1);}
+/** 来源标识：连接地址 + 反向代理带来的第一个 X-Forwarded-For。
+ * 两个桶都要过——伪造 XFF 也绕不开「连接地址」那个桶；代理后面则能把真实来源分开算。 */
+function clientKeys(req:IncomingMessage,scope:string){
+ const keys=[`${scope}:conn:${req.socket.remoteAddress??'unknown'}`];
+ const fwd=String(req.headers['x-forwarded-for']??'').split(',')[0]?.trim();
+ if(fwd)keys.push(`${scope}:fwd:${fwd}`);
+ return keys;
+}
+/** 所有限流器、每个键都放行才算放行。 */
+function allowAll(keys:string[],...limiters:RateLimiter[]){for(const l of limiters)for(const k of keys)if(!l.take(k))return false;return true;}
 function equalToken(actual:string,expected:string){const a=Buffer.from(actual),b=Buffer.from(expected);return a.length===b.length&&timingSafeEqual(a,b);}
 async function readBody(req:IncomingMessage,limit=550000):Promise<unknown>{let size=0;const chunks:Buffer[]=[];for await(const chunk of req){size+=Buffer.byteLength(chunk);if(size>limit)throw new RuntimeError('invalid_params','请求超出大小限制');chunks.push(Buffer.from(chunk));}try{return JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw new RuntimeError('invalid_params','无效JSON');}}

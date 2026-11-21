@@ -2,7 +2,7 @@
 import { RubricAssessment,createModelAnalyzer } from '../../server/plugins/assessment';
 import type { LearningRuntime } from '../../server/bootstrap';
 import type { AssessmentEnginePort,ModelProvider } from '../../shared/learning-contracts';
-import { skillStatusLabels,evidenceKindLabels } from '../../src/learning/assessment';
+import { skillStatusLabels,evidenceKindLabels } from '../../shared/assessment-labels';
 export function registerAssessmentExample(runtime:LearningRuntime,assessorProvider?:ModelProvider):AssessmentEnginePort {
  const engine=new RubricAssessment(assessorProvider?{analyzer:createModelAnalyzer(assessorProvider)}:{});
  runtime.registerAssessment(engine);return engine;

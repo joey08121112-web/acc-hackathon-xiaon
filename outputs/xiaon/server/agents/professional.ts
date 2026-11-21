@@ -3,7 +3,7 @@
 import { INTERVIEW_MODULE_ORDER,INTERVIEW_REQUIRED_MODULES,LEVEL_BY_BASIS,type ChatObservation,type InterviewSession,type MonthStage,type ProfessionalReport,type TrendQuery } from '../../shared/learning-contracts';
 import { hash } from '../storage/repository';
 import { RuntimeError } from '../core/errors';
-import { shanghaiDate } from '../../src/learning/review';
+import { shanghaiDate } from '../../shared/review';
 /** 理解和逻辑都测完才能出报告（decision 15）。 */
 export const reportReady=(interview:Pick<InterviewSession,'completedModules'>|null)=>!!interview&&INTERVIEW_REQUIRED_MODULES.every(m=>interview.completedModules.includes(m));
 /** Latest revision of each id, in first-seen order (interviews and monthStages are append-only revisions). */

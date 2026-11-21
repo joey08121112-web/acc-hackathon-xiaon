@@ -1,21 +1,9 @@
 import { test, expect, type Page } from "@playwright/test";
+import { passOnboarding } from "./onboarding";
 const screenshot = (p: Page, name: string) =>
   p.screenshot({ path: `../evidence/${name}.png`, fullPage: false });
 async function basic(p: Page) {
-  // Exercise the same local-ID fallback needed by plain HTTP LAN previews.
-  await p.addInitScript(() => { Object.defineProperty(crypto, "randomUUID", { value: undefined }); });
-  await p.goto("/");
-  await p.getByRole("button", { name: "认识一下小N", exact: true }).click();
-  await p
-    .getByRole("combobox", { name: "年龄段", exact: true })
-    .selectOption("14-17");
-  await p.getByRole("checkbox").check();
-  await p
-    .getByRole("button", { name: "继续，选择可选功能", exact: true })
-    .click();
-  await p
-    .getByRole("button", { name: "关闭可选功能，进入基本体验", exact: true })
-    .click();
+  await passOnboarding(p);
 }
 async function settings(p: Page) {
   await p.getByRole("button", { name: "我的与设置", exact: true }).click();
@@ -30,16 +18,25 @@ const state = (p: Page) =>
   p.evaluate(() =>
     JSON.parse(localStorage.getItem("xiaon-progress-v1") || "{}"),
   );
-test("01 首次未满14确认失败、取消、完成；可选默认关闭；拒绝可进入", async ({
+test("01 首次进入：两个记忆开关默认关闭；监护人确认可失败/取消/完成；没有家长同意也能进入", async ({
   page,
 }) => {
   await page.goto("/");
   await screenshot(page, "01-onboarding");
-  await page.getByRole("button", { name: "认识一下小N", exact: true }).click();
-  await page.getByRole("checkbox").check();
+  // 当前引导是单屏：昵称 + 年级 chip + 两个记忆开关（默认都关）+ 一个「开始和小N聊」。
+  // 改版前这里是「年龄段 + 必须勾选的同意框 + 未满 14 岁要先过监护人确认」三步。
+  for (const t of await page.getByRole("switch").all())
+    await expect(t).toHaveAttribute("aria-checked", "false");
+  await page.getByRole("button", { name: "开始和小N聊", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: "继续，选择可选功能", exact: true }),
-  ).toBeDisabled();
+    page.getByRole("button", { name: "我的与设置", exact: true }),
+  ).toBeVisible();
+  await screenshot(page, "02-consent");
+  expect((await state(page)).longMemory).toBe(false);
+
+  // 监护人确认演示现在在「我的与设置 → 监护人演示」页（2026-11-21 核对 UI）。
+  await settings(page);
+  await page.getByRole("button", { name: /监护人演示/ }).first().click();
   await page
     .getByRole("button", { name: "发起监护人确认演示", exact: true })
     .click();
@@ -57,20 +54,8 @@ test("01 首次未满14确认失败、取消、完成；可选默认关闭；拒
   await page
     .getByRole("button", { name: "模拟监护人阅读并确认", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "继续，选择可选功能", exact: true })
-    .click();
-  for (const t of await page.getByRole("switch").all())
-    await expect(t).toHaveAttribute("aria-checked", "false");
-  await screenshot(page, "02-consent");
-  await page
-    .getByRole("button", { name: "关闭可选功能，进入基本体验", exact: true })
-    .click();
-  await expect(
-    page.getByRole("heading", { name: "今天，按你的节奏来。", exact: true }),
-  ).toBeVisible();
+  await expect(page.getByText("演示完成", { exact: true })).toBeVisible();
   await screenshot(page, "03-home");
-  expect((await state(page)).longMemory).toBe(false);
 });
 test("02 选择休息、刷新与今日页都停止任务催促", async ({ page }) => {
   await basic(page);
@@ -536,23 +521,20 @@ test("16 重新首次介绍保留进度，重置演示清空进度与图片", as
   await settings(page);
   await page.getByRole("button", { name: /重新体验首次进入/ }).click();
   await expect(
-    page.getByRole("heading", { name: "慢慢来， 也会到达。" }),
+    page.getByRole("heading", { name: "慢慢来，也会到达。" }),
   ).toBeVisible();
   expect((await state(page)).calcSeen).toHaveLength(1);
-  await page.getByRole("button", { name: "认识一下小N", exact: true }).click();
-  await page
-    .getByRole("button", { name: "继续，选择可选功能", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "关闭可选功能，进入基本体验", exact: true })
-    .click();
+  await page.getByRole("button", { name: "开始和小N聊", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "我的与设置", exact: true }),
+  ).toBeVisible();
   await settings(page);
   await page.getByRole("button", { name: /重置整个演示/ }).click();
   await page
     .getByRole("button", { name: "确认清空本机演示", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "慢慢来， 也会到达。" }),
+    page.getByRole("heading", { name: "慢慢来，也会到达。" }),
   ).toBeVisible();
   expect((await state(page)).calcSeen).toHaveLength(0);
   expect((await state(page)).records).toEqual({});

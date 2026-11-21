@@ -1,6 +1,6 @@
 /** 监护人页：学习概览 + 每周学习小结。数据全部来自 l.view（本机 SQLite 学习记录），口径见 digest.ts。 */
 import { useState } from 'react';
-import type { LearningView } from '../../../server/agents/learning';
+import type { LearningView } from '../../../shared/views';
 import { guardianDigest,digestText,shortDate } from './digest';
 
 export function GuardianOverview({view}:{view:LearningView}){

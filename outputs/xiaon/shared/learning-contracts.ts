@@ -46,6 +46,18 @@ const PlanProposal = z.strictObject({focus:PlanFocus.optional(),...base,...opera
 const PlanVersion = z.strictObject({...base,...operation,...revision,version,proposalId:id,previousVersionId:id.nullable(),goal:text,items:z.array(planItem),changes:z.array(text),confirmation:z.strictObject({action:z.enum(['accept','lighter','reschedule','defer','resume']),confirmedAt:utc,actor:z.literal('student'),expectedPreviousVersionId:id.nullable(),reason:text}),createdAt:utc});
 const MemoryItem = z.strictObject({...base,...operation,text,source:z.literal('student_explicit'),purpose:z.enum(['tutoring','planning']),createdAt:utc,expiresAt:nullableTime,reviewAt:nullableTime,active:z.boolean()});
 const ConsentState = z.strictObject({...base,...operation,optionalMemory:z.boolean(),updatedAt:utc});
+/** 同意书版本。2026-11-21 加：家长以后要能查「当时同意的是哪一版」，所以版本号是契约的一部分。 */
+export const GUARDIAN_AGREEMENT_VERSION='1.0';
+// 监护人同意留痕（2026-11-21 加）。同意书版本、时间、操作者都要留下来 ——
+// 「当时同意的是哪一版、是谁同意的、什么时候同意的」，家长以后要能查得到。
+// 追加式：撤回不是改这一条，而是再记一条 decision='revoked'，前面的记录原样保留。
+const GuardianConsent = z.strictObject({...base,...operation,revision:version,
+ agreementVersion:z.string().min(1).max(20),
+ actor:z.enum(['student','guardian']),
+ decision:z.enum(['granted','declined','revoked']),
+ scope:z.array(z.enum(['learning_overview','memory_use','chat_replay'])).min(1).max(8),
+ note:z.string().max(500).nullable(),
+ at:utc});
 const ErrorCode = z.enum(['invalid_params','unknown_tool','forbidden','not_found','invalid_state','conflict','unavailable','not_implemented','timeout','cancelled','budget_exhausted','provider_auth','provider_rate_limit','provider_error','unsupported_tools','internal_error']);
 const Failure = z.strictObject({code:ErrorCode,message:text,recoverable:z.boolean()});
 // E1: 'generator' is an additive, tool-less structured-output role; it never grades, confirms or writes data.
@@ -222,7 +234,7 @@ const tools = {
 };
 export const schemas = {
   TaskDefinition,TaskPublicView,LearningSession,SessionEvent,Attempt,ExposureEvent,GradingResult,Evidence,SkillState,AssessmentSnapshot,
-  ReviewPolicy,ReviewItem,ReviewOutcome,ReportSnapshot,PlanProposal,PlanVersion,MemoryItem,ConsentState,ToolCall,ToolResult,AgentRun,RolePolicy,GenerationRecord,StuckPoint,LatestFeedback,
+  ReviewPolicy,ReviewItem,ReviewOutcome,ReportSnapshot,PlanProposal,PlanVersion,MemoryItem,ConsentState,GuardianConsent,ToolCall,ToolResult,AgentRun,RolePolicy,GenerationRecord,StuckPoint,LatestFeedback,
   SourceTime:sourceTime,Failure,SubmitAttempt,
   StartSession:z.strictObject({...operation,mode:LearningSession.shape.mode}),
   SessionState:z.strictObject({...operation,sessionId:id,status:LearningSession.shape.status}),
@@ -274,6 +286,7 @@ export type PlanProposal = z.infer<typeof PlanProposal>;
 export type PlanVersion = z.infer<typeof PlanVersion>;
 export type MemoryItem = z.infer<typeof MemoryItem>;
 export type ConsentState = z.infer<typeof ConsentState>;
+export type GuardianConsent = z.infer<typeof GuardianConsent>;
 export type ToolCall = z.infer<typeof ToolCall>;
 export type ToolResult = z.infer<typeof ToolResult>;
 export type AgentRun = z.infer<typeof AgentRun>;
@@ -349,6 +362,8 @@ export interface Clock { now(): string }
 export interface EntityMap {
   tasks:TaskDefinition; sessions:LearningSession; sessionEvents:SessionEvent; attempts:Attempt; exposures:ExposureEvent; gradings:GradingResult;
   evidence:Evidence; skills:SkillState; assessments:AssessmentSnapshot; reviewPolicies:ReviewPolicy; reviewItems:ReviewItem;
+  /** 监护人同意流水（2026-11-21）。追加式，带 revision：撤回另记一条，不改旧记录。 */
+ guardianConsents:GuardianConsent;
   reviewOutcomes:ReviewOutcome; reports:ReportSnapshot; proposals:PlanProposal; plans:PlanVersion; memories:MemoryItem; consents:ConsentState; toolCalls:ToolCall; runs:AgentRun;
   /** E1 attached audit records; included in reset like every other collection. */
   generations:GenerationRecord;

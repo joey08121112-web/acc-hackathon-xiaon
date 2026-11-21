@@ -1,6 +1,6 @@
 import type { Attempt,EngineContext,GradingResult,SkillState,AssessmentSnapshot,TaskDefinition } from '../../../shared/learning-contracts';
 import { skillDefinitions,skillIdsForTask } from './catalog';
-import type { evidenceKindLabels } from '../../../src/learning/assessment';
+import type { evidenceKindLabels } from '../../../shared/assessment-labels';
 export type IndependencePolicy={minimumTasks:number;minimumDates:number;minimumSessions:number};
 export const DEFAULT_INDEPENDENCE_POLICY:IndependencePolicy={minimumTasks:2,minimumDates:2,minimumSessions:2};
 export function latestGrade(attemptId:string,ctx:EngineContext):GradingResult|undefined{return ctx.repository.list('gradings').filter(g=>g.attemptId===attemptId).at(-1);}

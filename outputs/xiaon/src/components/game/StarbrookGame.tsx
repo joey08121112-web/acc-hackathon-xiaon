@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { Mascot } from '../../Art';
 import { apiRequest } from '../../agent-client';
+import { fetchText } from '../../agent-client/http';
 import { lastAccount } from '../../auth/session';
 
 const GAME_INDEX = '/starbrook/index.html';
@@ -153,18 +154,18 @@ export function StarbrookGame({
       pushed.current = true;
     }
     if (deploy === 'unknown' || deploy === 'missing') {
-      let cancelled = false;
+      // 静态资源，不是 API：取不到就当游戏没部署好，别把控制台刷满错误。
+      const controller = new AbortController();
       setDeploy('checking');
-      fetch(GAME_INDEX, { cache: 'no-store' })
-        .then(async (r) => {
-          const body = r.ok ? await r.text() : '';
-          if (!cancelled) setDeploy(/godot|\.wasm/i.test(body) ? 'ready' : 'missing');
+      fetchText(GAME_INDEX, { signal: controller.signal, cache: 'no-store' })
+        .then((body) => {
+          setDeploy(/godot|\.wasm/i.test(body) ? 'ready' : 'missing');
         })
         .catch(() => {
-          if (!cancelled) setDeploy('missing');
+          setDeploy('missing');
         });
       return () => {
-        cancelled = true;
+        controller.abort();
       };
     }
   }, [open, deploy]);

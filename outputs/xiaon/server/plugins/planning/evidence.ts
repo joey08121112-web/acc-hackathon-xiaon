@@ -1,6 +1,6 @@
 import type { AssessmentSnapshot, EngineContext } from '../../../shared/learning-contracts';
 import { RuntimeError } from '../../core/errors';
-import { revisedEvidenceIds,shanghaiDate } from '../../../src/learning/review';
+import { revisedEvidenceIds,shanghaiDate } from '../../../shared/review';
 
 export function assertAssessment(snapshot:AssessmentSnapshot,context:EngineContext) {
  const {repository:r}=context;

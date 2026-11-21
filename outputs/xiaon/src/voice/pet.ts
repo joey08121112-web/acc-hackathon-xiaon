@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { PetMood, PetTouchKind, PetZone } from '../Art';
-import { clipsOf, type ClipGroup } from './clips';
+import { clipsOf, type ClipGroup } from '../../shared/voice-clips';
 import { getVoiceKind, voice } from './voice';
 /**
  * How the pet answers being touched. Everything here is local: no model call, nothing saved, no learning evidence.

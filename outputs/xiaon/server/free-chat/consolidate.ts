@@ -34,22 +34,52 @@ export function idleMsFromEnv(env:Readonly<Record<string,string|undefined>>=proc
 }
 const DAY=86400000;
 const shanghaiDay=(iso:string)=>new Date(iso).toLocaleDateString('en-CA',{timeZone:'Asia/Shanghai'});
-/** 品类词表（R5 的兜底），六类跟界面承诺一致：情绪心事、家庭矛盾、身体健康、恋爱、人际冲突、能认出身份的信息。
+/** 敏感词表：六类跟界面承诺一致（情绪心事、家庭矛盾、身体健康、恋爱、人际冲突、能认出身份的信息）。
  * 词表只是第一道；真正的保证在后两道——add/update/mention 必须有学生原话做证据，且证据原话本身也要过这张表：
- * 模型把条目文本洗干净了（「呼吸不太好」）、原话里带着「哮喘」的，一样不入档。判不准就不记。 */
-const SENSITIVE=/自杀|自残|想死|不想活|割腕|跳楼|抑郁|焦虑|难过|伤心|害怕|想哭|委屈|孤单|孤独|自卑|紧张|压力|崩溃|烦躁|emo|心情|情绪|心事|离婚|吵架|打架|家暴|打我|骂我|离家出走|后爸|后妈|继父|继母|哮喘|感冒|发烧|发热|咳嗽|头疼|头痛|头晕|肚子疼|肚子痛|拉肚子|呕吐|恶心|胃炎|近视|散光|牙疼|拔牙|蛀牙|过敏|湿疹|荨麻疹|骨折|扭伤|受伤|缝针|手术|住院|医院|看病|就诊|复诊|体检|打针|疫苗|吃药|服药|生病|病了|不舒服|身体|恋爱|男朋友|女朋友|暗恋|表白|早恋|处对象|牵手|欺负|霸凌|孤立|绝交|闹翻|被骂|被打|冲突|地址|住在|小区|门牌|电话|手机号|微信号|QQ号|身份证|学号|名字|姓名|叫什么|我叫|学校叫|在.{1,8}(中学|小学|学校)上学|\d{6,}/i;
+ * 模型把条目文本洗干净了（「呼吸不太好」）、原话里带着「哮喘」的，一样不入档。判不准就不记。
+ *
+ * 2026-11-21 补洞。原表漏了未成年人身份信息里最常出现的四类，用四句最普通的日常说法实测确认过会漏：
+ * 「我在实验中学」「我上次考试考了58分」「我家在文昌路12号」「我爸妈在杭州上班」——全部两道门都过。
+ * 界面承诺（见 CONSOLIDATE_PROMPT）本来就写了"绝对不记……学校名字、住址、电话这类能认出他是谁的信息"，
+ * 是词表没兑现承诺，不是策略变了。
+ * 分组写开是为了能逐组加词、逐组写断言。匹配语义不变：任一组命中即拦。
+ * 取舍原则按 R1-R6 定下的那条走：少记不伤学生，错记伤学生——宁可多拦一点。 */
+const SENSITIVE_GROUPS:readonly RegExp[]=[
+ // 情绪心事
+ /自杀|自残|想死|不想活|割腕|跳楼|抑郁|焦虑|难过|伤心|害怕|想哭|委屈|孤单|孤独|自卑|紧张|压力|崩溃|烦躁|emo|心情|情绪|心事/i,
+ // 家庭矛盾
+ /离婚|吵架|打架|家暴|打我|骂我|离家出走|后爸|后妈|继父|继母/i,
+ // 身体健康
+ /哮喘|感冒|发烧|发热|咳嗽|头疼|头痛|头晕|肚子疼|肚子痛|拉肚子|呕吐|恶心|胃炎|近视|散光|牙疼|拔牙|蛀牙|过敏|湿疹|荨麻疹|骨折|扭伤|受伤|缝针|手术|住院|医院|看病|就诊|复诊|体检|打针|疫苗|吃药|服药|生病|病了|不舒服|身体/i,
+ // 恋爱
+ /恋爱|男朋友|女朋友|暗恋|表白|早恋|处对象|牵手/i,
+ // 人际冲突
+ /欺负|霸凌|孤立|绝交|闹翻|被骂|被打|冲突/i,
+ // 能认出他是谁：身份标识与联系方式
+ /身份证|学号|电话|手机号|微信号|QQ号|名字|姓名|叫什么|我叫|学校叫|\d{6,}/i,
+ // 补①：学校名与学校关系。条目文本会省略主语（「在实验中学」），所以学校名词本身就要拦，不靠「我」起头。
+ /(中学|小学|初中|高中|幼儿园|校区|分校)|(附中|一中|二中|三中|四中|五中|外国语)|学籍|转学|升学|班主任|班级|校服|校徽|校车|校庆/i,
+ // 补②：成绩与排名。裸「有考试」不拦——那是日程事实可以记；分数和排名是能力标签，必须拦。
+ /考了\s*\d+\s*分|得分|分数|成绩|排名|平均分|满分|及格|挂科|考砸|班级第|年级第/i,
+ // 补③：住址。要求家/住/搬的语境，避免误伤「走路」「上街」「城市」这类普通词。
+ /(我家|我们家|家里|家住|住在|住|家在|搬到|搬去|老家).{0,10}(路|街|巷|弄|市|省|县|区)|\d+号楼|\d+单元|\d+室|\d+栋|\d+座|\d+号院/i,
+ // 补④：家长的联系方式与工作地。家长存在本身可记（「有个妹妹」是允许的事实），联系方式与所在地不可。
+ /(爸妈|爸爸|妈妈|父母|家长|爷爷奶奶|外公外婆).{0,10}(电话|手机|微信|住址|地址|工作|上班|单位)/i,
+];
+/** 任一组命中即视为敏感。 */
+const isSensitive=(text:string)=>SENSITIVE_GROUPS.some(g=>g.test(text));
 const normalize=(s:string)=>s.replace(/[\s\p{P}\p{S}]/gu,'').toLowerCase();
 /** 保守核验完整短语，只忽略空白与标点；不删内容词，也不靠两字重合或无序单字推断事实。
  * 同义改写无法核验时宁可少记。否定、疑问及敏感原话不作自动记忆的依据。 */
 const UNCERTAIN=/不|没|别|讨厌|假如|如果|也许|可能|听说|他说|她说|吗|么|？|\?/;
-export function evidenceLine(text:string,userLines:readonly{content:string;createdAt:string}[]){
+export function evidenceLine(text:string,userLines:readonly{content:string;createdAt:string;threadId?:string}[]){
  const t=normalize(text);
- if(t.length<2||SENSITIVE.test(text))return null;
- return [...userLines].reverse().find(m=>!SENSITIVE.test(m.content)&&!UNCERTAIN.test(m.content)&&normalize(m.content).includes(t))??null;
+ if(t.length<2||isSensitive(text))return null;
+ return [...userLines].reverse().find(m=>!isSensitive(m.content)&&!UNCERTAIN.test(m.content)&&normalize(m.content).includes(t))??null;
 }
 /** 删除后必须有明确支持同一完整事实的原话；无关的“喜欢”不能恢复已删除内容。 */
 const REVIVE=/喜欢|爱|迷|想玩|想学|又想|又开始|还是|重新|接着|在玩/;
-function revivalEvidence(userLines:readonly{content:string;createdAt:string}[],deleted:{text:string;deletedAt:string}){
+function revivalEvidence(userLines:readonly{content:string;createdAt:string;threadId?:string}[],deleted:{text:string;deletedAt:string}){
  return evidenceLine(deleted.text,userLines.filter(m=>m.createdAt>deleted.deletedAt&&REVIVE.test(m.content)));
 }
 /** 同一件事的不同说法：“喜欢打篮球”和“打篮球”算一件。 */
@@ -91,9 +121,9 @@ function apply(store:FreeChatStore,ops:Op[],pending:ReturnType<FreeChatStore['pe
  const mention=(id:string,kind:ProfileKind,text:string)=>{if(touched.has(id))return;touched.add(id);store.mention(id);changes.push({op:'mention',itemId:id,kind,text});};
  for(const op of ops){
   if(op.op==='add'){
-   if(SENSITIVE.test(op.text))continue;
+   if(isSensitive(op.text))continue;
    const evidence=evidenceLine(op.text,userLines);
-   if(!evidence||SENSITIVE.test(evidence.content))continue;
+   if(!evidence||isSensitive(evidence.content))continue;
    const profile=store.profile();
    const same=profile.items.find(i=>i.kind===op.kind&&similar(i.text,op.text));
    if(same){mention(same.id,same.kind,same.text);continue;}
@@ -102,7 +132,7 @@ function apply(store:FreeChatStore,ops:Op[],pending:ReturnType<FreeChatStore['pe
    if(deleted&&!revivalEvidence(userLines,deleted))continue;
    if(store.countKind(op.kind)>=ITEMS_PER_KIND_MAX)continue;
    const expiresAt=op.kind==='recent'?new Date(Date.parse(now)+(op.expiresInDays??RECENT_DAYS)*DAY).toISOString():null;
-   const id=store.insert({kind:op.kind,text:op.text,source:'chat',editedByStudent:false,expiresAt});
+   const id=store.insert({kind:op.kind,text:op.text,source:'chat',editedByStudent:false,expiresAt,originThreadId:evidence.threadId??null,evidenceQuote:evidence.content});
    touched.add(id);changes.push({op:'add',itemId:id,kind:op.kind,text:op.text});continue;
   }
   const item=store.item(op.id);if(!item||touched.has(item.id))continue;
@@ -111,9 +141,13 @@ function apply(store:FreeChatStore,ops:Op[],pending:ReturnType<FreeChatStore['pe
   // 学生自己加的、改过的条目，整理只能记一次“又提到了”。
   if(item.editedByStudent)continue;
   if(op.op==='update'){
-   if(SENSITIVE.test(op.text)||op.text===item.text)continue;
-   if(!evidenceLine(op.text,userLines))continue;
-   touched.add(item.id);store.chatUpdate(item.id,op.text);changes.push({op:'update',itemId:item.id,kind:item.kind,text:op.text});
+   if(isSensitive(op.text)||op.text===item.text)continue;
+   const evidence=evidenceLine(op.text,userLines);if(!evidence)continue;
+   touched.add(item.id);
+   // 2026-11-21：不原地覆盖。旧条目标失效保留，新内容另起一条（学生能看见「之前记的是什么」）。
+   const newId=store.chatUpdate(item.id,op.text,{threadId:evidence.threadId??null,evidenceQuote:evidence.content});
+   touched.add(newId);
+   changes.push({op:'update',itemId:newId,kind:item.kind,text:op.text});
   }else if(item.kind==='interest'&&item.status==='active'){
    touched.add(item.id);store.chatPast(item.id);changes.push({op:'past',itemId:item.id,kind:item.kind,text:item.text});
   }

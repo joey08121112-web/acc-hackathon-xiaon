@@ -37,7 +37,11 @@ test('phone login: register, log in from another device, log out, lockout and ad
   assert.equal((await session(anonUser)).status,403,'an anonymous identity alone no longer opens a session');
   assert.equal((await auth('check',{phone:'12345'})).status,400);
   assert.deepEqual(await (await auth('check',{phone:'13800138000'})).json(),{registered:false});
-  assert.equal((await auth('login',{phone:'13800138000',password:'abc12345'})).status,404);
+  // 2026-11-21：未注册与密码错误现在完全一样——同样的错误码（403）、同样的文案、同样量级的耗时。
+  // 之前是 404 + 「这个手机号还没注册」，光看状态码就能枚举出哪些手机号有账号。
+  const unregistered=await auth('login',{phone:'13800138000',password:'abc12345'});
+  assert.equal(unregistered.status,403);
+  assert.deepEqual(await unregistered.json(),{schemaVersion:'1.0.0',ok:false,error:{code:'forbidden',message:'手机号或密码不对',recoverable:true}});
   assert.equal((await auth('register',{phone:'13800138000',password:'12345'})).status,400);
   assert.equal((await auth('register',{phone:'13800138000',password:'abc 12345'})).status,400);
 
@@ -78,8 +82,53 @@ test('phone login: register, log in from another device, log out, lockout and ad
  }
 });
 
-test('without requireLogin the auth routes stay closed and anonymous sessions work as before',async()=>{
- const directory=mkdtempSync(join(tmpdir(),'xiaon-login-off-'));const provider=new SyntheticProvider();
+// 2026-11-21：令牌有到期时间、能改密、能吊销其他设备。此前令牌没有服务端有效期，也没有改密入口，
+// 家长没法让泄露的登录失效。
+test('token expiry, password change and revoking other devices',async()=>{
+ const directory=mkdtempSync(join(tmpdir(),'xiaon-login-ttl-'));
+ const provider=new SyntheticProvider();
+ const users=new UserRuntimes({directory,provider,learning:true,create:path=>createRuntime({databasePath:path,provider})});
+ const port=await freePort(),origin=`http://127.0.0.1:${port}`,server=createHttpServer(users,{allowedOrigins:[origin],host:`127.0.0.1:${port}`,requireLogin:true});
+ await new Promise<void>(r=>server.listen(port,'127.0.0.1',r));
+ const cookiesOf=(res:Response)=>res.headers.getSetCookie().map(c=>c.split(';')[0]);
+ const auth=(path:string,body:unknown,cookie='')=>fetch(origin+'/api/auth/'+path,{method:'POST',headers:{'Content-Type':'application/json',Origin:origin,...(cookie?{Cookie:cookie}:{})},body:JSON.stringify(body)});
+ const session=(cookie:string)=>fetch(origin+'/api/local-session',{method:'POST',headers:{'Content-Type':'application/json',Origin:origin,Cookie:cookie},body:'{}'});
+ try{
+  const registered=await auth('register',{phone:'13800138000',password:'abc12345'});
+  const first=cookiesOf(registered).find(c=>c.startsWith('xiaon_login='))!;
+  const second=await auth('login',{phone:'13800138000',password:'abc12345'});
+  const secondLogin=cookiesOf(second).find(c=>c.startsWith('xiaon_login='))!;
+  assert.equal((await session(first)).status,200);
+  assert.equal((await session(secondLogin)).status,200);
+
+  // 退出其他设备：当前设备留着，另一个立刻失效。
+  const revoked=await auth('logout-all',{},first);
+  assert.equal(revoked.status,200);
+  assert.deepEqual(await revoked.json(),{ok:true,revoked:1});
+  assert.equal((await session(first)).status,200,'当前设备不受影响');
+  assert.equal((await session(secondLogin)).status,403,'别的设备被踢掉');
+
+  // 改密：原密码不对就拒绝。
+  assert.equal((await auth('password',{oldPassword:'wrong123',newPassword:'newpass1'},first)).status,403);
+  // 改密成功：当前设备拿到新令牌，这个手机号的其它令牌全部作废。
+  const changed=await auth('password',{oldPassword:'abc12345',newPassword:'newpass1'},first);
+  assert.equal(changed.status,200);
+  assert.deepEqual(await changed.json(),{ok:true,phone:'138****8000'});
+  const newLogin=cookiesOf(changed).find(c=>c.startsWith('xiaon_login='))!;
+  assert.equal((await session(newLogin)).status,200);
+  assert.equal((await session(first)).status,403,'改密后旧令牌失效');
+  assert.equal((await auth('login',{phone:'13800138000',password:'abc12345'})).status,403,'旧密码不能再登录');
+  assert.equal((await auth('login',{phone:'13800138000',password:'newpass1'})).status,200,'新密码可以登录');
+
+  // 令牌到期：expires_at 过了，服务端就不认了（客户端还带着 cookie 也不行）。
+  const db=new DatabaseSync(join(directory,'identities.sqlite'));
+  db.prepare('UPDATE logins SET expires_at=?').run(new Date(Date.now()-1000).toISOString());
+  db.close();
+  assert.equal((await session(newLogin)).status,403,'到期的令牌不再有效');
+ }finally{await new Promise<void>(r=>server.close(()=>r()));users.close();rmSync(directory,{recursive:true,force:true});}
+});
+
+test('without requireLogin the auth routes stay closed and anonymous sessions work as before',async()=>{ const directory=mkdtempSync(join(tmpdir(),'xiaon-login-off-'));const provider=new SyntheticProvider();
  const users=new UserRuntimes({directory,provider,learning:true,create:path=>createRuntime({databasePath:path,provider})});
  const port=await freePort(),origin=`http://127.0.0.1:${port}`,server=createHttpServer(users,{allowedOrigins:[origin],host:`127.0.0.1:${port}`});
  await new Promise<void>(r=>server.listen(port,'127.0.0.1',r));

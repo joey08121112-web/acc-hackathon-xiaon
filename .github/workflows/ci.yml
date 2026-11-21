@@ -1,0 +1,77 @@
+# 学伴小N · 持续验证门禁
+# 2026-11-21 建：331601a 曾带着一个失败用例进主干（专业模式入口文案漂移），仓库当时无任何 CI。
+# 本工作流把「每次完成都要有可跑证据」变成机制，而不是靠记性。
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+# 同一分支的新推送取消旧运行，避免排队浪费。
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: 类型检查 + 单元 + 契约 + 构建
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: outputs/xiaon
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: outputs/xiaon/package-lock.json
+
+      - run: npm ci
+
+      # 服务端 + 契约 + 前端 API 客户端 + 测试的类型检查（tsconfig.agent.json）。
+      - name: 类型检查（服务端/契约/测试）
+        run: npm run typecheck:agent
+
+      # 分层方向：server↛src、src↛server、plugins↛agents。
+      # 这三条越界在 2026-11-21 审查里都真实存在过，修完后加门禁防止长回来。
+      - name: 依赖方向门禁
+        run: npm run check:layers
+
+      # 纯规则领域逻辑（src/domain.ts）+ 局域网非安全上下文的 id 兜底（src/agent-client）。
+      - name: 单元测试（领域规则）
+        run: npm test
+
+      # 学习域契约与工具链（tests-agent/a..i）。
+      - name: 契约与工具链测试
+        run: npm run test:agent
+
+      # 自由聊记忆治理（server/free-chat）。
+      - name: 记忆治理测试
+        run: npm run test:free-chat
+
+      # 生产构建：tsc -b && vite build。
+      - name: 前端生产构建
+        run: npm run build
+
+      # 服务端构建：tsc -p tsconfig.server.json + 打包产物。
+      # 2026-11-21 修过「构建前不清 dist-server，陈旧产物混进镜像」的坑，
+      # 这个脚本本身也要有门禁 —— 前端绿了不代表部署镜像里跑得起来。
+      - name: 服务端生产构建
+        run: npm run build:server
+
+      # 密钥与学生数据绝不能进仓库（.env.server / .local/ 学习库 / 上传图片）。
+      - name: 仓库卫生检查
+        run: |
+          set -e
+          if git ls-files --error-unmatch 'outputs/xiaon/.env.server' >/dev/null 2>&1; then
+            echo '::error::outputs/xiaon/.env.server 被跟踪，密钥泄露'; exit 1
+          fi
+          leaked=$(git ls-files 'outputs/xiaon/.local/*' 'outputs/xiaon/.env*' | grep -v '\.env\.example$' || true)
+          if [ -n "$leaked" ]; then
+            echo "::error::以下本地/密钥文件被跟踪："; echo "$leaked"; exit 1
+          fi
+          echo '仓库卫生检查通过'

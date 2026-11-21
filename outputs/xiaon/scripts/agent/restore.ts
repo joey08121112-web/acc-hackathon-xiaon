@@ -3,7 +3,6 @@ import { DatabaseSync, backup } from 'node:sqlite';
 import { chmodSync, existsSync, mkdirSync, renameSync, rmSync, openSync, closeSync, realpathSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { backupDatabase, validateDatabase } from './backup';
 export async function restoreDatabase({databasePath,backupPath,serviceStopped=false}:{databasePath:string;backupPath:string;serviceStopped?:boolean}):Promise<{previousBackup:string|null}>{
@@ -27,11 +26,16 @@ export async function restoreDatabase({databasePath,backupPath,serviceStopped=fa
   return{previousBackup};
  }finally{db.close();rmSync(temporary,{force:true});}
 }
-if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
- const {values}=parseArgs({options:{db:{type:'string'},from:{type:'string'},stopped:{type:'boolean'}}});
- try{
-  if(!values.from)throw new Error('请用 --from 指定备份文件');
-  const result=await restoreDatabase({databasePath:values.db??process.env.XIAON_DB_PATH??'.local/learning.sqlite',backupPath:values.from,serviceStopped:values.stopped});
-  console.log('恢复完成；原库备份：'+(result.previousBackup??'原库不存在'));
- }catch(e){console.error((e as Error).message);process.exitCode=1;}
+// 2026-11-21：入口判定不依赖 import.meta，同一个文件既能跑 TS 源码也能编译成 CommonJS 在生产跑。
+const isMain=(name:string)=>{const entry=process.argv[1];return !!entry&&new RegExp(name+'\\.(ts|js)$').test(resolve(entry));};
+if(isMain('restore')){
+ // CommonJS 不支持顶层 await，包一层 async 函数（ESM 源码运行同样成立）。
+ void (async()=>{
+  const {values}=parseArgs({options:{db:{type:'string'},from:{type:'string'},stopped:{type:'boolean'}}});
+  try{
+   if(!values.from)throw new Error('请用 --from 指定备份文件');
+   const result=await restoreDatabase({databasePath:values.db??process.env.XIAON_DB_PATH??'.local/learning.sqlite',backupPath:values.from,serviceStopped:values.stopped});
+   console.log('恢复完成；原库备份：'+(result.previousBackup??'原库不存在'));
+  }catch(e){console.error((e as Error).message);process.exitCode=1;}
+ })();
 }

@@ -5,7 +5,7 @@ import type { LearningUI } from '../../agents/useLearning';
 import { apiRequest, newOperationId } from '../../agent-client';
 import { useDevMode } from '../../agents/devMode';
 import type { ChatIntent, ChatReply, ConversationSummary, Greeting, MemoryDraft, ModeSuggestion } from '../../../shared/learning-contracts';
-import { SAFETY_PATTERN } from '../../../server/agents/stages';
+import { SAFETY_PATTERN } from '../../../shared/safety';
 import { PetHero, useThinkingText } from './PetStage';
 import { useVoice } from '../../voice/voice';
 import { useMic } from '../../voice/mic';

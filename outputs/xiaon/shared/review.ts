@@ -1,5 +1,5 @@
 /** Browser-safe projections. The server owns mutations and trusted evidence validation. */
-import type { AssessmentSnapshot, EngineContext, ReviewItem, TaskPublicView } from '../../../shared/learning-contracts';
+import type { AssessmentSnapshot, EngineContext, ReviewItem, TaskPublicView } from './learning-contracts';
 
 export const DAY_MS = 86_400_000;
 export function shanghaiDate(instant: string): string {

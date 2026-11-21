@@ -724,7 +724,9 @@
   margin-top: 3px;
   font-size: 0.75rem;
   line-height: 1.5;
-  color: #6b7a67;
+  /* 2026-11-21：#6b7a67 在 #f5f7ee 上只有 4.21:1，低于 WCAG AA 小字要的 4.5:1
+     （axe 实测报 color-contrast）。加深到 #626f5d ≈ 4.9:1。 */
+  color: #626f5d;
 }
 
 @media (prefers-reduced-motion: reduce) {

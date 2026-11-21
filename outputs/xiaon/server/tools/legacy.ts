@@ -1,4 +1,4 @@
-import { tasks,correct } from '../../src/data';
+import { tasks,correct } from '../../shared/task-bank';
 import { SCHEMA_VERSION,schemas,type TaskDefinition,type TaskPublicView,type TaskSelection,type TaskCatalog,type AssessmentEnginePort,type EngineContext,type SkillState,type GradingResult } from '../../shared/learning-contracts';
 import { RuntimeError } from '../core/errors';
 import { randomUUID } from 'node:crypto';

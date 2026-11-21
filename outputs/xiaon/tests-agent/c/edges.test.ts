@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { fixture } from './fixtures';
 import { PlanningEngine } from '../../server/plugins/planning';
-import { selectReviewTarget, currentReviewItems, planHistory } from '../../src/learning/review';
+import { selectReviewTarget, currentReviewItems, planHistory } from '../../shared/review';
 import { attemptFacts } from '../../server/plugins/planning/evidence';
 import { schemas, type ReviewItem } from '../../shared/learning-contracts';
 

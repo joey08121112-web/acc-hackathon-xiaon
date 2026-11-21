@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { schemas } from '../../shared/learning-contracts';
 import { AssessmentCatalog, assessmentTasks, skillDefinitions, legacyIdMapping } from '../../server/plugins/assessment';
 import { checkObjective } from '../../server/plugins/assessment/grading';
-import { tasks as oldTasks } from '../../src/data';
+import { tasks as oldTasks } from '../../shared/task-bank';
 const catalog=new AssessmentCatalog();
 
 test('six explicit subskills have observation, genuinely different transfer and delayed tasks; strict public views hide keys',()=>{

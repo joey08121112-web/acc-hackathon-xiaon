@@ -9,7 +9,7 @@ import { RuntimeError } from '../../core/errors';
 import { hash } from '../../storage/repository';
 import { classifyAttempt } from '../assessment/state';
 import { skillDefinitions,type AssessmentCatalog } from '../assessment/catalog';
-import { currentReviewItems,shanghaiDate } from '../../../src/learning/review';
+import { currentReviewItems,shanghaiDate } from '../../../shared/review';
 import { questionExpression } from './expression';
 import { GENERATOR_PROMPT,repairMessage } from './prompt';
 import { ESTIMATED_MINUTES,MAGNITUDE_LIMIT,TEMPLATE_VERSION,templatesFor,type Difficulty,type KnowledgePointId } from './templates';

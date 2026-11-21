@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRuntime } from '../../server/bootstrap';
 import { installLearning } from '../../server/agents/learning';
-import { decideStage,initialStageState } from '../../server/agents/stages';
+import { decideStage,initialStageState } from '../../server/core/stages';
 import { temporaryRepository,TestClock } from '../../server/storage/testing';
 import { draftProgressCard } from '../../server/plugins/progress';
 const id=()=>crypto.randomUUID();

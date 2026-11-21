@@ -425,7 +425,9 @@ button.companion-pet:active:not(:disabled) {
 .companion-chat[data-home="true"] .free-chat-head h2 {
   font-size: 12px;
   font-weight: 500;
-  color: #6c7d68;
+  /* 2026-11-21：#6c7d68 在 #faf9f3 上只有 4.17:1，低于 WCAG AA 小字要的 4.5:1
+     （axe 实测报 color-contrast）。加深到 #626f5d ≈ 5.0:1。 */
+  color: #626f5d;
 }
 
 .companion-chat[data-home="true"] .free-chat-list {

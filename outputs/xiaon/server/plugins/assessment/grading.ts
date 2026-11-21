@@ -1,4 +1,4 @@
-import { correct,tasks as legacyTasks,type Task } from '../../../src/data';
+import { correct,tasks as legacyTasks,type Task } from '../../../shared/task-bank';
 import type { TaskDefinition,Attempt,Evidence,GradingResult } from '../../../shared/learning-contracts';
 import { validateAnalysis,type AnswerAnalysis,type AnalysisPoint } from './model-analysis';
 type PointFinding={pointId:string;status:Evidence['status'];quote:string;location:Evidence['location'];explanation:string;source:Evidence['source']};

@@ -5,8 +5,8 @@
 import { z } from 'zod';
 import { schemas,SCHEMA_VERSION,INTERVIEW_MODULE_ORDER,MODULE_LEVEL_LABELS,type ChatObservation,type GradingResult,type InterviewModule,type InterviewPending,type InterviewSession,type InterviewStep,type InterviewTurn,type InterviewTurnKind,type ModuleLevel,type ProfessionalReport,type TaskDefinition } from '../../../shared/learning-contracts';
 import { RuntimeError } from '../../core/errors';
-import { HELP_PATTERN,containsAnswer } from '../../agents/stages';
-import { INTERVIEWER_PROMPT,REPORT_WORDING_PROMPT } from '../../agents/prompts/interviewer';
+import { HELP_PATTERN,containsAnswer } from '../../core/stages';
+import { INTERVIEWER_PROMPT,REPORT_WORDING_PROMPT } from '../../core/prompts/interviewer';
 import type { InterviewAnswerInput,InterviewPauseInput,InterviewResumeInput,InterviewStartInput,ProfessionalContext,ReportInput } from '../context';
 import { LOCAL_WORDING,levelOf,moduleBasis,statedReason,suggestionsFor,type AttemptFact } from './levels';
 export { moduleBasis,levelOf,statedReason,REASON_MIN_CHARS,NO_REASON_PATTERN,SUGGESTIONS } from './levels';

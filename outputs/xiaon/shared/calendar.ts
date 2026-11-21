@@ -1,5 +1,5 @@
 /** 所有者：zCode（第二期：月阶段 / 周任务共用的日历规则）。纯函数、无依赖，服务端插件和浏览器组件都从这里取，
- * 与 src/learning/review 的 browser-safe 定位一致。日期一律是上海时区的 YYYY-MM-DD 字符串。 */
+ * 与 shared/review 的 browser-safe 定位一致。日期一律是上海时区的 YYYY-MM-DD 字符串。 */
 const parts=(date:string):[number,number,number]=>{const [y,m,d]=date.split('-').map(Number);return [y,m,d];};
 const format=(y:number,m:number,d:number)=>new Date(Date.UTC(y,m-1,d)).toISOString().slice(0,10);
 /** 日期加减天数（按日历日，不涉时区换算）。 */

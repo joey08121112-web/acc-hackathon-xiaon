@@ -108,9 +108,21 @@ cd outputs/xiaon
 
 ## 7. 已知边界与注意事项
 
-- **手机号登录（默认开启）**：打开网页先看到登录页，用手机号 + 学生自己设的密码（6–32 位，不能有空格）。注册过的手机号直接登录，没注册的设密码注册；暂不发短信验证码，密码忘了暂时找不回。账号和密码哈希（scrypt 加盐）存在 `users/identities.sqlite` 的 `accounts` 表，登录令牌只存哈希、HttpOnly cookie 有效 180 天，一个账号可在多台设备同时登录，「我的与设置 → 退出登录」只退出当前设备。同一手机号连续输错 5 次密码锁 10 分钟。第一次在某个浏览器注册时，会接管这个浏览器原来的匿名记录（还没绑过账号的话），所以升级前聊过、做过的都还在；换设备登录则看到同一份记录。设 `XIAON_REQUIRE_LOGIN=0` 关掉登录，回到下面的匿名身份模式。
+- **手机号登录（默认开启）**：打开网页先看到登录页，用手机号 + 学生自己设的密码（6–32 位，不能有空格）。注册过的手机号直接登录，没注册的设密码注册；暂不发短信验证码，密码忘了暂时找不回。账号和密码哈希（scrypt 加盐）存在 `users/identities.sqlite` 的 `accounts` 表，登录令牌只存哈希、HttpOnly cookie 有效 30 天（2026-11-21 改：服务端令牌有硬上限，到期即失效；改密码会把该手机号所有设备踢下线），一个账号可在多台设备同时登录，「我的与设置 → 退出登录」只退出当前设备。同一手机号连续输错 5 次密码锁 10 分钟。第一次在某个浏览器注册时，会接管这个浏览器原来的匿名记录（还没绑过账号的话），所以升级前聊过、做过的都还在；换设备登录则看到同一份记录。设 `XIAON_REQUIRE_LOGIN=0` 关掉登录，回到下面的匿名身份模式。
 - **匿名身份，每人独立数据**：不用登录。第一次打开时服务端发一个只属于这个浏览器的随机身份（HttpOnly cookie，一年有效），并为它单独建一个库 `<XIAON_DB_PATH 所在目录>/users/<身份>.sqlite`（可用 `XIAON_USERS_DIR` 改位置）。不同的人互相看不到、改不了、清不掉对方的记录；「我的与设置」里的重置只清空自己的。身份只登记在服务端的 `users/identities.sqlite`，伪造或过期的 cookie 只会得到一个新的空身份。代价：清除浏览器数据或换手机，原来的记录就找不回了；也拦不住拿到链接的陌生人进来（身份总数默认上限 1000，用 `XIAON_MAX_USERS` 调整；每分钟最多新建 30 个）。语音识别/朗读的频率限制按人计算。旧版本的共享库 `learning.sqlite` 不再被读取，留在原处，确认无用后可自行删除。
 - **数据库必须挂卷**：镜像默认写 `/data/learning.sqlite`。没有实际挂载时，镜像启动命令会输出丢失记录的警告；整个卷（含 `users/`）都要在持久卷上。按第 9 节配置，并验证重启后记录仍在。
+- **容器不是 root（2026-11-21 改）**：镜像先以 root 启动，把挂载卷的属主修成 `node:node`，
+  再用 `setpriv` 降权到 uid 1000 运行。平台给的卷属主常常是 root，这一步是兜底。
+  实测容器内 `Uid: 1000 1000 1000 1000`、健康检查与静态页都是 200。
+  **上线前仍要在真机确认容器能写 `/data`** —— 属主修不好的平台（只读卷、特殊属主）需要单独处理。
+- **学生的数据权利已经有接口（2026-11-21 加）**：
+  「我的与设置 → 账号安全 → 我的数据」里有「导出我的数据」和「删除账号和全部数据」。
+  - 导出：`GET /api/account/export`（另有 `GET /api/free-chat/profile/export` 只导档案），
+    返回账号信息、档案（含每条记忆的来源原话）、全部学习记录，JSON 文件下载。
+    唯一不导出的是 `learning.problemSecrets`（判题用的参考答案），导出文件的 `excluded` 字段里写明了。
+  - 删除：`POST /api/account/delete`，要带 `confirmation:"删除我的账号和全部数据"`；
+    手机号账号还要密码（`password`）。删的是账号记录、全部登录令牌、这个人的整个 SQLite 库文件（含 WAL 残留）。
+    不可逆，没有回收站。
 - **Coding Plan Key**：这个套餐面向个人编程工具，限流按一个人设计。几位评委体验没问题；若要长期对外开放，先核实套餐条款，或换标准 API Key（基址改为 `https://open.bigmodel.cn/api/paas/v4`）。
 - **HTTPS 是硬要求**：前端用到的 `crypto.randomUUID()` 只在 HTTPS 或 localhost 下可用，裸 IP 的 http 地址会直接报错。上面三种方式都自带 HTTPS。
 - `.env.server`、`.local/`、`dist/` 已被 `.gitignore` 和 `.dockerignore` 排除，不会进仓库或镜像。
@@ -125,8 +137,13 @@ cd outputs/xiaon
 本机开发仍默认 `.local/learning.sqlite`；H 路仅使用自己 worktree 内的 `.local/h.sqlite`。容器默认 `/data/learning.sqlite`。`Dockerfile` 不声明匿名 VOLUME，避免把匿名磁盘误当成平台会持续复用的磁盘。启动命令先检查 Linux 的实际挂载；数据库不在独立挂载内时会输出「未检测到持久卷」。这项检查只能证明存在挂载，平台是否在下一次部署复用该卷仍需实际验证。若覆盖镜像的启动命令，须保留前置检查：
 
 ```sh
-node --import tsx scripts/agent/backup.ts --check-volume
+node dist-server/scripts/agent/backup.js --check-volume
 ```
+
+> **2026-11-21 变更**：生产镜像不再带 TypeScript 转译器（`tsx` 属于 devDependencies，
+> 运行时镜像只装生产依赖），服务端编译成 CommonJS 产物 `dist-server/`。
+> 镜像里执行备份/恢复要用编译后的入口 `node dist-server/scripts/agent/backup.js`；
+> 本机开发（装了 devDependencies）仍可用 `node --import tsx scripts/agent/backup.ts`。
 
 ### Zeabur（已停运，仅存档）
 
@@ -147,12 +164,14 @@ Zeabur 已宣布关停、共享集群不再接收新项目（见第 4 节），�
 ```sh
 # 本机 H 路；容器内改为 --db /data/learning.sqlite --out /data/backups
 node --import tsx scripts/agent/backup.ts --db .local/h.sqlite --out .local/h-backups --keep 7
+# 容器内（没有 tsx，用编译后的入口）：
+node dist-server/scripts/agent/backup.js --db /data/learning.sqlite --out /data/backups --keep 7
 ```
 
 多用户部署时每个身份一个库，`users/` 下逐个备份（含身份登记表 `identities.sqlite`，丢了它所有人都会变成新用户）：
 
 ```sh
-for db in /data/users/*.sqlite; do node --import tsx scripts/agent/backup.ts --db "$db" --out /data/backups --keep 7; done
+for db in /data/users/*.sqlite; do node dist-server/scripts/agent/backup.js --db "$db" --out /data/backups --keep 7; done
 ```
 
 恢复同理：只恢复某一个人时停服务后对那一个文件执行下面的恢复命令。
@@ -163,6 +182,8 @@ for db in /data/users/*.sqlite; do node --import tsx scripts/agent/backup.ts --d
 
 ```sh
 node --import tsx scripts/agent/restore.ts --db .local/h.sqlite --from /absolute/path/to/backup.sqlite --stopped
+# 容器内：
+node dist-server/scripts/agent/restore.js --db /data/learning.sqlite --from /absolute/path/to/backup.sqlite --stopped
 ```
 
 恢复不接收模型输出，也不会读写任何 `.env.server`。恢复后重新启动同一数据库路径的服务，再核对记录。不要直接把单个运行中数据库文件拖走，也不要复制旧的 WAL/SHM 旁文件覆盖恢复结果。

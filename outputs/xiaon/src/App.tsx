@@ -39,8 +39,9 @@ import {
   X,
 } from "lucide-react";
 import { MapArt, Mascot, SpaceShape } from "./Art";
-import { apiRequest } from "./agent-client";
-import { AccountContext } from "./auth/session";
+import { GUARDIAN_AGREEMENT_VERSION } from "../shared/learning-contracts";
+import { apiRequest, localId, newOperationId } from "./agent-client";
+import { AccountContext, clearAccountCache } from "./auth/session";
 import { explorationStatus } from "./components/learning/ExplorationMap";
 import { placeOf } from "./components/professional/ProfessionalMap";
 import { useLearning } from "./agents/useLearning";
@@ -55,7 +56,7 @@ import {
   dimensions,
   getTask,
   type Dimension,
-} from "./data";
+} from "../shared/task-bank";
 import {
   hydrate,
   initial,
@@ -72,9 +73,9 @@ import {
   type State,
 } from "./domain";
 import { IMAGE_KEY, Upload } from "./Upload";
-const uid = () =>
-  globalThis.crypto?.randomUUID?.() ??
-  `local-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+// 唯一 id 的生成统一走 agent-client 的 localId（局域网 http:// 访问时 crypto.randomUUID 不存在，
+// 2026-11-21 实测：没有兜底的话首次引导第一步就会崩）。这里不再各写一份。
+const uid = localId;
 const icons = [Flower2, BookOpen, Plus, ShoppingBagIcon, Compass];
 const PAGE_OF_TAB: Record<string, string> = {
   小N: "home",
@@ -122,7 +123,10 @@ function SectionHeading({
 function App() {
   const learning = useLearning();
   const devMode = useDevMode();
-  const [memoryChoice, setMemoryChoice] = useState<boolean>(true);
+  // 2026-11-21：两处默认都改为「关」（PRD FR12「长期记忆默认关闭」）。
+  // 学习侧此前默认 true——点「开始」就等于默认同意了；自由聊侧默认在服务端是开。
+  const [memoryChoice, setMemoryChoice] = useState<boolean>(false);
+  const [chatMemoryChoice, setChatMemoryChoice] = useState<boolean>(false);
   const [introNickname, setIntroNickname] = useState("");
   const [introSaving, setIntroSaving] = useState(false);
   const [introError, setIntroError] = useState("");
@@ -133,12 +137,19 @@ function App() {
       if (learning.enabled && !learning.connected) throw new Error("请先连接，再保存你的选择。");
       if (learning.connected) {
         await learning.run("consent", { optionalMemory: memoryChoice }, { persist: false });
+        // 自由聊的自动记忆是另一套机制（从聊天里自动整理），单独征询一次。
+        // 写失败就保持服务端默认（关），不会反过来变成默认开。
+        if (!s.introBackup) {
+          await apiRequest("free-chat/settings", { autoRemember: chatMemoryChoice }).catch(() => {});
+        }
         const nickname = introNickname.trim();
         if (nickname || s.grade) {
           void apiRequest("free-chat/profile/basic", { nickname, grade: s.grade }).catch(() => {});
         }
       }
-      patch({ necessary: true, longMemory: memoryChoice, onboarded: true, introBackup: undefined, page: "home", tab: "小N" });
+      // 连上服务时服务端的 consent 才是真相源，本地不再留影子值；离线才写本地那份。
+      if (!learning.connected) patch({ longMemory: memoryChoice });
+      patch({ necessary: true, onboarded: true, introBackup: undefined, page: "home", tab: "小N" });
       window.history.replaceState(
         { ...window.history.state, page: "home", tab: "小N" },
         "",
@@ -148,6 +159,62 @@ function App() {
     finally { setIntroSaving(false); }
   };
   const account = useContext(AccountContext);
+  // 改密：服务端会作废这个手机号的全部登录令牌，再给这台设备发一个新的。
+  // 家长改完密码，别处登录的旧令牌立刻失效——此前没有这个能力。
+  const changePassword = async () => {
+    if (accountBusy) return;
+    setAccountBusy(true); setAccountError(""); setAccountNotice("");
+    try {
+      await apiRequest("auth/password", { oldPassword, newPassword });
+      setOldPassword(""); setNewPassword("");
+      setAccountNotice("密码改好了。其它设备上的登录已经失效，这台设备继续用。");
+    } catch (e) {
+      setAccountError(e instanceof Error ? e.message : "没能改成功，请再试一次");
+    } finally { setAccountBusy(false); }
+  };
+  const logoutOtherDevices = async () => {
+    if (accountBusy) return;
+    setAccountBusy(true); setAccountError(""); setAccountNotice("");
+    try {
+      const r = await apiRequest<{ revoked: number }>("auth/logout-all", {});
+      setAccountNotice(`已退出其它 ${r.revoked} 台设备，这台还在登录。`);
+    } catch (e) {
+      setAccountError(e instanceof Error ? e.message : "没能退出，请再试一次");
+    } finally { setAccountBusy(false); }
+  };
+  /** 导出我的数据：拿到的副本直接存成 JSON 文件，自己留着。 */
+  const exportMyData = async () => {
+    if (dataBusy) return;
+    setDataBusy(true); setAccountError(""); setAccountNotice("");
+    try {
+      const data = await apiRequest<Record<string, unknown>>("account/export");
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `学伴小N-我的数据-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setAccountNotice("已经导出成文件了。里面是这个账号、小N 记下的事和全部学习记录。");
+    } catch (e) {
+      setAccountError(e instanceof Error ? e.message : "没能导出，请再试一次");
+    } finally { setDataBusy(false); }
+  };
+  /** 删除账号和全部数据：不可逆，所以要明文确认并验密码。 */
+  const deleteMyAccount = async () => {
+    if (dataBusy) return;
+    setDataBusy(true); setAccountError(""); setAccountNotice("");
+    try {
+      await apiRequest("account/delete", {
+        confirmation: "删除我的账号和全部数据",
+        password: deletePassword,
+      });
+      clearAccountCache();
+      window.location.replace("/");
+    } catch (e) {
+      setAccountError(e instanceof Error ? e.message : "没能删除，请再试一次");
+      setDataBusy(false);
+    }
+  };
   const learningPages = ["chat","explore","task","growth","report","plan","today","review","memory"];
   const [s, dispatch] = useReducer(reducer, null, () => {
     try {
@@ -163,6 +230,10 @@ function App() {
       };
     }
   });
+  // 记忆开关的真相源（2026-11-21）。以前本地和服务端各存一份，设置页那个开关只改本地，
+  // 于是同一页上开关和徽标能互相矛盾，服务端还照旧按"开启"采集记忆。
+  // 连上服务时以服务端的 consent 为准；只有离线原型（learning.enabled 为 false）才用本地那份。
+  const longMemoryOn = learning.enabled ? !!learning.view?.optionalMemory : s.longMemory;
   const [memories, setMemories] = useState<Memory[]>(() => {
     try {
       return JSON.parse(localStorage.getItem(MEMORY_KEY) || "[]");
@@ -179,7 +250,18 @@ function App() {
     [submitting, setSubmitting] = useState(false),
     [helpFail, setHelpFail] = useState(false),
     [editing, setEditing] = useState<string | null>(null),
-    [editText, setEditText] = useState("");
+    [editText, setEditText] = useState(""),
+    // 账号安全（2026-11-21 新增）：改密码、退出其它设备。
+    [oldPassword, setOldPassword] = useState(""),
+    [newPassword, setNewPassword] = useState(""),
+    [accountNotice, setAccountNotice] = useState(""),
+    [accountError, setAccountError] = useState(""),
+    [accountBusy, setAccountBusy] = useState(false),
+    // 我的数据（2026-11-21 加）：导出与删除。审查发现记忆治理红线第 7 条命中 ——
+    // 界面有查看和删除，却没有导出，也没有账号级删除。
+    [dataBusy, setDataBusy] = useState(false),
+    [deletePassword, setDeletePassword] = useState(""),
+    [deleteConfirm, setDeleteConfirm] = useState("");
   const submitLock = useRef(false),
     taskTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const patch = (p: Partial<State>) => dispatch({ type: "patch", patch: p });
@@ -388,7 +470,6 @@ function App() {
     if (learning.enabled) void learning.pause().catch(()=>{});
     patch({
       rest: true,
-      chatStatus: s.chatStatus === "waiting" ? "paused" : s.chatStatus,
       page: "home",
       tab: "小N",
     });
@@ -405,7 +486,6 @@ function App() {
       dispatch({ type: "pause", id: s.activeTask });
     patch({
       safety: true,
-      chatStatus: s.chatStatus === "waiting" ? "paused" : s.chatStatus,
       page: s.page,
       tab: s.tab,
     });
@@ -472,7 +552,7 @@ function App() {
     if (s.onboarded && !learning.view.consentConfigured && !learning.busy) void learning.run('consent',{optionalMemory:s.longMemory},{persist:false}).catch(()=>{});
     // 反过来：服务端已有 consent（这个账号早就完成过引导，只是这台浏览器没有本地进度，
     // 比如换设备登录、清过本地数据）：直接进入小N，不再重走监护人确认和记忆选择。
-    if (!s.onboarded && learning.view.consentConfigured) patch({ onboarded: true, longMemory: learning.view.optionalMemory, page: "home", tab: "小N" });
+    if (!s.onboarded && learning.view.consentConfigured) patch({ onboarded: true, page: "home", tab: "小N" });
   },[s.onboarded,learning.connected,learning.view?.consentConfigured]);
   const report = observations(s),
     plan = planDraft(s),
@@ -539,7 +619,19 @@ function App() {
             </p>
             <button
               className="primary wide"
-              onClick={() => patch({ guardian: "complete" })}
+              onClick={() => {
+                patch({ guardian: "complete" });
+                // 同意要留痕（2026-11-21）：版本、时间、操作者记在服务端，家长以后查得到。
+                // 演示版的「监护人」由学生本人代演，所以 actor 记 student，界面上说清楚。
+                void apiRequest("guardian/consent", {
+                  operationId: newOperationId(),
+                  agreementVersion: GUARDIAN_AGREEMENT_VERSION,
+                  actor: "student",
+                  decision: "granted",
+                  scope: ["learning_overview"],
+                  note: "监护人确认演示（由学生代演，未做身份核验）",
+                }).catch(() => setToast("同意已记在这台设备上，但没能存到服务端。"));
+              }}
             >
               模拟监护人阅读并确认
             </button>
@@ -631,19 +723,45 @@ function App() {
           </div>
         </div>
 
+        {/* 重进引导时不再出现这一格：自由聊自动记忆是「成长 · 我的档案」里的独立开关，
+            这里重写会覆盖学生自己明确开过的选择。只在首次进入时征询。 */}
+        {!s.introBackup && (
         <div className="onboard-memory-card">
           <div className="onboard-memory-head">
             <div>
-              <strong>让小N记住我的学习偏好</strong>
+              <strong>让小N 从聊天里记住我</strong>
               <p className="small muted">
-                记住你聊过的小事与适合你的讲法，随时可在「成长 · 我的档案」里修改、删除或关闭。
+                从你们的聊天里整理你提过的小事（兴趣、近况），放进「成长 · 我的档案」。随时可以改、删或关掉。
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={chatMemoryChoice}
+              aria-label="让小N 从聊天里记住我"
+              className="ui-switch"
+              disabled={introSaving}
+              onClick={() => setChatMemoryChoice((v) => !v)}
+            >
+              <span className="ui-switch-thumb" />
+            </button>
+          </div>
+        </div>
+        )}
+
+        <div className="onboard-memory-card">
+          <div className="onboard-memory-head">
+            <div>
+              <strong>让小N记住我的辅导偏好</strong>
+              <p className="small muted">
+                只记住你自己确认过的学习偏好（比如讲题一次只讲一步），只用于辅导，不记别的。
               </p>
             </div>
             <button
               type="button"
               role="switch"
               aria-checked={memoryChoice}
-              aria-label="让小N记住我的学习偏好"
+              aria-label="让小N记住我的辅导偏好"
               className="ui-switch"
               disabled={introSaving}
               onClick={() => setMemoryChoice((v) => !v)}
@@ -786,7 +904,7 @@ function App() {
             )}
             {s.storageNotice && <div className="notice">{s.storageNotice}</div>}
             <LearningStatus l={learning} />
-            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；{account.phone?"它跟你的手机号账号绑定，换手机登录同一个号还能接着用。":"它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。"}真实模型会向智谱发送本次需要的学习内容和获准记忆。对话原文也会保存在你的学习记录里，可以在首页下方的“对话记录”回看。你和小N的对话存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
+            {learning.enabled && (s.page === "privacy" || s.page === "settings") && <div className="notice learning-disclosure">学习记录保存在服务器上只属于你的空间里，别人看不到，也清不掉；{account.phone?"它跟你的手机号账号绑定，换手机登录同一个号还能接着用。":"它和这个浏览器绑定，清除浏览器数据或换手机后就找不回了。"}对话原文也会保存在你的学习记录里，可以在首页下方的"对话记录"回看。你和小N的对话存在你的空间里，小N 会从中整理出兴趣、近况这类小事放进「成长 · 我的档案」，你可以改、删或关掉。你可以查看记录、管理记忆或清空自己的记录。{learning.disclosure&&<p>{learning.disclosure}</p>}{devMode && <p>每个匿名身份一个独立 SQLite，浏览器缓存草稿。</p>}</div>}
             <main className={`page page-${s.page}`}>
               {learning.enabled && s.page !== "chat" && learningPages.includes(s.page) && <LearningPages l={learning} page={s.page} navigate={navigate} onExploreDimension={(index)=>openModal(`dimension-${index}`)} safety={s.safety} station={station} onStation={(m)=>m?openStation(m):closeStation()} />}
               {/* 首页小N就是自由聊，切页只隐藏：还在等的回复回来照样接上；不再挂载旧多智能体 ChatPanel。 */}
@@ -1795,6 +1913,102 @@ function App() {
                     </div>
                     <Tag>{account.phone ? "已登录" : "本地演示"}</Tag>
                   </div>
+                  {account.phone && (
+                    <div className="settings-group">
+                      <div>
+                        <strong>账号安全</strong>
+                        <p className="small muted">
+                          登录令牌最长 30 天。改密码会把别的设备全部踢下线。
+                        </p>
+                      </div>
+                      <label className="field">
+                        原密码
+                        <input
+                          type="password"
+                          autoComplete="current-password"
+                          value={oldPassword}
+                          onChange={(e) => setOldPassword(e.target.value)}
+                        />
+                      </label>
+                      <label className="field">
+                        新密码（至少 6 位）
+                        <input
+                          type="password"
+                          autoComplete="new-password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                        />
+                      </label>
+                      <button
+                        className="secondary wide"
+                        disabled={accountBusy || !oldPassword || newPassword.length < 6}
+                        onClick={() => void changePassword()}
+                      >
+                        改密码，并退出其它设备
+                      </button>
+                      <button
+                        className="secondary wide"
+                        disabled={accountBusy}
+                        onClick={() => void logoutOtherDevices()}
+                      >
+                        只退出其它设备
+                      </button>
+                      <div className="settings-subgroup">
+                        <strong>我的数据</strong>
+                        <p className="small muted">
+                          导出把这个账号、小N 记下的事和全部学习记录给一份副本（JSON 文件）。
+                          删除会把账号、登录和服务器上这个人的全部数据删掉，不能恢复。
+                        </p>
+                        <button
+                          className="secondary wide"
+                          disabled={dataBusy}
+                          onClick={() => void exportMyData()}
+                        >
+                          导出我的数据
+                        </button>
+                        <label className="field">
+                          删除需要输入密码
+                          <input
+                            type="password"
+                            autoComplete="current-password"
+                            value={deletePassword}
+                            onChange={(e) => setDeletePassword(e.target.value)}
+                          />
+                        </label>
+                        <button
+                          className="secondary wide danger"
+                          disabled={
+                            dataBusy ||
+                            deleteConfirm !== "删除我的账号和全部数据" ||
+                            !deletePassword
+                          }
+                          onClick={() => void deleteMyAccount()}
+                        >
+                          删除账号和全部数据
+                        </button>
+                        <label className="field">
+                          {deleteConfirm !== "删除我的账号和全部数据"
+                            ? "确认删除请填写：删除我的账号和全部数据"
+                            : "已确认"}
+                          <input
+                            value={deleteConfirm}
+                            placeholder="删除我的账号和全部数据"
+                            onChange={(e) => setDeleteConfirm(e.target.value)}
+                          />
+                        </label>
+                      </div>
+                      {accountNotice && (
+                        <p className="notice" role="status">
+                          {accountNotice}
+                        </p>
+                      )}
+                      {accountError && (
+                        <p className="notice error" role="alert">
+                          {accountError}
+                        </p>
+                      )}
+                    </div>
+                  )}
                   <div className="settings-group">
                     {[
                       {
@@ -1875,7 +2089,7 @@ function App() {
                   <div className="settings-group">
                     <button
                       onClick={() => {
-                        setMemoryChoice(s.longMemory); setIntroError("");
+                        setMemoryChoice(longMemoryOn); setIntroError("");
                         const { age, grade, book, necessary, guardian, research } = s;
                         patch({
                           onboarded: false,
@@ -1922,12 +2136,18 @@ function App() {
                   <Toggle
                     title="跨会话长期记忆"
                     description={
-                      s.longMemory
+                      longMemoryOn
                         ? "已开启。只记录你主动分享的偏好和任务表现，不保存短期情绪标签。"
                         : "已关闭。已有条目不再供后续使用，也不会新增长期条目。作答进度仍独立保存在本机。"
                     }
-                    checked={s.longMemory}
-                    onChange={() => patch({ longMemory: !s.longMemory })}
+                    checked={longMemoryOn}
+                    onChange={() =>
+                      learning.enabled
+                        ? void learning
+                            .run("consent", { optionalMemory: !longMemoryOn }, { persist: false })
+                            .catch(() => {})
+                        : patch({ longMemory: !s.longMemory })
+                    }
                   />
                   {(
                     [
@@ -1945,7 +2165,7 @@ function App() {
                           .map((m) => (
                             <article key={m.id}>
                               <Tag>
-                                {s.longMemory && m.active
+                                {longMemoryOn && m.active
                                   ? "正在使用"
                                   : "已停止使用"}
                               </Tag>
@@ -2038,7 +2258,7 @@ function App() {
                   ))}
                   <button
                     className="secondary wide"
-                    disabled={!s.longMemory}
+                    disabled={!longMemoryOn}
                     onClick={() =>
                       remember({
                         id: "preference-demo",
@@ -2055,7 +2275,7 @@ function App() {
                   <button
                     className="secondary wide"
                     disabled={
-                      !s.longMemory || !report.some((o) => o.basis.length)
+                      !longMemoryOn || !report.some((o) => o.basis.length)
                     }
                     onClick={() => {
                       const o = report.find((o) => o.basis.length)!;
@@ -2113,7 +2333,7 @@ function App() {
                     </div>
                     <div>
                       <strong>跨会话长期记忆 · 可选</strong>
-                      <Tag>{(learning.enabled ? learning.view?.optionalMemory : s.longMemory) ? "开启" : "关闭"}</Tag>
+                      <Tag>{longMemoryOn ? "开启" : "关闭"}</Tag>
                       <p>由你确认后记住生活小事、兴趣和有用的方法。关闭后不提议记住，也不主动提起；对话小结等学习记录仍会保存。</p>
                       <button onClick={() => navigate("memory")}>
                         管理记忆与开关 <ArrowRight size={15} />
@@ -2394,6 +2614,36 @@ function App() {
                     这是权限设计演示。前端切换页面没有实现真实身份核验或数据访问隔离。
                   </SectionHeading>
                   {guardianPanel()}
+                  {/* 同意流水（2026-11-21）：服务端记下来的「谁、什么时候、按哪一版同意了什么」。 */}
+                  {learning.view && learning.view.guardianConsents.length > 0 && (
+                    <div className="guardian-overview">
+                      <h2>同意流水</h2>
+                      <Tag>服务端留痕 · 可在「导出我的数据」里一并拿到</Tag>
+                      <ul className="guardian-consent-log">
+                        {learning.view.guardianConsents.map((c) => (
+                          <li key={c.id}>
+                            <strong>
+                              {
+                                {
+                                  granted: "已同意",
+                                  declined: "已拒绝",
+                                  revoked: "已撤回",
+                                }[c.decision]
+                              }
+                            </strong>
+                            <span>
+                              同意书 v{c.agreementVersion} ·{" "}
+                              {c.actor === "guardian" ? "监护人" : "学生代演"} ·{" "}
+                              {new Date(c.at).toLocaleString("zh-CN", {
+                                timeZone: "Asia/Shanghai",
+                              })}
+                            </span>
+                            {c.note && <small>{c.note}</small>}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   {learning.enabled && learning.view ? (
                     <GuardianOverview view={learning.view} />
                   ) : (
@@ -2486,7 +2736,7 @@ function App() {
                         {s.rightsScope === "涉及敏感内容的查阅请求"
                           ? "结果：需进一步核实必要性与权限，没有直接展示敏感倾诉内容。"
                           : s.rightsScope === "授权状态与保存规则"
-                            ? `演示结果：长期记忆${s.longMemory ? "开启" : "关闭"}；研究用途${s.research ? "选择授权演示" : "关闭"}。内容保留在本机，直至主动删除。`
+                            ? `演示结果：长期记忆${longMemoryOn ? "开启" : "关闭"}；研究用途${s.research ? "选择授权演示" : "关闭"}。内容保留在本机，直至主动删除。`
                             : learning.enabled && learning.view
                               ? (() => {
                                   const o = guardianDigest(learning.view).overview;

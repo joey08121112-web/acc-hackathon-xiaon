@@ -3,10 +3,11 @@ import { createHash } from 'node:crypto';
 import { mkdirSync,chmodSync } from 'node:fs';
 import { dirname } from 'node:path';
 import type { z } from 'zod';
-import { schemas,type EntityMap,type LearningRepository } from '../../shared/learning-contracts';
+import { schemas,SCHEMA_VERSION,type EntityMap,type LearningRepository } from '../../shared/learning-contracts';
 import { RuntimeError } from '../core/errors';
+import { applyMigrations,ensureColumn,type Migration } from './migrate';
 export const entitySchemas = {
- tasks:schemas.TaskDefinition,generations:schemas.GenerationRecord,sessions:schemas.LearningSession,sessionEvents:schemas.SessionEvent,attempts:schemas.Attempt,exposures:schemas.ExposureEvent,gradings:schemas.GradingResult,evidence:schemas.Evidence,skills:schemas.SkillState,assessments:schemas.AssessmentSnapshot,reviewPolicies:schemas.ReviewPolicy,reviewItems:schemas.ReviewItem,reviewOutcomes:schemas.ReviewOutcome,reports:schemas.ReportSnapshot,proposals:schemas.PlanProposal,plans:schemas.PlanVersion,memories:schemas.MemoryItem,consents:schemas.ConsentState,toolCalls:schemas.ToolCall,runs:schemas.AgentRun,stuckPoints:schemas.StuckPoint,
+ tasks:schemas.TaskDefinition,generations:schemas.GenerationRecord,sessions:schemas.LearningSession,sessionEvents:schemas.SessionEvent,attempts:schemas.Attempt,exposures:schemas.ExposureEvent,gradings:schemas.GradingResult,evidence:schemas.Evidence,skills:schemas.SkillState,assessments:schemas.AssessmentSnapshot,reviewPolicies:schemas.ReviewPolicy,reviewItems:schemas.ReviewItem,reviewOutcomes:schemas.ReviewOutcome,guardianConsents:schemas.GuardianConsent,reports:schemas.ReportSnapshot,proposals:schemas.PlanProposal,plans:schemas.PlanVersion,memories:schemas.MemoryItem,consents:schemas.ConsentState,toolCalls:schemas.ToolCall,runs:schemas.AgentRun,stuckPoints:schemas.StuckPoint,
  // G0 首页改版. problemSecrets is server-only: never listed by the coordinator view().
  problems:schemas.ProblemRecord,problemSecrets:schemas.ProblemSecret,episodes:schemas.LearningEpisode,progressCards:schemas.ProgressCard,memoryMentions:schemas.MemoryMention,memoryOffers:schemas.MemoryOffer,observations:schemas.ChatObservation,summaries:schemas.ConversationSummary,chatTurns:schemas.ChatTurn,
  // 生活话题观察（2026-10-24）：场景推进记录
@@ -16,8 +17,13 @@ export const entitySchemas = {
  // G2 第二期：专业模式. Learning records (not subject to the memory switch); interviews and monthStages are revisioned like episodes.
  interviews:schemas.InterviewSession,interviewTurns:schemas.InterviewTurn,professionalReports:schemas.ProfessionalReport,monthStages:schemas.MonthStage,
 } satisfies {[K in keyof EntityMap]:z.ZodType<EntityMap[K]>};
-/** Append-only revisions: key id:r<revision>; get() returns the latest. */
-const revisioned=new Set<keyof EntityMap>(['reviewItems','episodes','interviews','monthStages']);
+/** Append-only revisions: key id:r<revision>; get() returns the latest.
+ *  2026-11-21：改成从契约派生。带 revision 字段的实体就是版本化的 —— 人肉维护的清单漏加一条，
+ *  表现是「新版本盖掉了旧版本」这种静默冲突，比报错难查得多。 */
+const revisioned=new Set<keyof EntityMap>(
+ (Object.entries(entitySchemas) as [string,{shape:Record<string,unknown>}][])
+  .filter(([,schema])=>'revision' in schema.shape)
+  .map(([name])=>name as keyof EntityMap));
 function canonical(value:unknown):string {
  if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';
  if(value!==null&&typeof value==='object')return '{'+Object.entries(value).sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>JSON.stringify(k)+':'+canonical(v)).join(',')+'}';
@@ -25,33 +31,42 @@ function canonical(value:unknown):string {
 }
 export const hash=(value:unknown)=>createHash('sha256').update(canonical(value)).digest('hex');
 /** No SQL, file or deletion capability is exposed as a model tool. */
+/** 迁移清单。版本号连续；加一条就把版本加一，别跳号。
+ *  集合表是「加法式」的：v1 的建表循环按 entitySchemas 全量建好，后来新增的集合也在这条循环里，
+ *  所以 v2 之后多数只是记账。真正需要写代码的，是改列、改索引这类不能靠建表循环完成的迁移。 */
+export const MIGRATIONS:Migration[]=[
+ {version:1,note:'v1：分集合的追加式表 + 幂等回执表（operations）',up(db){
+   for(const name of Object.keys(entitySchemas))db.exec(`CREATE TABLE IF NOT EXISTS ${name}(key TEXT PRIMARY KEY,id TEXT NOT NULL,data TEXT NOT NULL CHECK(json_valid(data)));`);
+   db.exec('CREATE TABLE IF NOT EXISTS operations(id TEXT PRIMARY KEY,request_hash TEXT NOT NULL,result TEXT NOT NULL);');
+ }},
+ {version:2,note:'v2（E1）：generations 表，由 v1 的建表循环创建',up(){}},
+ {version:3,note:'v3（P0）：stuckPoints 表，同上',up(){}},
+ {version:4,note:'v4（G0）：problems…chatTurns 表，同上',up(){}},
+ {version:5,note:'v5（G2）：interviews…monthStages 表，同上',up(){}},
+ {version:6,note:'v6：memoryOffers 表，同上',up(){}},
+ {version:7,note:'v7（2026-10-24）：lifeScenes 表，同上',up(){}},
+ {version:8,note:'v8（2026-10-24）：chatLog 表（对话回放），同上',up(){}},
+ {version:9,note:'v9（2026-11-21）：meta 补 contract_version 列，记录这份数据是按哪版契约写的',up(db){
+   ensureColumn(db,'meta','contract_version','TEXT');
+   db.prepare('UPDATE meta SET contract_version=? WHERE id=1 AND contract_version IS NULL').run(SCHEMA_VERSION);
+ }},
+];
+
 export class SqliteRepository implements LearningRepository {
  private db:DatabaseSync;private depth=0;
  constructor(path:string){
   if(path!==':memory:')mkdirSync(dirname(path),{recursive:true,mode:0o700});
   this.db=new DatabaseSync(path);if(path!==':memory:')chmodSync(path,0o600);
   this.db.exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA busy_timeout=3000;');
-  this.db.exec('CREATE TABLE IF NOT EXISTS migrations(version INTEGER PRIMARY KEY); CREATE TABLE IF NOT EXISTS meta(id INTEGER PRIMARY KEY CHECK(id=1),revision INTEGER NOT NULL,evidence_revision INTEGER NOT NULL DEFAULT 0); INSERT OR IGNORE INTO meta VALUES(1,0,0);');
-  // v1: separate typed append-only collections, indexes on JSON reference fields for future B/C queries.
+  this.db.exec('CREATE TABLE IF NOT EXISTS migrations(version INTEGER PRIMARY KEY); CREATE TABLE IF NOT EXISTS meta(id INTEGER PRIMARY KEY CHECK(id=1),revision INTEGER NOT NULL,evidence_revision INTEGER NOT NULL DEFAULT 0,contract_version TEXT); INSERT OR IGNORE INTO meta(id,revision,evidence_revision) VALUES(1,0,0);');
+  // 迁移框架真读（2026-11-21）：之前这张表只写不读，版本号纯给人看。现在版本会被读，
+  // 没跑过的按顺序跑，跑过的跳过；库比代码新就明确报错，不让旧代码静默读新库。
+  applyMigrations(this.db,MIGRATIONS);
+  // 索引是幂等的，每次开库都补齐（不影响数据，也不需要版本号）。
   this.transaction(()=>{
    for(const name of Object.keys(entitySchemas)){
     this.db.exec(`CREATE TABLE IF NOT EXISTS ${name}(key TEXT PRIMARY KEY,id TEXT NOT NULL,data TEXT NOT NULL CHECK(json_valid(data))); CREATE INDEX IF NOT EXISTS ${name}_id ON ${name}(id);`);
    }
-   this.db.exec('CREATE TABLE IF NOT EXISTS operations(id TEXT PRIMARY KEY,request_hash TEXT NOT NULL,result TEXT NOT NULL); INSERT OR IGNORE INTO migrations VALUES(1);');
-   // v2 (E1): additive generations table, created by the loop above; existing rows are untouched.
-   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(2);');
-   // v3 (P0): additive stuckPoints table, created by the same loop.
-   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(3);');
-   // v4 (G0): additive revamp tables (problems … chatTurns), created by the same loop; existing rows are untouched.
-   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(4);');
-   // v5 (G2): additive professional-mode tables (interviews … monthStages), created by the same loop; existing rows are untouched.
-   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(5);');
-   // v6: program-only memory offer events, created by the same additive loop.
-   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(6);');
-   // v7 (2026-10-24): additive lifeScenes table, created by the same additive loop.
-   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(7);');
-   // v8 (2026-10-24): additive chatLog table (对话回放), created by the same additive loop.
-   this.db.exec('INSERT OR IGNORE INTO migrations VALUES(8);');
    for(const table of ['attempts','exposures','gradings','evidence','reviewItems','reviewOutcomes','reports','plans','problems','episodes','progressCards','observations','summaries','chatTurns','lifeScenes','chatLog'])this.db.exec(`CREATE INDEX IF NOT EXISTS ${table}_session ON ${table}(json_extract(data,'$.sessionId')); CREATE INDEX IF NOT EXISTS ${table}_knowledge ON ${table}(json_extract(data,'$.knowledgePointId'));`);
   });
  }

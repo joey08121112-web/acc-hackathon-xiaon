@@ -11,11 +11,18 @@ import type { LearningUI } from '../../src/agents/useLearning';
 import { ProfessionalModeView } from '../../src/components/professional/ProfessionalModeView';
 import { ProfessionalReportView } from '../../src/components/professional/ProfessionalReportView';
 const navigate=()=>{};
-test('entry explains time and order, requires an explicit start, shows the map, and can pause',async()=>{
+test('entry explains order and pause, requires an explicit start, shows the map, and can pause',async()=>{
  const f=temporaryRepository();try{
   const view=await installLearning(createRuntime(f)).view(),l={view,connected:true,busy:false} as LearningUI;
   const html=renderToStaticMarkup(createElement(ProfessionalModeView,{l,navigate,safety:false}));
-  for(const text of ['分钟','开始','随时暂停','理解','逻辑','计算','建模','空间想象','不打总分'])assert.ok(html.includes(text),text);
+  // 2026-11-21：331601a 把入口文案从「大约 10–15 分钟」改为「按自己的节奏」（不再承诺用时），
+  // 「随时暂停」改为「随时可停」，维度名「空间想象」在叙事里改称「空间」。断言对准新契约。
+  for(const text of ['按自己的节奏','五站','随时可停','理解','逻辑','计算','建模','空间','不打总分','开始'])assert.ok(html.includes(text),text);
+  // 五站在入口文案里必须按测评顺序出现（顺序本身是产品承诺，不能只是都出现过）。
+  let cursor=-1;
+  for(const station of ['理解《星溪镇》','逻辑《断桥真伪录》','计算《符号炼金台》','建模《星溪策算司》','空间《星象风车台》']){
+   const at=html.indexOf(station,cursor+1);assert.ok(at>cursor,`顺序：${station}`);cursor=at;
+  }
   view.interviews=[{schemaVersion:'1.0.0',id:'interview-h',operationId:'start-h',revision:3,learningSessionId:'ls-h',moduleOrder:[...INTERVIEW_MODULE_ORDER],currentModule:'计算',completedModules:['理解','逻辑'],status:'paused',pending:null,startedAt:view.now,pausedAt:view.now,completedAt:null,updatedAt:view.now} satisfies InterviewSession];
   const paused=renderToStaticMarkup(createElement(ProfessionalModeView,{l,navigate,safety:false}));
   assert.match(paused,/上次停在：计算/);assert.match(paused,/继续测评/);

@@ -104,7 +104,7 @@ export function CompanionStage({mood,status,subtitle,children,composer,notice,vi
    onPointerDown={down} onPointerMove={move} onPointerUp={e=>release(e)} onPointerCancel={e=>release(e,true)} onClick={e=>{if(e.detail===0)change(!compact,true);}}>
    <div ref={art} className="companion-pet-art"><Mascot mood={mood} look svgRef={portrait}/></div>
   </button>
-  <div className="companion-full-caption" ref={caption} hidden={!visible} aria-hidden={compact}>
+  <div className="companion-full-caption" ref={caption} hidden={!visible} aria-hidden={compact} inert={compact}>
    <div className="companion-wave" ref={bars} aria-hidden="true">{Array.from({length:9},(_,i)=><i key={i}/>)}</div>
    <p>{subtitle}</p>
    <button type="button" className="companion-pull-pill" onClick={()=>change(true)}><ChevronDown size={13}/> 下拉或点此查看聊天记录</button>

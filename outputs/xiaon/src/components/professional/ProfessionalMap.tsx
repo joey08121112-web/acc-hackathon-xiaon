@@ -3,7 +3,7 @@
 import { Check, Compass, Gamepad2, SearchCheck, Store, Wrench } from 'lucide-react';
 import { INTERVIEW_MODULE_ORDER } from '../../../shared/learning-contracts';
 import { MapArt } from '../../Art';
-import { dimensionDetails } from '../../data';
+import { dimensionDetails } from '../../../shared/task-bank';
 import { icons } from '../learning/ExplorationMap';
 
 export type MapModule = (typeof INTERVIEW_MODULE_ORDER)[number];

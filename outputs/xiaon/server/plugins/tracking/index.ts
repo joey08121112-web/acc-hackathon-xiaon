@@ -2,7 +2,7 @@
  * TrendPoint 由 professionalReports 推导：每个点取来源报告自己的等级，月份按报告时间的上海月份算；
  * latest 每月每模块一点、同月多次测评取最近一次，history 保留全部报告的全部模块点，按时间排列。 */
 import { INTERVIEW_MODULE_ORDER,type TrendPoint,type TrendQuery } from '../../../shared/learning-contracts';
-import { shanghaiDate } from '../../../src/learning/review';
+import { shanghaiDate } from '../../../shared/review';
 import type { ProfessionalContext,TrendInput } from '../context';
 const order=new Map(INTERVIEW_MODULE_ORDER.map((m,i)=>[m,i]));
 const key=(p:TrendPoint)=>p.month+'|'+p.module;
