@@ -25,6 +25,9 @@ test("01 首次进入：两个记忆开关默认关闭；监护人确认可失�
   await screenshot(page, "01-onboarding");
   // 当前引导是单屏：昵称 + 年级 chip + 两个记忆开关（默认都关）+ 一个「开始和小N聊」。
   // 改版前这里是「年龄段 + 必须勾选的同意框 + 未满 14 岁要先过监护人确认」三步。
+  // 2026-11-21 产品决定：正式取消「未满 14 岁要先有监护人知情」这道门槛，界面上那句承诺已删
+  // （系统本来就不拦任何东西）。要加回来得先做真实的监护人确认，见审查报告 §F.2。
+  // 本用例断言的是当前行为「没有家长同意也能进入」——门槛取消后它依然是产品该保证的东西。
   for (const t of await page.getByRole("switch").all())
     await expect(t).toHaveAttribute("aria-checked", "false");
   await page.getByRole("button", { name: "开始和小N聊", exact: true }).click();
