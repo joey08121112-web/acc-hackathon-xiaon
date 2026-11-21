@@ -3,7 +3,7 @@ import { temporaryRepository } from '../../server/storage/testing';
 import { GlmProvider } from '../../server/providers/glm';
 import { readGlmConfig } from '../../server/providers/config';
 const config=readGlmConfig();const {apiKey:key,model}=config;
-if(!key){console.log(JSON.stringify({evidenceLevel:'real_model_api',status:'NOT_RUN',reason:'No server-side GLM key configured. No chat credentials requested.',model,baseUrl:config.baseUrl,timeoutMs:config.timeoutMs,maxTokens:config.maxTokens}));process.exit(2);}
+if(!key){console.log(JSON.stringify({evidenceLevel:'real_model_api',status:'NOT_RUN',reason:'No server-side model key configured. No chat credentials requested.',model,baseUrl:config.baseUrl,timeoutMs:config.timeoutMs,maxTokens:config.maxTokens}));process.exit(2);}
 const f=temporaryRepository();const r=createRuntime({...f,provider:new GlmProvider(key,model,fetch,config),modelTimeoutMs:config.timeoutMs});
 try{
  const s=r.events.startSession({operationId:'real-synthetic-session',mode:'support'});r.events.expose({operationId:'real-open',sessionId:s.id,taskId:'bracket',taskVersion:1,kind:'task',hintId:null});r.events.submit({operationId:'real-attempt',sessionId:s.id,taskId:'bracket',taskVersion:1,value:'x+5'});

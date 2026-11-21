@@ -3,9 +3,9 @@ import { createRuntime } from '../../server/bootstrap';
 import { installLearning } from '../../server/agents/learning';
 import { GlmProvider } from '../../server/providers/glm';
 import { readGlmConfig } from '../../server/providers/config';
-// Real GLM, synthetic student sentences only. Prints Tutor message, stage and latency; never credentials.
+// Real model, synthetic student sentences only. Prints Tutor message, stage and latency; never credentials.
 const c = readGlmConfig();
-if (!c.apiKey) { console.log('GLM 未配置'); process.exit(2); }
+if (!c.apiKey) { console.log('模型未配置'); process.exit(2); }
 const runtime = createRuntime({ databasePath: ':memory:', provider: new GlmProvider(c.apiKey, c.model, fetch, c), modelTimeoutMs: c.timeoutMs });
 const learning = installLearning(runtime);
 type H = { role: 'user' | 'assistant'; content: string }[];

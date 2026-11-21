@@ -9,7 +9,7 @@
 | 组成 | 位置 | 作用 |
 |---|---|---|
 | 前端静态文件 | `npm run build` 产出的 `dist/` | 浏览器里跑的页面 |
-| Node 后端 | `server/`，默认端口 18920 | 提供 `/api/*`，替浏览器调用智谱 GLM，密钥只在这里 |
+| Node 后端 | `server/`，默认端口 18920 | 提供 `/api/*`，替浏览器调用 MiniMax 模型，密钥只在这里 |
 | SQLite 数据库 | `.local/*.sqlite` | 学习记录（单个学生） |
 
 前端只请求「自己这个网址下的 `/api/...`」，所以**页面和 API 必须同源**。开发时由 Vite 把 `/api` 转给后端；部署时让 Node 自己托管 `dist/`，一个进程搞定，不需要再配 Nginx。
@@ -36,7 +36,7 @@
 
 Railway 新账号送 **30 天试用 + $5 一次性额度**，用 GitHub 登录即可，**不需要信用卡**（[$5 试用额度够这个小服务跑数周](https://docs.railway.com/pricing/free-trial)，本次比赛全程免费）。试用与付费版功能基本一致：支持 Docker 部署、公网域名、持久卷。国内直连 `*.up.railway.com` 域名 2026-10-21 实测连通正常（首次字节约 1.1 秒）。
 
-> **必须用 GitHub 账号登录**：未通过 GitHub 验证的「受限试用」会限制出站网络，服务将连不上智谱 API，模型模式直接失效（降级为本地规则回复）。
+> **必须用 GitHub 账号登录**：未通过 GitHub 验证的「受限试用」会限制出站网络，服务将连不上模型 API，模型模式直接失效（降级为本地规则回复）。
 
 1. 确认 GitHub 仓库 `joey08121112-web/acc-hackathon-xiaon` 已包含本次改动（`outputs/xiaon/Dockerfile` 存在即可）。
 2. 打开 [railway.com](https://railway.com)，用 GitHub 账号登录，即获完整试用。
@@ -45,14 +45,16 @@ Railway 新账号送 **30 天试用 + $5 一次性额度**，用 GitHub 登录�
 5. **Variables（环境变量）**逐条添加（值从本机 `outputs/xiaon/.env.server` 复制，不要截图或粘进聊天）：
 
    ```
-   XIAON_GLM_API_KEY      = <你的 Coding Plan Key>
-   XIAON_GLM_MODEL        = glm-5.3-flash
-   XIAON_GLM_BASE_URL     = https://open.bigmodel.cn/api/coding/paas/v4
+   XIAON_GLM_API_KEY      = <你的 MiniMax 订阅 Key>
+   XIAON_GLM_MODEL        = MiniMax-M3.1-Flash
+   XIAON_GLM_BASE_URL     = https://api.minimax.cn/v1
    XIAON_GLM_TIMEOUT_MS   = 120000
-   XIAON_GLM_MAX_TOKENS   = 8192
+   XIAON_GLM_MAX_TOKENS   = 16384
    ```
 
    可选：`XIAON_GLM_HEDGE_MS`（默认 20000）——单次请求超过这么久没回就自动再发一次，用先回来的那个；设 0 关闭。
+   可选：`XIAON_GLM_REASONING_EFFORT`（MiniMax 专用，low/medium/high/xhigh/max，留空由服务端决定）——思考深度越高越慢越贵。
+   不要设 `XIAON_GLM_THINKING`：那是智谱 GLM 专用的，MiniMax 收到 `thinking.type=disabled` 会直接 400（改用智谱时才设 disabled）。
 
    `XIAON_API_HOST` / `XIAON_API_PORT` / `XIAON_STATIC_DIR` / `XIAON_DB_PATH` 已在 Dockerfile 里写好。
 6. （可选，建议）按第 9 节给服务添加 Volume（Mount Path `/data`），学习记录在重新部署后保留。不加也能正常运行，只是每次重新部署记录清空——对比赛演示反而合适（见第 7 节）。
@@ -73,7 +75,7 @@ Railway 新账号送 **30 天试用 + $5 一次性额度**，用 GitHub 登录�
 6. 开启公网访问/默认域名，得到 `https://xiaon-xxxx.sh.app.tcloudbase.com`。
 7. 回环境变量加 `XIAON_PUBLIC_ORIGIN = 该域名`（一字不差、无末尾斜杠），重新部署。
 8. 按第 6 节自检。**若首页 403 而 `/api/health` 正常**：网关未传 `X-Forwarded-Host`，补一条 `XIAON_ALLOWED_ORIGINS = https://该域名` 再重部署。
-9. 控制台如有「请求超时」，调到 ≥120 秒（GLM 回复上限 120s）。
+9. 控制台如有「请求超时」，调到 ≥120 秒（模型回复上限 120s）。
 
 与 Railway 的差异：无持久卷，SQLite 随重新部署/缩容清空（演示期反而合适）；其余同第 7 节。
 
@@ -123,7 +125,7 @@ cd outputs/xiaon
   - 删除：`POST /api/account/delete`，要带 `confirmation:"删除我的账号和全部数据"`；
     手机号账号还要密码（`password`）。删的是账号记录、全部登录令牌、这个人的整个 SQLite 库文件（含 WAL 残留）。
     不可逆，没有回收站。
-- **Coding Plan Key**：这个套餐面向个人编程工具，限流按一个人设计。几位评委体验没问题；若要长期对外开放，先核实套餐条款，或换标准 API Key（基址改为 `https://open.bigmodel.cn/api/paas/v4`）。
+- **订阅 Key（`sk-cp-` 开头）**：这个套餐面向个人编程工具，限流按一个人设计。几位评委体验没问题；若要长期对外开放，先核实套餐条款，或换按量付费的标准 API Key（基址不变，仍是 `https://api.minimax.cn/v1`，只是 Key 类型不同）。
 - **HTTPS 是硬要求**：前端用到的 `crypto.randomUUID()` 只在 HTTPS 或 localhost 下可用，裸 IP 的 http 地址会直接报错。上面三种方式都自带 HTTPS。
 - `.env.server`、`.local/`、`dist/` 已被 `.gitignore` 和 `.dockerignore` 排除，不会进仓库或镜像。
 

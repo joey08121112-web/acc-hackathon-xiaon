@@ -27,13 +27,13 @@
 **形态**：手机竖屏网页 + Node 后端 + 每账号独立 SQLite。手机号+密码登录，先登录再进应用（`XIAON_REQUIRE_LOGIN=0` 可退回匿名模式）。
 
 **核心能力**：
-- 首页语音自由聊（豆包 ASR → 智谱 GLM → 豆包 TTS）+「成长·我的档案」+ 自动记忆整理；
+- 首页语音自由聊（豆包 ASR → MiniMax M3.1-Flash → 豆包 TTS）+「成长·我的档案」+ 自动记忆整理；
 - 专业模式：五维结构化测评 + 受控出题（两个知识点的白名单模板）+ `record_stuck_point` / `select_task` / `get_hint` / `grade_attempt` 工具链；
 - 五站互动游戏「星溪探索世界」：理解《星溪镇》→ 逻辑《断桥真伪录》→ 计算《符号炼金台》→ 建模《星溪策算司》→ 空间《星象风车台》，评价摘要写入学生档案；
 - 记忆治理：fc_epoch 双代次、敏感词表、原话证据门、删除/停用/更正/复活证据门（R1–R6 已修复）；
 - `outputs/nova-group-website/`：独立 NOVA 静态官网（零构建，与主应用无关）。
 
-**模型分工口径**（对外讲解）：豆包=耳朵和嘴巴（ASR/TTS），智谱 GLM=大脑（对话、判题、出题、报告）。
+**模型分工口径**（对外讲解）：豆包=耳朵和嘴巴（ASR/TTS），MiniMax M3.1-Flash=大脑（对话、判题、出题、报告）。
 
 ## 2. 仓库地图
 
@@ -99,7 +99,7 @@ npm run test:all          → exit 0（含 build + build:server）
 - 手机号+密码登录（2026-11-01 上线；更早「不做登录」的结论已作废，以现行代码为准）；
 - 30 分钟体验时限已于 10-30 **整体撤除**（代码删净、线上休眠），不要以为它还在；
 - R1–R6 记忆治理修复已入库，重构别弱化；
-- 对外分工口径：豆包=耳朵嘴巴、智谱=大脑。
+- 对外分工口径：豆包=耳朵嘴巴、MiniMax=大脑。
 
 ### 4.4 未决事项（用户知道、尚未拍板）
 
@@ -146,12 +146,12 @@ npm run dev:learning          # UI http://127.0.0.1:5194 / API 18931，均仅 lo
 
 | 用途 | 变量 | 关键值 |
 |---|---|---|
-| 对话/判题/出题（大脑） | `XIAON_GLM_*` | 基址 https://open.bigmodel.cn/api/coding/paas/v4，模型 glm-5.3-flash |
+| 对话/判题/出题（大脑） | `XIAON_GLM_*` | 基址 https://api.minimax.cn/v1，模型 MiniMax-M3.1-Flash（2026-11-21 由智谱 GLM 切来，详见[切换记录](2026-11-21-模型供应商切换-MiniMax-M3.1-Flash.md)） |
 | 语音合成（嘴巴） | `XIAON_DOUBAO_TTS_*` | seed-tts-2.0，新控制台 X-Api-Key |
 | 语音识别（耳朵） | `XIAON_DOUBAO_ASR_*` | stream 模式 seedasr，单句录完再识别（实测 0.78–1.46s）；双向流式不建议 |
 | 公网部署开关 | XIAON_STATIC_DIR / XIAON_PUBLIC_ORIGIN / XIAON_API_HOST | 三项不设=只认本机；见 DEPLOY.md §2 |
 
-**红线**：用户只有 GLM Coding Plan Key（基址 `/api/coding/paas/v4`）。标准 API Key（`/api/paas/v4`）与 Coding Plan Key 不能混用基址；不要仅改基址混用不同类型 Key。产品化时需确认 Coding Plan 套餐适用范围。
+**红线**：用户现在用的是 MiniMax 订阅 Key（`sk-cp-` 开头，OpenAI 兼容端点 `https://api.minimax.cn/v1`）。**不要给 MiniMax 发 `thinking.type=disabled`**（会 400，要省思考时间用 `XIAON_GLM_REASONING_EFFORT` 降档，但降档会让 PlannerReporter 的 `statementIndexes` 更容易越界）。不同类型 Key（订阅/按量付费）不能混用；产品化时需确认套餐适用范围。
 
 ## 7. 线上部署概要
 

@@ -78,7 +78,7 @@ test('小结失败可重试，问候失败回退；输入框在缩小视口可�
 test('开发者开关默认关；隐私列出记录类型；旧 chat 导航回首页',async({page})=>{
  await ready(page);await page.getByRole('button',{name:'我的与设置',exact:true}).click();
  const toggle=page.getByRole('switch',{name:'评委 / 开发者模式'});await expect(toggle).toHaveAttribute('aria-checked','false');await toggle.click();await expect(page.getByLabel('服务模式')).toBeVisible();await toggle.click();await expect(page.getByLabel('服务模式')).toHaveCount(0);
- await page.getByRole('button',{name:/信息与授权 必要用途/}).click();for(const text of ['对话观察','对话小结','进步卡','错题记录','智谱'])await expect(page.getByText(new RegExp(text)).first()).toBeVisible();
+ await page.getByRole('button',{name:/信息与授权 必要用途/}).click();for(const text of ['对话观察','对话小结','进步卡','错题记录','MiniMax'])await expect(page.getByText(new RegExp(text)).first()).toBeVisible();
  await page.evaluate(key=>{const s=JSON.parse(localStorage.getItem(key)!);s.page='chat';localStorage.setItem(key,JSON.stringify(s));},PROGRESS_KEY);await page.reload();await expect(page).toHaveURL(/#home$/);await expect(page.getByRole('textbox',{name:'对小N说'})).toBeVisible();
 });
 

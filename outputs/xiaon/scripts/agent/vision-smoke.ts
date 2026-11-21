@@ -1,7 +1,7 @@
 import { chromium } from '@playwright/test';
 import { readGlmConfig } from '../../server/providers/config';
 // Vision smoke for stage 0 (zCode route): render the synthetic worksheet from Upload.tsx's
-// sample with a real browser, send the JPEG to glm-5.3-flash once, and report status only.
+// sample with a real browser, send the JPEG to the configured model once, and report status only.
 // Never logs the key or the image bytes. No key -> exit 2 with 未运行 (never faked as passed).
 const config = readGlmConfig();
 if (!config.apiKey) { console.log(JSON.stringify({ status: '未运行', reason: 'XIAON_GLM_API_KEY 未配置' })); process.exit(2); }

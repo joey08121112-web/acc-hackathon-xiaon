@@ -28,13 +28,13 @@ XIAON_API_TARGET=http://127.0.0.1:18931 npm run dev -- --host 127.0.0.1 --port 5
 
 ## 模型与数据用途
 
-`.env.server` 只在服务端读取，沿用 `.env.example` 的 XIAON_GLM_API_KEY / XIAON_GLM_MODEL / XIAON_GLM_BASE_URL / TIMEOUT_MS / MAX_TOKENS。默认 glm-5.3-flash；按A阶段用户确认保留个人Coding Plan基址；不把Key写到VITE变量、聊天或前端。未配置Key时明确显示本地规则，程序评分、证据、报告、计划和复习仍可运行，需要开放解释分析的部分保留待核查。synthetic只在显式测试夹具中启用。
+`.env.server` 只在服务端读取，沿用 `.env.example` 的 XIAON_GLM_API_KEY / XIAON_GLM_MODEL / XIAON_GLM_BASE_URL / TIMEOUT_MS / MAX_TOKENS。默认模型已切到 MiniMax M3.1-Flash（基址 `https://api.minimax.cn/v1`，OpenAI 兼容端点，2026-11-21 改）。`XIAON_GLM_*` 是历史前缀，现在读作「服务端模型供应商」；改供应商只改 MODEL + BASE_URL，并按对方协议调两个思考开关：`XIAON_GLM_REASONING_EFFORT`（MiniMax 专用，low/medium/high/xhigh/max，留空由服务端决定）和 `XIAON_GLM_THINKING`（只给智谱 GLM 用 disabled，MiniMax 收到 disabled 会直接 400，所以默认不发）。不把Key写到VITE变量、聊天或前端。未配置Key时明确显示本地规则，程序评分、证据、报告、计划和复习仍可运行，需要开放解释分析的部分保留待核查。synthetic只在显式测试夹具中启用。
 
 首页与底部自由聊共用 `/api/free-chat`，只发送自由聊提示词、个人档案摘要和最近 20 条消息，不调用旧首页的 Tutor/阶段控制或旧记忆表。专业测评等独立学习页面保留原有服务，按需使用可信题面/rubric、原始作答及暴露快照、程序生成的报告事实、计划草案和获准偏好；这些内容不进入首页自由聊。外部已发送内容无法追溯撤回。只使用合成学习材料。不是公网部署方案、没有账号或真实监护核验，数据库没有应用层加密。
 
 2026-11-01 用户进一步要求屏蔽旧小N智能体与提示词：`shared/legacy-home.ts` 统一列出停用入口。旧通用 `/api/chat` 及旧首页的 chat、greeting、conversation/end、loop、recognize、错题/进步卡/记忆草稿确认共 9 个入口，在前端请求前及服务端会话验证后均拒绝；服务端不再分派到旧协调器。旧链接和旧缓存页面转到新首页，遗留旧请求不再显示重试。旧 `ChatPanel` 与离线聊天兜底退出应用挂载，首页只使用自由聊提示词和自由聊记忆整理提示词。旧源码和记录留档；专业测评、评分、出题及计划的独立共用模块仍保留，未全站关闭这些功能。
 
-[官方Coding Plan接入与套餐适用范围](https://docs.bigmodel.cn/cn/coding-plan/quick-start)限定指定工具/产品环境；当前配置与本次开发验收不能作为正式教学产品可使用该套餐的保证，产品化时需确认适用套餐，或配置对应标准API与Key。不要仅改基址混用不同类型Key。
+当前用的是 MiniMax 的订阅 Key（`sk-cp-` 开头），面向编程工具场景；把它用作儿童教学产品后台的模型调用，套餐适用范围、数据留存与训练策略未核实，本次开发验收不能作为正式教学产品可使用该套餐的保证，产品化时需确认适用套餐与条款，或改用按量付费的标准 API Key。不要仅改基址混用不同类型 Key。接口口径见[MiniMax 接口概览](https://platform.minimax.cn/docs/api-reference/api-overview)与[OpenAI 兼容接入说明](https://platform.minimax.cn/docs/api-reference/text-openai-api)。
 
 ## 从选择到复习
 
@@ -62,7 +62,7 @@ XIAON_API_TARGET=http://127.0.0.1:18931 npm run dev -- --host 127.0.0.1 --port 5
 
 限额（非密钥，可选环境变量）：`XIAON_GENERATION_TIMEOUT_MS`（默认 60000）、`XIAON_GENERATION_DAILY_LIMIT`（默认 12 次/上海日期）、`XIAON_GENERATION_SESSION_LIMIT`（默认 5 道/场次）、`XIAON_GENERATION_MAX_ROUNDS`（1 或 2）。模型、Key 与基址沿用 `XIAON_GLM_*`。
 
-验证：`npm run test:agent:e`（模板独立算术、校验器、全链路、HTTP）、`npm run test:agent:e:browser`（独立 5197/18938、临时库、模拟模型、TestClock 推进到生成题复习）、`npm run test:agent:e:real`（真实 GLM，合成材料、临时库；无 Key 时退出 2 并标记未运行）。规则详见 `文档/交接/2026-10-21/交付/E/GENERATION-RULES.md`。
+验证：`npm run test:agent:e`（模板独立算术、校验器、全链路、HTTP）、`npm run test:agent:e:browser`（独立 5197/18938、临时库、模拟模型、TestClock 推进到生成题复习）、`npm run test:agent:e:real`（真实模型，合成材料、临时库；无 Key 时退出 2 并标记未运行）。规则详见 `文档/交接/2026-10-21/交付/E/GENERATION-RULES.md`。
 
 ## 数据迁移与恢复
 
@@ -81,7 +81,7 @@ XIAON_API_TARGET=http://127.0.0.1:18931 npm run dev -- --host 127.0.0.1 --port 5
 - `npm run test:agent`：A/B/C/D/E当前集成规则与HTTP。
 - `npm run test:all`：规则、Agent检查、生产构建。
 - `npm run test:agent:d:browser`：独立18931/5194、临时SQLite、模拟模型、手机浏览器；先停止自己占用这两个端口的预览。
-- `npm run test:agent:d:real`：只发合成材料、临时SQLite的真实GLM三角色验收；Key未配置退出2，不冒充通过。
+- `npm run test:agent:d:real`：只发合成材料、临时SQLite的真实模型三角色验收；Key未配置退出2，不冒充通过。
 - `node scripts/agent/service-smoke.mjs`：实际服务进程重启、记录与幂等恢复。
 
 [本次HANDOFF](../../任务书/2026-10-21-Agent升级/交付/D/HANDOFF.md)、[验收矩阵](../../任务书/2026-10-21-Agent升级/交付/D/ACCEPTANCE.md)包含当前命令退出码、首次失败、截图、去敏轨迹和限制。A/B/C为本窗口独立复核范围；D集成、浏览器与真实模型为本窗口自验。
